@@ -8,7 +8,8 @@
  */
 
 export const config = {
-  runtime: 'edge', // Use edge runtime for faster cold starts
+  runtime: 'edge',
+  maxDuration: 300, // 5 minutes (Vercel Pro plan)
 };
 
 const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';

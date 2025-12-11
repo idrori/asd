@@ -9,8 +9,8 @@
 
 export const config = {
   runtime: 'edge',
-  // Gemini responses can be large and take time
-  maxDuration: 60, // 60 seconds max (Vercel hobby plan limit)
+  // Gemini responses can be large and take time (especially thinking models)
+  maxDuration: 300, // 5 minutes (Vercel Pro plan)
 };
 
 interface GeminiRequest {
