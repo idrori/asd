@@ -7,8 +7,11 @@
  * Endpoint: POST /api/openai
  */
 
+import type { VercelRequest, VercelResponse } from '@vercel/node';
+
 export const config = {
-  runtime: 'edge',
+  // Using Node.js runtime (not edge) to support 300s timeout
+  // Edge functions max out at 30 seconds
   maxDuration: 300, // 5 minutes (Vercel Pro plan)
 };
 
@@ -23,64 +26,55 @@ interface OpenAIRequest {
   temperature?: number;
   max_tokens?: number;
   max_completion_tokens?: number;
+  response_format?: {
+    type: 'json_object' | 'text';
+  };
 }
 
-export default async function handler(request: Request): Promise<Response> {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  // Set CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
   // Handle CORS preflight
-  if (request.method === 'OPTIONS') {
-    return new Response(null, {
-      status: 204,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Max-Age': '86400',
-      },
-    });
+  if (req.method === 'OPTIONS') {
+    res.setHeader('Access-Control-Max-Age', '86400');
+    return res.status(204).end();
   }
 
   // Only allow POST
-  if (request.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-      status: 405,
-      headers: { 'Content-Type': 'application/json' },
-    });
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   // Get API key from environment (secure - never sent to client)
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     console.error('[OpenAI Proxy] OPENAI_API_KEY not configured');
-    return new Response(JSON.stringify({ error: 'API key not configured' }), {
-      status: 500,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
-    });
+    return res.status(500).json({ error: 'API key not configured' });
   }
 
   try {
-    const body: OpenAIRequest = await request.json();
+    const body: OpenAIRequest = req.body;
 
     // Validate request
     if (!body.messages || !Array.isArray(body.messages)) {
-      return new Response(JSON.stringify({ error: 'Invalid request: messages array required' }), {
-        status: 400,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      });
+      return res.status(400).json({ error: 'Invalid request: messages array required' });
     }
 
     // Build OpenAI request
-    const openaiRequest = {
-      model: body.model || 'gpt-4o',
+    const openaiRequest: Record<string, any> = {
+      model: body.model || process.env.OPENAI_MODEL || 'gpt-4o',
       messages: body.messages,
       temperature: body.temperature ?? 0.7,
       max_completion_tokens: body.max_completion_tokens || body.max_tokens || 16000,
     };
+
+    // Add response_format if specified
+    if (body.response_format) {
+      openaiRequest.response_format = body.response_format;
+    }
 
     console.log(`[OpenAI Proxy] Calling ${openaiRequest.model}...`);
 
@@ -97,41 +91,23 @@ export default async function handler(request: Request): Promise<Response> {
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       console.error('[OpenAI Proxy] API Error:', response.status, errorData);
-      return new Response(JSON.stringify({
+      return res.status(response.status).json({
         error: 'OpenAI API error',
         status: response.status,
-        details: errorData.error?.message || 'Unknown error'
-      }), {
-        status: response.status,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
+        details: (errorData as any).error?.message || 'Unknown error'
       });
     }
 
     const data = await response.json();
     console.log('[OpenAI Proxy] Success');
 
-    return new Response(JSON.stringify(data), {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
-    });
+    return res.status(200).json(data);
 
   } catch (error) {
     console.error('[OpenAI Proxy] Error:', error);
-    return new Response(JSON.stringify({
+    return res.status(500).json({
       error: 'Internal server error',
       details: error instanceof Error ? error.message : 'Unknown error'
-    }), {
-      status: 500,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
     });
   }
 }

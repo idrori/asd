@@ -1793,7 +1793,7 @@ async function callOpenAIViaProxy<T>(prompt: string, baseUrl: string): Promise<T
       messages: [
         {
           role: 'system',
-          content: 'You are an expert IS (Information Systems) journal reviewer. Provide thorough, constructive feedback. Always respond with valid JSON only.'
+          content: 'You are an expert IS (Information Systems) journal reviewer. Provide thorough, constructive feedback. Always respond with valid JSON only, no markdown code blocks.'
         },
         {
           role: 'user',
@@ -1801,7 +1801,8 @@ async function callOpenAIViaProxy<T>(prompt: string, baseUrl: string): Promise<T
         }
       ],
       temperature: 0.7,
-      max_completion_tokens: 16000
+      max_completion_tokens: 16000,
+      response_format: { type: 'json_object' }
     })
   });
 
@@ -1821,9 +1822,15 @@ async function callOpenAIViaProxy<T>(prompt: string, baseUrl: string): Promise<T
   console.log('[OpenAI] Proxy response received, parsing JSON...');
 
   try {
-    return JSON.parse(responseContent) as T;
+    // Try to extract JSON from markdown code blocks if present
+    let jsonStr = responseContent;
+    const jsonMatch = responseContent.match(/```(?:json)?\s*([\s\S]*?)```/);
+    if (jsonMatch) {
+      jsonStr = jsonMatch[1].trim();
+    }
+    return JSON.parse(jsonStr) as T;
   } catch (e) {
-    console.error('[OpenAI] Failed to parse JSON response:', responseContent.substring(0, 200));
+    console.error('[OpenAI] Failed to parse JSON response:', responseContent.substring(0, 500));
     throw new Error('[OpenAI] Invalid JSON response');
   }
 }
@@ -1877,9 +1884,15 @@ async function callOpenAIDirect<T>(prompt: string): Promise<T> {
   console.log('[OpenAI] Direct response received, parsing JSON...');
 
   try {
-    return JSON.parse(responseContent) as T;
+    // Try to extract JSON from markdown code blocks if present
+    let jsonStr = responseContent;
+    const jsonMatch = responseContent.match(/```(?:json)?\s*([\s\S]*?)```/);
+    if (jsonMatch) {
+      jsonStr = jsonMatch[1].trim();
+    }
+    return JSON.parse(jsonStr) as T;
   } catch (e) {
-    console.error('[OpenAI] Failed to parse JSON response:', responseContent.substring(0, 200));
+    console.error('[OpenAI] Failed to parse JSON response:', responseContent.substring(0, 500));
     throw new Error('[OpenAI] Invalid JSON response');
   }
 }
