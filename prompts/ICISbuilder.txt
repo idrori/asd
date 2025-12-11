@@ -1,0 +1,1497 @@
+This set of prompts is designed to help you build a NEW research paper for ICIS (International Conference on Information Systems) from scratch. It will receive a research interview transcript and generate a complete paper in a single iteration.
+
+Verify that the following files exist in directory "icis" or its subdirectories {ICIS_PATH}\Data, {ICIS_PATH}\Code, {ICIS_PATH}\Templates:
+- 'icisTemplate.txt' - template for writing a 16-page paper
+- 'INTERVIEW_{participantId}_{timestamp}.txt' - interview transcript
+- 'icis2024Examples/' - 11 representative ICIS papers for calibration
+- 'Data_file_{participantId}.*' - [Optional] data supplied by participant
+
+# For running Python: Use 'py' on Windows, 'python3' on Linux/Mac
+---
+
+## STEP 0: EXTRACT PARTICIPANT ID (Execute First)
+
+**Before any other step, extract the participantId from the interview filename:**
+
+1. Locate interview file: `INTERVIEW_*.txt`
+2. Parse filename format: `INTERVIEW_{participantId}_{timestamp}.txt`
+3. Extract {participantId} - the portion between first underscore and last underscore before timestamp
+   - Example: `INTERVIEW_maayan_university_edu_20241115_091230.txt`
+   - participantId = `maayan_university_edu`
+4. Store this ID for use in ALL output file names throughout this workflow
+
+**All output files MUST include {participantId} in their names:**
+- `icis_paper_{participantId}_v{N}.tex` / `.pdf`
+- `feedback_{participantId}_v{N}.txt`
+- `oversight_{participantId}_v{N}.txt`
+- `data_assessment_{participantId}.txt`
+- `research_metadata_{participantId}.json`
+
+---
+
+Below are 9 steps (1-9) to execute consecutively. Step 2 is divided into Steps 2a-2e for different research types. Execute only the appropriate one based on STEP 1, then proceed with remaining steps.
+
+**ALL STEPS:** Follow Universal Research Rules (see Appendix A at end of this file)
+---
+
+## STEP 1: RESEARCH INTERVIEW ANALYSIS AND CONCEPT DEVELOPMENT
+
+If the INTERVIEW* transcript is not in English, translate it.
+
+Analyze INTERVIEW* to extract core research vision:
+
+1. **Research Domain:** Problem, limitations, insights, applications, methods mentioned
+2. **Innovation Focus:** Research gap, research type, unique approach, challenges
+3. **Theoretical Basis:** Theories/frameworks to employ (critical for IS research!)
+4. **Implementation:** Datasets, resources, metrics, constraints
+5. **Impact:** Applications, field advancement, future directions
+6. **Initial References:** 1-3 references supplied in the interview
+
+DELIVERABLE: Comprehensive research outline including:
+- Problem statement
+- Research approach
+- Theoretical basis and hypotheses
+- Contributions (as list)
+- Implementation plan
+- Evaluation strategy (metrics and protocols for assessing results)
+- **RESEARCH TYPE** (exactly one of): "Simulation & Computational Modeling" OR "Analytical & Theoretical Modeling (with or without data)" OR "Laboratory & field experiments" OR "Survey research"
+- Initial references (1-3 from interview)
+- **Needs mathematical formulation:** Yes/No (indicate if novel algorithms, proofs, or computational models are needed - this determines whether Step 3 executes for experimental/survey research) 
+
+---
+
+## STEP 1.5: DATA FILE ASSESSMENT
+
+**Execute this step to determine data availability and strategy.**
+
+### A) Check for Data_file
+
+Use Glob to check if data file exists (using participantId from STEP 0):
+```
+Glob: Data_file_{participantId}*
+Glob: Data/*
+```
+
+Document result:
+- ✅ **Data_file found:** [location and format]
+- ❌ **No Data_file:** Proceed based on research type
+
+### B) If Data_file exists, assess format and contents:
+
+1. **Determine format:**
+   - CSV/TSV (.csv, .tsv)
+   - Excel (.xlsx, .xls)
+   - JSON (.json)
+   - MATLAB (.mat)
+   - Text (.txt)
+
+2. **Read and document:**
+   - Number of observations (observationCount)
+   - Variables/columns (variables)
+   - Data types per variable (variableTypes)
+   - Count of missing values (missingValueCount)
+   - Any obvious issues or quality concerns (dataIssues)
+
+3. **Save assessment:** Create Code/data_assessment_{participantId}.txt with above fields
+
+### C) Set Data Strategy Based on Research Type
+
+**ALL research types produce FULL PAPER (14-16 pages).**
+
+**For RESEARCH TYPE 2D (Laboratory & Field Experiments):**
+- ✅ Data_file exists → Full paper with empirical results
+- ❌ No Data_file + Interview indicates data collection PLANNED → Write full paper with methodology, note "Data collection in progress" in Results/Discussion
+- ❌ No Data_file + No planned data collection → Generate synthetic experimental data for demonstration
+
+**For RESEARCH TYPE 2E (Survey Research):**
+- ✅ Data_file exists → Full paper with empirical results
+- ❌ No Data_file + Interview indicates data collection PLANNED → Write full paper with methodology, note "Data collection in progress" in Results/Discussion
+- ❌ No Data_file + No planned data collection → Generate synthetic survey data for demonstration
+
+**For RESEARCH TYPE 2A (Simulation & Computational Modeling):**
+- ✅ Data_file exists → Use for calibration/validation + generate synthetic data for simulation runs
+- ❌ No Data_file → Generate synthetic data based on literature (simulations always need data)
+
+**For RESEARCH TYPE 2B (Analytical & Theoretical Modeling):**
+- ✅ Data_file exists → Use for empirical validation of theoretical predictions
+- ❌ No Data_file → Theoretical paper with propositions and numerical examples for illustration
+
+### D) File Organization
+
+```
+{ICIS_PATH}\
+├── Data_file_{participantId}.csv (or other format) [IF PROVIDED by participant]
+├── Data/
+│   ├── cleaned_data_{participantId}.csv [Preprocessed real data, if Data_file provided]
+│   ├── synthetic_data_{participantId}.csv [Generated data for simulations/augmentation]
+│   └── data_assessment_{participantId}.txt [Documentation]
+├── Code/
+│   ├── data_preprocessing.py [IF real data exists]
+│   ├── data_generation.py [IF synthetic data needed]
+│   └── data_loader.py [Load data for experiments]
+```
+
+**DELIVERABLE:**
+- Data strategy documented
+- Data generation approach if no Data_file provided
+
+---
+
+## STEP 2: PLAN ACCORDING TO RESEARCH TYPE
+
+Read 11 papers in ICIS2024Examples/ to familiarize with ICIS standards and similar research.
+
+According to research type from STEP 1, follow appropriate sub-step:
+
+---
+
+### STEP 2A) Simulation & Computational Modeling
+
+**Research Rules:** See Appendix A (emphasis: synthetic data labeling, validation)
+
+**DATA STRATEGY:**
+
+**IF Data_file EXISTS:**
+- Use real data for model calibration and validation
+- Generate synthetic data for simulation runs and sensitivity analyses
+- Document both data sources clearly in paper
+- Label synthetic data generation method
+
+**IF Data_file DOES NOT EXIST:**
+- Generate synthetic data based on literature and theory
+- Cite sources for parameter values and distributions
+- Clearly label all data as synthetic
+- Document generation method thoroughly
+
+**Both cases proceed with FULL PAPER (all steps 1-9)**
+
+**FRAMEWORK:**
+
+1. Define research question and objectives
+2. Choose simulation approach: ABM (heterogeneity), DES (process flows), or SD (feedback loops)
+3. Develop conceptual model, set assumptions, align with IS theory
+4. Identify data sources (empirical/theoretical/expert), justify, prepare calibration
+5. Design experiments (factors, scenarios, replications)
+6. Verify and validate model (ensure intended behavior, real-world reflection)
+7. Analyze results (statistics, IS theory context, visualizations, limitations)
+
+**Best Practices:**
+- Align model with goals, develop iteratively, validate frequently
+- Document and question assumptions/parameters, link to theory, ensure reproducibility
+- Use graphics
+- Examine rigor of computational modeling
+- Examine validity and robustness of results
+- Discuss theoretical insights from findings
+
+**Tools:** NetLogo, Mesa, AnyLogic (ABM); Simul8, Arena, SimPy (DES); Vensim, Stella, PySD (SD)
+
+**Quality Standards:** See Appendix C.1
+**References:** See Appendix E.1
+---
+
+### STEP 2B) Analytical & Theoretical Modeling (with or without data)
+
+**Research Rules:** See Appendix A (emphasis: mathematical rigor, assumption transparency)
+
+**DATA STRATEGY:**
+
+**IF Data_file EXISTS:**
+- Use real data for empirical validation of theoretical predictions
+- Generate synthetic data if needed for additional scenarios
+- Paper includes: Theory development + Empirical validation
+- Document data sources clearly
+
+**IF Data_file DOES NOT EXIST:**
+- Purely theoretical paper with propositions and proofs
+- Paper includes: Theory development + Propositions (no empirical validation)
+- May include numerical examples or illustrative simulations
+
+**Both cases proceed with FULL PAPER (all steps 1-9)**
+
+**FRAMEWORK:**
+
+1. Define theoretical problem and objectives
+2. Select analytical framework (game theory, optimization, network theory, etc.)
+3. Formulate model: variables, parameters, assumptions (explicit rationale)
+4. Derive analytical results/propositions (equilibria, comparative statics)
+5. Link to data/empirical evidence if applicable
+6. Validate: logical consistency, sensitivity analysis, robustness
+7. Analyze and interpret (translate to insights, IS theory implications)
+
+**Quality Standards:** See Appendix C.2
+**References:** See Appendix E.2
+
+---
+
+### STEP 2C) Secondary data analysis
+Currently unavailable
+
+---
+
+### STEP 2D) Laboratory & Field Experiments
+
+**DATA REQUIREMENTS - CHECK FIRST:**
+
+**IF Data_file EXISTS:**
+1. Read and validate the data file (see Step 1.5 assessment)
+2. Document sample characteristics for Method section
+3. Proceed with FULL PAPER workflow (all steps 1-9)
+
+**IF Data_file DOES NOT EXIST:**
+
+Check interview transcript for data collection plans:
+
+**Option A - Data collection PLANNED (interview mentions upcoming study, IRB approval, recruitment plans):**
+- Write full methodology section with complete experimental design
+- In Results section: "Data collection is currently in progress. Preliminary results will be available upon completion of the study."
+- In Discussion section: Discuss expected findings based on hypotheses
+- Do NOT generate synthetic data
+
+**Option B - No data collection planned (purely theoretical demonstration):**
+- Generate synthetic experimental data based on:
+  - Literature-derived effect sizes and distributions
+  - Theoretical predictions from your research model
+  - Realistic sample characteristics for your target population
+- Clearly label synthetic data in the paper and document generation methodology
+
+**Research Rules:** See Appendix A (emphasis: pre-specification, randomization, no post-hoc changes)
+
+**FRAMEWORK:**
+
+1. Define theoretical problem and objectives, and define nomological network if possible
+2. Formulate model: variables, parameters, assumptions (explicit rationale)
+3. Design experiment upstream for validity and select experimental design (pretests, validated items)
+4. Describe sample, procedures, tools, randomization, balance checks, manipulation checks, human-computer interaction if relevant
+5. Link analyses and results to hypotheses
+6. Analyze and interpret (translate to insights, IS theory implications)
+
+**Quality Standards:** See Appendix C.3
+**References:** See Appendix E.3
+
+---
+
+### STEP 2E) Survey research
+
+**DATA REQUIREMENTS - CHECK FIRST:**
+
+**IF Data_file EXISTS:**
+1. Read and validate the data file (see Step 1.5 assessment)
+2. Document sample characteristics for Method section
+3. Proceed with FULL PAPER workflow (all steps 1-9)
+
+**IF Data_file DOES NOT EXIST:**
+
+Check interview transcript for data collection plans:
+
+**Option A - Data collection PLANNED (interview mentions upcoming survey, IRB approval, recruitment plans):**
+- Write full methodology section with complete survey design
+- In Results section: "Survey data collection is currently in progress. Results will be available upon completion."
+- In Discussion section: Discuss expected findings based on hypotheses
+- Do NOT generate synthetic data
+
+**Option B - No data collection planned (purely theoretical demonstration):**
+- Generate synthetic survey response data based on:
+  - Literature-derived factor loadings and correlations
+  - Theoretical predictions from your research model
+  - Realistic response distributions for validated scales
+- Clearly label synthetic data in the paper and document generation methodology
+
+**Research Rules:** See Appendix A (emphasis: pre-specification, randomization, no post-hoc changes)
+
+**FRAMEWORK:**
+
+1. Define theoretical problem and objectives, and define nomological network if possible
+2. Formulate model: variables, parameters, assumptions (explicit rationale)
+3. Specify design of study (sample, procedure, use of online services)
+4. Describe measures and questionnaires in detail, linking to research on the measures
+5. Link analyses and results to hypotheses
+6. Analyze and interpret (translate to insights, IS theory and practical implications)
+
+**Quality Standards:** See Appendix C.3
+**References:** See Appendix E.3
+
+---
+
+## STEP 2 FINAL: GENERATE RESEARCH METADATA FILES (All Research Types)
+
+**CRITICAL:** Execute this step AFTER completing your research-type-specific planning (Step 2A, 2B, or 2D).
+
+This step is customized for different research types. The metadata files organize your research plan for subsequent steps and are used throughout STEP 3-8.
+
+---
+
+### FILE 1: research_metadata_{participantId}.json
+
+Save as: Code/research_metadata_{participantId}.json
+
+**REQUIRED JSON STRUCTURE (note: use camelCase for field names):**
+
+```json
+{
+  "title": "Compelling paper title that: 1) Captures the main contribution, 2) Is specific and informative, 3) Follows academic conventions (typically 10-15 words), 4) Avoids jargon while being technically accurate",
+  "abstract": "150-200 word abstract that: 1) States the problem clearly, 2) Describes the novel approach, 3) Highlights key theoretical contributions, 4) Reports main results with specific numbers, 5) Emphasizes unique advantages",
+  "venue": "ICIS2025",
+  "researchType": "USE THE EXACT RESEARCH TYPE FROM STEP 1 (e.g., 'Laboratory & field experiments', 'Simulation & Computational Modeling', 'Analytical & Theoretical Modeling (with or without data)', 'Survey research')",
+  "sourcePapers": [
+    {
+      "reference": "Actual paper title, author(s), year, and publication venue",
+      "rank": 1,
+      "type": ["USE THE RESEARCH TYPE FROM STEP 1"],
+      "usage": "Concrete way this paper will be incorporated into your research"
+    },
+    {
+      "reference": "Second paper details",
+      "rank": 2,
+      "type": ["USE THE RESEARCH TYPE FROM STEP 1"],
+      "usage": "How this paper contributes to your work"
+    }
+    // Begin with 1-3 references from INTERVIEW (initialReferences) and continue for 20-25 total key references covering all aspects:
+    // - Foundational theory papers (IS theories, behavioral theories, economic theories)
+    // - Methodological papers matching your research type
+    // - Prior empirical work in your domain
+    // - Papers addressing similar research questions
+    // - Papers on evaluation metrics and analysis methods
+    // - Papers establishing your constructs and measurement instruments
+  ],
+
+  "task1": "Detailed technical implementation with exact specifications:
+    FOR EXPERIMENTAL RESEARCH:
+    1. Experimental design (between/within subjects, factorial design, sample size calculation)
+    2. Participant recruitment (population, sampling method, recruitment channels)
+    3. Manipulation procedures (stimuli creation, pretesting, manipulation checks)
+    4. Measurement instruments (scales, items, reliability/validity evidence)
+    5. Data collection protocol (platform, procedure, controls for confounds)
+    6. Randomization procedures (assignment mechanism, balance checks)
+    7. Statistical analysis plan (tests, power analysis, planned comparisons)
+
+    FOR COMPUTATIONAL/SIMULATION RESEARCH:
+    1. Data collection/generation parameters (sample size, recruitment, data sources, synthetic generation)
+    2. Preprocessing pipeline with specific algorithms and parameters
+    3. Feature extraction methods with mathematical details
+    4. Model architecture with layer specifications
+    5. Training protocol with hyperparameters
+    6. Evaluation metrics and protocols
+    7. Expected performance targets",
+
+  "task2": "Research objectives and expected outcomes with specific targets:
+    FOR EXPERIMENTAL RESEARCH:
+    - Hypothesis testing results with expected directions and effect sizes
+    - Theoretical contributions (mechanisms validated, boundaries established)
+    - Practical implications for practitioners/platforms
+
+    FOR COMPUTATIONAL RESEARCH:
+    - Performance improvements over baselines (with specific % targets)
+    - Theoretical contributions (novel algorithms, frameworks)
+    - Ablation study findings",
+
+  "sections": {
+    "introduction": {
+      "required": true,
+      "minWords": 500,
+      "minParagraphs": 3,
+      "description": "Problem statement, research gap, contributions, paper structure"
+    },
+    "literatureReview": {
+      "required": true,
+      "minWords": 800,
+      "minParagraphs": 5,
+      "minReferences": 15,
+      "description": "Prior work organized by themes, research gap identification"
+    },
+    "theoreticalFramework": {
+      "required": true,
+      "minWords": 600,
+      "minParagraphs": 4,
+      "requiresHypotheses": true,
+      "description": "Theory basis, constructs, hypotheses with theoretical justification"
+    },
+    "methodology": {
+      "required": true,
+      "minWords": 600,
+      "minParagraphs": 4,
+      "description": "Research design, data collection, measures, analysis approach"
+    },
+    "results": {
+      "required": true,
+      "minWords": 500,
+      "minParagraphs": 3,
+      "minFigures": 2,
+      "minTables": 1,
+      "description": "Findings with figures/tables, statistical results, hypothesis outcomes"
+    },
+    "discussion": {
+      "required": true,
+      "minWords": 400,
+      "minParagraphs": 3,
+      "description": "Interpretation, theoretical implications, practical implications, limitations"
+    },
+    "conclusion": {
+      "required": true,
+      "minWords": 200,
+      "minParagraphs": 2,
+      "description": "Summary, contributions, future research directions"
+    }
+  }
+}
+```
+**VERIFICATION CHECKLIST FOR JSON:**
+- [ ] Title is compelling, specific, 10-15 words, captures main contribution
+- [ ] Abstract is 150-200 words and includes problem, approach, contributions, results, advantages
+- [ ] Research type matches exactly what was identified in STEP 1
+- [ ] All source papers have type field matching your research type
+- [ ] 20-25 source papers are included
+- [ ] All citations verified to exist on semanticscholar.org
+- [ ] All citations meet quality thresholds using Semantic Scholar API:
+  - Citation count >500 OR
+  - Published in top-tier journal (ISR, MISQ, JMIS, JAIS, Management Science, etc.) OR
+  - Recent paper (<3 years) from reputable IS venue with demonstrated impact
+- [ ] Semantic Scholar validation completed and documented (see STEP 2 FINAL)
+- [ ] task1 includes specific implementation details appropriate for your research type (experimental vs. computational)
+- [ ] task2 clearly states expected outcomes with quantitative targets appropriate for your research type
+- [ ] **sections field is complete** with all 7 sections defined (introduction, literatureReview, theoreticalFramework, methodology, results, discussion, conclusion)
+---
+
+### FILE 2: metaprompt_{participantId}.py
+
+Save as: Code/metaprompt_{participantId}.py
+
+**SELECT AND USE THE APPROPRIATE RESEARCH-TYPE-SPECIFIC TEMPLATE:**
+
+Based on your RESEARCH_TYPE identified in STEP 1, use the corresponding specialized template:
+
+| RESEARCH_TYPE | Template File to Use |
+|---------------|---------------------|
+| "Laboratory & field experiments" | Templates/metaprompt_template_EXPERIMENTAL.py |
+| "Survey research" | Templates/metaprompt_template_EXPERIMENTAL.py |
+| "Simulation & Computational Modeling" | Templates/metaprompt_template_COMPUTATIONAL.py |
+| "Analytical & Theoretical Modeling (with or without data)" | Templates/metaprompt_template_COMPUTATIONAL.py* |
+
+*Use COMPUTATIONAL if implementing algorithms/models; use EXPERIMENTAL if testing hypotheses with data
+
+**PROCEDURE:**
+
+1. **Copy the appropriate template (replace {participantId} with actual ID from STEP 0):**
+   ```
+   Windows: copy Templates\metaprompt_template_EXPERIMENTAL.py Code\metaprompt_{participantId}.py
+   Linux/Mac: cp Templates/metaprompt_template_EXPERIMENTAL.py Code/metaprompt_{participantId}.py
+   ```
+
+2. **Fill in ALL sections** of the template:
+   - Replace all [placeholders] with your specific research details
+   - Follow the detailed guidance within each section
+   - Delete example text and insert your actual content
+   - Remove optional sections that don't apply
+
+3. **Consult:** See ICIS_BUILDER_GUIDE.md for detailed explanations and examples
+
+**VERIFICATION CHECKLIST FOR metaprompt.py:**
+
+**For EXPERIMENTAL template:**
+- [ ] All hypotheses have explicit theoretical basis stated
+- [ ] Each hypothesis has operationalization (IV, DV, measurement)
+- [ ] Sample size justified with power analysis (target power, effect size, alpha)
+- [ ] Statistical tests specified for each hypothesis (exact test, assumptions)
+- [ ] All measurement scales have citations and prior reliability reported
+- [ ] Manipulation checks included for all manipulated IVs
+- [ ] IRB and ethics section completed (approval, consent, privacy)
+- [ ] RESEARCH_TYPE matches STEP 1 and JSON file
+- [ ] LITERATURE_REVIEW summarizes 20-25 key papers with theory emphasis
+- [ ] THEORETICAL_BASIS includes nomological network and mechanisms
+
+**For COMPUTATIONAL template:**
+- [ ] Model architecture fully specified (layers, parameters, algorithms)
+- [ ] All hyperparameters documented with justification
+- [ ] At least 4-6 baseline comparisons included (simple + strong)
+- [ ] Ablation studies planned for all key components
+- [ ] Sensitivity analyses planned for key parameters
+- [ ] Data splitting strategy clearly defined (train/val/test, no leakage)
+- [ ] Reproducibility measures specified (random seeds, Docker, configs)
+- [ ] RESEARCH_TYPE matches STEP 1 and JSON file
+- [ ] LITERATURE_REVIEW summarizes 20-25 key papers with technical emphasis
+- [ ] THEORETICAL_BASIS links computational approach to IS theory
+
+**For BOTH templates:**
+- [ ] 20-25 source papers in LITERATURE_REVIEW with specific usage
+- [ ] ALL papers validated using Semantic Scholar API (citation_validation field in JSON)
+- [ ] Each paper meets quality criteria: >500 citations OR top-tier journal OR recent quality
+- [ ] THEORETICAL_BASIS clearly links research to established theory
+- [ ] DATASETS/DATA_COLLECTION fully specified (origin, size, preprocessing)
+- [ ] EVALUATION metrics defined with formulas and interpretation
+- [ ] IMPLEMENTATION detailed enough for independent replication
+- [ ] COMPARISON_TEMPLATE matches your analysis type (hypothesis tests vs. performance metrics)
+
+---
+
+---
+
+### CITATION QUALITY VALIDATION (REQUIRED)
+
+**Before finalizing research_metadata.json, validate ALL source papers using Semantic Scholar API:**
+
+**STEP 2-FINAL-A: Setup Semantic Scholar Validator**
+
+1. Create `Code/scholar_validator.py` with your Semantic Scholar API key:
+   ```python
+   import requests
+   import json
+   import time
+
+   # Configure your Semantic Scholar API key
+   SCHOLAR_API_KEY = "YOUR_SEMANTIC_SCHOLAR_API_KEY"
+   SCHOLAR_API_URL = "https://api.semanticscholar.org/graph/v1/paper/search"
+
+   # Define top-tier IS and related journals
+   TOP_TIER_JOURNALS = [
+       "Information Systems Research",
+       "MIS Quarterly",
+       "MISQ",
+       "Journal of Management Information Systems",
+       "JMIS",
+       "Journal of the Association for Information Systems",
+       "JAIS",
+       "Management Science",
+       "Strategic Management Journal",
+       "Academy of Management Journal",
+       "Academy of Management Review",
+       "Journal of Marketing",
+       "Marketing Science"
+   ]
+
+   def validate_paper(title, author=None, year=None):
+       """
+       Validates paper meets quality criteria using Google Scholar
+       Returns: {
+           'valid': bool,
+           'citation_count': int,
+           'journal': str,
+           'meets_citation_threshold': bool,
+           'is_top_tier_journal': bool,
+           'is_recent_quality': bool
+       }
+       """
+       # Implementation here
+       pass
+   ```
+
+2. Install required library: `py -m pip install requests`
+
+**STEP 2-FINAL-B: Validate Each Reference**
+
+For EACH paper in your source_papers array (all 20-25 papers):
+
+1. **Extract paper details** from your reference string
+   - Parse: title, author(s), year, venue
+
+2. **Query Semantic Scholar API:**
+   ```python
+   result = validate_paper(
+       title="Paper Title Here",
+       author="First Author",
+       year=2023
+   )
+   ```
+
+3. **Check if paper meets quality criteria** (ANY ONE of these):
+
+   **Criterion A: High Citations**
+   - Citation count ≥ 500
+   - Indicates established, influential work
+
+   **Criterion B: Top-Tier Journal**
+   - Published in: ISR, MISQ, JMIS, JAIS, Management Science, etc.
+   - Check against TOP_TIER_JOURNALS list
+
+   **Criterion C: Recent Quality**
+   - Published ≤ 3 years ago AND
+   - From recognized IS venue (ICIS, ECIS, PACIS, HICSS) AND
+   - Citation count ≥ 50 (demonstrating early impact)
+
+4. **If paper FAILS all three criteria:**
+   - Remove from source_papers array
+   - Find replacement paper on same topic that meets criteria
+   - Document replacement: "Replaced [old] with [new] due to quality threshold"
+
+5. **Document validation in research_metadata.json:**
+   Add this field at the top level (note: use camelCase for consistency):
+   ```json
+   "citationValidation": {
+       "validated": true,
+       "validationDate": "2025-11-23",
+       "totalPapers": 23,
+       "highCitationPapers": 15,
+       "topTierJournalPapers": 8,
+       "recentQualityPapers": 0,
+       "papersReplaced": 2,
+       "apiKeyUsed": true
+   }
+   ```
+
+**STEP 2-FINAL-C: Verification**
+
+Run validation script to verify all papers (replace {participantId} with actual ID):
+```bash
+py Code/scholar_validator.py Code/research_metadata_{participantId}.json
+```
+
+Should output:
+```
+Validating 23 papers...
+✓ Paper 1: 1,234 citations - VALID (high citations)
+✓ Paper 2: Published in MISQ - VALID (top-tier journal)
+✓ Paper 3: 2024, ICIS, 87 citations - VALID (recent quality)
+✗ Paper 4: 234 citations, mid-tier journal - INVALID
+...
+Summary: 21/23 valid, 2 need replacement
+```
+
+Replace invalid papers and re-validate until 100% pass.
+
+---
+
+**DELIVERABLES:**
+1. research_metadata_{participantId}.json in Code/ subdirectory (with citation_validation field)
+2. metaprompt_{participantId}.py in Code/ subdirectory
+3. scholar_validator.py in Code/ subdirectory (with your API key configured)
+
+**CRITICAL:** Use EXACT research type from STEP 1. Verify citations on semanticscholar.org. Validate ALL papers meet quality thresholds using Semantic Scholar API. Ensure consistency between files.
+
+---
+
+## STEP 3: MATHEMATICAL FORMULATION DEVELOPMENT
+
+**Skip logic (based on STEP 1 "Needs mathematical formulation" field):**
+
+| Research Type | Data Available | Needs Math Formulation | Action |
+|---------------|----------------|------------------------|--------|
+| 2A (Simulation) | Any | N/A | **ALWAYS EXECUTE** |
+| 2B (Analytical) | Any | N/A | **ALWAYS EXECUTE** |
+| 2D (Experiments) | Any | No | **SKIP** (standard statistical methods) |
+| 2D (Experiments) | Any | Yes | **EXECUTE** (novel algorithms/proofs) |
+| 2E (Survey) | Any | No | **SKIP** (standard statistical methods) |
+| 2E (Survey) | Any | Yes | **EXECUTE** (novel algorithms/proofs) |
+
+**In summary:**
+- **ALWAYS execute** for Simulation (2A) and Analytical (2B) research
+- **SKIP** for Experimental/Survey (2D/2E) using standard statistical methods only
+- **EXECUTE** for Experimental/Survey (2D/2E) with novel algorithms, proofs, or computational models
+
+Develop comprehensive mathematical foundation as LaTeX document with:
+1. Signal/data representation
+2. Core algorithm formulation
+3. Architecture (if applicable)
+4. Optimization and training (if applicable)
+5. Evaluation framework
+6. Theoretical analysis (complexity, convergence, etc.)
+
+DELIVERABLE: Complete mathematical_formulation.tex ready for compilation
+
+---
+## STEP 4: EXPERIMENTAL IMPLEMENTATION
+
+**EXECUTE FOR ALL RESEARCH TYPES.**
+
+**Important:** Use only standard Python libraries (numpy, pandas, matplotlib).
+  Avoid scipy/sklearn dependencies for compatibility. Implement statistical tests
+  manually or use numpy-based alternatives
+
+Create complete, runnable Python implementation in **Code/** directory:
+
+**FOR RESEARCH TYPE 2D/2E:**
+- data_preprocessing.py (load Data_file OR generate synthetic data)
+- data_loader.py (prepare data for analysis)
+- statistical_tests.py (implement hypothesis tests)
+- visualization.py (exploratory plots)
+- Main analysis runner
+
+**FOR RESEARCH TYPE 2A (Simulation):**
+- data_preprocessing.py (IF Data_file exists: load real data for calibration)
+- data_generation.py (generate synthetic data for simulation runs)
+- simulation_model.py (implement simulation logic)
+- data_loader.py (load and prepare all data sources)
+- Main experiment runner
+
+**FOR RESEARCH TYPE 2B (Analytical/Theoretical):**
+- data_preprocessing.py (IF Data_file exists: load real data for validation)
+- data_generation.py (IF needed: generate synthetic data for numerical examples)
+- analytical_model.py (implement theoretical model)
+- numerical_solver.py (solve model equations)
+- Main analysis runner
+
+**File locations:**
+- All .py files → Code/ directory
+- Original Data_file → root directory (don't modify)
+- Processed data → Data/ directory
+- Configuration files → Code/ directory
+
+Include: realistic data, progress logging, docstrings, comments
+Ensure code runs without external dependencies
+
+DELIVERABLE: Complete Python implementation in Code/ directory, executable immediately
+
+---
+
+## STEP 5: EXPERIMENT EXECUTION
+
+**EXECUTE FOR ALL RESEARCH TYPES.**
+
+**Windows Compatibility:** Avoid Unicode characters (→, η, ≈) in print statements.
+  Use ASCII equivalents (-> instead of →, eta-sq instead of η²).
+
+Create experiment execution script in **Code/** directory. Use python3 for running code.
+
+Requirements:
+- ExperimentRunner class with timestamped output directory
+- Baseline experiments (realistic results from literature)
+- Main method results (show improvements, training dynamics)
+- Ablation studies (if applicable)
+- Domain-specific analysis
+- Results storage (JSON, summary statistics, comparison tables)
+
+**File locations:**
+- Execution script → Code/ directory
+- Results JSON/CSV → Results/ directory
+- Intermediate data → Data/ directory
+
+Print progress, save immediately, include timestamps
+
+DELIVERABLE: Executable script in Code/ generating complete results in Results/
+
+**MANDATORY AFTER COMPLETION - Document Paths for STEP 8:**
+
+Execute these commands and report results:
+
+1. Find all figures created:
+   Glob: Results/**/fig*.png
+   Glob: Results/**/figure*.png
+
+2. Report exact locations:
+   "Experiment complete. Results saved to:
+    - JSON results: [exact path]
+    - Figures:
+      * [exact path to fig1]
+      * [exact path to fig2]
+      * [etc.]
+
+    For STEP 8 LaTeX reference:
+    - Paper will be in: {ICIS_PATH}\Paper\
+    - Figures are in: [exact directory]
+    - Relative path to use: ../Results/ or ../Results/<subdirectory>/"
+
+3. Note: This path information is CRITICAL for STEP 8 to avoid placeholder boxes
+
+---
+
+## STEP 6: RESULTS GENERATION AND VISUALIZATION
+
+**EXECUTE FOR ALL RESEARCH TYPES.**
+
+Generate publication-quality figures using matplotlib/seaborn.
+
+**Create visualization script in Code/** directory (e.g., `Code/generate_visualizations.py`)
+
+Setup:
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+plt.style.use('seaborn-v0_8-paper')
+sns.set_palette("husl")
+```
+
+Required figures (as applicable):
+
+**FOR ALL RESEARCH TYPES - Data Analysis Figures:**
+- Descriptive statistics visualization (histograms, box plots, distribution plots)
+- Correlation heatmaps or matrices
+- Main results visualization (bar charts with error bars, line plots with confidence intervals)
+- Comparison charts (treatment vs control, before vs after)
+
+**FOR EXPERIMENTAL/SURVEY RESEARCH (2D/2E):**
+- Hypothesis test results visualization (group comparisons with significance markers)
+- Interaction plots for factorial designs
+- Structural equation model diagrams (if applicable)
+- Measurement model results (factor loadings, reliability indicators)
+
+**FOR SIMULATION/COMPUTATIONAL RESEARCH (2A/2B):**
+- Training/validation curves
+- Performance comparison charts (proposed vs baselines)
+- Ablation study visualizations
+- Sensitivity analysis plots
+- Convergence plots
+
+**FOR ALL TYPES:**
+- Statistical significance indicators (*, **, *** annotations)
+- Effect size visualizations where appropriate
+
+**File locations:**
+- Visualization script → Code/ directory
+- Generated figures → Results/ directory (save as .png and .pdf)
+
+Guidelines: 300 DPI, clear labels, consistent colors, PDF+PNG, proper font sizes
+
+DELIVERABLE: Visualization script in Code/, publication-ready figures in Results/
+
+**CRITICAL - After Saving Figures:**
+
+1. Verify files were actually saved:
+   Use Glob: **/fig*.png
+   Expected: Should find all figures you just created
+
+2. If Glob finds NO files:
+   - Check the save path you used
+   - Verify directory exists
+   - Re-save figures
+   - Verify with Glob again
+
+3. Document exact paths found:
+   Report: "Figures saved and verified:
+            - [full path to fig1.png]
+            - [full path to fig2.png]
+            - [etc.]"
+
+4. Calculate relative path from Paper/ directory:
+   If figures in: {ICIS_PATH}\Results\fig1.png
+   And paper in: {ICIS_PATH}\Paper\icis_paper_{participantId}_v1.tex
+   Then LaTeX should use: ../Results/fig1.png
+
+5. Save this path mapping for STEP 8 reference
+
+---
+
+## STEP 7: RESULTS ANALYSIS
+
+**EXECUTE FOR ALL RESEARCH TYPES.**
+
+Conduct comprehensive analysis:
+1. Performance analysis (metrics in context, comparisons, strengths/weaknesses)
+2. Technical analysis (why it works, key components, failure modes, scalability)
+3. Ablation insights (validate decisions, critical vs optional)
+4. Domain-specific analysis (implications, deployment, requirements)
+5. Statistical analysis (significance, confidence intervals, effect sizes)
+
+DELIVERABLE: Comprehensive results_analysis.md in Paper/ subdirectory with:
+- Executive summary
+- Detailed findings
+- Implications
+- Future directions
+- Limitations
+
+---
+
+## STEP 8: PAPER WRITING
+
+⚠️ CRITICAL: ACADEMIC WRITING REQUIREMENTS
+
+**MANDATORY LATEX STRUCTURE:**
+Every paper MUST include the following at the START of the LaTeX document:
+```latex
+\documentclass{article}
+\usepackage{...}  % packages
+
+\title{Your Paper Title Here}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+...
+\end{abstract}
+```
+
+**NEVER omit \title{}, \begin{document}, or \maketitle - these are REQUIRED.**
+
+**DETERMINE PAPER TYPE:**
+
+**FULL PAPER (ALL Research Types):**
+- All sections: Introduction, Literature Review, Theory, Method, Results, Discussion, Conclusion
+- Target: 14-16 pages
+- Include all figures and tables from analysis
+- Follow steps 8.1-8.3 below for figure handling
+
+---
+
+**⚠️ CRITICAL - BEFORE WRITING LATEX - VERIFY FIGURE PATHS:**
+
+**STEP 8.1 - LOCATE FIGURE FILES:**
+
+1. Use Glob to find ALL figures created in STEP 6:
+   Glob: **/fig*.png
+   Glob: **/figure*.png
+
+2. Document what you found:
+   - How many figure files exist?
+   - What are their exact paths?
+   - Are they in Results/, Results/figures/, or timestamped subdirectory?
+
+3. Determine relative path from Paper/ directory:
+   If figures are in: {ICIS_PATH}\Results\fig1.png
+   And paper will be in: {ICIS_PATH}\Paper\icis_paper_{participantId}_v1.tex
+   Then LaTeX path is: ../Results/fig1.png
+
+   Use pattern: ../<relative-path-from-icis-root>
+
+4. DO NOT use:
+   ❌ Absolute paths: {ICIS_PATH}\Results\fig.png
+   ❌ Hardcoded timestamps: Results/experiment_20251118_154951/
+   ❌ Guessed paths without Glob verification
+
+**STEP 8.2 - TEST PATH WITH MINIMAL EXAMPLE:**
+
+Before writing full paper, test ONE figure path:
+
+1. Create test_figure.tex with this content:
+   \documentclass{article}
+   \usepackage{graphicx}
+   \begin{document}
+   \includegraphics{../Results/fig1.png}
+   \end{document}
+
+2. Compile from Paper/ directory:
+   pdflatex test_figure.tex
+
+3. Check compilation output:
+   ✓ SUCCESS: Should see [1 <../Results/fig1.png>]
+   ✗ FAILURE: Will see "File ... not found"
+
+4. If FAILURE:
+   - Path is wrong
+   - Use Glob to verify file location
+   - Adjust path in test_figure.tex
+   - Recompile until SUCCESS
+
+5. Once ONE path works, use SAME pattern for ALL figures
+
+**STEP 8.3 - WRITE LATEX:**
+
+**FOR FULL PAPER:**
+Write the paper using the SAME path pattern that worked in test (from STEP 8.2).
+
+Example figure inclusion:
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{../Results/fig1_main_comparison.png}
+\caption{Main System Comparison}
+\label{fig:main}
+\end{figure}
+
+Use the path structure that passed the test in STEP 8.2
+
+**FORBIDDEN:**
+- Bullet points in body (except: data characteristics, criteria, conditions)
+- Paragraphs <100 words
+- \\subsubsection{} commands
+- Numbered lists in narrative
+
+**REQUIRED:**
+- Paragraphs 150-250 words minimum
+- Flowing narrative with transitions
+- Integrate ideas within paragraphs
+- ONLY \\section{} and \\subsection{} headings
+- 14-16 pages total
+- **RESULTS SECTION MUST INCLUDE:**
+  - At least 2-3 data analysis figures from STEP 6
+  - Figures showing main findings (hypothesis tests, model results, comparisons)
+  - Each figure must be referenced and discussed in the text
+  - Tables summarizing key statistical results
+
+**Academic Style:** See Appendix D for detailed guidelines
+
+Write complete paper in LaTeX following ICISTemplate.txt
+
+**After writing, verify:**
+□ 14-16 pages total
+□ Bullet points ≤ 3 locations
+□ Average paragraph ≥ 150 words
+□ All sections included (Intro, Lit Review, Theory, Method, Results, Discussion, Conclusion)
+□ No \\subsubsection{}
+□ Smooth narrative flow
+□ Results section includes at least 2-3 data analysis figures
+□ Each figure is referenced in text (e.g., "As shown in Figure 1...")
+□ Figures compile (see compilation check below)
+
+**FIGURE COMPILATION CHECK:**
+After first pdflatex run, verify:
+- Look for: [page <../Results/fig1.png>] in output
+- If "File not found" appears: Use Glob to find correct paths, update LaTeX, recompile
+- Check PDF size: Should be >450KB with images
+
+---
+
+## STEP 8.4: SECTION CONTENT VALIDATION (MANDATORY)
+
+⚠️ **CRITICAL:** Before proceeding to Step 8.5, validate that ALL sections exist and contain substantive content.
+
+**STEP 8.4-A: Verify All Required Sections Exist**
+
+Search the LaTeX file for each required section header:
+```
+grep "\\section{" Paper/icis_paper_{participantId}_v1.tex
+```
+
+**Required sections (ALL must be present):**
+1. Introduction (or \section{Introduction})
+2. Literature Review (or \section{Literature Review} or \section{Related Work})
+3. Theoretical Framework (or \section{Theoretical Framework} or \section{Theory})
+4. Methodology (or \section{Method} or \section{Methodology} or \section{Research Design})
+5. Results (or \section{Results} or \section{Findings})
+6. Discussion (or \section{Discussion})
+7. Conclusion (or \section{Conclusion})
+
+**If ANY section is missing:** STOP and add the missing section before proceeding.
+
+**STEP 8.4-B: Validate Section Content**
+
+For EACH section, verify it contains substantive content (not just a header):
+
+| Section | Min Words | Min Paragraphs | Required Elements |
+|---------|-----------|----------------|-------------------|
+| Introduction | 500 | 3 | Problem statement, research gap, contributions |
+| Literature Review | 800 | 5 | 15+ citations, organized themes |
+| Theoretical Framework | 600 | 4 | Theory basis, hypotheses (H1, H2, etc.) |
+| Methodology | 600 | 4 | Design, data, measures, analysis plan |
+| **Results** | **500** | **3** | **2+ figures, 1+ table, statistical findings** |
+| Discussion | 400 | 3 | Implications, limitations |
+| Conclusion | 200 | 2 | Summary, future research |
+
+**STEP 8.4-C: Results Section Special Validation**
+
+The Results section MUST contain:
+1. ✅ At least 2 figures (\includegraphics commands)
+2. ✅ At least 1 table (\begin{table} environment)
+3. ✅ Statistical results (effect sizes, p-values, confidence intervals)
+4. ✅ Explicit reference to each figure ("As shown in Figure 1...")
+5. ✅ Interpretation of findings connected to hypotheses
+
+**Count figures in Results section:**
+```
+# Find Results section and count figures within it
+sed -n '/\\section{Results}/,/\\section{/p' Paper/icis_paper_{participantId}_v1.tex | grep -c "includegraphics"
+```
+
+**If Results section has <2 figures or <1 table:** STOP and add required visual elements.
+
+**STEP 8.4-D: Section Validation Checklist**
+
+Before proceeding to STEP 8.5, confirm ALL checks pass:
+
+□ Introduction section exists with ≥500 words
+□ Literature Review section exists with ≥800 words and ≥15 citations
+□ Theoretical Framework section exists with ≥600 words and explicit hypotheses
+□ Methodology section exists with ≥600 words
+□ **Results section exists with ≥500 words, ≥2 figures, ≥1 table**
+□ Discussion section exists with ≥400 words
+□ Conclusion section exists with ≥200 words
+
+**If ANY check fails:** Edit the paper to add missing content before proceeding.
+
+**DELIVERABLE:**
+- Complete LaTeX paper with all sections containing substantive content
+
+---
+
+## STEP 8.5: REFERENCE VALIDATION AND GENERATION (MANDATORY)
+
+⚠️ CRITICAL: ALL references MUST be validated via Semantic Scholar API before inclusion.
+
+**REFERENCE RULES:**
+1. **NO fabricated references** - Every reference must exist in Semantic Scholar
+2. **APA 7th Edition format** - Consistent formatting throughout
+3. **If not found, find alternative** - Never include a reference that cannot be verified
+
+**STEP 8.5-A: Extract All Citations**
+
+1. Extract all \cite{} keys from the paper:
+   ```
+   grep -o '\\cite{[^}]*}' Paper/icis_paper_{participantId}_v1.tex
+   ```
+
+2. Create list of citation keys to validate
+
+**STEP 8.5-B: Validate Each Reference via Semantic Scholar**
+
+For EACH citation key (e.g., Davis1989, VenkEtAl2003):
+
+1. **Parse the key** to extract author name and year:
+   - Davis1989 → author="Davis", year="1989"
+   - VenkMorDav2003 → author="Venkatesh", year="2003"
+
+2. **Query Semantic Scholar API:**
+   ```python
+   import requests
+
+   SCHOLAR_API_KEY = "YOUR_SEMANTIC_SCHOLAR_API_KEY"  # From .env
+
+   def lookup_reference(author, year):
+       url = f"https://api.semanticscholar.org/graph/v1/paper/search"
+       params = {
+           "query": f"{author} {year}",
+           "limit": 1,
+           "fields": "title,authors,year,venue,journal"
+       }
+       headers = {"x-api-key": SCHOLAR_API_KEY}
+       response = requests.get(url, params=params, headers=headers)
+       return response.json()
+   ```
+
+3. **If paper FOUND:**
+   - Format in APA 7th Edition style:
+   ```
+   Author, A. A., & Author, B. B. (Year). Title of article. \textit{Journal Name}, volume(issue), pages.
+   ```
+
+4. **If paper NOT FOUND:**
+   - Try alternative searches (adjacent years, broader terms)
+   - If still not found: **DO NOT INCLUDE** - remove the \cite{} from the paper
+   - Find a replacement paper on the same topic that IS in Semantic Scholar
+
+**STEP 8.5-C: Generate References Section**
+
+Create the \\begin{thebibliography} section with ONLY verified references:
+
+```latex
+\\begin{thebibliography}{99}
+
+\\bibitem{Davis1989} Davis, F. D. (1989). Perceived usefulness, perceived ease of use, and user acceptance of information technology. \\textit{MIS Quarterly}, 13(3), 319-340.
+
+\\bibitem{VenkMorDav2003} Venkatesh, V., Morris, M. G., Davis, G. B., \\& Davis, F. D. (2003). User acceptance of information technology: Toward a unified view. \\textit{MIS Quarterly}, 27(3), 425-478.
+
+% Only include references that were found in Semantic Scholar
+
+\\end{thebibliography}
+```
+
+**APA 7TH EDITION FORMAT REQUIREMENTS:**
+- Author format: LastName, F. M., \\& LastName, F. M.
+- Year in parentheses: (2020).
+- Article title in sentence case
+- Journal name in italics: \\textit{MIS Quarterly}
+- Volume in italics: \\textit{44}(2), 523-548.
+- Use \\& for multiple authors (not "and")
+
+**VERIFICATION CHECKLIST:**
+□ All \cite{} keys have matching \bibitem{} entries
+□ All references verified via Semantic Scholar API
+□ No fabricated/placeholder references
+□ Consistent APA 7th Edition formatting
+□ References that couldn't be found were removed from text
+
+**DELIVERABLE:**
+- Complete References section with only verified citations in APA format
+
+---
+
+## STEP 9: FINAL SUBMISSION PREPARATION
+
+⚠️ CRITICAL: FIGURE RENDERING VERIFICATION
+
+**Compilation:**
+Run pdflatex twice to resolve references
+
+**Verify Figures RENDERED (not placeholders) - Use ALL 4 methods:**
+
+**Method 1 - Check Compilation Output:**
+Look for: [11 <../Results/fig1.png>], [12 <../Results/fig2.png>]
+If see "File not found" → Use Glob to find files, update paths, recompile
+
+**Method 2 - Check PDF File Size:**
+- <350KB = likely no images (PROBLEM)
+- >450KB = images embedded (GOOD)
+
+**Method 3 - Check Log for Warnings:**
+```
+grep -i "not found" *.log
+```
+If warnings found → Fix paths and recompile
+
+**Method 4 - Count Inclusions:**
+```
+grep "includegraphics" *.tex | wc -l
+```
+Should match number of figures
+
+**RECOVERY PROCEDURE - If Figures Are Placeholder Boxes:**
+
+If after compilation you see placeholder boxes instead of images:
+
+1. **Diagnose the problem:**
+   Check compilation output for "File not found" warnings
+   Note which files are missing
+
+2. **Find actual file locations:**
+   For each missing file, use Glob:
+   Glob: **/fig1_main_comparison.png
+
+   Record where files actually are
+
+3. **Calculate correct relative paths:**
+   From: {ICIS_PATH}\Paper\icis_paper_{participantId}_v1.tex
+   To: {ICIS_PATH}\Results\fig1.png
+   Path: ../Results/fig1.png
+
+4. **Update ALL figure paths in LaTeX:**
+   Use Edit tool to update each \includegraphics path:
+
+   Find: \includegraphics{Results/old_path/fig1.png}
+   Replace: \includegraphics{../Results/fig1.png}
+
+   Repeat for each figure
+
+5. **Recompile and verify:**
+   Run: pdflatex icis_paper_{participantId}_v1.tex
+   Check for: [11 <../Results/fig1.png>]
+   Verify: No "File not found" warnings
+
+6. **Check PDF file size:**
+   Should increase from ~300KB to ~500KB
+   Confirms images are now embedded
+
+7. **Visual check (if possible):**
+   Open PDF and verify images display, not boxes
+
+Only proceed to final submission when ALL figures render correctly
+
+**Final Checklist:**
+□ Core files: paper (.tex + .pdf), figures (high-res), bibliography
+□ Supplementary: code, results, analyses, README
+□ References compile (no "?" in PDF)
+□ Page count correct
+□ All claims supported
+□ Figures/tables referenced
+□ No compilation warnings
+
+DELIVERABLE: Publication-ready PDF
+
+---
+
+## EXECUTION WORKFLOW
+
+1. Initialize: Read transcript, determine research type
+2. Plan: Create todo list, track progress
+3. Implement: Follow steps 1-9 sequentially
+4. Verify: Test code, compile LaTeX
+5. Iterate: Address issues before proceeding
+6. Finalize: Ensure PDF includes all figures
+
+**Key Points:**
+- Use python3 for Python execution
+- Generate realistic synthetic data
+- Include figures in final compilation
+- Save results with timestamps
+- Track progress with TodoWrite tool
+
+---
+
+## COMMON PITFALLS - FIGURE RENDERING
+
+### Pitfall 1: Figures Appear as Boxes in PDF
+
+**Symptoms:**
+- LaTeX compiles "successfully"
+- PDF created but shows boxes with captions instead of images
+- PDF file size is small (<350 KB)
+
+**Cause:** Figure file paths in \includegraphics{...} don't match actual file locations. LaTeX creates placeholder boxes when files aren't found.
+
+**Solution:**
+1. Use Glob to find where figures actually are: **/fig*.png
+2. Note the exact paths returned
+3. Calculate relative path from Paper/ to the figures:
+   - If figures are in: {ICIS_PATH}\Results\fig1.png
+   - And paper is in: {ICIS_PATH}\Paper\icis_paper_{participantId}_v1.tex
+   - Relative path is: ../Results/fig1.png
+4. Use Edit tool to update ALL \includegraphics paths:
+   - Find: \includegraphics{Results/old_path/fig1.png}
+   - Replace: \includegraphics{../Results/fig1.png}
+5. Recompile and check output for: [page <../Results/fig1.png>]
+6. Verify PDF size increases (should be >450 KB)
+
+---
+
+### Pitfall 2: Paths Work on First Run, Break on Subsequent Builds
+
+**Symptoms:**
+- Figures worked perfectly initially
+- Later builds show placeholder boxes
+- No changes were made to figure files
+
+**Cause:** Hardcoded timestamp paths like Results/experiment_20251118_154951/. New experiment runs create new timestamps, making old paths invalid.
+
+**Solution - For Current Paper:**
+1. Find where figures currently are: Glob **/fig*.png
+2. Update to current paths using Edit tool
+
+**Prevention - For Future:**
+- Never use timestamped paths in LaTeX
+- Always use latest non-timestamped paths
+- Use relative paths: ../Results/
+- Or copy figures to stable location (just Results/) if needed
+
+---
+
+### Pitfall 3: Verification Says "Complete" But Figures Missing
+
+**Symptoms:**
+- Verification checklist all marked ✓
+- But PDF still has placeholder boxes instead of images
+
+**Cause:** Verification only checked \label{fig:} existence, didn't verify actual image files or PDF rendering.
+
+**Solution - Complete Verification Requires ALL 5:**
+1. Label count: grep "\\label{fig:"  ✓ Checks references exist
+2. File existence: Glob <path-from-includegraphics>  ✓ Checks image files exist
+3. Compilation check: Look for [page <path>] in output  ✓ Checks LaTeX found files
+4. File size check: PDF should be >450 KB with images  ✓ Checks images embedded
+5. Warning check: grep "not found" *.log should return nothing  ✓ Checks no errors
+
+Only mark verification complete when ALL 5 pass, not just #1.
+
+---
+
+# APPENDIX A: UNIVERSAL RESEARCH RULES
+
+Apply to ALL steps:
+
+## Data & Results Integrity
+✅ Explicitly state what was/wasn't executed
+✅ Label synthetic data and generation method
+✅ Document seeds, generators, parameters
+✅ Point to verifiable sources
+❌ Don't fabricate results/runs/experiments
+❌ Don't represent synthetic as real without validation
+❌ Don't cherry-pick or omit contradictory evidence
+
+## Assumptions & Theory
+✅ Justify assumptions with IS/economic theory references
+✅ Define boundary conditions explicitly
+✅ Explain variable interactions
+✅ Link to established theory
+❌ Don't use unsubstantiated assumptions
+❌ Don't generalize beyond stated scope
+❌ Don't omit key derivation steps
+
+## Literature & Citations
+✅ Cite specific, checkable sources
+✅ Quote/summarize with clear attribution
+✅ Use only peer-reviewed sources
+✅ Include contradictory literature
+❌ Don't hallucinate papers/authors/venues/years
+❌ Don't paraphrase without reference
+❌ Don't cite generic web pages when primary sources exist
+
+## Reproducibility
+✅ Provide complete specifications
+✅ Share data/materials/code (or explain constraints)
+✅ Document tools, versions, configurations
+✅ Include access paths and run guides
+❌ Don't omit critical implementation details
+❌ Don't skip verification steps
+❌ Don't withhold information needed for replication
+
+---
+
+# APPENDIX C: RESEARCH QUALITY STANDARDS
+
+## C.1 Simulation & Computational Modeling
+
+- **Model fit:** Justify why simulation appropriate and which class
+- **Specification:** Complete description (entities, states, processes, initialization)
+  - For ABM: Follow ODD protocol (Overview, Design concepts, Details)
+- **Assumptions:** Explicit, tied to theory/sources, explain abstractions
+- **Verification/Validation:** Unit tests, extreme cases, stylized facts, empirical patterns
+- **Calibration:** Transparent procedures, face validity, benchmark comparisons
+- **Experiment design:** Pre-specify factors/metrics, sufficient replications, sensitivity analysis
+- **Theory linkage:** Connect to IS theory, generate propositions, discuss boundaries
+- **Reproducibility:** Release code, configs, seeds, data, run guide
+
+## C.2 Analytical & Theoretical Modeling
+
+- **Purpose:** Begin from documented IS puzzle/stylized fact
+- **Assumptions:** Minimal, transparent, economically/behaviorally interpretable
+- **Mechanisms:** Show how assumptions produce results and comparative statics
+- **Robustness:** Alternative structures, distributions, timing
+- **Insights:** Translate to intuitions, visual aids, testable predictions
+- **Soundness:** Complete proofs (or sketches + appendices), clean notation
+- **Readability:** Focus main text on meaning, include roadmaps for intricate models
+
+## C.3 Laboratory & Field Experiments
+
+- **Theory first:** Define nomological network, align hypotheses/measures/analysis
+- **Validity design:** Cognitive pretests, validated items, reliability checks
+- **Pre-specification:** Register hypotheses, outcomes, analysis plan
+- **Experimental type:** Explicit about lab/field/online, discuss tradeoffs
+- **Randomization:** Document assignment, balance checks, compliance, manipulation checks
+- **Metrics:** Business/behavior-relevant, define guardrails, avoid poor proxies
+- **Power:** For unit of randomization, cluster-robust SEs
+- **Replication:** Provide materials, scripts, stimuli, reproducibility package
+
+## C.4 Surveys, Questionnaires, Field Studies
+
+- **Theory first:** Define nomological network, align hypotheses/measures/analysis
+- **Randomization:** Document assignment, balance checks, compliance, manipulation checks
+- **Metrics:** Business/behavior-relevant, define guardrails, avoid poor proxies
+- **Power:** For unit of randomization, cluster-robust SEs
+- **Replication:** Provide materials, scripts, stimuli, reproducibility package
+
+---
+
+# APPENDIX D: WRITING STYLE GUIDE
+
+## Paragraph Development
+- Target: 150-250 words (6-10 sentences)
+- Develop ONE main idea thoroughly
+- Use transition sentences between paragraphs
+- Avoid choppy 1-2 sentence paragraphs
+
+## Subsection Minimization
+- Use \\section{} only for major divisions
+- Use \\subsection{} only when necessary
+- NO \\subsubsection{} - integrate into flowing paragraphs
+- Maximum 2 heading levels in most sections
+
+## Narrative Cohesion
+- Transitional phrases: "Building on this," "Moreover," "Consequently"
+- Signposting: "We now turn to," "Having established X"
+- Link sentences with pronouns, synonyms, connecting phrases
+
+## Examples
+
+❌ **Fragmented:**
+```
+\\subsubsection{Route 1}
+Control enhances ownership.
+
+\\subsubsection{Route 2}
+Familiarity breeds ownership.
+```
+
+✅ **Flowing:**
+```
+Three routes develop psychological ownership. First, controlling the target enhances feelings as individuals exercise decisions over use. Second, intimately knowing develops through deep engagement and familiarity. Third, self-investment incorporates objects into extended self-concept.
+```
+
+---
+
+# APPENDIX E: KEY REFERENCES BY METHOD
+
+## E.1 Simulation
+
+**Agent-Based Modeling:**
+Macal & North (2010), "Tutorial on agent-based modelling," J. Simulation
+Kiesling et al. (2012), "Agent-based simulation of innovation diffusion," CEJOR
+
+**Discrete-Event:**
+Banks et al. (2010), Discrete-Event System Simulation, Pearson
+Law (2015), Simulation Modeling and Analysis, McGraw-Hill
+
+**System Dynamics:**
+Sterman (2000), Business Dynamics, McGraw-Hill
+Forrester (1961), Industrial Dynamics, MIT Press
+
+## E.2 Analytical Modeling
+
+Refer to ISR/MISQ editorials on theoretical contributions
+
+## E.3 Experimental Design
+
+Refer to experimental design standards in IS journals
