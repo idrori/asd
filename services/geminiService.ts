@@ -1822,12 +1822,20 @@ async function callOpenAIViaProxy<T>(prompt: string, baseUrl: string): Promise<T
   console.log('[OpenAI] Proxy response received, parsing JSON...');
 
   try {
-    // Try to extract JSON from markdown code blocks if present
-    let jsonStr = responseContent;
-    const jsonMatch = responseContent.match(/```(?:json)?\s*([\s\S]*?)```/);
-    if (jsonMatch) {
-      jsonStr = jsonMatch[1].trim();
+    // Clean the response - handle various markdown wrapping scenarios
+    let jsonStr = responseContent.trim();
+
+    // Remove markdown code blocks (with or without closing ```)
+    if (jsonStr.startsWith('```')) {
+      // Remove opening ```json or ```
+      jsonStr = jsonStr.replace(/^```(?:json)?\s*\n?/, '');
+      // Remove closing ``` if present
+      jsonStr = jsonStr.replace(/\n?```\s*$/, '');
     }
+
+    // Trim again after removing markdown
+    jsonStr = jsonStr.trim();
+
     return JSON.parse(jsonStr) as T;
   } catch (e) {
     console.error('[OpenAI] Failed to parse JSON response:', responseContent.substring(0, 500));
@@ -1884,12 +1892,20 @@ async function callOpenAIDirect<T>(prompt: string): Promise<T> {
   console.log('[OpenAI] Direct response received, parsing JSON...');
 
   try {
-    // Try to extract JSON from markdown code blocks if present
-    let jsonStr = responseContent;
-    const jsonMatch = responseContent.match(/```(?:json)?\s*([\s\S]*?)```/);
-    if (jsonMatch) {
-      jsonStr = jsonMatch[1].trim();
+    // Clean the response - handle various markdown wrapping scenarios
+    let jsonStr = responseContent.trim();
+
+    // Remove markdown code blocks (with or without closing ```)
+    if (jsonStr.startsWith('```')) {
+      // Remove opening ```json or ```
+      jsonStr = jsonStr.replace(/^```(?:json)?\s*\n?/, '');
+      // Remove closing ``` if present
+      jsonStr = jsonStr.replace(/\n?```\s*$/, '');
     }
+
+    // Trim again after removing markdown
+    jsonStr = jsonStr.trim();
+
     return JSON.parse(jsonStr) as T;
   } catch (e) {
     console.error('[OpenAI] Failed to parse JSON response:', responseContent.substring(0, 500));
