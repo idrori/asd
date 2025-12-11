@@ -2025,66 +2025,62 @@ You MUST return a complete JSON object with ALL of these fields:
   "criticalAlerts": []
 }`;
 
-    try {
-      result = await callOpenAIJson<any>(prompt);
-    } catch (e) {
-      console.warn('[runReviewer] FALLBACK USED - OpenAI call failed:', (e as Error).message);
-      result = getDefaultReviewResult((e as Error).message);
-    }
+    // No fallback - let error propagate to caller
+    result = await callOpenAIJson<any>(prompt);
   } else {
     // Section-by-section review for comprehensive coverage
     console.log('[Reviewer] Starting section-by-section review...');
 
-    try {
-      // Review each section (could be parallelized for speed)
-      const sectionReviews: SectionReviewResult[] = [];
-      for (const section of sections) {
-        console.log(`[Reviewer] Reviewing section: ${section.name}...`);
-        const sectionReview = await reviewSection(section, paperTitle);
-        sectionReviews.push(sectionReview);
-        console.log(`[Reviewer] ${section.name} score: ${sectionReview.score}/5`);
-      }
-
-      // Aggregate all section reviews into final result
-      console.log('[Reviewer] Aggregating section reviews...');
-      result = await aggregateSectionReviews(sectionReviews, paperContent, misqReviewCriteria);
-      console.log('[Reviewer] Section-by-section review complete');
-
-    } catch (e) {
-      console.warn('[runReviewer] FALLBACK USED - Section review failed:', (e as Error).message);
-      result = getDefaultReviewResult((e as Error).message);
+    // Review each section (could be parallelized for speed)
+    // No fallback - let errors propagate to caller
+    const sectionReviews: SectionReviewResult[] = [];
+    for (const section of sections) {
+      console.log(`[Reviewer] Reviewing section: ${section.name}...`);
+      const sectionReview = await reviewSection(section, paperTitle);
+      sectionReviews.push(sectionReview);
+      console.log(`[Reviewer] ${section.name} score: ${sectionReview.score}/5`);
     }
+
+    // Aggregate all section reviews into final result
+    console.log('[Reviewer] Aggregating section reviews...');
+    result = await aggregateSectionReviews(sectionReviews, paperContent, misqReviewCriteria);
+    console.log('[Reviewer] Section-by-section review complete');
   }
 
-  // Ensure all required fields exist with defaults
-  // Use ?? (nullish coalescing) instead of || to preserve 0 values from fallback data
+  // Validate that API returned all required fields - no defaults
+  if (result.novelty === undefined || result.significance === undefined ||
+      result.methodologicalRigor === undefined || result.clarity === undefined ||
+      result.relevance === undefined) {
+    throw new Error('[Reviewer] API response missing required score fields');
+  }
+
   const reviewResult: ReviewResult = {
-    novelty: result.novelty ?? 3,
-    significance: result.significance ?? 3,
-    methodologicalRigor: result.methodologicalRigor ?? 3,
-    clarity: result.clarity ?? 3,
-    relevance: result.relevance ?? 3,
+    novelty: result.novelty,
+    significance: result.significance,
+    methodologicalRigor: result.methodologicalRigor,
+    clarity: result.clarity,
+    relevance: result.relevance,
 
-    reviewScore: result.novelty ?? 3,
-    reliabilityScore: result.significance ?? 3,
-    alignmentScore: result.methodologicalRigor ?? 3,
-    errorsDetected: (result.majorConcerns?.length ?? 0) + (result.minorCorrections?.length ?? 0),
+    reviewScore: result.novelty,
+    reliabilityScore: result.significance,
+    alignmentScore: result.methodologicalRigor,
+    errorsDetected: (result.majorConcerns?.length || 0) + (result.minorCorrections?.length || 0),
 
-    feedback: result.overallAssessment ?? "The paper needs further development.",
-    majorConcerns: result.majorConcerns ?? [],
-    minorCorrections: result.minorCorrections ?? [],
+    feedback: result.overallAssessment,
+    majorConcerns: result.majorConcerns || [],
+    minorCorrections: result.minorCorrections || [],
 
-    researchQuestionFeedback: result.researchQuestionFeedback ?? "Research question needs clarification.",
-    methodFeedback: result.methodFeedback ?? "Method section needs more detail.",
-    impactFeedback: result.impactFeedback ?? "Impact could be better articulated.",
-    writingFeedback: result.writingFeedback ?? "Writing quality is acceptable.",
-    overallAssessment: result.overallAssessment ?? "The paper shows promise but needs revision.",
+    researchQuestionFeedback: result.researchQuestionFeedback,
+    methodFeedback: result.methodFeedback,
+    impactFeedback: result.impactFeedback,
+    writingFeedback: result.writingFeedback,
+    overallAssessment: result.overallAssessment,
 
-    noveltyComment: result.noveltyComment ?? "Acceptable novelty",
-    significanceComment: result.significanceComment ?? "Acceptable significance",
-    methodologicalRigorComment: result.methodologicalRigorComment ?? "Method needs improvement",
-    clarityComment: result.clarityComment ?? "Writing is clear",
-    relevanceComment: result.relevanceComment ?? "Relevant to IS field",
+    noveltyComment: result.noveltyComment,
+    significanceComment: result.significanceComment,
+    methodologicalRigorComment: result.methodologicalRigorComment,
+    clarityComment: result.clarityComment,
+    relevanceComment: result.relevanceComment,
 
     // Trustworthiness will be set separately below
     trustworthiness: {
@@ -2335,29 +2331,23 @@ Provide a detailed review of THIS SECTION ONLY. Return JSON:
   "minorCorrections": ["typo or minor fix"]
 }`;
 
-  try {
-    const result = await callOpenAIJson<SectionReviewResult>(prompt);
-    return {
-      sectionName: section.name,
-      score: result.score ?? 3,
-      strengths: result.strengths ?? [],
-      weaknesses: result.weaknesses ?? [],
-      suggestions: result.suggestions ?? [],
-      majorConcerns: result.majorConcerns ?? [],
-      minorCorrections: result.minorCorrections ?? []
-    };
-  } catch (error) {
-    console.error(`[Reviewer] Failed to review section "${section.name}":`, error);
-    return {
-      sectionName: section.name,
-      score: 0,
-      strengths: [],
-      weaknesses: [`⚠️ Failed to review this section: ${(error as Error).message}`],
-      suggestions: [],
-      majorConcerns: [`Review API failed for ${section.name} section`],
-      minorCorrections: []
-    };
+  // No fallback - let errors propagate to caller
+  const result = await callOpenAIJson<SectionReviewResult>(prompt);
+
+  // Validate required fields
+  if (result.score === undefined) {
+    throw new Error(`[Reviewer] Section "${section.name}" response missing required score field`);
   }
+
+  return {
+    sectionName: section.name,
+    score: result.score,
+    strengths: result.strengths || [],
+    weaknesses: result.weaknesses || [],
+    suggestions: result.suggestions || [],
+    majorConcerns: result.majorConcerns || [],
+    minorCorrections: result.minorCorrections || []
+  };
 }
 
 /**
@@ -2442,50 +2432,6 @@ Based on this comprehensive review, provide the FINAL assessment as JSON:
 }
 
 /**
- * Get default review result when API fails
- */
-function getDefaultReviewResult(errorMessage?: string): any {
-  const errorPrefix = "⚠️ [REVIEW FAILED - FALLBACK DATA] ";
-  const errorSuffix = errorMessage ? ` (Error: ${errorMessage})` : "";
-  return {
-    novelty: 0,
-    noveltyComment: errorPrefix + "Review API unavailable" + errorSuffix,
-    significance: 0,
-    significanceComment: errorPrefix + "Review API unavailable" + errorSuffix,
-    methodologicalRigor: 0,
-    methodologicalRigorComment: errorPrefix + "Review API unavailable" + errorSuffix,
-    clarity: 0,
-    clarityComment: errorPrefix + "Review API unavailable" + errorSuffix,
-    relevance: 0,
-    relevanceComment: errorPrefix + "Review API unavailable" + errorSuffix,
-    researchQuestionFeedback: errorPrefix + "Could not generate feedback - OpenAI API call failed." + errorSuffix,
-    methodFeedback: errorPrefix + "Could not generate feedback - OpenAI API call failed." + errorSuffix,
-    impactFeedback: errorPrefix + "Could not generate feedback - OpenAI API call failed." + errorSuffix,
-    writingFeedback: errorPrefix + "Could not generate feedback - OpenAI API call failed." + errorSuffix,
-    overallAssessment: errorPrefix + "REVIEW NOT COMPLETED. The OpenAI API call failed. Please check your API key and try again." + errorSuffix,
-    majorConcerns: [
-      errorPrefix + "Review could not be completed - API error" + errorSuffix
-    ],
-    minorCorrections: [],
-    trustworthiness: {
-      reliability: 0,
-      reliabilityRationale: errorPrefix + "Review API unavailable" + errorSuffix,
-      benevolence: 0,
-      benevolenceRationale: errorPrefix + "Review API unavailable" + errorSuffix,
-      goalAlignment: 0,
-      goalAlignmentRationale: errorPrefix + "Review API unavailable" + errorSuffix
-    },
-    criticalAlerts: [{
-      title: "Review API Failed",
-      impact: "High",
-      details: "The OpenAI API call failed. This review contains fallback data only.",
-      actionRequired: "Check API key and retry the review",
-      consequence: "Paper cannot be properly reviewed without working API"
-    }]
-  };
-}
-
-/**
  * Generate trustworthiness assessment from author's perspective
  * As per ICISreview.txt Step 4: "Act as the author who was interviewed"
  * Uses OpenAI API for consistency with reviewer
@@ -2542,38 +2488,30 @@ Return your assessment as JSON:
   "goalAlignmentRationale": "<2-3 sentences explaining your rating as the author>"
 }`;
 
-  try {
-    const result = await callOpenAIJson<any>(prompt);
-    console.log('[Trustworthiness] Assessment complete:', {
-      reliability: result.reliability,
-      benevolence: result.benevolence,
-      goalAlignment: result.goalAlignment
-    });
-    return {
-      reliability: result.reliability ?? 5,
-      benevolence: result.benevolence ?? 5,
-      goalAlignment: result.goalAlignment ?? 5,
-      rationales: {
-        reliability: result.reliabilityRationale ?? "Process followed standard methodology",
-        benevolence: result.benevolenceRationale ?? "System was transparent in its approach",
-        goalAlignment: result.goalAlignmentRationale ?? "Output aligned with stated objectives"
-      }
-    };
-  } catch (error) {
-    const errorMsg = (error as Error).message;
-    console.warn('[assessTrustworthiness] FALLBACK USED - API call failed:', errorMsg);
-    const errorPrefix = "⚠️ [ASSESSMENT FAILED] ";
-    return {
-      reliability: 0,
-      benevolence: 0,
-      goalAlignment: 0,
-      rationales: {
-        reliability: errorPrefix + "API call failed: " + errorMsg,
-        benevolence: errorPrefix + "API call failed: " + errorMsg,
-        goalAlignment: errorPrefix + "API call failed: " + errorMsg
-      }
-    };
+  // No fallback - let errors propagate to caller
+  const result = await callOpenAIJson<any>(prompt);
+
+  // Validate required fields - no defaults
+  if (result.reliability === undefined || result.benevolence === undefined ||
+      result.goalAlignment === undefined) {
+    throw new Error('[Trustworthiness] API response missing required fields');
   }
+
+  console.log('[Trustworthiness] Assessment complete:', {
+    reliability: result.reliability,
+    benevolence: result.benevolence,
+    goalAlignment: result.goalAlignment
+  });
+  return {
+    reliability: result.reliability,
+    benevolence: result.benevolence,
+    goalAlignment: result.goalAlignment,
+    rationales: {
+      reliability: result.reliabilityRationale,
+      benevolence: result.benevolenceRationale,
+      goalAlignment: result.goalAlignmentRationale
+    }
+  };
 };
 
 // --- Reviser Functions ---
@@ -2957,19 +2895,8 @@ Generate:
 
 Return as JSON with keys: abstract, task1, task2, sourcePaperUsage (object)`;
 
-  try {
-    return await callGeminiJson(prompt);
-  } catch (error) {
-    const errorMsg = (error as Error).message;
-    console.warn('[generateMetadata] FALLBACK USED - Gemini call failed:', errorMsg);
-    const errorPrefix = "⚠️ [GENERATION FAILED] ";
-    return {
-      abstract: errorPrefix + "Gemini API call failed: " + errorMsg,
-      task1: errorPrefix + "Gemini API call failed: " + errorMsg,
-      task2: errorPrefix + "Gemini API call failed: " + errorMsg,
-      sourcePaperUsage: {}
-    };
-  }
+  // No fallback - let errors propagate to caller
+  return await callGeminiJson(prompt);
 };
 
 /**
