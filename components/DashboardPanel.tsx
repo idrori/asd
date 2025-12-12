@@ -33,6 +33,8 @@ interface DashboardPanelProps {
   onStageAbort?: (stage: Stage) => void;
   onStageRestart?: (stage: Stage) => void;
   filePrefix?: string;
+  dataFileName?: string;
+  dataFileContent?: string;
 }
 
 const DashboardPanel: React.FC<DashboardPanelProps> = ({
@@ -45,7 +47,9 @@ const DashboardPanel: React.FC<DashboardPanelProps> = ({
   onRefreshDetection,
   onStageAbort,
   onStageRestart,
-  filePrefix
+  filePrefix,
+  dataFileName,
+  dataFileContent
 }) => {
   // State for files passed from Reviewer to Supervisor
   const [reviewOutputFiles, setReviewOutputFiles] = useState<ReviewOutputFiles | undefined>();
@@ -141,6 +145,8 @@ const DashboardPanel: React.FC<DashboardPanelProps> = ({
             currentPaperVersion={state.currentPaperVersion}
             filePrefix={filePrefix}
             dataAlert={state.dataAlert}
+            dataFileName={dataFileName}
+            dataFileContent={dataFileContent}
           />
         );
 

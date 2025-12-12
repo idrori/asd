@@ -46,6 +46,8 @@ const App: React.FC = () => {
     uploadedFiles,
     handleFileChange,
     getInterviewContent,
+    getDataFileContent,
+    getDataFileName,
     detectionStatus,
     refreshDetection
   } = useFileUpload();
@@ -155,6 +157,8 @@ Is this the correct data file for your analysis?`;
             onStageAbort={handleStageAbort}
             onStageRestart={handleStageRestart}
             filePrefix={getFilePrefix()}
+            dataFileName={getDataFileName()}
+            dataFileContent={getDataFileContent()}
           />
         )}
       </div>

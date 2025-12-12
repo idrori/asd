@@ -363,6 +363,14 @@ export function useFileUpload() {
     return uploadedFiles.interviewContent || '';
   }, [uploadedFiles.interviewContent]);
 
+  const getDataFileContent = useCallback((): string => {
+    return uploadedFiles.dataFileContent || '';
+  }, [uploadedFiles.dataFileContent]);
+
+  const getDataFileName = useCallback((): string => {
+    return uploadedFiles.dataFile?.name || '';
+  }, [uploadedFiles.dataFile]);
+
   const refreshDetection = useCallback(async () => {
     await autoDetectFiles();
   }, []);
@@ -371,6 +379,8 @@ export function useFileUpload() {
     uploadedFiles,
     handleFileChange,
     getInterviewContent,
+    getDataFileContent,
+    getDataFileName,
     detectionStatus,
     refreshDetection
   };
