@@ -559,6 +559,7 @@ export interface PythonExecutionResult {
     filename: string;
     path: string;
     size: number;
+    base64?: string;  // For cloud-generated figures
   }[];
   error?: string;
   dataFileFound?: boolean;
@@ -566,16 +567,122 @@ export interface PythonExecutionResult {
   usedSyntheticData?: boolean;
 }
 
+export interface CloudAnalysisResult {
+  success: boolean;
+  summary?: {
+    shape: { rows: number; columns: number };
+    columns: string[];
+    numeric_columns: string[];
+    categorical_columns: string[];
+    descriptive_stats?: Record<string, any>;
+    missing_values?: Record<string, number>;
+    categorical_summary?: Record<string, any>;
+    correlation_matrix?: Record<string, Record<string, number | null>>;
+    correlation_test?: {
+      variables: string[];
+      correlation: number;
+      p_value: number;
+      n?: number;
+    };
+  };
+  figures?: {
+    name: string;
+    type: string;
+    base64: string;
+    description: string;
+  }[];
+  chart_data?: {
+    type: 'histogram' | 'heatmap' | 'bar' | 'scatter';
+    column?: string;
+    columns?: string[];
+    x_column?: string;
+    y_column?: string;
+    data: any;
+    stats?: Record<string, any>;
+    correlation?: number;
+  }[];
+  text_summary?: string;
+  error?: string;
+}
+
+/**
+ * Analyze data file using Vercel Python serverless function
+ * Returns statistical analysis and figures as base64
+ */
+export async function analyzeDataWithPython(csvContent: string, analysisType: string = 'full'): Promise<CloudAnalysisResult> {
+  try {
+    console.log(`[Cloud Python] Analyzing data (${csvContent.length} chars, type: ${analysisType})...`);
+
+    const response = await fetch(`${VERCEL_API_URL}/api/analyze-data`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        csvContent,
+        analysisType
+      })
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      console.log(`[Cloud Python] Analysis complete: ${result.figures?.length || 0} figures generated`);
+    } else {
+      console.warn(`[Cloud Python] Analysis failed: ${result.error}`);
+    }
+
+    return result;
+  } catch (error) {
+    console.error('[Cloud Python] Error:', error);
+    return {
+      success: false,
+      error: (error as Error).message
+    };
+  }
+}
+
 /**
  * Execute a Python visualization script
- * The script is saved to Code/ and executed, with figures saved to Results/
+ * Tries cloud Python first, falls back to local backend
  */
 export async function executePythonScript(
   filename: string,
   code: string,
   dataFile?: string
 ): Promise<PythonExecutionResult> {
-  // Check backend availability
+  // First try cloud Python analysis if we have cloud data
+  const cloudData = getCloudDataFile();
+  if (cloudData?.content && VERCEL_API_URL) {
+    console.log('[executePythonScript] Trying cloud Python analysis...');
+    const cloudResult = await analyzeDataWithPython(cloudData.content, 'full');
+
+    if (cloudResult.success) {
+      // Convert cloud result to PythonExecutionResult format
+      // Note: Cloud analysis now returns chart_data for frontend rendering instead of base64 images
+      const generatedFigures: PythonExecutionResult['generatedFigures'] = [];
+
+      // Store chart data as JSON "figures" that can be used by frontend charting
+      if (cloudResult.chart_data) {
+        cloudResult.chart_data.forEach((chart, idx) => {
+          generatedFigures.push({
+            filename: `${chart.type}_${chart.column || chart.x_column || idx}.json`,
+            path: `cloud://chart_data/${idx}`,
+            size: JSON.stringify(chart).length,
+            // Store chart data as base64-encoded JSON for consistency
+            base64: btoa(JSON.stringify(chart))
+          });
+        });
+      }
+
+      return {
+        success: true,
+        stdout: cloudResult.text_summary || '',
+        dataFileFound: true,
+        generatedFigures
+      };
+    }
+  }
+
+  // Fall back to local backend
   if (backendAvailable === null) {
     await checkBackendHealth();
   }
@@ -583,12 +690,12 @@ export async function executePythonScript(
   if (!backendAvailable) {
     return {
       success: false,
-      error: 'Backend server not available. Run "node server.cjs" to enable Python execution.'
+      error: 'Python execution not available. Cloud analysis failed and local backend not running.'
     };
   }
 
   try {
-    console.log(`[executePythonScript] filename=${filename}, dataFile=${dataFile || 'UNDEFINED'}`);
+    console.log(`[executePythonScript] Using local backend, filename=${filename}, dataFile=${dataFile || 'UNDEFINED'}`);
     const requestBody = { filename, code, dataFile };
     console.log(`[executePythonScript] Request body dataFile:`, requestBody.dataFile);
     const response = await fetch(`${API_BASE}/execute-python`, {

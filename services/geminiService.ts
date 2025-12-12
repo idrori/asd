@@ -14,7 +14,7 @@ import {
   writeOversightFile,
   writeFeedbackFile
 } from './fileService';
-import { saveDataFile, executePythonScript, listGeneratedFigures, readPdfFile, getDataFilePreview, getCloudDataFile } from './fileApi';
+import { saveDataFile, executePythonScript, listGeneratedFigures, readPdfFile, getDataFilePreview, getCloudDataFile, analyzeDataWithPython, CloudAnalysisResult } from './fileApi';
 
 // API Configuration
 // Supports three modes (in priority order):
@@ -1226,6 +1226,79 @@ export interface DataAnalysisResult {
  * @param onConfirm - Optional callback to confirm data file before analysis
  *                    If provided, shows first line and waits for user confirmation
  */
+/**
+ * Use Gemini to analyze CSV content directly
+ * This is the simplest approach - no Python needed at all
+ */
+async function analyzeCSVWithGemini(
+  csvContent: string,
+  dataFileName: string,
+  onProgress?: (message: string) => void
+): Promise<DataAnalysisResult> {
+  console.log('[DataAnalysis] Using Gemini to analyze CSV content...');
+  onProgress?.('Analyzing data with AI...');
+
+  // Limit CSV content to avoid token limits (first 100 rows + header)
+  const lines = csvContent.split('\n');
+  const sampleContent = lines.slice(0, 101).join('\n');
+
+  const prompt = `You are a data analyst. Analyze this CSV data and provide a structured summary.
+
+CSV FILE: ${dataFileName}
+TOTAL ROWS (estimate): ${lines.length - 1}
+
+DATA SAMPLE (first 100 rows):
+\`\`\`
+${sampleContent}
+\`\`\`
+
+Provide a comprehensive analysis in the following format:
+
+File: ${dataFileName}
+Dataset shape: [X] rows x [Y] columns
+
+COLUMN NAMES AND TYPES:
+  - [column_name]: [numeric/categorical] ([description])
+
+NUMERIC COLUMNS STATISTICS:
+  [column_name]:
+    min=[value], max=[value], mean=[value], std=[value]
+    [any notable patterns or distributions]
+
+CATEGORICAL COLUMNS VALUE COUNTS:
+  [column_name]: [X] unique values
+    Values: {"value1": count1, "value2": count2, ...}
+
+KEY INSIGHTS:
+  - [Notable patterns, correlations, or data quality issues]
+  - [Recommendations for analysis]
+
+Be precise with column names (they may contain Hebrew or special characters - use them exactly as they appear).
+Calculate statistics from the actual data shown. If the full dataset has more rows, note that statistics are based on the sample.`;
+
+  try {
+    const response = await callGemini(prompt, 'Analyze CSV data');
+
+    if (response) {
+      console.log('[DataAnalysis] Gemini analysis complete');
+      onProgress?.('AI data analysis complete');
+      return {
+        success: true,
+        dataSummary: response,
+        dataFileFound: true
+      };
+    }
+  } catch (error) {
+    console.error('[DataAnalysis] Gemini analysis failed:', error);
+  }
+
+  return {
+    success: false,
+    dataFileFound: true,
+    error: 'AI analysis failed'
+  };
+}
+
 export async function analyzeDataFile(
   dataFileName: string,
   onProgress?: (message: string) => void,
@@ -1273,6 +1346,80 @@ export async function analyzeDataFile(
   }
 
   onProgress?.('Analyzing data file...');
+
+  // STEP 2: Try Gemini analysis first (simplest - no Python needed)
+  const cloudData = getCloudDataFile();
+  if (cloudData?.content) {
+    console.log('[DataAnalysis] Trying Gemini analysis (no Python needed)...');
+    const geminiResult = await analyzeCSVWithGemini(cloudData.content, dataFileName, onProgress);
+    if (geminiResult.success) {
+      return geminiResult;
+    }
+  }
+
+  // STEP 3: Try cloud Python analysis (uses lightweight standard library)
+  if (cloudData?.content) {
+    console.log('[DataAnalysis] Trying cloud Python analysis (lightweight)...');
+    onProgress?.('Using cloud data analysis...');
+
+    try {
+      const cloudResult = await analyzeDataWithPython(cloudData.content, 'full');
+
+      if (cloudResult.success && cloudResult.text_summary) {
+        console.log('[DataAnalysis] Cloud analysis successful!');
+
+        // Format the summary in a similar way to the old Python output
+        let dataSummary = `File: ${dataFileName}\n`;
+        dataSummary += `Dataset shape: ${cloudResult.summary?.shape.rows} rows x ${cloudResult.summary?.shape.columns} columns\n\n`;
+
+        dataSummary += 'COLUMN NAMES AND TYPES:\n';
+        cloudResult.summary?.columns.forEach(col => {
+          const isNumeric = cloudResult.summary?.numeric_columns.includes(col);
+          dataSummary += `  - ${col}: ${isNumeric ? 'numeric' : 'categorical'}\n`;
+        });
+        dataSummary += '\n';
+
+        if (cloudResult.summary?.numeric_columns.length) {
+          dataSummary += 'NUMERIC COLUMNS STATISTICS:\n';
+          for (const col of cloudResult.summary.numeric_columns.slice(0, 10)) {
+            const stats = cloudResult.summary.descriptive_stats?.[col];
+            if (stats) {
+              dataSummary += `  ${col}:\n`;
+              dataSummary += `    min=${stats.min}, max=${stats.max}, mean=${stats.mean}, std=${stats.std}\n`;
+            }
+          }
+          dataSummary += '\n';
+        }
+
+        if (cloudResult.summary?.categorical_columns.length) {
+          dataSummary += 'CATEGORICAL COLUMNS VALUE COUNTS:\n';
+          for (const col of cloudResult.summary.categorical_columns.slice(0, 5)) {
+            const values = cloudResult.summary.categorical_summary?.[col];
+            if (values) {
+              const uniqueCount = Object.keys(values).length;
+              dataSummary += `  ${col}: ${uniqueCount} unique values\n`;
+              if (uniqueCount <= 10) {
+                dataSummary += `    Values: ${JSON.stringify(values)}\n`;
+              }
+            }
+          }
+        }
+
+        onProgress?.('Cloud data analysis complete');
+        return {
+          success: true,
+          dataSummary,
+          dataFileFound: true
+        };
+      }
+    } catch (error) {
+      console.warn('[DataAnalysis] Cloud analysis failed, falling back to local Python:', error);
+    }
+  }
+
+  // STEP 4: Fall back to local Python with pandas (if available)
+  console.log('[DataAnalysis] Falling back to local Python analysis...');
+  onProgress?.('Using local Python for analysis...');
 
   const analysisCode = `import os
 import pandas as pd
@@ -1553,6 +1700,11 @@ print("Generated figures successfully")
 /**
  * Generate visualizations for the paper
  * Returns list of generated figures and data usage status for inclusion in the paper
+ *
+ * Visualization modes (in order of preference):
+ * 1. Cloud Python (standard library) - generates chart_data for TikZ/PGFPlots
+ * 2. Local Python (with matplotlib) - generates PNG images
+ * 3. AI-generated TikZ/PGFPlots code - pure LaTeX, no external dependencies
  */
 export async function generateVisualizations(
   interviewTranscript: string,
@@ -1561,6 +1713,38 @@ export async function generateVisualizations(
   onProgress?: (message: string) => void,
   dataSummary?: string  // Pre-analyzed data summary with actual column names
 ): Promise<VisualizationResult> {
+  // STEP 1: Try cloud Python analysis for chart data (TikZ/PGFPlots generation)
+  const cloudData = getCloudDataFile();
+  if (cloudData?.content) {
+    console.log('[Visualizations] Trying cloud Python analysis for chart data...');
+    onProgress?.('Generating visualizations from cloud data...');
+
+    try {
+      const cloudResult = await analyzeDataWithPython(cloudData.content, 'full');
+
+      if (cloudResult.success && cloudResult.chart_data && cloudResult.chart_data.length > 0) {
+        console.log(`[Visualizations] Cloud analysis returned ${cloudResult.chart_data.length} chart datasets`);
+
+        // Generate TikZ/PGFPlots code from chart data
+        const tikzFigures = await generateTikZFromChartData(cloudResult, interviewTranscript, researchContext);
+
+        if (tikzFigures.length > 0) {
+          onProgress?.(`Generated ${tikzFigures.length} TikZ/PGFPlots figures from cloud data`);
+
+          return {
+            figures: tikzFigures,
+            usedSyntheticData: false,
+            dataFileFound: true,
+            dataSummary: cloudResult.text_summary || dataSummary
+          };
+        }
+      }
+    } catch (error) {
+      console.warn('[Visualizations] Cloud chart generation failed, falling back to local Python:', error);
+    }
+  }
+
+  // STEP 2: Fall back to local Python with matplotlib
   onProgress?.('Generating visualization code...');
   console.log('[Visualizations] Generating Python code...');
   if (dataSummary) {
@@ -1582,6 +1766,22 @@ export async function generateVisualizations(
       console.error('[Visualizations] Python execution failed:', result.error);
       console.error('[Visualizations] stderr:', result.stderr);
       onProgress?.(`Visualization error: ${result.error}`);
+
+      // STEP 3: Generate AI-based TikZ visualizations as last resort
+      console.log('[Visualizations] Falling back to AI-generated TikZ figures...');
+      onProgress?.('Generating AI-based visualizations (TikZ)...');
+      const aiFigures = await generateAITikZFigures(interviewTranscript, researchContext, dataSummary);
+
+      if (aiFigures.length > 0) {
+        onProgress?.(`Generated ${aiFigures.length} AI-generated TikZ figures`);
+        return {
+          figures: aiFigures,
+          usedSyntheticData: true,
+          dataFileFound: false,
+          dataAlert: '*** NOTE: Visualizations generated using AI (TikZ/PGFPlots). Python execution was not available.'
+        };
+      }
+
       return {
         figures: [],
         usedSyntheticData: true,
@@ -1652,7 +1852,213 @@ export async function generateVisualizations(
 }
 
 /**
+ * Generate TikZ/PGFPlots code from cloud analysis chart data
+ */
+async function generateTikZFromChartData(
+  cloudResult: CloudAnalysisResult,
+  interviewTranscript: string,
+  researchContext: string
+): Promise<GeneratedFigure[]> {
+  const figures: GeneratedFigure[] = [];
+
+  // Generate TikZ code for each chart type
+  for (const chart of cloudResult.chart_data || []) {
+    let tikzCode = '';
+    let description = '';
+
+    if (chart.type === 'histogram' && chart.column && chart.data) {
+      description = `Distribution of ${chart.column}`;
+      tikzCode = generateHistogramTikZ(chart.column, chart.data, chart.stats);
+    } else if (chart.type === 'bar' && chart.column && chart.data) {
+      description = `Value distribution for ${chart.column}`;
+      tikzCode = generateBarChartTikZ(chart.column, chart.data);
+    } else if (chart.type === 'scatter' && chart.x_column && chart.y_column && chart.data) {
+      description = `Scatter plot: ${chart.x_column} vs ${chart.y_column}`;
+      tikzCode = generateScatterTikZ(chart.x_column, chart.y_column, chart.data, chart.correlation);
+    }
+
+    if (tikzCode) {
+      figures.push({
+        filename: `tikz_${chart.type}_${chart.column || chart.x_column || figures.length}`,
+        description,
+        latexRef: tikzCode  // Store TikZ code directly instead of file path
+      });
+    }
+  }
+
+  return figures;
+}
+
+/**
+ * Generate TikZ histogram code
+ */
+function generateHistogramTikZ(column: string, data: Array<{bin_start: number, bin_end: number, count: number}>, stats?: Record<string, any>): string {
+  const maxCount = Math.max(...data.map(d => d.count));
+
+  let tikz = `\\begin{figure}[htbp]
+\\centering
+\\begin{tikzpicture}
+\\begin{axis}[
+    ybar interval,
+    xlabel={${column.replace(/_/g, '\\_')}},
+    ylabel={Frequency},
+    ymin=0,
+    ymax=${Math.ceil(maxCount * 1.1)},
+    width=0.8\\textwidth,
+    height=6cm,
+    title={Distribution of ${column.replace(/_/g, '\\_')}},
+    grid=major
+]
+\\addplot coordinates {
+`;
+
+  for (const bin of data) {
+    tikz += `    (${bin.bin_start.toFixed(2)}, ${bin.count})\n`;
+  }
+  tikz += `    (${data[data.length - 1].bin_end.toFixed(2)}, 0)
+};
+`;
+
+  // Add mean line if stats available
+  if (stats?.mean) {
+    tikz += `\\addplot[red, thick, dashed] coordinates {(${stats.mean}, 0) (${stats.mean}, ${maxCount})};
+\\node[red, above] at (axis cs:${stats.mean}, ${maxCount * 0.9}) {Mean: ${stats.mean.toFixed(2)}};
+`;
+  }
+
+  tikz += `\\end{axis}
+\\end{tikzpicture}
+\\caption{Distribution of ${column.replace(/_/g, '\\_')}${stats ? ` (n=${stats.count}, mean=${stats.mean?.toFixed(2)}, std=${stats.std?.toFixed(2)})` : ''}}
+\\label{fig:hist_${column.replace(/[^a-zA-Z0-9]/g, '_')}}
+\\end{figure}`;
+
+  return tikz;
+}
+
+/**
+ * Generate TikZ bar chart code
+ */
+function generateBarChartTikZ(column: string, data: Record<string, number>): string {
+  const entries = Object.entries(data).slice(0, 10);  // Limit to 10 bars
+  const maxVal = Math.max(...entries.map(([_, v]) => v));
+
+  let tikz = `\\begin{figure}[htbp]
+\\centering
+\\begin{tikzpicture}
+\\begin{axis}[
+    ybar,
+    symbolic x coords={${entries.map(([k]) => k.substring(0, 15).replace(/_/g, '\\_')).join(', ')}},
+    xtick=data,
+    x tick label style={rotate=45, anchor=east, font=\\footnotesize},
+    xlabel={${column.replace(/_/g, '\\_')}},
+    ylabel={Count},
+    ymin=0,
+    ymax=${Math.ceil(maxVal * 1.1)},
+    width=0.9\\textwidth,
+    height=6cm,
+    bar width=0.6cm,
+    title={Value Distribution for ${column.replace(/_/g, '\\_')}},
+    grid=major
+]
+\\addplot coordinates {
+`;
+
+  for (const [key, val] of entries) {
+    tikz += `    (${key.substring(0, 15).replace(/_/g, '\\_')}, ${val})\n`;
+  }
+
+  tikz += `};
+\\end{axis}
+\\end{tikzpicture}
+\\caption{Value distribution for ${column.replace(/_/g, '\\_')}}
+\\label{fig:bar_${column.replace(/[^a-zA-Z0-9]/g, '_')}}
+\\end{figure}`;
+
+  return tikz;
+}
+
+/**
+ * Generate TikZ scatter plot code
+ */
+function generateScatterTikZ(xCol: string, yCol: string, data: Array<[number, number]>, correlation?: number): string {
+  const sampleData = data.slice(0, 100);  // Limit points for readability
+
+  let tikz = `\\begin{figure}[htbp]
+\\centering
+\\begin{tikzpicture}
+\\begin{axis}[
+    scatter,
+    only marks,
+    xlabel={${xCol.replace(/_/g, '\\_')}},
+    ylabel={${yCol.replace(/_/g, '\\_')}},
+    width=0.8\\textwidth,
+    height=6cm,
+    title={${xCol.replace(/_/g, '\\_')} vs ${yCol.replace(/_/g, '\\_')}${correlation !== undefined ? ` (r = ${correlation.toFixed(3)})` : ''}},
+    grid=major
+]
+\\addplot[blue, mark=*, mark size=1.5pt] coordinates {
+`;
+
+  for (const [x, y] of sampleData) {
+    tikz += `    (${x}, ${y})\n`;
+  }
+
+  tikz += `};
+\\end{axis}
+\\end{tikzpicture}
+\\caption{Scatter plot of ${xCol.replace(/_/g, '\\_')} vs ${yCol.replace(/_/g, '\\_')}${correlation !== undefined ? ` (Pearson r = ${correlation.toFixed(3)})` : ''}}
+\\label{fig:scatter_${xCol.replace(/[^a-zA-Z0-9]/g, '_')}_${yCol.replace(/[^a-zA-Z0-9]/g, '_')}}
+\\end{figure}`;
+
+  return tikz;
+}
+
+/**
+ * Generate AI-based TikZ figures when Python is not available
+ */
+async function generateAITikZFigures(
+  interviewTranscript: string,
+  researchContext: string,
+  dataSummary?: string
+): Promise<GeneratedFigure[]> {
+  // Use Gemini to generate TikZ/PGFPlots code based on research context
+  const prompt = `You are generating TikZ/PGFPlots visualization code for an ICIS research paper.
+
+RESEARCH CONTEXT:
+${researchContext.substring(0, 2000)}
+
+INTERVIEW EXCERPT:
+${interviewTranscript.substring(0, 1000)}
+
+${dataSummary ? `DATA SUMMARY:\n${dataSummary.substring(0, 1000)}` : 'No specific data available - generate illustrative figures.'}
+
+Generate 2-3 TikZ/PGFPlots figures appropriate for this research. Each figure should:
+1. Use \\begin{tikzpicture} and pgfplots axis environments
+2. Include appropriate labels, titles, and captions
+3. Be publication-ready for an academic paper
+4. If no real data is available, use illustrative/example data clearly marked as such
+
+Return ONLY the LaTeX code for each figure, separated by "---FIGURE---" markers.
+Each figure should be a complete \\begin{figure}...\\end{figure} block.`;
+
+  try {
+    const response = await callGemini(prompt, 'Generate TikZ visualizations');
+    const figureBlocks = response.split('---FIGURE---').filter(b => b.trim());
+
+    return figureBlocks.map((tikzCode, i) => ({
+      filename: `ai_tikz_figure_${i + 1}`,
+      description: `AI-generated Figure ${i + 1}`,
+      latexRef: tikzCode.trim()
+    }));
+  } catch (error) {
+    console.error('[Visualizations] AI TikZ generation failed:', error);
+    return [];
+  }
+}
+
+/**
  * Generate LaTeX figure includes for the Results section
+ * Handles both image files (includegraphics) and TikZ code (inline)
  */
 export function generateFigureLatex(figures: GeneratedFigure[]): string {
   if (figures.length === 0) return '';
@@ -1660,7 +2066,17 @@ export function generateFigureLatex(figures: GeneratedFigure[]): string {
   let latex = '\n% Generated Figures\n';
 
   figures.forEach((fig, i) => {
-    latex += `
+    // Check if latexRef contains TikZ code (starts with \begin{figure} or \begin{tikzpicture})
+    const isTikZCode = fig.latexRef.includes('\\begin{tikzpicture}') ||
+                       fig.latexRef.includes('\\begin{figure}') ||
+                       fig.latexRef.includes('\\begin{axis}');
+
+    if (isTikZCode) {
+      // TikZ/PGFPlots code - include directly
+      latex += `\n${fig.latexRef}\n`;
+    } else {
+      // Image file - use includegraphics
+      latex += `
 \\begin{figure}[htbp]
 \\centering
 \\includegraphics[width=0.75\\textwidth,max width=\\linewidth]{${fig.latexRef}}
@@ -1668,6 +2084,7 @@ export function generateFigureLatex(figures: GeneratedFigure[]): string {
 \\label{fig:fig${i + 1}}
 \\end{figure}
 `;
+    }
   });
 
   return latex;
