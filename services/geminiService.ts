@@ -1609,7 +1609,98 @@ else:
 }
 
 /**
+ * Generate Python matplotlib code for serverless execution
+ * This code runs in a sandboxed Python environment with:
+ * - df: pandas DataFrame already loaded with CSV data
+ * - plt, sns, pd, np: pre-imported visualization libraries
+ * - save_figure(fig, filename, description): helper to save figures
+ *
+ * The AI generates custom visualization code based on:
+ * - The research context and questions
+ * - The actual data columns and types
+ * - What figures would be most meaningful for the paper
+ */
+async function generateServerlessFigureCode(
+  interviewTranscript: string,
+  researchContext: string,
+  dataSummary: string
+): Promise<string> {
+  const prompt = `You are generating Python code to create publication-quality figures for an academic research paper.
+
+RESEARCH CONTEXT:
+${researchContext.substring(0, 2000)}
+
+INTERVIEW/DATA CONTEXT:
+${interviewTranscript.substring(0, 1500)}
+
+DATA ANALYSIS SUMMARY (ACTUAL DATA):
+${dataSummary}
+
+EXECUTION ENVIRONMENT:
+Your code will run in a sandboxed Python environment with:
+- \`df\`: pandas DataFrame already loaded with the CSV data
+- \`plt\`: matplotlib.pyplot (pre-imported)
+- \`sns\`: seaborn (pre-imported)
+- \`pd\`: pandas (pre-imported)
+- \`np\`: numpy (pre-imported)
+- \`save_figure(fig, filename, description)\`: helper function to save figures
+
+CRITICAL RULES:
+1. Do NOT import any modules - they are pre-imported
+2. Do NOT load the data - \`df\` is already available
+3. Do NOT use plt.savefig() - use save_figure(fig, filename, description) instead
+4. Generate 3-6 meaningful figures that tell the story of this research
+5. Use the ACTUAL column names from the data summary above
+6. Create publication-quality visualizations (appropriate for academic papers)
+
+FIGURE TYPES TO CONSIDER (based on data types):
+- For numeric columns: histograms with KDE, box plots, violin plots
+- For categorical columns: bar charts, count plots
+- For relationships: scatter plots with regression, correlation heatmaps
+- For comparisons: grouped bar charts, side-by-side distributions
+- For trends: line plots if time-series data exists
+
+CODE STRUCTURE:
+\`\`\`python
+# Figure 1: [Description]
+fig, ax = plt.subplots(figsize=(8, 5))
+# ... plotting code using actual column names from df ...
+save_figure(fig, 'fig1_descriptive_name.png', 'Description of what this figure shows')
+
+# Figure 2: [Description]
+fig, ax = plt.subplots(figsize=(8, 5))
+# ... more plotting code ...
+save_figure(fig, 'fig2_descriptive_name.png', 'Description of this figure')
+
+# Continue for all figures...
+\`\`\`
+
+IMPORTANT:
+- Use \`plt.style.use('seaborn-v0_8-whitegrid')\` for consistent styling
+- Add clear titles, axis labels, and legends
+- Use professional color schemes
+- Handle missing data gracefully with .dropna()
+- Generate figures that would be appropriate for an ICIS conference paper
+
+Generate the Python code now. Return ONLY the code, no explanations.`;
+
+  const code = await callGemini(prompt,
+    "You are an expert data visualization specialist. Generate clean, professional Python code for academic figures."
+  );
+
+  // Extract code from markdown if present
+  let cleanCode = code;
+  const codeMatch = code.match(/```python\s*([\s\S]*?)\s*```/) || code.match(/```\s*([\s\S]*?)\s*```/);
+  if (codeMatch) {
+    cleanCode = codeMatch[1];
+  }
+
+  return cleanCode.trim();
+}
+
+/**
  * Generate Python visualization code based on research context
+ * @deprecated Use generateServerlessFigureCode for cloud execution
  */
 async function generateVisualizationCode(
   interviewTranscript: string,
@@ -1761,11 +1852,68 @@ export async function generateVisualizations(
   onProgress?: (message: string) => void,
   dataSummary?: string  // Pre-analyzed data summary with actual column names
 ): Promise<VisualizationResult> {
-  // STEP 1: Try matplotlib/seaborn Python serverless function (preferred - like Claude Code locally)
   const cloudData = getCloudDataFile();
+
+  // STEP 1: Try AI-generated custom figure code (PRIMARY METHOD)
+  // AI generates Python code tailored to this specific paper's data and research questions
+  if (cloudData?.content && dataSummary) {
+    console.log('[Visualizations] Generating AI-customized figure code...');
+    onProgress?.('AI is designing custom figures for your research...');
+
+    try {
+      // Have Gemini generate custom Python code for this paper
+      const figureCode = await generateServerlessFigureCode(
+        interviewTranscript,
+        researchContext,
+        dataSummary
+      );
+
+      console.log(`[Visualizations] Generated ${figureCode.length} chars of custom Python code`);
+      onProgress?.('Executing AI-generated visualization code...');
+
+      // Execute the AI-generated code in the Python serverless function
+      const { executeAIGeneratedFigureCode, uploadMatplotlibFiguresToBlob } = await import('./fileApi');
+      const codeResult = await executeAIGeneratedFigureCode(figureCode, cloudData.content);
+
+      if (codeResult.success && codeResult.figures && codeResult.figures.length > 0) {
+        console.log(`[Visualizations] AI code generated ${codeResult.count} figures`);
+        onProgress?.(`Uploading ${codeResult.count} AI-generated figures to storage...`);
+
+        // Upload figures to Vercel Blob
+        const uploadResult = await uploadMatplotlibFiguresToBlob(codeResult.figures);
+
+        if (uploadResult.success && uploadResult.figures && uploadResult.figures.length > 0) {
+          // Convert to GeneratedFigure format for LaTeX
+          const pngFigures: GeneratedFigure[] = uploadResult.figures.map((fig) => ({
+            filename: fig.filename,
+            description: fig.description,
+            latexRef: fig.blobUrl  // Use blob URL for includegraphics
+          }));
+
+          onProgress?.(`Generated ${pngFigures.length} custom figures tailored to your research`);
+          console.log(`[Visualizations] AI-generated figures stored in Blob, session: ${uploadResult.sessionId}`);
+
+          return {
+            figures: pngFigures,
+            usedSyntheticData: false,
+            dataFileFound: true,
+            dataSummary: dataSummary
+          };
+        } else {
+          console.warn('[Visualizations] Blob upload failed:', uploadResult.error);
+        }
+      } else {
+        console.warn('[Visualizations] AI code execution failed:', codeResult.error);
+      }
+    } catch (error) {
+      console.warn('[Visualizations] AI figure generation failed, trying fallback:', error);
+    }
+  }
+
+  // STEP 2: Fallback to hardcoded matplotlib (generic charts)
   if (cloudData?.content) {
-    console.log('[Visualizations] Trying matplotlib/seaborn Python for figure generation...');
-    onProgress?.('Generating publication-quality figures with matplotlib...');
+    console.log('[Visualizations] Falling back to generic matplotlib figures...');
+    onProgress?.('Generating standard figures with matplotlib...');
 
     try {
       // Call matplotlib serverless function directly with CSV content
@@ -1806,7 +1954,7 @@ export async function generateVisualizations(
       console.warn('[Visualizations] Matplotlib generation failed, trying QuickChart fallback:', error);
     }
 
-    // STEP 2: Fallback to QuickChart.io if matplotlib fails
+    // STEP 3: Fallback to QuickChart.io if matplotlib fails
     console.log('[Visualizations] Falling back to QuickChart.io...');
     onProgress?.('Trying QuickChart.io fallback...');
 

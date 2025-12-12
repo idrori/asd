@@ -8,6 +8,10 @@
       "maxDuration": 60,
       "memory": 1024
     },
+    "api/execute-figure-code.py": {
+      "maxDuration": 120,
+      "memory": 1024
+    },
     "api/analyze-data.py": {
       "maxDuration": 30
     }

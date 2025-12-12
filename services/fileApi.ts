@@ -985,7 +985,8 @@ export interface MatplotlibResult {
 
 /**
  * Generate figures using matplotlib/seaborn Python serverless function
- * This is the primary method - works exactly like Claude Code generating figures locally
+ * This is the fallback method with hardcoded chart types
+ * @deprecated Use executeAIGeneratedFigureCode instead for custom AI-generated visualizations
  */
 export async function generateMatplotlibFigures(csvContent: string): Promise<MatplotlibResult> {
   if (!csvContent) {
@@ -1013,6 +1014,73 @@ export async function generateMatplotlibFigures(csvContent: string): Promise<Mat
     return result;
   } catch (error) {
     console.error('[Matplotlib] Error:', error);
+    return {
+      success: false,
+      error: (error as Error).message
+    };
+  }
+}
+
+/**
+ * Execute AI-generated Python code for custom figure generation
+ * This is the primary method - AI generates custom matplotlib code based on:
+ * - The specific data columns and types
+ * - The paper's research questions
+ * - The analysis requirements
+ *
+ * The code runs in a sandboxed Python environment with matplotlib/seaborn/pandas/numpy
+ */
+export async function executeAIGeneratedFigureCode(
+  pythonCode: string,
+  csvContent: string
+): Promise<MatplotlibResult> {
+  if (!pythonCode) {
+    return { success: false, error: 'No Python code provided' };
+  }
+  if (!csvContent) {
+    return { success: false, error: 'No CSV content provided' };
+  }
+
+  try {
+    console.log(`[AI Figure Code] Executing ${pythonCode.length} chars of AI-generated code...`);
+    console.log(`[AI Figure Code] CSV content: ${csvContent.length} chars`);
+
+    const response = await fetch(`${VERCEL_API_URL}/api/execute-figure-code`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        code: pythonCode,
+        csvContent
+      })
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      console.log(`[AI Figure Code] Generated ${result.count} figures via AI-generated Python code`);
+      console.log(`[AI Figure Code] Data shape: ${result.dataShape?.rows} x ${result.dataShape?.columns}`);
+
+      // Convert to MatplotlibResult format
+      return {
+        success: true,
+        figures: result.figures?.map((f: any) => ({
+          filename: f.filename,
+          type: 'custom',
+          base64: f.base64,
+          description: f.description
+        })),
+        count: result.count,
+        dataShape: result.dataShape
+      };
+    } else {
+      console.warn(`[AI Figure Code] Execution failed: ${result.error}`);
+      return {
+        success: false,
+        error: result.error
+      };
+    }
+  } catch (error) {
+    console.error('[AI Figure Code] Error:', error);
     return {
       success: false,
       error: (error as Error).message
