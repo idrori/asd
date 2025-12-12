@@ -6,7 +6,7 @@ import {
   readFeedbackFile,
   getOversightProgression
 } from '../../services/fileService';
-import { saveFinalSubmission, compileLaTeX, downloadCompiledPdf, createViewerLink, openPaperViewer, getLastCompiledPdfBlob, CompileResult, ViewerLinkResult } from '../../services/fileApi';
+import { saveFinalSubmission, compileLaTeX, downloadCompiledPdf, createViewerLink, openPaperViewer, getLastCompiledPdfBlob, downloadAllFigures, getCurrentSessionFigures, CompileResult, ViewerLinkResult } from '../../services/fileApi';
 
 interface FinalizeStageProps {
   logs: string[];
@@ -59,7 +59,7 @@ const FinalizeStage: React.FC<FinalizeStageProps> = ({
     if (result.success) {
       const savedFilesList = result.files || [];
 
-      // Also download PDF if available
+      // Download PDF if available
       const pdfData = getLastCompiledPdfBlob();
       if (pdfData) {
         const url = URL.createObjectURL(pdfData.blob);
@@ -71,6 +71,28 @@ const FinalizeStage: React.FC<FinalizeStageProps> = ({
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
         savedFilesList.push(pdfData.filename);
+      }
+
+      // Download PNG figures if available
+      const sessionFigures = getCurrentSessionFigures();
+      if (sessionFigures.length > 0) {
+        console.log(`[Save] Downloading ${sessionFigures.length} PNG figures...`);
+        const figureBlobs = await downloadAllFigures();
+
+        // Download each figure with a small delay to avoid browser blocking
+        for (const fig of figureBlobs) {
+          await new Promise(resolve => setTimeout(resolve, 200));
+          const url = URL.createObjectURL(fig.blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = fig.filename;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          savedFilesList.push(fig.filename);
+        }
+        console.log(`[Save] Downloaded ${figureBlobs.length} PNG figures`);
       }
 
       setSavedFiles(savedFilesList);
@@ -300,11 +322,11 @@ const FinalizeStage: React.FC<FinalizeStageProps> = ({
           className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-400 text-white px-6 py-3 rounded-lg font-medium flex items-center justify-center gap-2"
         >
           <Save size={18} className={isSaving ? 'animate-pulse' : ''} />
-          {isSaving ? 'Saving...' : 'Save All Files (pdf + .tex + data)'}
+          {isSaving ? 'Saving...' : 'Save All Files (pdf + .tex + .png + data)'}
         </button>
 
         <p className="text-xs text-slate-500 text-center">
-          Downloads PDF and saves .tex to icis/Paper/, oversight/feedback to icis/Data/
+          Downloads PDF, .tex, PNG figures, and data files
         </p>
 
         {savedFiles.length > 0 && (

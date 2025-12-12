@@ -956,3 +956,122 @@ export async function getDataFilePreview(filename: string): Promise<DataFilePrev
     return { success: false, error: (error as Error).message };
   }
 }
+
+// ============================================================================
+// PNG Figure Generation (using QuickChart.io + Vercel Blob)
+// ============================================================================
+
+export interface GeneratedPngFigure {
+  filename: string;
+  blobUrl: string;
+  description: string;
+  width?: number;
+  height?: number;
+}
+
+export interface GenerateFiguresResult {
+  success: boolean;
+  sessionId?: string;
+  figures?: GeneratedPngFigure[];
+  count?: number;
+  error?: string;
+}
+
+// Store generated figures for the current session
+let currentSessionFigures: GeneratedPngFigure[] = [];
+let currentSessionId: string | null = null;
+
+/**
+ * Generate PNG figures from chart data using QuickChart.io
+ * Uploads to Vercel Blob storage and returns URLs
+ */
+export async function generatePngFigures(
+  chartData: CloudAnalysisResult['chart_data'],
+  sessionId?: string
+): Promise<GenerateFiguresResult> {
+  if (!chartData || chartData.length === 0) {
+    return { success: false, error: 'No chart data provided' };
+  }
+
+  try {
+    console.log(`[PNG Figures] Generating ${chartData.length} figures...`);
+
+    const response = await fetch(`${VERCEL_API_URL}/api/generate-figures`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chartData,
+        sessionId
+      })
+    });
+
+    const result = await response.json();
+
+    if (result.success && result.figures) {
+      // Store for later download
+      currentSessionFigures = result.figures;
+      currentSessionId = result.sessionId;
+      console.log(`[PNG Figures] Generated ${result.count} figures, session: ${result.sessionId}`);
+    } else {
+      console.warn(`[PNG Figures] Generation failed: ${result.error}`);
+    }
+
+    return result;
+  } catch (error) {
+    console.error('[PNG Figures] Error:', error);
+    return {
+      success: false,
+      error: (error as Error).message
+    };
+  }
+}
+
+/**
+ * Get the current session's generated figures
+ */
+export function getCurrentSessionFigures(): GeneratedPngFigure[] {
+  return currentSessionFigures;
+}
+
+/**
+ * Get the current session ID
+ */
+export function getCurrentSessionId(): string | null {
+  return currentSessionId;
+}
+
+/**
+ * Clear the current session figures (call when starting new paper)
+ */
+export function clearSessionFigures(): void {
+  currentSessionFigures = [];
+  currentSessionId = null;
+}
+
+/**
+ * Download all PNG figures from blob storage
+ * Returns array of {filename, blob} for saving
+ */
+export async function downloadAllFigures(): Promise<Array<{ filename: string; blob: Blob }>> {
+  const downloads: Array<{ filename: string; blob: Blob }> = [];
+
+  for (const figure of currentSessionFigures) {
+    try {
+      const response = await fetch(figure.blobUrl);
+      if (response.ok) {
+        const blob = await response.blob();
+        downloads.push({
+          filename: figure.filename,
+          blob
+        });
+      } else {
+        console.warn(`[PNG Figures] Failed to download ${figure.filename}: ${response.status}`);
+      }
+    } catch (error) {
+      console.warn(`[PNG Figures] Error downloading ${figure.filename}:`, error);
+    }
+  }
+
+  console.log(`[PNG Figures] Downloaded ${downloads.length}/${currentSessionFigures.length} figures`);
+  return downloads;
+}

@@ -1761,30 +1761,55 @@ export async function generateVisualizations(
   onProgress?: (message: string) => void,
   dataSummary?: string  // Pre-analyzed data summary with actual column names
 ): Promise<VisualizationResult> {
-  // STEP 1: Try cloud Python analysis for chart data (TikZ/PGFPlots generation)
+  // STEP 1: Try cloud Python analysis for chart data → PNG generation
   const cloudData = getCloudDataFile();
   if (cloudData?.content) {
     console.log('[Visualizations] Trying cloud Python analysis for chart data...');
-    onProgress?.('Generating visualizations from cloud data...');
+    onProgress?.('Analyzing data for visualizations...');
 
     try {
       const cloudResult = await analyzeDataWithPython(cloudData.content, 'full');
 
       if (cloudResult.success && cloudResult.chart_data && cloudResult.chart_data.length > 0) {
         console.log(`[Visualizations] Cloud analysis returned ${cloudResult.chart_data.length} chart datasets`);
+        onProgress?.(`Generating ${cloudResult.chart_data.length} PNG figures...`);
 
-        // Generate TikZ/PGFPlots code from chart data
-        const tikzFigures = await generateTikZFromChartData(cloudResult, interviewTranscript, researchContext);
+        // Generate PNG figures from chart data (stored in Vercel Blob)
+        const { generatePngFigures } = await import('./fileApi');
+        const pngResult = await generatePngFigures(cloudResult.chart_data);
 
-        if (tikzFigures.length > 0) {
-          onProgress?.(`Generated ${tikzFigures.length} TikZ/PGFPlots figures from cloud data`);
+        if (pngResult.success && pngResult.figures && pngResult.figures.length > 0) {
+          // Convert PNG figures to GeneratedFigure format for LaTeX
+          const pngFigures: GeneratedFigure[] = pngResult.figures.map((fig, i) => ({
+            filename: fig.filename,
+            description: fig.description,
+            latexRef: fig.blobUrl  // Use blob URL for includegraphics
+          }));
+
+          onProgress?.(`Generated ${pngFigures.length} PNG figures from cloud data`);
+          console.log(`[Visualizations] PNG figures stored in Blob, session: ${pngResult.sessionId}`);
 
           return {
-            figures: tikzFigures,
+            figures: pngFigures,
             usedSyntheticData: false,
             dataFileFound: true,
             dataSummary: cloudResult.text_summary || dataSummary
           };
+        } else {
+          console.warn('[Visualizations] PNG generation failed:', pngResult.error);
+          // Fall back to TikZ if PNG fails
+          onProgress?.('PNG generation failed, trying TikZ fallback...');
+          const tikzFigures = await generateTikZFromChartData(cloudResult, interviewTranscript, researchContext);
+
+          if (tikzFigures.length > 0) {
+            onProgress?.(`Generated ${tikzFigures.length} TikZ figures (fallback)`);
+            return {
+              figures: tikzFigures,
+              usedSyntheticData: false,
+              dataFileFound: true,
+              dataSummary: cloudResult.text_summary || dataSummary
+            };
+          }
         }
       }
     } catch (error) {
@@ -2106,7 +2131,10 @@ Each figure should be a complete \\begin{figure}...\\end{figure} block.`;
 
 /**
  * Generate LaTeX figure includes for the Results section
- * Handles both image files (includegraphics) and TikZ code (inline)
+ * Handles three cases:
+ * 1. TikZ code - include directly (old approach)
+ * 2. Blob URLs (https://) - use local filename (PNGs downloaded separately)
+ * 3. Local file paths - use includegraphics with path
  */
 export function generateFigureLatex(figures: GeneratedFigure[]): string {
   if (figures.length === 0) return '';
@@ -2122,13 +2150,27 @@ export function generateFigureLatex(figures: GeneratedFigure[]): string {
     if (isTikZCode) {
       // TikZ/PGFPlots code - include directly
       latex += `\n${fig.latexRef}\n`;
+    } else if (fig.latexRef.startsWith('http://') || fig.latexRef.startsWith('https://')) {
+      // Blob URL - use local filename (PNG files will be downloaded alongside .tex)
+      // LaTeX will look for the file in the same directory as the .tex file
+      const safeFilename = fig.filename.replace(/[^a-zA-Z0-9_.-]/g, '_');
+      const escapedDescription = fig.description.replace(/_/g, '\\_').replace(/&/g, '\\&').replace(/%/g, '\\%');
+      latex += `
+\\begin{figure}[htbp]
+\\centering
+\\includegraphics[width=0.75\\textwidth]{${safeFilename}}
+\\caption{${escapedDescription}}
+\\label{fig:fig${i + 1}}
+\\end{figure}
+`;
     } else {
-      // Image file - use includegraphics
+      // Local file path - use includegraphics with path
+      const escapedDescription = fig.description.replace(/_/g, '\\_').replace(/&/g, '\\&').replace(/%/g, '\\%');
       latex += `
 \\begin{figure}[htbp]
 \\centering
 \\includegraphics[width=0.75\\textwidth,max width=\\linewidth]{${fig.latexRef}}
-\\caption{${fig.description}}
+\\caption{${escapedDescription}}
 \\label{fig:fig${i + 1}}
 \\end{figure}
 `;
