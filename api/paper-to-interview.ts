@@ -4,6 +4,8 @@
  * Analyzes a research paper PDF and generates a synthetic interview
  * about open research problems stemming from the paper.
  *
+ * Uses Gemini File API for large PDFs to avoid body size limits.
+ *
  * Endpoint: POST /api/paper-to-interview
  */
 
@@ -17,6 +19,88 @@ interface PaperToInterviewRequest {
   pdfBase64: string;
   formatTemplate: string;
   paperName?: string;
+}
+
+// Upload file to Gemini File API
+async function uploadToGeminiFiles(apiKey: string, base64Data: string, filename: string): Promise<string> {
+  // First, get upload URI
+  const initResponse = await fetch(
+    `https://generativelanguage.googleapis.com/upload/v1beta/files?key=${apiKey}`,
+    {
+      method: 'POST',
+      headers: {
+        'X-Goog-Upload-Protocol': 'resumable',
+        'X-Goog-Upload-Command': 'start',
+        'X-Goog-Upload-Header-Content-Type': 'application/pdf',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        file: {
+          display_name: filename,
+        },
+      }),
+    }
+  );
+
+  if (!initResponse.ok) {
+    const error = await initResponse.text();
+    throw new Error(`Failed to initialize upload: ${error}`);
+  }
+
+  const uploadUri = initResponse.headers.get('X-Goog-Upload-URL');
+  if (!uploadUri) {
+    throw new Error('No upload URI returned');
+  }
+
+  // Convert base64 to buffer
+  const buffer = Buffer.from(base64Data, 'base64');
+
+  // Upload the file content
+  const uploadResponse = await fetch(uploadUri, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/pdf',
+      'X-Goog-Upload-Command': 'upload, finalize',
+      'X-Goog-Upload-Offset': '0',
+    },
+    body: buffer,
+  });
+
+  if (!uploadResponse.ok) {
+    const error = await uploadResponse.text();
+    throw new Error(`Failed to upload file: ${error}`);
+  }
+
+  const fileInfo = await uploadResponse.json();
+  console.log(`[Paper-to-Interview] Uploaded file: ${fileInfo.file?.name}`);
+
+  return fileInfo.file?.uri || fileInfo.file?.name;
+}
+
+// Wait for file to be processed
+async function waitForFileProcessing(apiKey: string, fileUri: string): Promise<void> {
+  // Extract file name from URI
+  const fileName = fileUri.includes('/') ? fileUri.split('/').pop() : fileUri;
+
+  for (let i = 0; i < 30; i++) { // Wait up to 30 seconds
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/files/${fileName}?key=${apiKey}`
+    );
+
+    if (response.ok) {
+      const fileInfo = await response.json();
+      if (fileInfo.state === 'ACTIVE') {
+        return;
+      }
+      if (fileInfo.state === 'FAILED') {
+        throw new Error('File processing failed');
+      }
+    }
+
+    await new Promise(resolve => setTimeout(resolve, 1000));
+  }
+
+  throw new Error('File processing timeout');
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -49,6 +133,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (!body.formatTemplate) {
       return res.status(400).json({ error: 'Interview format template required' });
     }
+
+    const paperName = body.paperName || 'paper.pdf';
+    console.log(`[Paper-to-Interview] Processing paper: ${paperName}`);
+
+    // Calculate PDF size
+    const pdfSizeBytes = (body.pdfBase64.length * 3) / 4;
+    const pdfSizeMB = pdfSizeBytes / (1024 * 1024);
+    console.log(`[Paper-to-Interview] PDF size: ${pdfSizeMB.toFixed(2)} MB`);
 
     // Use gemini-2.0-flash which supports PDF
     const model = 'gemini-2.0-flash';
@@ -86,31 +178,69 @@ The interview should be about an OPEN research problem that:
 
 Generate the full interview transcript now, including all sections from the template.`;
 
-    console.log(`[Paper-to-Interview] Processing paper: ${body.paperName || 'unnamed'}`);
+    let geminiRequest;
 
-    const geminiRequest = {
-      contents: [{
-        role: 'user',
-        parts: [
-          {
-            inline_data: {
-              mime_type: 'application/pdf',
-              data: body.pdfBase64
+    // For large files (> 15MB), use File API
+    if (pdfSizeMB > 15) {
+      console.log('[Paper-to-Interview] Using File API for large PDF');
+
+      // Upload file first
+      const fileUri = await uploadToGeminiFiles(apiKey, body.pdfBase64, paperName);
+
+      // Wait for processing
+      await waitForFileProcessing(apiKey, fileUri);
+
+      geminiRequest = {
+        contents: [{
+          role: 'user',
+          parts: [
+            {
+              file_data: {
+                mime_type: 'application/pdf',
+                file_uri: fileUri
+              }
+            },
+            {
+              text: userPrompt
             }
-          },
-          {
-            text: userPrompt
-          }
-        ]
-      }],
-      systemInstruction: {
-        parts: [{ text: systemPrompt }]
-      },
-      generationConfig: {
-        temperature: 0.8,
-        maxOutputTokens: 16384,
-      }
-    };
+          ]
+        }],
+        systemInstruction: {
+          parts: [{ text: systemPrompt }]
+        },
+        generationConfig: {
+          temperature: 0.8,
+          maxOutputTokens: 16384,
+        }
+      };
+    } else {
+      // For smaller files, use inline data
+      console.log('[Paper-to-Interview] Using inline data for PDF');
+
+      geminiRequest = {
+        contents: [{
+          role: 'user',
+          parts: [
+            {
+              inline_data: {
+                mime_type: 'application/pdf',
+                data: body.pdfBase64
+              }
+            },
+            {
+              text: userPrompt
+            }
+          ]
+        }],
+        systemInstruction: {
+          parts: [{ text: systemPrompt }]
+        },
+        generationConfig: {
+          temperature: 0.8,
+          maxOutputTokens: 16384,
+        }
+      };
+    }
 
     const response = await fetch(baseUrl, {
       method: 'POST',

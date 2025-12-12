@@ -47,7 +47,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
               </svg>
               <p>Click to upload PDF paper</p>
-              <p class="text-xs text-slate-400 mt-1">Max 20MB</p>
+              <p class="text-xs text-slate-400 mt-1">Max 3MB</p>
             </div>
           </label>
         </div>
@@ -139,10 +139,31 @@
     let formatFile = null;
     let generatedInterview = '';
 
+    // Max file size (3MB to account for base64 overhead staying under 4.5MB limit)
+    const MAX_FILE_SIZE_MB = 3;
+
     // Handle paper upload
     function handlePaperUpload(event) {
       const file = event.target.files[0];
       if (file && file.type === 'application/pdf') {
+        const fileSizeMB = file.size / 1024 / 1024;
+
+        if (fileSizeMB > MAX_FILE_SIZE_MB) {
+          document.getElementById('paper-preview').innerHTML = `
+            <div class="text-red-600">
+              <svg class="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+              </svg>
+              <p class="font-medium">File too large</p>
+              <p class="text-xs mt-1">${fileSizeMB.toFixed(2)} MB exceeds ${MAX_FILE_SIZE_MB}MB limit</p>
+              <p class="text-xs text-slate-500 mt-1">Please use a smaller PDF</p>
+            </div>
+          `;
+          paperFile = null;
+          checkCanGenerate();
+          return;
+        }
+
         paperFile = file;
         document.getElementById('paper-preview').innerHTML = `
           <div class="text-emerald-600">
@@ -150,7 +171,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
             <p class="font-medium">${file.name}</p>
-            <p class="text-xs text-slate-500 mt-1">${(file.size / 1024 / 1024).toFixed(2)} MB</p>
+            <p class="text-xs text-slate-500 mt-1">${fileSizeMB.toFixed(2)} MB</p>
           </div>
         `;
         checkCanGenerate();
@@ -290,7 +311,7 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
         </svg>
         <p>Click to upload PDF paper</p>
-        <p class="text-xs text-slate-400 mt-1">Max 20MB</p>
+        <p class="text-xs text-slate-400 mt-1">Max 3MB</p>
       `;
 
       document.getElementById('format-preview').innerHTML = `

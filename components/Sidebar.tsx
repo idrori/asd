@@ -243,13 +243,13 @@ const Sidebar: React.FC<SidebarProps> = ({
           </button>
         </div>
 
-        {/* New Voice Interview Button */}
+        {/* Voice Interview Button */}
         {onNewInterview && (
           <button
             onClick={onNewInterview}
             className="w-full px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded transition-colors"
           >
-            New Voice Interview
+            Voice Interview
           </button>
         )}
 
