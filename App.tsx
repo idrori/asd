@@ -130,6 +130,11 @@ Is this the correct data file for your analysis?`;
             // Pass mode to interview page (only register participants in research mode)
             window.open(`${baseUrl}interview.html?mode=${paperMode}`, '_blank', 'noopener,noreferrer');
           }}
+          onPaperToInterview={() => {
+            // Open Paper to Interview page in new tab
+            const baseUrl = import.meta.env.BASE_URL || '/';
+            window.open(`${baseUrl}paper-to-interview.html`, '_blank', 'noopener,noreferrer');
+          }}
           onResearchAdmin={paperMode === 'research' ? () => setCurrentView(currentView === 'admin' ? 'main' : 'admin') : undefined}
           paperMode={paperMode}
           onPaperModeChange={handlePaperModeChange}
