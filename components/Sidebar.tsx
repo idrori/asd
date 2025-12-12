@@ -35,6 +35,7 @@ interface SidebarProps {
   onStageClick: (stage: Stage) => void;
   onStageAction?: (stage: Stage, action: StageAction) => void;
   onNewCase?: () => void;
+  onNewInterview?: () => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
@@ -46,7 +47,8 @@ const Sidebar: React.FC<SidebarProps> = ({
   isProcessing = false,
   onStageClick,
   onStageAction,
-  onNewCase
+  onNewCase,
+  onNewInterview
 }) => {
   const [menuOpen, setMenuOpen] = useState<Stage | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -204,9 +206,20 @@ const Sidebar: React.FC<SidebarProps> = ({
         </div>
       )}
 
-      {/* New Project Button - Above Stage List */}
-      {onNewCase && (
-        <div className="px-4 pt-4 pb-2">
+      {/* Action Buttons - Above Stage List */}
+      <div className="px-4 pt-4 pb-2 space-y-2">
+        {/* New Interview Button */}
+        {onNewInterview && (
+          <button
+            onClick={onNewInterview}
+            className="w-full px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded transition-colors"
+          >
+            + New Interview
+          </button>
+        )}
+
+        {/* New Project Button */}
+        {onNewCase && (
           <button
             onClick={() => {
               if (window.confirm('Start a new project? This will clear all current progress and generated files.')) {
@@ -217,8 +230,8 @@ const Sidebar: React.FC<SidebarProps> = ({
           >
             + New Project
           </button>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Stage List */}
       <div className="flex-1 overflow-y-auto p-4 space-y-2">
