@@ -118,16 +118,20 @@ const ResearchDashboard: React.FC<ResearchDashboardProps> = ({ onViewParticipant
 
   if (!stats) return null;
 
+  // Funnel stages match ICIScopilot research workflow
   const funnelData = [
-    { label: 'Registered', count: stats.funnel.registered || 0, color: 'bg-gray-500' },
-    { label: 'Confirmed via Email', count: stats.funnel.confirmed_via_email, color: 'bg-blue-500' },
-    { label: 'Interview Completed', count: stats.funnel.interview_completed, color: 'bg-emerald-500' },
-    { label: 'Processing', count: stats.funnel.processing, color: 'bg-yellow-500' },
-    { label: 'Paper & Link Sent', count: stats.funnel.paper_link_sent, color: 'bg-purple-500' },
-    { label: 'Survey Sent', count: stats.funnel.survey_sent, color: 'bg-cyan-500' },
-    { label: 'Review Email Sent', count: stats.funnel.review_email_sent, color: 'bg-indigo-500' },
-    { label: 'Survey Completed', count: stats.funnel.survey_completed, color: 'bg-green-500' },
-    { label: 'Dropped Out', count: stats.funnel.dropped_out, color: 'bg-red-500' }
+    { label: '1. Registered', count: stats.funnel.registered || 0, color: 'bg-gray-500' },
+    { label: '2. Interview Done', count: stats.funnel.interview_completed || 0, color: 'bg-blue-500' },
+    { label: '3. Setup Done', count: stats.funnel.setup_completed || 0, color: 'bg-sky-500' },
+    { label: '4. Paper Built', count: stats.funnel.builder_completed || 0, color: 'bg-amber-500' },
+    { label: '5. Review Done', count: stats.funnel.reviewer_completed || 0, color: 'bg-orange-500' },
+    { label: '6. Oversight Done', count: stats.funnel.supervisor_completed || 0, color: 'bg-purple-500', note: 'Group 1 only' },
+    { label: '7. Revisions Done', count: stats.funnel.reviser_completed || 0, color: 'bg-indigo-500' },
+    { label: '8. Finalized', count: stats.funnel.finalize_completed || 0, color: 'bg-teal-500' },
+    { label: '9. Paper Sent', count: stats.funnel.paper_sent || 0, color: 'bg-cyan-500' },
+    { label: '10. Survey Sent', count: stats.funnel.survey_sent || 0, color: 'bg-violet-500' },
+    { label: '11. Completed', count: stats.funnel.survey_completed || 0, color: 'bg-green-500' },
+    { label: 'Dropped Out', count: stats.funnel.dropped_out || 0, color: 'bg-red-500' }
   ];
 
   return (

@@ -1,18 +1,28 @@
 /**
  * Participant Management Types
  * For tracking research study participants through the ICIScopilot workflow
+ *
+ * Research Workflow Stages:
+ * 1. Voice Interview → 2. Setup → 3. Builder → 4. Reviewer →
+ * 5. Supervisor (Group 1 only) → 6. Reviser → 7. Finalize → 8. Survey
  */
 
 export type ParticipantStatus =
+  // Initial registration
   | 'registered'
-  | 'confirmed_via_email'
-  | 'interview_completed'
-  | 'processing'
-  | 'paper_link_sent'
-  | 'survey_sent'
-  | 'review_email_sent'
-  | 'survey_completed'
-  | 'dropped_out';
+  // ICIScopilot workflow stages (matches app stages)
+  | 'interview_completed'    // Voice interview done
+  | 'setup_completed'        // Setup stage done
+  | 'builder_completed'      // Builder stage - paper generated
+  | 'reviewer_completed'     // Reviewer stage - AI review done
+  | 'supervisor_completed'   // Supervisor stage - human oversight (Group 1 only)
+  | 'reviser_completed'      // Reviser stage - revisions applied
+  | 'finalize_completed'     // Finalize stage - paper ready
+  // Post-workflow
+  | 'paper_sent'             // Final paper sent to participant
+  | 'survey_sent'            // Survey link sent
+  | 'survey_completed'       // Survey completed - study done
+  | 'dropped_out';           // Participant dropped out
 
 export type GroupId = 1 | 2 | null; // 1 = With Oversight, 2 = Control, null = Unassigned
 
@@ -52,13 +62,17 @@ export interface ResearchStats {
 }
 
 export interface FunnelData {
+  // Funnel stages match ICIScopilot research workflow
   registered: number;
-  confirmed_via_email: number;
   interview_completed: number;
-  processing: number;
-  paper_link_sent: number;
+  setup_completed: number;
+  builder_completed: number;
+  reviewer_completed: number;
+  supervisor_completed: number;  // Group 1 only
+  reviser_completed: number;
+  finalize_completed: number;
+  paper_sent: number;
   survey_sent: number;
-  review_email_sent: number;
   survey_completed: number;
   dropped_out: number;
 }
@@ -119,27 +133,33 @@ export interface StatsResponse {
   error?: string;
 }
 
-// Status display helpers
+// Status display helpers - matches ICIScopilot workflow stages
 export const STATUS_LABELS: Record<ParticipantStatus, string> = {
   registered: 'Registered',
-  confirmed_via_email: 'Confirmed via Email',
-  interview_completed: 'Interview Completed',
-  processing: 'Processing',
-  paper_link_sent: 'Paper & Link Sent',
+  interview_completed: 'Interview Done',
+  setup_completed: 'Setup Done',
+  builder_completed: 'Paper Built',
+  reviewer_completed: 'Review Done',
+  supervisor_completed: 'Oversight Done',
+  reviser_completed: 'Revisions Done',
+  finalize_completed: 'Finalized',
+  paper_sent: 'Paper Sent',
   survey_sent: 'Survey Sent',
-  review_email_sent: 'Review Email Sent',
-  survey_completed: 'Survey Completed',
+  survey_completed: 'Completed',
   dropped_out: 'Dropped Out'
 };
 
 export const STATUS_COLORS: Record<ParticipantStatus, string> = {
   registered: 'bg-gray-500',
-  confirmed_via_email: 'bg-blue-500',
-  interview_completed: 'bg-emerald-500',
-  processing: 'bg-yellow-500',
-  paper_link_sent: 'bg-purple-500',
-  survey_sent: 'bg-cyan-500',
-  review_email_sent: 'bg-indigo-500',
+  interview_completed: 'bg-blue-500',
+  setup_completed: 'bg-sky-500',
+  builder_completed: 'bg-amber-500',
+  reviewer_completed: 'bg-orange-500',
+  supervisor_completed: 'bg-purple-500',
+  reviser_completed: 'bg-indigo-500',
+  finalize_completed: 'bg-teal-500',
+  paper_sent: 'bg-cyan-500',
+  survey_sent: 'bg-violet-500',
   survey_completed: 'bg-green-500',
   dropped_out: 'bg-red-500'
 };

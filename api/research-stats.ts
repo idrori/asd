@@ -13,15 +13,18 @@ export const config = {
   maxDuration: 30,
 };
 
-// Types
+// Types - matches ICIScopilot workflow stages
 type ParticipantStatus =
   | 'registered'
-  | 'confirmed_via_email'
   | 'interview_completed'
-  | 'processing'
-  | 'paper_link_sent'
+  | 'setup_completed'
+  | 'builder_completed'
+  | 'reviewer_completed'
+  | 'supervisor_completed'
+  | 'reviser_completed'
+  | 'finalize_completed'
+  | 'paper_sent'
   | 'survey_sent'
-  | 'review_email_sent'
   | 'survey_completed'
   | 'dropped_out';
 
@@ -55,15 +58,18 @@ interface ParticipantsData {
 
 const PARTICIPANTS_FILE = 'research/participants.json';
 
-// Status progression order for funnel
+// Status progression order for funnel - matches ICIScopilot workflow
 const STATUS_ORDER: ParticipantStatus[] = [
   'registered',
-  'confirmed_via_email',
   'interview_completed',
-  'processing',
-  'paper_link_sent',
+  'setup_completed',
+  'builder_completed',
+  'reviewer_completed',
+  'supervisor_completed',  // Group 1 only
+  'reviser_completed',
+  'finalize_completed',
+  'paper_sent',
   'survey_sent',
-  'review_email_sent',
   'survey_completed',
   'dropped_out'
 ];
@@ -87,9 +93,14 @@ async function readParticipantsData(): Promise<ParticipantsData> {
   }
 }
 
-// Check if participant is "stuck" (no activity in 7 days while in processing state)
+// Check if participant is "stuck" (no activity in 7 days while in a workflow state)
 function isStuck(participant: Participant): boolean {
-  if (participant.status !== 'processing') return false;
+  // Stuck if in any workflow stage (not completed or dropped)
+  const workflowStates: ParticipantStatus[] = [
+    'setup_completed', 'builder_completed', 'reviewer_completed',
+    'supervisor_completed', 'reviser_completed'
+  ];
+  if (!workflowStates.includes(participant.status)) return false;
 
   const lastUpdate = new Date(participant.updated_at);
   const daysSinceUpdate = (Date.now() - lastUpdate.getTime()) / (1000 * 60 * 60 * 24);
@@ -140,15 +151,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       ? Math.round((surveysCompleted / surveysSent) * 100)
       : 0;
 
-    // Funnel data (count at each status)
+    // Funnel data (count at each status) - matches ICIScopilot workflow
     const funnel = {
       registered: participants.filter(p => p.status === 'registered').length,
-      confirmed_via_email: participants.filter(p => p.status === 'confirmed_via_email').length,
       interview_completed: participants.filter(p => p.status === 'interview_completed').length,
-      processing: participants.filter(p => p.status === 'processing').length,
-      paper_link_sent: participants.filter(p => p.status === 'paper_link_sent').length,
+      setup_completed: participants.filter(p => p.status === 'setup_completed').length,
+      builder_completed: participants.filter(p => p.status === 'builder_completed').length,
+      reviewer_completed: participants.filter(p => p.status === 'reviewer_completed').length,
+      supervisor_completed: participants.filter(p => p.status === 'supervisor_completed').length,
+      reviser_completed: participants.filter(p => p.status === 'reviser_completed').length,
+      finalize_completed: participants.filter(p => p.status === 'finalize_completed').length,
+      paper_sent: participants.filter(p => p.status === 'paper_sent').length,
       survey_sent: participants.filter(p => p.status === 'survey_sent').length,
-      review_email_sent: participants.filter(p => p.status === 'review_email_sent').length,
       survey_completed: participants.filter(p => p.status === 'survey_completed').length,
       dropped_out: participants.filter(p => p.status === 'dropped_out').length
     };

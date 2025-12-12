@@ -19,14 +19,18 @@ export const config = {
 };
 
 // Types (inline to avoid import issues in serverless)
+// Matches ICIScopilot workflow stages
 type ParticipantStatus =
   | 'registered'
-  | 'confirmed_via_email'
   | 'interview_completed'
-  | 'processing'
-  | 'paper_link_sent'
+  | 'setup_completed'
+  | 'builder_completed'
+  | 'reviewer_completed'
+  | 'supervisor_completed'
+  | 'reviser_completed'
+  | 'finalize_completed'
+  | 'paper_sent'
   | 'survey_sent'
-  | 'review_email_sent'
   | 'survey_completed'
   | 'dropped_out';
 
