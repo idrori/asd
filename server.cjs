@@ -22,7 +22,7 @@ const SEMANTIC_SCHOLAR_BASE_URL = 'https://api.semanticscholar.org/graph/v1';
 
 // OpenAI API for paper review (proxied through backend for security)
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY || '';
-const OPENAI_MODEL = process.env.VITE_OPENAI_MODEL || 'gpt-5.1';
+const OPENAI_MODEL = process.env.VITE_OPENAI_MODEL || 'gpt-5.2';
 
 // Log API key status at startup
 console.log(`[SemanticScholar] API Key configured: ${SEMANTIC_SCHOLAR_API_KEY ? 'YES' : 'NO (references will use fallback)'}`);
@@ -307,9 +307,9 @@ app.post('/api/openai/chat', async (req, res) => {
 
     console.log(`[OpenAI Proxy] Calling ${OPENAI_MODEL} with ${messages.length} messages...`);
 
-    // GPT-5.1 is a reasoning model - it doesn't support temperature parameter
+    // GPT-5.2 is a reasoning model - it doesn't support temperature parameter
     // Only include temperature for non-reasoning models
-    const isReasoningModel = OPENAI_MODEL.includes('5.1') || OPENAI_MODEL.includes('o1') || OPENAI_MODEL.includes('o3');
+    const isReasoningModel = OPENAI_MODEL.includes('5.2') || OPENAI_MODEL.includes('5.1') || OPENAI_MODEL.includes('o1') || OPENAI_MODEL.includes('o3');
 
     const requestBody = {
       model: OPENAI_MODEL,

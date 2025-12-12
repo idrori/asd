@@ -154,7 +154,7 @@ export const REVIEW_THRESHOLDS = {
 // API configuration
 export const API_CONFIG = {
   GEMINI_MODEL: 'gemini-3-pro-preview',
-  OPENAI_MODEL: 'gpt-4o',
+  OPENAI_MODEL: 'gpt-5.2',
   MAX_RETRIES: 3,
   TIMEOUT_MS: 180000  // 3 minutes
 };

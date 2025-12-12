@@ -65,7 +65,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Build OpenAI request
     const openaiRequest: Record<string, any> = {
-      model: body.model || process.env.OPENAI_MODEL || 'gpt-4o',
+      model: body.model || process.env.OPENAI_MODEL || 'gpt-5.2',
       messages: body.messages,
       temperature: body.temperature ?? 0.7,
       max_completion_tokens: body.max_completion_tokens || body.max_tokens || 16000,

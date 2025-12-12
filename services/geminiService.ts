@@ -31,7 +31,7 @@ const MODEL_ID = import.meta.env.VITE_GEMINI_MODEL || 'gemini-3-pro-preview';
 
 // OpenAI configuration
 const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY || '';
-const OPENAI_MODEL = import.meta.env.VITE_OPENAI_MODEL || 'gpt-4o';
+const OPENAI_MODEL = import.meta.env.VITE_OPENAI_MODEL || 'gpt-5.2';
 
 // Direct API URLs (fallback only)
 const GEMINI_DIRECT_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_ID}:generateContent?key=${GEMINI_API_KEY}`;
@@ -2353,7 +2353,7 @@ async function callOpenAIJson<T>(prompt: string): Promise<T> {
 
 /**
  * Review paper and generate scores + feedback
- * Uses OpenAI GPT-5.1-pro with high thinking effort for thorough review
+ * Uses OpenAI GPT-5.2 with high thinking effort for thorough review
  * Uses ICISreview.txt prompt from prompts/ folder
  * Incorporates MISQ review criteria from reviewingMISQ.pdf
  * Creates oversight_v{N}.txt and feedback_v{N}.txt files as specified in the prompt
