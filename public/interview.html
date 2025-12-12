@@ -682,28 +682,32 @@ ${'='.repeat(50)}
       ws.send(JSON.stringify(message));
     }
 
+    // Track if AI is currently speaking (to prevent echo)
+    let isAISpeaking = false;
+
     // Start recording audio
     async function startRecording() {
-      if (!mediaStream || !audioContext) return;
+      if (!mediaStream) return;
+
+      // Create a separate audio context for recording at 16kHz
+      const recordingContext = new AudioContext({ sampleRate: 16000 });
 
       isRecording = true;
       updateStatus('listening', 'Listening', 'Speak when ready...');
 
-      const source = audioContext.createMediaStreamSource(mediaStream);
+      const source = recordingContext.createMediaStreamSource(mediaStream);
 
-      // Create a script processor for audio capture (simpler than AudioWorklet for this use case)
-      const processor = audioContext.createScriptProcessor(4096, 1, 1);
+      // Create a script processor for audio capture
+      const processor = recordingContext.createScriptProcessor(4096, 1, 1);
 
       processor.onaudioprocess = (e) => {
-        if (!isRecording || !ws || ws.readyState !== WebSocket.OPEN) return;
+        // Don't send audio while AI is speaking (prevents echo)
+        if (!isRecording || !ws || ws.readyState !== WebSocket.OPEN || isAISpeaking) return;
 
         const inputData = e.inputBuffer.getChannelData(0);
 
-        // Resample from 24kHz to 16kHz
-        const resampledData = resample(inputData, audioContext.sampleRate, 16000);
-
-        // Convert to 16-bit PCM
-        const pcmData = float32ToPcm16(resampledData);
+        // Convert to 16-bit PCM (already at 16kHz from the recording context)
+        const pcmData = float32ToPcm16(inputData);
 
         // Convert to base64
         const base64 = arrayBufferToBase64(pcmData.buffer);
@@ -722,9 +726,10 @@ ${'='.repeat(50)}
       };
 
       source.connect(processor);
-      processor.connect(audioContext.destination);
+      // Connect to a dummy destination (required for processing to work, but no audio output)
+      processor.connect(recordingContext.destination);
 
-      audioWorklet = { source, processor };
+      audioWorklet = { source, processor, context: recordingContext };
     }
 
     // Stop recording
@@ -734,13 +739,42 @@ ${'='.repeat(50)}
       if (audioWorklet) {
         audioWorklet.source.disconnect();
         audioWorklet.processor.disconnect();
+        if (audioWorklet.context) {
+          audioWorklet.context.close();
+        }
         audioWorklet = null;
       }
     }
 
+    // Audio queue for sequential playback
+    let audioQueue = [];
+    let isPlayingAudio = false;
+
     // Play audio from base64
     async function playAudio(base64Data) {
       if (!audioContext) return;
+
+      // Add to queue
+      audioQueue.push(base64Data);
+
+      // Process queue if not already playing
+      if (!isPlayingAudio) {
+        processAudioQueue();
+      }
+    }
+
+    // Process audio queue sequentially
+    async function processAudioQueue() {
+      if (audioQueue.length === 0) {
+        isPlayingAudio = false;
+        isAISpeaking = false;
+        return;
+      }
+
+      isPlayingAudio = true;
+      isAISpeaking = true;
+
+      const base64Data = audioQueue.shift();
 
       try {
         // Decode base64 to ArrayBuffer
@@ -765,10 +799,18 @@ ${'='.repeat(50)}
         const source = audioContext.createBufferSource();
         source.buffer = audioBuffer;
         source.connect(audioContext.destination);
+
+        // When this chunk finishes, process next in queue
+        source.onended = () => {
+          processAudioQueue();
+        };
+
         source.start();
 
       } catch (error) {
         console.error('Error playing audio:', error);
+        // Continue with next chunk even on error
+        processAudioQueue();
       }
     }
 
