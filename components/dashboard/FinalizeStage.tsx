@@ -6,7 +6,7 @@ import {
   readFeedbackFile,
   getOversightProgression
 } from '../../services/fileService';
-import { saveFinalSubmission, compileLaTeX, downloadCompiledPdf, createViewerLink, openPaperViewer, CompileResult, ViewerLinkResult } from '../../services/fileApi';
+import { saveFinalSubmission, compileLaTeX, downloadCompiledPdf, createViewerLink, openPaperViewer, getLastCompiledPdfBlob, CompileResult, ViewerLinkResult } from '../../services/fileApi';
 
 interface FinalizeStageProps {
   logs: string[];
@@ -46,6 +46,7 @@ const FinalizeStage: React.FC<FinalizeStageProps> = ({
       return;
     }
 
+    // Save .tex and data files
     const result = await saveFinalSubmission(
       currentPaperVersion,
       currentRound,
@@ -56,7 +57,23 @@ const FinalizeStage: React.FC<FinalizeStageProps> = ({
     );
 
     if (result.success) {
-      setSavedFiles(result.files || []);
+      const savedFilesList = result.files || [];
+
+      // Also download PDF if available
+      const pdfData = getLastCompiledPdfBlob();
+      if (pdfData) {
+        const url = URL.createObjectURL(pdfData.blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = pdfData.filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        savedFilesList.push(pdfData.filename);
+      }
+
+      setSavedFiles(savedFilesList);
     } else {
       setSaveError(result.error || 'Failed to save files');
     }
@@ -283,11 +300,11 @@ const FinalizeStage: React.FC<FinalizeStageProps> = ({
           className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-400 text-white px-6 py-3 rounded-lg font-medium flex items-center justify-center gap-2"
         >
           <Save size={18} className={isSaving ? 'animate-pulse' : ''} />
-          {isSaving ? 'Saving...' : 'Save All Files (.tex + data)'}
+          {isSaving ? 'Saving...' : 'Save All Files (pdf + .tex + data)'}
         </button>
 
         <p className="text-xs text-slate-500 text-center">
-          Saves .tex source to icis/Paper/ and oversight/feedback to icis/Data/
+          Downloads PDF and saves .tex to icis/Paper/, oversight/feedback to icis/Data/
         </p>
 
         {savedFiles.length > 0 && (

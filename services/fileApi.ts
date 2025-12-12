@@ -282,10 +282,14 @@ export function downloadSingleFile(filename: string, content: string | object): 
 // LaTeX Compilation
 // ============================================================================
 
+// Vercel API URL for cloud compilation
+const VERCEL_API_URL = import.meta.env.VITE_API_URL || '';
+
 export interface CompileResult {
   success: boolean;
   pdfPath?: string;
   pdfFilename?: string;
+  pdfBase64?: string;      // Base64-encoded PDF for download
   fileSize?: number;
   pageCount?: number;      // Number of pages in compiled PDF
   exceedsLimit?: boolean;  // True if paper exceeds ICIS 16-page limit
@@ -293,12 +297,42 @@ export interface CompileResult {
   error?: string;
 }
 
+// Store last compiled PDF for download
+let lastCompiledPdf: { filename: string; base64: string } | null = null;
+
 /**
- * Compile LaTeX content to PDF via backend server
- * Requires LaTeX (pdflatex) installed on the server
+ * Compile LaTeX content to PDF
+ * Uses Vercel serverless function (cloud) or local backend
  */
 export async function compileLaTeX(filename: string, content: string): Promise<CompileResult> {
-  // Check backend availability
+  // Try Vercel cloud compilation first
+  if (VERCEL_API_URL) {
+    try {
+      console.log('[LaTeX] Compiling via Vercel cloud...');
+      const response = await fetch(`${VERCEL_API_URL}/api/compile-latex`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filename, content })
+      });
+
+      const result = await response.json();
+
+      if (result.success && result.pdfBase64) {
+        // Store for later download
+        lastCompiledPdf = {
+          filename: result.pdfFilename,
+          base64: result.pdfBase64
+        };
+        console.log(`[LaTeX] Cloud compilation success: ${result.pdfFilename}`);
+      }
+
+      return result;
+    } catch (error) {
+      console.warn('[LaTeX] Cloud compilation failed, trying local backend...', error);
+    }
+  }
+
+  // Fallback to local backend
   if (backendAvailable === null) {
     await checkBackendHealth();
   }
@@ -306,7 +340,7 @@ export async function compileLaTeX(filename: string, content: string): Promise<C
   if (!backendAvailable) {
     return {
       success: false,
-      error: 'Backend server not available. Run "node server.cjs" to enable PDF compilation.'
+      error: 'PDF compilation not available. Please ensure the Vercel deployment is configured correctly.'
     };
   }
 
@@ -328,16 +362,48 @@ export async function compileLaTeX(filename: string, content: string): Promise<C
 }
 
 /**
- * Get the URL to download a compiled PDF
+ * Get the last compiled PDF as a Blob
+ */
+export function getLastCompiledPdfBlob(): { filename: string; blob: Blob } | null {
+  if (!lastCompiledPdf) return null;
+
+  const binaryString = atob(lastCompiledPdf.base64);
+  const bytes = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  const blob = new Blob([bytes], { type: 'application/pdf' });
+
+  return { filename: lastCompiledPdf.filename, blob };
+}
+
+/**
+ * Get the URL to download a compiled PDF (local backend only)
  */
 export function getPdfDownloadUrl(pdfFilename: string): string {
   return `${API_BASE}/get-pdf/${encodeURIComponent(pdfFilename)}`;
 }
 
 /**
- * Download a compiled PDF from the server
+ * Download a compiled PDF
+ * Uses stored base64 from cloud compilation or fetches from local backend
  */
 export async function downloadCompiledPdf(pdfFilename: string): Promise<void> {
+  // First try to use stored cloud-compiled PDF
+  const cloudPdf = getLastCompiledPdfBlob();
+  if (cloudPdf && cloudPdf.filename === pdfFilename) {
+    const url = URL.createObjectURL(cloudPdf.blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = pdfFilename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    return;
+  }
+
+  // Fallback to local backend download
   const url = getPdfDownloadUrl(pdfFilename);
   const a = document.createElement('a');
   a.href = url;
@@ -361,11 +427,45 @@ export interface ViewerLinkResult {
 }
 
 /**
- * Create an HTML viewer link for a paper (for sharing with researchers)
- * The link shows the paper in HTML format without download capability
+ * Create a shareable PDF viewer link for a paper (for sharing with researchers)
+ * The PDF is rendered in a browser viewer that prevents downloading
+ * Uses Vercel cloud storage with 24-hour expiration
  */
 export async function createViewerLink(texFilename: string): Promise<ViewerLinkResult> {
-  // Check backend availability
+  // Must have a compiled PDF first
+  if (!lastCompiledPdf) {
+    return {
+      success: false,
+      error: 'No compiled PDF available. Please compile the paper first.'
+    };
+  }
+
+  // Try Vercel cloud API first
+  if (VERCEL_API_URL) {
+    try {
+      console.log('[Viewer] Creating viewer link via Vercel cloud...');
+      const response = await fetch(`${VERCEL_API_URL}/api/create-viewer-link`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          filename: lastCompiledPdf.filename,
+          pdfBase64: lastCompiledPdf.base64
+        })
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        console.log(`[Viewer] Link created: ${result.fullUrl}`);
+        return result;
+      } else {
+        console.warn('[Viewer] Cloud API returned error:', result.error);
+      }
+    } catch (error) {
+      console.warn('[Viewer] Cloud API failed:', error);
+    }
+  }
+
+  // Fallback to local backend
   if (backendAvailable === null) {
     await checkBackendHealth();
   }
@@ -373,7 +473,7 @@ export async function createViewerLink(texFilename: string): Promise<ViewerLinkR
   if (!backendAvailable) {
     return {
       success: false,
-      error: 'Backend server not available. Run "node server.cjs" to create viewer links.'
+      error: 'Unable to create viewer link. Vercel KV storage may not be configured.'
     };
   }
 

@@ -5,6 +5,12 @@
       "maxDuration": 300
     }
   },
+  "rewrites": [
+    {
+      "source": "/viewer/:token",
+      "destination": "/viewer.html"
+    }
+  ],
   "headers": [
     {
       "source": "/api/(.*)",
