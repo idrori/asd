@@ -19,10 +19,16 @@ interface FigureResource {
   base64: string;
 }
 
+interface BibResource {
+  filename: string;
+  content: string;  // Raw .bib content (not base64)
+}
+
 interface CompileRequest {
   filename: string;
   content: string;
   figures?: FigureResource[];  // Optional PNG figures as base64
+  bibliography?: BibResource;  // Optional .bib file
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -40,7 +46,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const { filename, content, figures }: CompileRequest = req.body;
+    const { filename, content, figures, bibliography }: CompileRequest = req.body;
 
     if (!content) {
       console.error('[LaTeX Compiler] No content provided');
@@ -54,9 +60,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const tikzCount = (content.match(/\\begin\{tikzpicture\}/g) || []).length;
     const axisCount = (content.match(/\\begin\{axis\}/g) || []).length;
     const figureCount = figures?.length || 0;
+    const hasBibliography = !!bibliography;
 
     console.log(`[LaTeX Compiler] Compiling ${filename}...`);
-    console.log(`[LaTeX Compiler] Content: ${Math.round(contentLength / 1024)} KB, ${tikzCount} tikz, ${axisCount} pgfplots, ${figureCount} PNG figures`);
+    console.log(`[LaTeX Compiler] Content: ${Math.round(contentLength / 1024)} KB, ${tikzCount} tikz, ${axisCount} pgfplots, ${figureCount} PNG figures${hasBibliography ? ', with .bib file' : ''}`);
 
     // Build resources array for latex.ytotech.com
     // Main LaTeX file first
@@ -80,6 +87,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
     }
 
+    // Add bibliography file if provided
+    if (bibliography) {
+      resources.push({
+        path: bibliography.filename,
+        content: bibliography.content
+      });
+      console.log(`[LaTeX Compiler] Added bibliography: ${bibliography.filename} (${Math.round(bibliography.content.length / 1024)} KB)`);
+    }
+
     // Use latex.ytotech.com API for compilation
     const controller = new AbortController();
     const timeoutId = setTimeout(() => {
@@ -89,6 +105,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     let compileResponse: Response;
     try {
+      // Build compilation options
+      const compileOptions: any = {
+        compiler: 'pdflatex',
+        resources: resources
+      };
+
+      // Add bibliography options if .bib file is provided
+      if (bibliography) {
+        compileOptions.options = {
+          bibliography: {
+            command: 'bibtex'
+          }
+        };
+      }
+
       // Try latex.ytotech.com with pdflatex first
       compileResponse = await fetch('https://latex.ytotech.com/builds/sync', {
         method: 'POST',
@@ -96,10 +127,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           'Content-Type': 'application/json',
         },
         signal: controller.signal,
-        body: JSON.stringify({
-          compiler: 'pdflatex',
-          resources: resources
-        })
+        body: JSON.stringify(compileOptions)
       });
 
       // If we get SERVER_ERROR, try with xelatex as fallback
@@ -108,16 +136,22 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         if (errorCheck.includes('SERVER_ERROR')) {
           console.log('[LaTeX Compiler] pdflatex returned SERVER_ERROR, trying xelatex...');
 
+          const fallbackOptions: any = {
+            compiler: 'xelatex',
+            resources: resources
+          };
+          if (bibliography) {
+            fallbackOptions.options = {
+              bibliography: { command: 'bibtex' }
+            };
+          }
           const fallbackResponse = await fetch('https://latex.ytotech.com/builds/sync', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             signal: controller.signal,
-            body: JSON.stringify({
-              compiler: 'xelatex',
-              resources: resources
-            })
+            body: JSON.stringify(fallbackOptions)
           });
 
           if (fallbackResponse.ok) {

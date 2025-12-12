@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Sidebar, { PaperMode } from './components/Sidebar';
 import DashboardPanel from './components/DashboardPanel';
+import { AdminPanel } from './components/admin';
 import { Stage } from './types';
 import {
   useSimulationState,
@@ -10,7 +11,12 @@ import {
 } from './hooks';
 import { setPaperMode } from './services/geminiService';
 
+type AppView = 'main' | 'admin';
+
 const App: React.FC = () => {
+  // Current view state
+  const [currentView, setCurrentView] = useState<AppView>('main');
+
   // Paper mode state (draft = fast models, research = powerful models)
   const [paperMode, setPaperModeState] = useState<PaperMode>('research');
 
@@ -123,23 +129,28 @@ Is this the correct data file for your analysis?`;
             const baseUrl = import.meta.env.BASE_URL || '/';
             window.open(`${baseUrl}interview.html`, '_blank', 'noopener,noreferrer');
           }}
+          onResearchAdmin={() => setCurrentView(currentView === 'admin' ? 'main' : 'admin')}
           paperMode={paperMode}
           onPaperModeChange={handlePaperModeChange}
         />
       </div>
       <div className="flex-1 h-full">
-        <DashboardPanel
-          state={simulationState}
-          isProcessing={isProcessing}
-          onAction={handleWorkflowAction}
-          uploadedFiles={uploadedFiles}
-          onFileChange={handleFileChange}
-          detectionStatus={detectionStatus}
-          onRefreshDetection={refreshDetection}
-          onStageAbort={handleStageAbort}
-          onStageRestart={handleStageRestart}
-          filePrefix={getFilePrefix()}
-        />
+        {currentView === 'admin' ? (
+          <AdminPanel onClose={() => setCurrentView('main')} />
+        ) : (
+          <DashboardPanel
+            state={simulationState}
+            isProcessing={isProcessing}
+            onAction={handleWorkflowAction}
+            uploadedFiles={uploadedFiles}
+            onFileChange={handleFileChange}
+            detectionStatus={detectionStatus}
+            onRefreshDetection={refreshDetection}
+            onStageAbort={handleStageAbort}
+            onStageRestart={handleStageRestart}
+            filePrefix={getFilePrefix()}
+          />
+        )}
       </div>
     </div>
   );

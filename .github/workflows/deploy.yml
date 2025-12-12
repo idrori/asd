@@ -33,6 +33,8 @@ jobs:
       - name: Build
         run: npm run build
         env:
+          # GitHub Actions flag for Vite to set correct base path (/asd/)
+          GITHUB_ACTIONS: true
           # Vercel API proxy URL (recommended for production - keeps API keys secure)
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
           # Fallback: Direct API keys (only used if VITE_API_URL not set)

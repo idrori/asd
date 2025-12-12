@@ -19,7 +19,8 @@ import {
   StopCircle,
   RotateCcw,
   FastForward,
-  Play
+  Play,
+  Users
 } from 'lucide-react';
 
 // Stage control actions
@@ -38,6 +39,7 @@ interface SidebarProps {
   onStageAction?: (stage: Stage, action: StageAction) => void;
   onNewCase?: () => void;
   onNewInterview?: () => void;
+  onResearchAdmin?: () => void;
   paperMode?: PaperMode;
   onPaperModeChange?: (mode: PaperMode) => void;
 }
@@ -53,6 +55,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   onStageAction,
   onNewCase,
   onNewInterview,
+  onResearchAdmin,
   paperMode = 'draft',
   onPaperModeChange
 }) => {
@@ -259,6 +262,17 @@ const Sidebar: React.FC<SidebarProps> = ({
             className="w-full px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded transition-colors"
           >
             New Project
+          </button>
+        )}
+
+        {/* Research Admin Button */}
+        {onResearchAdmin && (
+          <button
+            onClick={onResearchAdmin}
+            className="w-full px-3 py-2 bg-slate-600 hover:bg-slate-500 text-white text-sm font-medium rounded transition-colors flex items-center justify-center gap-2"
+          >
+            <Users size={16} />
+            Research Admin
           </button>
         )}
       </div>

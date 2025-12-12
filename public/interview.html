@@ -684,6 +684,50 @@
       transcriptBox.scrollTop = transcriptBox.scrollHeight;
     }
 
+    // Register participant in research system
+    async function registerParticipant(email) {
+      try {
+        const apiUrl = getApiUrl();
+        const response = await fetch(`${apiUrl}/api/participants`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: email,
+            auto_assign_group: true
+          })
+        });
+        const data = await response.json();
+        if (data.success) {
+          console.log('[Interview] Participant registered:', data.participant?.id);
+        }
+      } catch (error) {
+        console.warn('[Interview] Failed to register participant:', error);
+        // Don't block interview if registration fails
+      }
+    }
+
+    // Update participant status to interview completed and save transcript
+    async function completeParticipantInterview(email, transcriptText) {
+      try {
+        const apiUrl = getApiUrl();
+        const response = await fetch(`${apiUrl}/api/participants`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: email,
+            status: 'interview_completed',
+            transcript: transcriptText
+          })
+        });
+        const data = await response.json();
+        if (data.success) {
+          console.log('[Interview] Participant status updated to interview_completed');
+        }
+      } catch (error) {
+        console.warn('[Interview] Failed to update participant status:', error);
+      }
+    }
+
     // Download transcript as text file
     function downloadTranscript() {
       const header = `Research Interview Transcript
@@ -723,6 +767,9 @@ ${'='.repeat(50)}
       document.getElementById('start-btn').textContent = 'Connecting...';
 
       try {
+        // Register participant in research system
+        await registerParticipant(userEmail);
+
         // Step 1: Get ephemeral client secret from our server
         const apiUrl = getApiUrl();
         console.log('[Interview] Fetching client secret from:', apiUrl);
@@ -941,13 +988,24 @@ ${'='.repeat(50)}
     }
 
     // End the interview
-    function endInterview() {
+    async function endInterview() {
       console.log('[Interview] Ending interview');
       isRecording = false;
 
       cleanup();
 
-      // Download transcript
+      // Build full transcript text for saving
+      const transcriptText = `Research Interview Transcript
+Date: ${new Date().toLocaleString()}
+Email: ${userEmail}
+References: ${userReferences || 'None provided'}
+${'='.repeat(50)}
+${transcript}`;
+
+      // Update participant status and save transcript to research system
+      await completeParticipantInterview(userEmail, transcriptText);
+
+      // Download transcript locally
       downloadTranscript();
 
       // Show completion screen
