@@ -962,15 +962,73 @@ export const runBuilder = async (
     console.log('[Builder] No data file provided - proceeding without data analysis');
   }
 
+  // Generate visualizations BEFORE Results section (for full papers)
+  // This allows the Results section to reference the actual figures
+  let generatedFigures: GeneratedFigure[] = [];
+  let usedSyntheticData = false;
+  let figuresInfoForResults = '';
+
+  if (!isPartialPaper && dataSummary) {
+    try {
+      onProgress?.('Visualizations', 'starting');
+      console.log('[Builder] Generating visualizations BEFORE Results section...');
+
+      // Create research context from interview (we don't have sections yet)
+      const researchContext = `Research Interview: ${interviewTranscript.substring(0, 2000)}`;
+
+      const vizResult = await generateVisualizations(
+        interviewTranscript,
+        researchContext,
+        dataFileName,
+        (msg) => console.log(`[Builder] ${msg}`),
+        dataSummary
+      );
+
+      generatedFigures = vizResult.figures;
+      usedSyntheticData = vizResult.usedSyntheticData;
+
+      // Build figure info string for Results section prompt
+      if (generatedFigures.length > 0) {
+        figuresInfoForResults = '\n\nGENERATED FIGURES (reference these in your Results section):\n';
+        generatedFigures.forEach((fig, i) => {
+          figuresInfoForResults += `- Figure ${i + 1} (\\ref{fig:fig${i + 1}}): ${fig.description}\n`;
+        });
+        figuresInfoForResults += '\nIMPORTANT: Reference each figure in the text using Figure~\\ref{fig:fig1}, Figure~\\ref{fig:fig2}, etc.\n';
+        figuresInfoForResults += 'Example: "As shown in Figure~\\ref{fig:fig1}, the distribution of..."\n';
+      }
+
+      // Merge visualization alerts with data analysis alerts
+      if (vizResult.dataAlert) {
+        dataAlert = dataAlert
+          ? `${dataAlert}\n${vizResult.dataAlert}`
+          : vizResult.dataAlert;
+      }
+
+      onProgress?.('Visualizations', 'completed');
+      console.log(`[Builder] Generated ${generatedFigures.length} figures before Results section`);
+    } catch (error) {
+      console.error('[Builder] Visualization generation failed:', error);
+      onProgress?.('Visualizations', 'error');
+      const vizError = `*** VISUALIZATION ERROR: ${(error as Error).message}`;
+      dataAlert = dataAlert ? `${dataAlert}\n${vizError}` : vizError;
+      usedSyntheticData = true;
+    }
+  }
+
   for (const section of sections) {
     try {
       onProgress?.(section.name, 'starting');
       console.log(`[Builder] Generating: ${section.name}...`);
 
+      // For Results section, include figure information
+      const sectionDataSummary = section.key === 'results' && figuresInfoForResults
+        ? (dataSummary || '') + figuresInfoForResults
+        : dataSummary;
+
       const content = await generateSection(section, {
         interviewTranscript,
         previousSections: generatedSections,
-        dataSummary  // Pass data summary to inform Methodology and Results sections
+        dataSummary: sectionDataSummary  // Pass data summary + figure info for Results
       });
 
       generatedSections[section.key] = content;
@@ -986,16 +1044,12 @@ export const runBuilder = async (
     }
   }
 
-  // Generate visualizations for all full papers (uses real data if available, otherwise synthetic/illustrative)
-  let generatedFigures: GeneratedFigure[] = [];
-  let usedSyntheticData = false;
-
-  if (!isPartialPaper) {
+  // If we didn't generate figures earlier (no dataSummary), try now
+  if (!isPartialPaper && generatedFigures.length === 0) {
     try {
       onProgress?.('Visualizations', 'starting');
-      console.log('[Builder] Generating visualizations...');
+      console.log('[Builder] Generating visualizations (post-sections fallback)...');
 
-      // Create research context from generated sections
       const researchContext = `
 Abstract: ${generatedSections.abstract?.substring(0, 500) || ''}
 Research Focus: ${generatedSections.introduction?.substring(0, 500) || ''}
@@ -1007,37 +1061,28 @@ Methodology: ${generatedSections.methodology?.substring(0, 500) || ''}
         researchContext,
         dataFileName,
         (msg) => console.log(`[Builder] ${msg}`),
-        dataSummary  // Pass pre-analyzed data summary with actual column names
+        dataSummary
       );
 
       generatedFigures = vizResult.figures;
       usedSyntheticData = vizResult.usedSyntheticData;
 
-      // Merge visualization alerts with data analysis alerts
       if (vizResult.dataAlert) {
         dataAlert = dataAlert
           ? `${dataAlert}\n${vizResult.dataAlert}`
           : vizResult.dataAlert;
       }
 
-      // Use visualization data summary if we don't have one from earlier analysis
       if (!dataSummary && vizResult.dataSummary) {
         dataSummary = vizResult.dataSummary;
       }
 
       onProgress?.('Visualizations', 'completed');
-      console.log(`[Builder] Generated ${generatedFigures.length} figures`);
-
-      if (vizResult.dataAlert) {
-        console.warn(`[Builder] ${vizResult.dataAlert}`);
-      }
+      console.log(`[Builder] Generated ${generatedFigures.length} figures (fallback)`);
     } catch (error) {
       console.error('[Builder] Visualization generation failed:', error);
       onProgress?.('Visualizations', 'error');
-      const vizError = `*** VISUALIZATION ERROR: ${(error as Error).message}`;
-      dataAlert = dataAlert ? `${dataAlert}\n${vizError}` : vizError;
       usedSyntheticData = true;
-      // Continue without figures - don't fail the whole paper
     }
   }
 
@@ -1665,15 +1710,29 @@ CODE STRUCTURE:
 # Figure 1: [Description]
 fig, ax = plt.subplots(figsize=(8, 5))
 # ... plotting code using actual column names from df ...
-save_figure(fig, 'fig1_descriptive_name.png', 'Description of what this figure shows')
+save_figure(fig, 'fig1_descriptive_name.png', 'SELF-EXPLANATORY CAPTION HERE')
 
 # Figure 2: [Description]
 fig, ax = plt.subplots(figsize=(8, 5))
 # ... more plotting code ...
-save_figure(fig, 'fig2_descriptive_name.png', 'Description of this figure')
+save_figure(fig, 'fig2_descriptive_name.png', 'SELF-EXPLANATORY CAPTION HERE')
 
 # Continue for all figures...
 \`\`\`
+
+CAPTION REQUIREMENTS (CRITICAL):
+Each figure caption MUST be self-explanatory and follow academic standards:
+- Start with what the figure shows (e.g., "Distribution of response times...")
+- Include the variable/metric being displayed
+- Include sample size if relevant (e.g., "n=150")
+- Include key statistics where appropriate (e.g., "mean=3.42, SD=0.87")
+- Mention the data source context (e.g., "from survey responses")
+- Be detailed enough that a reader can understand the figure without reading the paper body
+
+Example captions:
+- "Distribution of participant response times (n=150, mean=3.42s, SD=0.87s). The histogram shows a right-skewed distribution typical of reaction time data."
+- "Correlation matrix of key study variables. Darker colors indicate stronger correlations; asterisks denote significance at p<0.05."
+- "Comparison of satisfaction scores across three system types (n=50 per group). Error bars represent 95\\% confidence intervals."
 
 IMPORTANT:
 - Use \`plt.style.use('seaborn-v0_8-whitegrid')\` for consistent styling
