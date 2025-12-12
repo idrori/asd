@@ -30,14 +30,18 @@ interface StatusBadgeProps {
 }
 
 const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
+  // Use canonical status colors from types/participant.ts
   const colorMap: Record<ParticipantStatus, string> = {
     registered: 'bg-gray-100 text-gray-700',
-    confirmed_via_email: 'bg-blue-100 text-blue-700',
-    interview_completed: 'bg-emerald-100 text-emerald-700',
-    processing: 'bg-yellow-100 text-yellow-700',
-    paper_link_sent: 'bg-purple-100 text-purple-700',
-    survey_sent: 'bg-cyan-100 text-cyan-700',
-    review_email_sent: 'bg-indigo-100 text-indigo-700',
+    interview_completed: 'bg-blue-100 text-blue-700',
+    setup_completed: 'bg-sky-100 text-sky-700',
+    builder_completed: 'bg-amber-100 text-amber-700',
+    reviewer_completed: 'bg-orange-100 text-orange-700',
+    supervisor_completed: 'bg-purple-100 text-purple-700',
+    reviser_completed: 'bg-indigo-100 text-indigo-700',
+    finalize_completed: 'bg-teal-100 text-teal-700',
+    paper_sent: 'bg-cyan-100 text-cyan-700',
+    survey_sent: 'bg-violet-100 text-violet-700',
     survey_completed: 'bg-green-100 text-green-700',
     dropped_out: 'bg-red-100 text-red-700'
   };
@@ -153,14 +157,18 @@ const ParticipantList: React.FC<ParticipantListProps> = ({ onBack }) => {
     });
   };
 
+  // Use canonical statuses from types/participant.ts
   const allStatuses: ParticipantStatus[] = [
     'registered',
-    'confirmed_via_email',
     'interview_completed',
-    'processing',
-    'paper_link_sent',
+    'setup_completed',
+    'builder_completed',
+    'reviewer_completed',
+    'supervisor_completed',
+    'reviser_completed',
+    'finalize_completed',
+    'paper_sent',
     'survey_sent',
-    'review_email_sent',
     'survey_completed',
     'dropped_out'
   ];

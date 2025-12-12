@@ -9,6 +9,7 @@
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { put } from '@vercel/blob';
+import { randomBytes } from 'crypto';
 
 export const config = {
   maxDuration: 60,
@@ -19,13 +20,9 @@ interface CreateLinkRequest {
   pdfBase64: string;
 }
 
+// SECURITY: Use cryptographically secure random token generation
 function generateToken(): string {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let token = '';
-  for (let i = 0; i < 32; i++) {
-    token += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return token;
+  return randomBytes(24).toString('base64url');
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {

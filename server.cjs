@@ -13,8 +13,15 @@ const { exec } = require('child_process');
 // Load environment variables from .env file
 require('dotenv').config();
 
-// Paper Viewer for HTML viewing of papers
-const { setupViewerRoutes } = require('./paper-viewer/index.cjs');
+// Paper Viewer for HTML viewing of papers (optional module)
+let setupViewerRoutes = null;
+try {
+  const paperViewer = require('./paper-viewer/index.cjs');
+  setupViewerRoutes = paperViewer.setupViewerRoutes;
+  console.log('[PaperViewer] Module loaded successfully');
+} catch (err) {
+  console.log('[PaperViewer] Module not found - viewer routes disabled');
+}
 
 // Semantic Scholar API for reference lookup
 const SEMANTIC_SCHOLAR_API_KEY = process.env.VITE_SEMANTIC_SCHOLAR_API_KEY || '';
@@ -175,6 +182,32 @@ if (!fs.existsSync(CODE_DIR)) fs.mkdirSync(CODE_DIR, { recursive: true });
 if (!fs.existsSync(RESULTS_DIR)) fs.mkdirSync(RESULTS_DIR, { recursive: true });
 if (!fs.existsSync(PUBLIC_DATA_DIR)) fs.mkdirSync(PUBLIC_DATA_DIR, { recursive: true });
 
+// SECURITY: Filename sanitization to prevent path traversal attacks
+const ALLOWED_EXTENSIONS = new Set(['.tex', '.json', '.txt', '.csv', '.xlsx', '.pdf', '.png', '.bib', '.py', '.log', '.aux']);
+
+function sanitizeFilename(filename, allowedExts = ALLOWED_EXTENSIONS) {
+  if (!filename || typeof filename !== 'string') {
+    throw new Error('Invalid filename');
+  }
+  // Get just the basename (no directory traversal)
+  const base = path.basename(String(filename));
+  const ext = path.extname(base).toLowerCase();
+
+  // Check extension
+  if (!allowedExts.has(ext)) {
+    throw new Error(`Disallowed file extension: ${ext}`);
+  }
+
+  // Remove potentially dangerous characters (keep alphanumeric, dots, dashes, underscores)
+  const sanitized = base.replace(/[^a-zA-Z0-9._-]/g, '_');
+
+  if (sanitized.length === 0 || sanitized.startsWith('.')) {
+    throw new Error('Invalid filename after sanitization');
+  }
+
+  return sanitized;
+}
+
 // ============================================================================
 // Auto-generate manifest.json from files in icis/Data folder (NOT public/Data)
 // Files should be placed in icis/Data - this is the source of truth
@@ -261,8 +294,10 @@ generateManifest();
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 
-// Initialize paper viewer routes
-setupViewerRoutes(app, PAPER_DIR, RESULTS_DIR);
+// Initialize paper viewer routes (if module is available)
+if (setupViewerRoutes) {
+  setupViewerRoutes(app, PAPER_DIR, RESULTS_DIR);
+}
 
 // Serve files from icis/Data folder at /Data path
 // This allows the frontend to fetch /Data/manifest.json, /Data/INTERVIEWxxx.txt, etc.
@@ -383,7 +418,8 @@ app.get('/api/manifest', (req, res) => {
 app.post('/api/save-paper', (req, res) => {
   try {
     const { filename, content } = req.body;
-    const filepath = path.join(PAPER_DIR, filename);
+    const safeFilename = sanitizeFilename(filename);
+    const filepath = path.join(PAPER_DIR, safeFilename);
     fs.writeFileSync(filepath, content, 'utf-8');
     console.log(`Saved: ${filepath}`);
     res.json({ success: true, path: filepath });
@@ -397,7 +433,8 @@ app.post('/api/save-paper', (req, res) => {
 app.post('/api/save-data', (req, res) => {
   try {
     const { filename, content } = req.body;
-    const filepath = path.join(DATA_DIR, filename);
+    const safeFilename = sanitizeFilename(filename);
+    const filepath = path.join(DATA_DIR, safeFilename);
     const fileContent = typeof content === 'string' ? content : JSON.stringify(content, null, 2);
     fs.writeFileSync(filepath, fileContent, 'utf-8');
     console.log(`Saved: ${filepath}`);
@@ -416,7 +453,8 @@ app.post('/api/save-files', (req, res) => {
 
     for (const file of files) {
       const dir = file.directory === 'paper' ? PAPER_DIR : DATA_DIR;
-      const filepath = path.join(dir, file.filename);
+      const safeFilename = sanitizeFilename(file.filename);
+      const filepath = path.join(dir, safeFilename);
       const content = typeof file.content === 'string' ? file.content : JSON.stringify(file.content, null, 2);
       fs.writeFileSync(filepath, content, 'utf-8');
       savedFiles.push(filepath);

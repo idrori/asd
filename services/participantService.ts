@@ -213,7 +213,7 @@ export async function markPaperSent(
 ): Promise<Participant> {
   return updateParticipant({
     email,
-    status: 'paper_link_sent',
+    status: 'paper_sent',
     paper_link: paperLink
   });
 }
@@ -233,8 +233,8 @@ export async function markSurveyCompleted(email: string): Promise<Participant> {
 }
 
 /**
- * Mark participant as processing
+ * Mark participant as starting the builder stage (setup completed)
  */
-export async function markProcessing(email: string): Promise<Participant> {
-  return updateParticipantStatus(email, 'processing');
+export async function markSetupCompleted(email: string): Promise<Participant> {
+  return updateParticipantStatus(email, 'setup_completed');
 }

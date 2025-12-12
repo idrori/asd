@@ -11,6 +11,7 @@
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { put } from '@vercel/blob';
+import { randomBytes } from 'crypto';
 
 export const config = {
   maxDuration: 60,
@@ -40,14 +41,9 @@ interface GeneratedFigure {
   height?: number;
 }
 
-// Generate a unique session token
+// SECURITY: Use cryptographically secure random token generation
 function generateSessionId(): string {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let token = '';
-  for (let i = 0; i < 16; i++) {
-    token += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return token;
+  return randomBytes(12).toString('base64url');
 }
 
 // Convert chart data to QuickChart configuration
