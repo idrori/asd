@@ -160,6 +160,12 @@
       border: 3px solid #94a3b8;
     }
 
+    .status-indicator.connecting {
+      background: rgba(251, 191, 36, 0.2);
+      border: 3px solid #fbbf24;
+      animation: pulse 1s infinite;
+    }
+
     @keyframes pulse {
       0%, 100% { transform: scale(1); opacity: 1; }
       50% { transform: scale(1.05); opacity: 0.8; }
@@ -243,6 +249,13 @@
       color: #10b981;
       margin-bottom: 1rem;
     }
+
+    .powered-by {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: #64748b;
+    }
   </style>
 </head>
 <body>
@@ -281,6 +294,8 @@
       <button id="start-btn" class="btn btn-primary" onclick="startInterview()">
         Start Voice Interview
       </button>
+
+      <div class="powered-by">Powered by OpenAI Realtime API (gpt-4o-realtime)</div>
     </div>
 
     <!-- Interview Screen -->
@@ -333,78 +348,26 @@
     let ws = null;
     let audioContext = null;
     let mediaStream = null;
-    let audioWorklet = null;
+    let scriptProcessor = null;
     let isRecording = false;
     let transcript = '';
     let userEmail = '';
     let userReferences = '';
     let interviewStartTime = null;
     let timerInterval = null;
-    let currentSpeaker = null;
+    let currentAIText = '';
+    let currentUserText = '';
 
-    // Interview prompt (embedded)
-    const INTERVIEW_PROMPT = `You are conducting a structured research interview for automated scientific discovery. Your goal is to understand the participant's research needs, data, and goals.
-
-INTERVIEW STRUCTURE (Target: 9 minutes total):
-
-1. INTRODUCTION (30 sec)
-- Greet warmly and introduce yourself as a research assistant
-- Explain the interview will help understand their research needs
-- Ask them to speak naturally
-
-2. RESEARCH BACKGROUND * (1 min)
-- What is your field of research?
-- What specific problem are you trying to solve?
-
-3. DATA DESCRIPTION * (1.5 min)
-- What data do you have or plan to collect?
-- What format is your data in (CSV, surveys, experiments)?
-- How many observations/participants do you have?
-
-4. RESEARCH QUESTIONS * (1.5 min)
-- What is your main research question or hypothesis?
-- Are there secondary questions you want to explore?
-
-5. METHODOLOGY PREFERENCES (1 min)
-- Do you have specific statistical methods in mind?
-- Any constraints on the analysis approach?
-
-6. EXPECTED OUTCOMES * (1 min)
-- What would a successful result look like?
-- How will you use the findings?
-
-7. TIMELINE AND CONSTRAINTS (30 sec)
-- Any deadlines or time constraints?
-- Resource limitations?
-
-8. RELATED WORK (30 sec)
-- Are there similar studies you're building on?
-- Key papers that inspire this work?
-
-9. ADDITIONAL CONTEXT (30 sec)
-- Anything else important for understanding your research?
-
-10. WRAP-UP (30 sec)
-- Summarize key points
-- Thank them for their time
-
-GUIDELINES:
-- Questions marked with * are mandatory - must be covered
-- Use Voice Activity Detection - wait for natural pauses before responding
-- Be conversational and supportive, not interrogative
-- Ask follow-up questions when answers are unclear
-- Keep track of time and gently move forward if running long
-- At the end, provide a brief summary of what you learned
-
-IMPORTANT: This is a voice conversation. Speak naturally and conversationally. Do not use markdown, bullet points, or formatting - just natural speech.`;
+    // Audio playback state
+    let audioQueue = [];
+    let isPlaying = false;
+    let nextPlayTime = 0;
 
     // Get API base URL
     function getApiUrl() {
-      // If on GitHub Pages, use Vercel API
       if (window.location.hostname.includes('github.io')) {
         return 'https://icis-deploy-12-10-2025.vercel.app';
       }
-      // Otherwise use same origin (for Vercel deployment)
       return window.location.origin;
     }
 
@@ -435,8 +398,10 @@ IMPORTANT: This is a voice conversation. Speak naturally and conversationally. D
         icon.textContent = '🎙️';
       } else if (status === 'speaking') {
         icon.textContent = '🔊';
-      } else {
+      } else if (status === 'connecting') {
         icon.textContent = '⏳';
+      } else {
+        icon.textContent = '💬';
       }
     }
 
@@ -495,6 +460,94 @@ ${'='.repeat(50)}
       URL.revokeObjectURL(url);
     }
 
+    // Convert Float32Array to Int16Array (PCM16)
+    function floatTo16BitPCM(float32Array) {
+      const int16Array = new Int16Array(float32Array.length);
+      for (let i = 0; i < float32Array.length; i++) {
+        const s = Math.max(-1, Math.min(1, float32Array[i]));
+        int16Array[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
+      }
+      return int16Array;
+    }
+
+    // Convert Int16Array to base64
+    function int16ToBase64(int16Array) {
+      const bytes = new Uint8Array(int16Array.buffer);
+      let binary = '';
+      for (let i = 0; i < bytes.length; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      return btoa(binary);
+    }
+
+    // Resample audio from source rate to target rate
+    function resampleAudio(audioData, sourceRate, targetRate) {
+      if (sourceRate === targetRate) {
+        return audioData;
+      }
+      const ratio = sourceRate / targetRate;
+      const newLength = Math.round(audioData.length / ratio);
+      const result = new Float32Array(newLength);
+      for (let i = 0; i < newLength; i++) {
+        const srcIndex = i * ratio;
+        const srcIndexFloor = Math.floor(srcIndex);
+        const srcIndexCeil = Math.min(srcIndexFloor + 1, audioData.length - 1);
+        const t = srcIndex - srcIndexFloor;
+        result[i] = audioData[srcIndexFloor] * (1 - t) + audioData[srcIndexCeil] * t;
+      }
+      return result;
+    }
+
+    // Play received audio using Web Audio API with proper scheduling
+    async function playAudio(base64Data) {
+      if (!audioContext) return;
+
+      try {
+        // Decode base64 to PCM16
+        const binaryString = atob(base64Data);
+        const bytes = new Uint8Array(binaryString.length);
+        for (let i = 0; i < binaryString.length; i++) {
+          bytes[i] = binaryString.charCodeAt(i);
+        }
+
+        // Convert to Int16 then Float32
+        const pcmData = new Int16Array(bytes.buffer);
+        const floatData = new Float32Array(pcmData.length);
+        for (let i = 0; i < pcmData.length; i++) {
+          floatData[i] = pcmData[i] / 32768;
+        }
+
+        // Create audio buffer (OpenAI outputs 24kHz PCM16)
+        const audioBuffer = audioContext.createBuffer(1, floatData.length, 24000);
+        audioBuffer.getChannelData(0).set(floatData);
+
+        // Schedule playback to avoid overlapping
+        const currentTime = audioContext.currentTime;
+        const startTime = Math.max(currentTime, nextPlayTime);
+
+        const source = audioContext.createBufferSource();
+        source.buffer = audioBuffer;
+        source.connect(audioContext.destination);
+
+        // Update next play time
+        nextPlayTime = startTime + audioBuffer.duration;
+
+        source.start(startTime);
+
+        // Update status while playing
+        updateStatus('speaking', 'AI Speaking', 'Listening for your response...');
+
+        source.onended = () => {
+          // Check if all audio has played
+          if (audioContext.currentTime >= nextPlayTime - 0.05) {
+            updateStatus('listening', 'Your Turn', 'Speak when ready...');
+          }
+        };
+      } catch (error) {
+        console.error('Error playing audio:', error);
+      }
+    }
+
     // Start the interview
     async function startInterview() {
       hideError();
@@ -503,12 +556,7 @@ ${'='.repeat(50)}
       userReferences = document.getElementById('references').value.trim();
 
       if (!userEmail) {
-        showError('Please enter your email address.');
-        return;
-      }
-
-      if (!userEmail.includes('@')) {
-        showError('Please enter a valid email address.');
+        showError('Please enter your email address');
         return;
       }
 
@@ -516,393 +564,302 @@ ${'='.repeat(50)}
       document.getElementById('start-btn').textContent = 'Connecting...';
 
       try {
-        // Get API key from server
-        const tokenResponse = await fetch(`${getApiUrl()}/api/get-interview-token`);
-        const tokenData = await tokenResponse.json();
+        // Get ephemeral token from server
+        const apiUrl = getApiUrl();
+        console.log('[Interview] Fetching token from:', apiUrl);
 
-        if (!tokenData.success) {
-          throw new Error(tokenData.error || 'Failed to get API token');
+        const tokenResponse = await fetch(`${apiUrl}/api/openai-realtime-token`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (!tokenResponse.ok) {
+          const errorData = await tokenResponse.json();
+          throw new Error(errorData.error || 'Failed to get session token');
         }
+
+        const tokenData = await tokenResponse.json();
+        console.log('[Interview] Got session token');
+
+        if (!tokenData.success || !tokenData.client_secret) {
+          throw new Error('Invalid token response');
+        }
+
+        // Initialize audio context for playback
+        audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 24000 });
+        nextPlayTime = audioContext.currentTime;
 
         // Request microphone access
         mediaStream = await navigator.mediaDevices.getUserMedia({
           audio: {
-            sampleRate: 16000,
+            sampleRate: 24000,
             channelCount: 1,
             echoCancellation: true,
-            noiseSuppression: true
+            noiseSuppression: true,
+            autoGainControl: true
           }
         });
 
-        // Initialize audio context
-        audioContext = new AudioContext({ sampleRate: 24000 });
+        // Connect to OpenAI Realtime API via WebSocket
+        const model = 'gpt-4o-realtime-preview-2024-12-17';
+        const wsUrl = `wss://api.openai.com/v1/realtime?model=${model}`;
 
-        // Show interview screen
-        document.getElementById('welcome-screen').classList.add('hidden');
-        document.getElementById('interview-screen').classList.remove('hidden');
+        console.log('[Interview] Connecting to WebSocket...');
 
-        // Connect to Gemini Live API
-        await connectToGemini(tokenData.apiKey);
+        ws = new WebSocket(wsUrl, [
+          'realtime',
+          `openai-insecure-api-key.${tokenData.client_secret.value}`
+        ]);
 
-      } catch (error) {
-        console.error('Failed to start interview:', error);
-        showError(`Failed to start: ${error.message}`);
-        document.getElementById('start-btn').disabled = false;
-        document.getElementById('start-btn').textContent = 'Start Voice Interview';
-      }
-    }
+        ws.onopen = () => {
+          console.log('[Interview] WebSocket connected');
 
-    // Connect to Gemini Live API via WebSocket
-    async function connectToGemini(apiKey) {
-      updateStatus('idle', 'Connecting...', 'Establishing connection to AI');
+          // Switch to interview screen
+          document.getElementById('welcome-screen').classList.add('hidden');
+          document.getElementById('interview-screen').classList.remove('hidden');
 
-      const model = 'gemini-2.0-flash-exp';
-      const wsUrl = `wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent?key=${apiKey}`;
+          updateStatus('connecting', 'Connected', 'Starting interview...');
 
-      ws = new WebSocket(wsUrl);
+          // Start timer
+          interviewStartTime = Date.now();
+          timerInterval = setInterval(updateTimer, 1000);
 
-      ws.onopen = () => {
-        console.log('WebSocket connected');
-
-        // Send setup message
-        const setupMessage = {
-          setup: {
-            model: `models/${model}`,
-            generationConfig: {
-              responseModalities: ['AUDIO'],
-              speechConfig: {
-                voiceConfig: {
-                  prebuiltVoiceConfig: {
-                    voiceName: 'Aoede'
-                  }
-                }
+          // Send session update with our configuration
+          ws.send(JSON.stringify({
+            type: 'session.update',
+            session: {
+              modalities: ['text', 'audio'],
+              voice: 'alloy',
+              input_audio_format: 'pcm16',
+              output_audio_format: 'pcm16',
+              input_audio_transcription: {
+                model: 'whisper-1'
+              },
+              turn_detection: {
+                type: 'server_vad',
+                threshold: 0.5,
+                prefix_padding_ms: 300,
+                silence_duration_ms: 500,
+                create_response: true
               }
-            },
-            systemInstruction: {
-              parts: [{ text: INTERVIEW_PROMPT }]
             }
+          }));
+
+          // Start audio recording after a short delay
+          setTimeout(() => {
+            startAudioRecording();
+            // Request initial greeting from AI
+            ws.send(JSON.stringify({
+              type: 'response.create',
+              response: {
+                modalities: ['text', 'audio'],
+                instructions: 'Please greet the participant warmly and begin the research interview by introducing yourself and explaining the process.'
+              }
+            }));
+          }, 500);
+        };
+
+        ws.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            handleServerEvent(data);
+          } catch (error) {
+            console.error('[Interview] Error parsing message:', error);
           }
         };
 
-        ws.send(JSON.stringify(setupMessage));
-      };
+        ws.onerror = (error) => {
+          console.error('[Interview] WebSocket error:', error);
+          showError('Connection error. Please try again.');
+          cleanup();
+        };
 
-      ws.onmessage = async (event) => {
-        try {
-          let data;
-          if (event.data instanceof Blob) {
-            const text = await event.data.text();
-            data = JSON.parse(text);
-          } else {
-            data = JSON.parse(event.data);
+        ws.onclose = (event) => {
+          console.log('[Interview] WebSocket closed:', event.code, event.reason);
+          if (isRecording) {
+            endInterview();
           }
+        };
 
-          await handleGeminiMessage(data);
-        } catch (error) {
-          console.error('Error processing message:', error);
-        }
-      };
-
-      ws.onerror = (error) => {
-        console.error('WebSocket error:', error);
-        updateStatus('idle', 'Connection Error', 'Please try again');
-      };
-
-      ws.onclose = () => {
-        console.log('WebSocket closed');
-        if (isRecording) {
-          stopRecording();
-        }
-      };
+      } catch (error) {
+        console.error('[Interview] Error:', error);
+        showError(error.message || 'Failed to start interview');
+        document.getElementById('start-btn').disabled = false;
+        document.getElementById('start-btn').textContent = 'Start Voice Interview';
+        cleanup();
+      }
     }
 
-    // Handle messages from Gemini
-    async function handleGeminiMessage(data) {
-      // Setup complete
-      if (data.setupComplete) {
-        console.log('Setup complete, starting interview');
-        interviewStartTime = Date.now();
-        timerInterval = setInterval(updateTimer, 1000);
+    // Handle server events
+    function handleServerEvent(event) {
+      switch (event.type) {
+        case 'session.created':
+        case 'session.updated':
+          console.log('[Interview] Session ready');
+          updateStatus('listening', 'Ready', 'Waiting for AI to speak...');
+          break;
 
-        // Start recording
-        startRecording();
-
-        // Send initial message to start the interview
-        const contextMessage = userReferences
-          ? `The participant's email is ${userEmail}. They mentioned these references as inspiration: ${userReferences}. Please begin the interview.`
-          : `The participant's email is ${userEmail}. Please begin the interview.`;
-
-        sendTextMessage(contextMessage);
-        return;
-      }
-
-      // Handle server content (audio response)
-      if (data.serverContent) {
-        const parts = data.serverContent.modelTurn?.parts || [];
-
-        for (const part of parts) {
-          // Handle audio
-          if (part.inlineData?.mimeType?.startsWith('audio/')) {
-            updateStatus('speaking', 'AI Speaking', 'Listening to response...');
-            await playAudio(part.inlineData.data);
+        case 'response.audio.delta':
+          // Received audio chunk from AI
+          if (event.delta) {
+            playAudio(event.delta);
           }
+          break;
 
-          // Handle text (for transcript)
-          if (part.text) {
-            addToTranscript('AI', part.text);
+        case 'response.audio_transcript.delta':
+          // AI speech transcription (streaming)
+          if (event.delta) {
+            currentAIText += event.delta;
           }
-        }
+          break;
 
-        // Check if turn is complete
-        if (data.serverContent.turnComplete) {
+        case 'response.audio_transcript.done':
+          // AI finished speaking - add to transcript
+          if (currentAIText) {
+            addToTranscript('AI', currentAIText);
+            currentAIText = '';
+          }
+          break;
+
+        case 'conversation.item.input_audio_transcription.completed':
+          // User's speech was transcribed
+          if (event.transcript) {
+            addToTranscript('User', event.transcript);
+          }
+          break;
+
+        case 'input_audio_buffer.speech_started':
+          updateStatus('listening', 'Listening...', 'You are speaking');
+          break;
+
+        case 'input_audio_buffer.speech_stopped':
+          updateStatus('idle', 'Processing...', 'AI is thinking');
+          break;
+
+        case 'response.created':
+          console.log('[Interview] Response started');
+          break;
+
+        case 'response.done':
+          console.log('[Interview] Response complete');
+          // Flush any remaining AI text
+          if (currentAIText) {
+            addToTranscript('AI', currentAIText);
+            currentAIText = '';
+          }
           updateStatus('listening', 'Your Turn', 'Speak when ready...');
-        }
-      }
+          break;
 
-      // Handle tool calls (if any)
-      if (data.toolCall) {
-        console.log('Tool call received:', data.toolCall);
+        case 'error':
+          console.error('[Interview] Server error:', event.error);
+          if (event.error?.message) {
+            showError(`Error: ${event.error.message}`);
+          }
+          break;
+
+        default:
+          // Log other events for debugging
+          if (event.type && !event.type.includes('delta')) {
+            console.log('[Interview] Event:', event.type);
+          }
       }
     }
 
-    // Send text message to Gemini
-    function sendTextMessage(text) {
-      if (!ws || ws.readyState !== WebSocket.OPEN) return;
-
-      const message = {
-        clientContent: {
-          turns: [{
-            role: 'user',
-            parts: [{ text }]
-          }],
-          turnComplete: true
-        }
-      };
-
-      ws.send(JSON.stringify(message));
-    }
-
-    // Track if AI is currently speaking (to prevent echo)
-    let isAISpeaking = false;
-
-    // Start recording audio
-    async function startRecording() {
-      if (!mediaStream) return;
-
-      // Create a separate audio context for recording at 16kHz
-      const recordingContext = new AudioContext({ sampleRate: 16000 });
+    // Start recording audio from microphone
+    function startAudioRecording() {
+      if (!mediaStream || !ws) return;
 
       isRecording = true;
-      updateStatus('listening', 'Listening', 'Speak when ready...');
 
+      // Create audio context for recording at mic sample rate
+      const recordingContext = new (window.AudioContext || window.webkitAudioContext)();
       const source = recordingContext.createMediaStreamSource(mediaStream);
 
-      // Create a script processor for audio capture
-      const processor = recordingContext.createScriptProcessor(4096, 1, 1);
+      // Use ScriptProcessor for audio capture (deprecated but widely supported)
+      // Buffer size of 4096 at 24kHz = ~170ms chunks
+      const bufferSize = 4096;
+      scriptProcessor = recordingContext.createScriptProcessor(bufferSize, 1, 1);
 
-      processor.onaudioprocess = (e) => {
-        // Don't send audio while AI is speaking (prevents echo)
-        if (!isRecording || !ws || ws.readyState !== WebSocket.OPEN || isAISpeaking) return;
+      scriptProcessor.onaudioprocess = (e) => {
+        if (!isRecording || !ws || ws.readyState !== WebSocket.OPEN) return;
 
         const inputData = e.inputBuffer.getChannelData(0);
 
-        // Convert to 16-bit PCM (already at 16kHz from the recording context)
-        const pcmData = float32ToPcm16(inputData);
+        // Resample to 24kHz if needed
+        const resampledData = resampleAudio(inputData, recordingContext.sampleRate, 24000);
 
-        // Convert to base64
-        const base64 = arrayBufferToBase64(pcmData.buffer);
+        // Convert to PCM16 and base64
+        const pcm16 = floatTo16BitPCM(resampledData);
+        const base64Audio = int16ToBase64(pcm16);
 
-        // Send to Gemini
-        const audioMessage = {
-          realtimeInput: {
-            mediaChunks: [{
-              mimeType: 'audio/pcm;rate=16000',
-              data: base64
-            }]
-          }
-        };
-
-        ws.send(JSON.stringify(audioMessage));
+        // Send audio to OpenAI
+        ws.send(JSON.stringify({
+          type: 'input_audio_buffer.append',
+          audio: base64Audio
+        }));
       };
 
-      source.connect(processor);
-      // Connect to a dummy destination (required for processing to work, but no audio output)
-      processor.connect(recordingContext.destination);
+      source.connect(scriptProcessor);
+      scriptProcessor.connect(recordingContext.destination);
 
-      audioWorklet = { source, processor, context: recordingContext };
-    }
-
-    // Stop recording
-    function stopRecording() {
-      isRecording = false;
-
-      if (audioWorklet) {
-        audioWorklet.source.disconnect();
-        audioWorklet.processor.disconnect();
-        if (audioWorklet.context) {
-          audioWorklet.context.close();
-        }
-        audioWorklet = null;
-      }
-    }
-
-    // Audio queue for sequential playback
-    let audioQueue = [];
-    let isPlayingAudio = false;
-
-    // Play audio from base64
-    async function playAudio(base64Data) {
-      if (!audioContext) return;
-
-      // Add to queue
-      audioQueue.push(base64Data);
-
-      // Process queue if not already playing
-      if (!isPlayingAudio) {
-        processAudioQueue();
-      }
-    }
-
-    // Process audio queue sequentially
-    async function processAudioQueue() {
-      if (audioQueue.length === 0) {
-        isPlayingAudio = false;
-        isAISpeaking = false;
-        return;
-      }
-
-      isPlayingAudio = true;
-      isAISpeaking = true;
-
-      const base64Data = audioQueue.shift();
-
-      try {
-        // Decode base64 to ArrayBuffer
-        const binaryString = atob(base64Data);
-        const bytes = new Uint8Array(binaryString.length);
-        for (let i = 0; i < binaryString.length; i++) {
-          bytes[i] = binaryString.charCodeAt(i);
-        }
-
-        // Convert PCM to AudioBuffer (24kHz, 16-bit, mono)
-        const pcmData = new Int16Array(bytes.buffer);
-        const floatData = new Float32Array(pcmData.length);
-
-        for (let i = 0; i < pcmData.length; i++) {
-          floatData[i] = pcmData[i] / 32768;
-        }
-
-        const audioBuffer = audioContext.createBuffer(1, floatData.length, 24000);
-        audioBuffer.getChannelData(0).set(floatData);
-
-        // Play the audio
-        const source = audioContext.createBufferSource();
-        source.buffer = audioBuffer;
-        source.connect(audioContext.destination);
-
-        // When this chunk finishes, process next in queue
-        source.onended = () => {
-          processAudioQueue();
-        };
-
-        source.start();
-
-      } catch (error) {
-        console.error('Error playing audio:', error);
-        // Continue with next chunk even on error
-        processAudioQueue();
-      }
-    }
-
-    // Utility: Resample audio
-    function resample(inputData, inputRate, outputRate) {
-      if (inputRate === outputRate) return inputData;
-
-      const ratio = inputRate / outputRate;
-      const outputLength = Math.floor(inputData.length / ratio);
-      const output = new Float32Array(outputLength);
-
-      for (let i = 0; i < outputLength; i++) {
-        const inputIndex = i * ratio;
-        const index = Math.floor(inputIndex);
-        const fraction = inputIndex - index;
-
-        if (index + 1 < inputData.length) {
-          output[i] = inputData[index] * (1 - fraction) + inputData[index + 1] * fraction;
-        } else {
-          output[i] = inputData[index];
-        }
-      }
-
-      return output;
-    }
-
-    // Utility: Convert Float32 to PCM16
-    function float32ToPcm16(float32Array) {
-      const pcm16 = new Int16Array(float32Array.length);
-      for (let i = 0; i < float32Array.length; i++) {
-        const s = Math.max(-1, Math.min(1, float32Array[i]));
-        pcm16[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
-      }
-      return pcm16;
-    }
-
-    // Utility: ArrayBuffer to Base64
-    function arrayBufferToBase64(buffer) {
-      const bytes = new Uint8Array(buffer);
-      let binary = '';
-      for (let i = 0; i < bytes.byteLength; i++) {
-        binary += String.fromCharCode(bytes[i]);
-      }
-      return btoa(binary);
+      console.log('[Interview] Audio recording started');
+      updateStatus('listening', 'Ready', 'Listening for AI greeting...');
     }
 
     // End the interview
     function endInterview() {
-      // Stop recording
-      stopRecording();
+      console.log('[Interview] Ending interview');
+      isRecording = false;
 
-      // Stop timer
+      // Send any remaining audio and close
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({
+          type: 'input_audio_buffer.commit'
+        }));
+        ws.close();
+      }
+
+      cleanup();
+
+      // Download transcript
+      downloadTranscript();
+
+      // Show completion screen
+      document.getElementById('interview-screen').classList.add('hidden');
+      document.getElementById('complete-screen').classList.remove('hidden');
+      document.getElementById('final-transcript').innerHTML = document.getElementById('transcript').innerHTML;
+    }
+
+    // Cleanup resources
+    function cleanup() {
       if (timerInterval) {
         clearInterval(timerInterval);
         timerInterval = null;
       }
 
-      // Close WebSocket
-      if (ws) {
-        ws.close();
-        ws = null;
+      if (scriptProcessor) {
+        scriptProcessor.disconnect();
+        scriptProcessor = null;
       }
 
-      // Stop media stream
       if (mediaStream) {
         mediaStream.getTracks().forEach(track => track.stop());
         mediaStream = null;
       }
 
-      // Close audio context
       if (audioContext) {
         audioContext.close();
         audioContext = null;
       }
 
-      // Show complete screen
-      document.getElementById('interview-screen').classList.add('hidden');
-      document.getElementById('complete-screen').classList.remove('hidden');
-      document.getElementById('final-transcript').textContent = transcript || '(No transcript recorded)';
-
-      // Auto-download transcript
-      if (transcript) {
-        downloadTranscript();
+      if (ws) {
+        ws.close();
+        ws = null;
       }
     }
 
-    // Handle page unload
-    window.addEventListener('beforeunload', () => {
-      if (ws) ws.close();
-      if (mediaStream) mediaStream.getTracks().forEach(track => track.stop());
-      if (audioContext) audioContext.close();
-    });
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', cleanup);
   </script>
 </body>
 </html>
