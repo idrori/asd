@@ -1348,13 +1348,23 @@ let pngFiguresForCompilation: FigureResource[] = [];
 /**
  * Store PNG figures with base64 data for later LaTeX compilation
  * Called when figures are generated via QuickChart.io
+ * Also stores in currentSessionFigures for Save All Files button
  */
-export function storePngFiguresForCompilation(figures: Array<{ filename: string; base64: string }>): void {
+export function storePngFiguresForCompilation(figures: Array<{ filename: string; base64: string; description?: string }>): void {
   pngFiguresForCompilation = figures.map(fig => ({
     filename: fig.filename.replace(/[^a-zA-Z0-9_.-]/g, '_'),
     base64: fig.base64
   }));
-  console.log(`[PNG Storage] Stored ${pngFiguresForCompilation.length} PNG figures for LaTeX compilation`);
+
+  // Also store in currentSessionFigures for Save All Files to work
+  // Convert base64 to data URL format that can be fetched
+  currentSessionFigures = figures.map(fig => ({
+    filename: fig.filename.replace(/[^a-zA-Z0-9_.-]/g, '_'),
+    blobUrl: `data:image/png;base64,${fig.base64}`,
+    description: fig.description || ''
+  }));
+
+  console.log(`[PNG Storage] Stored ${pngFiguresForCompilation.length} PNG figures for LaTeX compilation and download`);
 }
 
 /**
