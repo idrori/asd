@@ -2,6 +2,7 @@
  * Vercel Serverless Function: LaTeX Compilation Proxy
  *
  * Compiles LaTeX content to PDF using latex.ytotech.com API
+ * Supports PNG figures passed as base64
  * Returns base64-encoded PDF for client download
  *
  * Endpoint: POST /api/compile-latex
@@ -13,9 +14,15 @@ export const config = {
   maxDuration: 300, // 5 minutes for compilation
 };
 
+interface FigureResource {
+  filename: string;
+  base64: string;
+}
+
 interface CompileRequest {
   filename: string;
   content: string;
+  figures?: FigureResource[];  // Optional PNG figures as base64
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -33,7 +40,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const { filename, content }: CompileRequest = req.body;
+    const { filename, content, figures }: CompileRequest = req.body;
 
     if (!content) {
       console.error('[LaTeX Compiler] No content provided');
@@ -46,13 +53,34 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const contentLength = content.length;
     const tikzCount = (content.match(/\\begin\{tikzpicture\}/g) || []).length;
     const axisCount = (content.match(/\\begin\{axis\}/g) || []).length;
+    const figureCount = figures?.length || 0;
 
     console.log(`[LaTeX Compiler] Compiling ${filename}...`);
-    console.log(`[LaTeX Compiler] Content: ${Math.round(contentLength / 1024)} KB, ${tikzCount} tikz figures, ${axisCount} pgfplots`);
+    console.log(`[LaTeX Compiler] Content: ${Math.round(contentLength / 1024)} KB, ${tikzCount} tikz, ${axisCount} pgfplots, ${figureCount} PNG figures`);
+
+    // Build resources array for latex.ytotech.com
+    // Main LaTeX file first
+    const resources: Array<{ main?: boolean; path?: string; content?: string; file?: string }> = [
+      {
+        main: true,
+        content: content
+      }
+    ];
+
+    // Add PNG figures as additional resources
+    if (figures && figures.length > 0) {
+      for (const fig of figures) {
+        // latex.ytotech.com accepts raw base64 content with 'file' field
+        // The path should match what's used in \includegraphics
+        resources.push({
+          path: fig.filename,
+          file: fig.base64  // Raw base64, NOT data URL
+        });
+        console.log(`[LaTeX Compiler] Added figure: ${fig.filename} (${Math.round(fig.base64.length / 1024)} KB base64)`);
+      }
+    }
 
     // Use latex.ytotech.com API for compilation
-    // This service accepts LaTeX and returns PDF
-    // Add AbortController with 4 minute timeout (leave 1 min buffer for Vercel)
     const controller = new AbortController();
     const timeoutId = setTimeout(() => {
       console.error('[LaTeX Compiler] Aborting due to 4 minute timeout');
@@ -61,7 +89,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     let compileResponse: Response;
     try {
-      // Try latex.ytotech.com first (supports TikZ/PGFPlots better)
+      // Try latex.ytotech.com with pdflatex first
       compileResponse = await fetch('https://latex.ytotech.com/builds/sync', {
         method: 'POST',
         headers: {
@@ -70,22 +98,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         signal: controller.signal,
         body: JSON.stringify({
           compiler: 'pdflatex',
-          resources: [
-            {
-              main: true,
-              content: content
-            }
-          ]
+          resources: resources
         })
       });
 
-      // If we get SERVER_ERROR, try latex.ytotech.com with xelatex as fallback
+      // If we get SERVER_ERROR, try with xelatex as fallback
       if (!compileResponse.ok) {
         const errorCheck = await compileResponse.clone().text();
         if (errorCheck.includes('SERVER_ERROR')) {
           console.log('[LaTeX Compiler] pdflatex returned SERVER_ERROR, trying xelatex...');
 
-          // Try with xelatex which handles some edge cases better
           const fallbackResponse = await fetch('https://latex.ytotech.com/builds/sync', {
             method: 'POST',
             headers: {
@@ -94,12 +116,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             signal: controller.signal,
             body: JSON.stringify({
               compiler: 'xelatex',
-              resources: [
-                {
-                  main: true,
-                  content: content
-                }
-              ]
+              resources: resources
             })
           });
 
@@ -109,10 +126,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           } else {
             const fallbackError = await fallbackResponse.text();
             console.log('[LaTeX Compiler] xelatex also failed:', fallbackError.substring(0, 200));
-            // Return original error with more context
             return res.status(200).json({
               success: false,
-              error: `LaTeX compilation failed on both pdflatex and xelatex. The document (${Math.round(contentLength / 1024)} KB with ${tikzCount} TikZ figures) may have syntax errors or be too complex for the cloud compiler. Consider using a local LaTeX installation.`,
+              error: `LaTeX compilation failed on both pdflatex and xelatex. The document (${Math.round(contentLength / 1024)} KB with ${tikzCount} TikZ figures and ${figureCount} PNG figures) may have syntax errors or be too complex.`,
               log: `pdflatex: ${errorCheck}\n\nxelatex: ${fallbackError.substring(0, 1500)}`
             });
           }
@@ -126,7 +142,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         console.error('[LaTeX Compiler] Request timed out after 4 minutes');
         return res.status(200).json({
           success: false,
-          error: `LaTeX compilation timed out. The document with ${tikzCount} TikZ figures may be too complex. Try reducing the number of figures.`
+          error: `LaTeX compilation timed out. The document with ${tikzCount} TikZ figures and ${figureCount} PNG figures may be too complex.`
         });
       }
       throw fetchError;
@@ -136,30 +152,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const errorText = await compileResponse.text();
       console.error('[LaTeX Compiler] API Error:', compileResponse.status, errorText.substring(0, 1000));
 
-      // Try to parse as JSON for better error message
       let errorMessage = 'LaTeX compilation failed';
       let logContent = errorText;
       try {
         const errorJson = JSON.parse(errorText);
-        // latex.ytotech.com returns { error: "...", logs: "..." }
         errorMessage = errorJson.error || errorJson.message || errorMessage;
         logContent = errorJson.logs || errorJson.log || errorText;
 
-        // Extract useful info from logs
         if (logContent) {
-          // Look for the actual LaTeX error in the logs
           const errorMatch = logContent.match(/!(.*?)\n/);
           if (errorMatch) {
             errorMessage = `LaTeX error: ${errorMatch[1].trim()}`;
           }
-          // Look for line number
           const lineMatch = logContent.match(/l\.(\d+)/);
           if (lineMatch) {
             errorMessage += ` (around line ${lineMatch[1]})`;
           }
         }
       } catch {
-        // If not JSON, check for common LaTeX errors
         if (errorText.includes('Undefined control sequence')) {
           const match = errorText.match(/Undefined control sequence[^\\]*\\(\w+)/);
           errorMessage = `LaTeX error: Undefined control sequence${match ? ` (\\${match[1]})` : ''}`;
@@ -167,6 +177,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           errorMessage = 'LaTeX error: Missing bracket or brace.';
         } else if (errorText.includes('Package pgfplots Error')) {
           errorMessage = 'LaTeX error: PGFPlots package error. Check axis definitions.';
+        } else if (errorText.includes('cannot find image file')) {
+          errorMessage = 'LaTeX error: Cannot find image file. Figure may not have been uploaded correctly.';
         } else if (errorText.length < 500) {
           errorMessage = errorText;
         }
@@ -183,7 +195,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const pdfBuffer = await compileResponse.arrayBuffer();
     const pdfBase64 = Buffer.from(pdfBuffer).toString('base64');
 
-    // Estimate page count (rough: ~50KB per page for academic papers)
+    // Estimate page count
     const fileSize = pdfBuffer.byteLength;
     const estimatedPages = Math.max(1, Math.round(fileSize / 50000));
 

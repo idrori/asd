@@ -301,18 +301,34 @@ export interface CompileResult {
 let lastCompiledPdf: { filename: string; base64: string } | null = null;
 
 /**
+ * Figure resource for LaTeX compilation (PNG images)
+ */
+export interface FigureResource {
+  filename: string;
+  base64: string;
+}
+
+/**
  * Compile LaTeX content to PDF
  * Uses Vercel serverless function (cloud) or local backend
+ * @param filename - The .tex filename
+ * @param content - The LaTeX content
+ * @param figures - Optional array of PNG figures to include (as base64)
  */
-export async function compileLaTeX(filename: string, content: string): Promise<CompileResult> {
-  // Count TikZ figures for logging
+export async function compileLaTeX(
+  filename: string,
+  content: string,
+  figures?: FigureResource[]
+): Promise<CompileResult> {
+  // Count TikZ figures and PNG figures for logging
   const tikzCount = (content.match(/\\begin\{tikzpicture\}/g) || []).length;
+  const pngCount = figures?.length || 0;
   const contentKB = Math.round(content.length / 1024);
 
   // Try Vercel cloud compilation first
   if (VERCEL_API_URL) {
     try {
-      console.log(`[LaTeX] Compiling via Vercel cloud... (${contentKB} KB, ${tikzCount} TikZ figures)`);
+      console.log(`[LaTeX] Compiling via Vercel cloud... (${contentKB} KB, ${tikzCount} TikZ, ${pngCount} PNG figures)`);
 
       // Use AbortController for 5 minute timeout on client side
       const controller = new AbortController();
@@ -327,7 +343,7 @@ export async function compileLaTeX(filename: string, content: string): Promise<C
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           signal: controller.signal,
-          body: JSON.stringify({ filename, content })
+          body: JSON.stringify({ filename, content, figures })
         });
         clearTimeout(timeoutId);
       } catch (fetchError: any) {
@@ -1320,4 +1336,37 @@ export async function downloadAllFigures(): Promise<Array<{ filename: string; bl
 
   console.log(`[PNG Figures] Downloaded ${downloads.length}/${currentSessionFigures.length} figures`);
   return downloads;
+}
+
+// ============================================================================
+// PNG Figures with Base64 Storage (for LaTeX compilation)
+// ============================================================================
+
+// Store PNG figures with base64 data for LaTeX compilation
+let pngFiguresForCompilation: FigureResource[] = [];
+
+/**
+ * Store PNG figures with base64 data for later LaTeX compilation
+ * Called when figures are generated via QuickChart.io
+ */
+export function storePngFiguresForCompilation(figures: Array<{ filename: string; base64: string }>): void {
+  pngFiguresForCompilation = figures.map(fig => ({
+    filename: fig.filename.replace(/[^a-zA-Z0-9_.-]/g, '_'),
+    base64: fig.base64
+  }));
+  console.log(`[PNG Storage] Stored ${pngFiguresForCompilation.length} PNG figures for LaTeX compilation`);
+}
+
+/**
+ * Get stored PNG figures for LaTeX compilation
+ */
+export function getPngFiguresForCompilation(): FigureResource[] {
+  return pngFiguresForCompilation;
+}
+
+/**
+ * Clear stored PNG figures (call when starting new paper)
+ */
+export function clearPngFiguresForCompilation(): void {
+  pngFiguresForCompilation = [];
 }

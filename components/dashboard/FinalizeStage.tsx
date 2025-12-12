@@ -6,7 +6,7 @@ import {
   readFeedbackFile,
   getOversightProgression
 } from '../../services/fileService';
-import { saveFinalSubmission, compileLaTeX, downloadCompiledPdf, createViewerLink, openPaperViewer, getLastCompiledPdfBlob, downloadAllFigures, getCurrentSessionFigures, CompileResult, ViewerLinkResult } from '../../services/fileApi';
+import { saveFinalSubmission, compileLaTeX, downloadCompiledPdf, createViewerLink, openPaperViewer, getLastCompiledPdfBlob, downloadAllFigures, getCurrentSessionFigures, getPngFiguresForCompilation, CompileResult, ViewerLinkResult } from '../../services/fileApi';
 
 interface FinalizeStageProps {
   logs: string[];
@@ -119,7 +119,11 @@ const FinalizeStage: React.FC<FinalizeStageProps> = ({
     const prefix = filePrefix ? `${filePrefix}_` : '';
     const filename = `${prefix}icis_paper_v${currentPaperVersion}_FINAL.tex`;
 
-    const result = await compileLaTeX(filename, paper);
+    // Get PNG figures for compilation (if any were generated via QuickChart.io)
+    const pngFigures = getPngFiguresForCompilation();
+    console.log(`[Compile] Compiling with ${pngFigures.length} PNG figures`);
+
+    const result = await compileLaTeX(filename, paper, pngFigures.length > 0 ? pngFigures : undefined);
     setCompileResult(result);
 
     if (!result.success) {
