@@ -400,7 +400,11 @@ IMPORTANT: This is a voice conversation. Speak naturally and conversationally. D
 
     // Get API base URL
     function getApiUrl() {
-      // In production, use relative URL
+      // If on GitHub Pages, use Vercel API
+      if (window.location.hostname.includes('github.io')) {
+        return 'https://icis-deploy-12-10-2025.vercel.app';
+      }
+      // Otherwise use same origin (for Vercel deployment)
       return window.location.origin;
     }
 
