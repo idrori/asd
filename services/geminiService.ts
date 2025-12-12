@@ -1287,6 +1287,7 @@ export interface GeneratedFigure {
   filename: string;
   description: string;
   latexRef: string;
+  base64?: string;  // Raw PNG data for upload to blob storage
 }
 
 /**
@@ -1900,9 +1901,8 @@ print("Generated figures successfully")
  * Returns list of generated figures and data usage status for inclusion in the paper
  *
  * Visualization modes (in order of preference):
- * 1. Cloud Python (standard library) - generates chart_data for TikZ/PGFPlots
- * 2. Local Python (with matplotlib) - generates PNG images
- * 3. AI-generated TikZ/PGFPlots code - pure LaTeX, no external dependencies
+ * 1. QuickChart.io (PRIMARY) - generates PNG from chart_data via TypeScript serverless
+ * 2. TikZ/PGFPlots fallback - pure LaTeX if QuickChart fails
  */
 export async function generateVisualizations(
   interviewTranscript: string,
@@ -1913,131 +1913,36 @@ export async function generateVisualizations(
 ): Promise<VisualizationResult> {
   const cloudData = getCloudDataFile();
 
-  // STEP 1: Try AI-generated custom figure code (PRIMARY METHOD)
-  // AI generates Python code tailored to this specific paper's data and research questions
-  if (cloudData?.content && dataSummary) {
-    console.log('[Visualizations] Generating AI-customized figure code...');
-    onProgress?.('AI is designing custom figures for your research...');
-
-    try {
-      // Have Gemini generate custom Python code for this paper
-      const figureCode = await generateServerlessFigureCode(
-        interviewTranscript,
-        researchContext,
-        dataSummary
-      );
-
-      console.log(`[Visualizations] Generated ${figureCode.length} chars of custom Python code`);
-      onProgress?.('Executing AI-generated visualization code...');
-
-      // Execute the AI-generated code in the Python serverless function
-      const { executeAIGeneratedFigureCode, uploadMatplotlibFiguresToBlob } = await import('./fileApi');
-      const codeResult = await executeAIGeneratedFigureCode(figureCode, cloudData.content);
-
-      if (codeResult.success && codeResult.figures && codeResult.figures.length > 0) {
-        console.log(`[Visualizations] AI code generated ${codeResult.count} figures`);
-        onProgress?.(`Uploading ${codeResult.count} AI-generated figures to storage...`);
-
-        // Upload figures to Vercel Blob
-        const uploadResult = await uploadMatplotlibFiguresToBlob(codeResult.figures);
-
-        if (uploadResult.success && uploadResult.figures && uploadResult.figures.length > 0) {
-          // Convert to GeneratedFigure format for LaTeX
-          const pngFigures: GeneratedFigure[] = uploadResult.figures.map((fig) => ({
-            filename: fig.filename,
-            description: fig.description,
-            latexRef: fig.blobUrl  // Use blob URL for includegraphics
-          }));
-
-          onProgress?.(`Generated ${pngFigures.length} custom figures tailored to your research`);
-          console.log(`[Visualizations] AI-generated figures stored in Blob, session: ${uploadResult.sessionId}`);
-
-          return {
-            figures: pngFigures,
-            usedSyntheticData: false,
-            dataFileFound: true,
-            dataSummary: dataSummary
-          };
-        } else {
-          console.warn('[Visualizations] Blob upload failed:', uploadResult.error);
-        }
-      } else {
-        console.warn('[Visualizations] AI code execution failed:', codeResult.error);
-      }
-    } catch (error) {
-      console.warn('[Visualizations] AI figure generation failed, trying fallback:', error);
-    }
-  }
-
-  // STEP 2: Fallback to hardcoded matplotlib (generic charts)
+  // STEP 1: Use QuickChart.io (PRIMARY METHOD)
+  // This works reliably with Vercel's 250MB limit - no Python dependencies
   if (cloudData?.content) {
-    console.log('[Visualizations] Falling back to generic matplotlib figures...');
-    onProgress?.('Generating standard figures with matplotlib...');
+    console.log('[Visualizations] Using QuickChart.io for figure generation...');
+    onProgress?.('Analyzing data for visualization...');
 
     try {
-      // Call matplotlib serverless function directly with CSV content
-      const { generateMatplotlibFigures, uploadMatplotlibFiguresToBlob } = await import('./fileApi');
-      const matplotlibResult = await generateMatplotlibFigures(cloudData.content);
-
-      if (matplotlibResult.success && matplotlibResult.figures && matplotlibResult.figures.length > 0) {
-        console.log(`[Visualizations] Matplotlib generated ${matplotlibResult.count} figures`);
-        onProgress?.(`Uploading ${matplotlibResult.count} matplotlib figures to storage...`);
-
-        // Upload matplotlib-generated figures to Vercel Blob
-        const uploadResult = await uploadMatplotlibFiguresToBlob(matplotlibResult.figures);
-
-        if (uploadResult.success && uploadResult.figures && uploadResult.figures.length > 0) {
-          // Convert to GeneratedFigure format for LaTeX
-          const pngFigures: GeneratedFigure[] = uploadResult.figures.map((fig) => ({
-            filename: fig.filename,
-            description: fig.description,
-            latexRef: fig.blobUrl  // Use blob URL for includegraphics
-          }));
-
-          onProgress?.(`Generated ${pngFigures.length} publication-quality figures with matplotlib/seaborn`);
-          console.log(`[Visualizations] Matplotlib figures stored in Blob, session: ${uploadResult.sessionId}`);
-
-          return {
-            figures: pngFigures,
-            usedSyntheticData: false,
-            dataFileFound: true,
-            dataSummary: dataSummary
-          };
-        } else {
-          console.warn('[Visualizations] Blob upload failed:', uploadResult.error);
-        }
-      } else {
-        console.warn('[Visualizations] Matplotlib generation failed:', matplotlibResult.error);
-      }
-    } catch (error) {
-      console.warn('[Visualizations] Matplotlib generation failed, trying QuickChart fallback:', error);
-    }
-
-    // STEP 3: Fallback to QuickChart.io if matplotlib fails
-    console.log('[Visualizations] Falling back to QuickChart.io...');
-    onProgress?.('Trying QuickChart.io fallback...');
-
-    try {
+      // Step 1a: Analyze data to get chart configurations
       const cloudResult = await analyzeDataWithPython(cloudData.content, 'full');
 
       if (cloudResult.success && cloudResult.chart_data && cloudResult.chart_data.length > 0) {
-        console.log(`[Visualizations] Cloud analysis returned ${cloudResult.chart_data.length} chart datasets`);
-        onProgress?.(`Generating ${cloudResult.chart_data.length} PNG figures via QuickChart...`);
+        console.log(`[Visualizations] Data analysis returned ${cloudResult.chart_data.length} chart configs`);
+        onProgress?.(`Generating ${cloudResult.chart_data.length} PNG figures via QuickChart.io...`);
 
-        // Generate PNG figures from chart data (stored in Vercel Blob)
-        const { generatePngFigures } = await import('./fileApi');
-        const pngResult = await generatePngFigures(cloudResult.chart_data);
+        // Step 1b: Generate PNG figures via QuickChart.io
+        const { generateQuickChartFigures } = await import('./fileApi');
+        const quickchartResult = await generateQuickChartFigures(cloudResult.chart_data);
 
-        if (pngResult.success && pngResult.figures && pngResult.figures.length > 0) {
-          // Convert PNG figures to GeneratedFigure format for LaTeX
-          const pngFigures: GeneratedFigure[] = pngResult.figures.map((fig, i) => ({
+        if (quickchartResult.success && quickchartResult.figures && quickchartResult.figures.length > 0) {
+          // Convert to GeneratedFigure format for LaTeX
+          // Store base64 PNGs - they'll be embedded or uploaded later
+          const pngFigures: GeneratedFigure[] = quickchartResult.figures.map((fig) => ({
             filename: fig.filename,
             description: fig.description,
-            latexRef: fig.blobUrl  // Use blob URL for includegraphics
+            latexRef: `data:image/png;base64,${fig.base64}`,  // Use data URL for now
+            base64: fig.base64  // Store raw base64 for later upload
           }));
 
-          onProgress?.(`Generated ${pngFigures.length} PNG figures from QuickChart`);
-          console.log(`[Visualizations] QuickChart figures stored in Blob, session: ${pngResult.sessionId}`);
+          onProgress?.(`Generated ${pngFigures.length} publication-quality figures`);
+          console.log(`[Visualizations] QuickChart.io generated ${pngFigures.length} PNG figures`);
 
           return {
             figures: pngFigures,
@@ -2046,133 +1951,68 @@ export async function generateVisualizations(
             dataSummary: cloudResult.text_summary || dataSummary
           };
         } else {
-          console.warn('[Visualizations] QuickChart PNG generation failed:', pngResult.error);
-          // Fall back to TikZ if PNG fails
-          onProgress?.('PNG generation failed, trying TikZ fallback...');
-          const tikzFigures = await generateTikZFromChartData(cloudResult, interviewTranscript, researchContext);
+          console.warn('[Visualizations] QuickChart.io generation failed:', quickchartResult.error);
+        }
+      } else {
+        console.warn('[Visualizations] Data analysis failed or returned no chart data');
+      }
+    } catch (error) {
+      console.warn('[Visualizations] QuickChart.io failed:', error);
+    }
 
-          if (tikzFigures.length > 0) {
-            onProgress?.(`Generated ${tikzFigures.length} TikZ figures (fallback)`);
-            return {
-              figures: tikzFigures,
-              usedSyntheticData: false,
-              dataFileFound: true,
-              dataSummary: cloudResult.text_summary || dataSummary
-            };
-          }
+    // STEP 2: TikZ fallback if QuickChart fails
+    console.log('[Visualizations] Falling back to TikZ/PGFPlots...');
+    onProgress?.('Generating TikZ figures as fallback...');
+
+    try {
+      const cloudResult = await analyzeDataWithPython(cloudData.content, 'full');
+      if (cloudResult.success && cloudResult.chart_data) {
+        const tikzFigures = await generateTikZFromChartData(cloudResult, interviewTranscript, researchContext);
+
+        if (tikzFigures.length > 0) {
+          onProgress?.(`Generated ${tikzFigures.length} TikZ figures`);
+          return {
+            figures: tikzFigures,
+            usedSyntheticData: false,
+            dataFileFound: true,
+            dataSummary: cloudResult.text_summary || dataSummary
+          };
         }
       }
     } catch (error) {
-      console.warn('[Visualizations] QuickChart fallback failed:', error);
+      console.warn('[Visualizations] TikZ fallback failed:', error);
     }
   }
 
-  // STEP 2: Fall back to local Python with matplotlib
-  onProgress?.('Generating visualization code...');
-  console.log('[Visualizations] Generating Python code...');
-  if (dataSummary) {
-    console.log('[Visualizations] Using pre-analyzed data summary with actual column names');
-  }
+  // STEP 3: Generate AI-based TikZ visualizations as last resort (no data file)
+  console.log('[Visualizations] No data available, generating AI TikZ figures...');
+  onProgress?.('Generating AI-based visualizations (TikZ)...');
 
   try {
-    // Generate the Python code - pass dataSummary so Gemini knows the actual column names
-    const pythonCode = await generateVisualizationCode(interviewTranscript, researchContext, dataFileName, dataSummary);
-    console.log(`[Visualizations] Generated ${pythonCode.length} chars of Python code`);
+    const aiFigures = await generateAITikZFigures(interviewTranscript, researchContext, dataSummary);
 
-    onProgress?.('Executing visualization script...');
-    console.log('[Visualizations] Executing Python script...');
-
-    // Execute the Python code
-    const result = await executePythonScript('generate_figures.py', pythonCode, dataFileName);
-
-    if (!result.success) {
-      console.error('[Visualizations] Python execution failed:', result.error);
-      console.error('[Visualizations] stderr:', result.stderr);
-      onProgress?.(`Visualization error: ${result.error}`);
-
-      // STEP 3: Generate AI-based TikZ visualizations as last resort
-      console.log('[Visualizations] Falling back to AI-generated TikZ figures...');
-      onProgress?.('Generating AI-based visualizations (TikZ)...');
-      const aiFigures = await generateAITikZFigures(interviewTranscript, researchContext, dataSummary);
-
-      if (aiFigures.length > 0) {
-        onProgress?.(`Generated ${aiFigures.length} AI-generated TikZ figures`);
-        return {
-          figures: aiFigures,
-          usedSyntheticData: true,
-          dataFileFound: false,
-          dataAlert: '*** NOTE: Visualizations generated using AI (TikZ/PGFPlots). Python execution was not available.'
-        };
-      }
-
+    if (aiFigures.length > 0) {
+      onProgress?.(`Generated ${aiFigures.length} AI-generated TikZ figures`);
       return {
-        figures: [],
+        figures: aiFigures,
         usedSyntheticData: true,
         dataFileFound: false,
-        dataAlert: `*** VISUALIZATION ERROR: ${result.error}`
+        dataAlert: '*** NOTE: Visualizations generated using AI (TikZ/PGFPlots). No data file was available.'
       };
     }
-
-    console.log('[Visualizations] Python stdout:', result.stdout);
-
-    // Check data file status
-    const dataFileFound = result.dataFileFound ?? false;
-    const usedSyntheticData = result.usedSyntheticData ?? !dataFileFound;
-
-    // Extract data summary from stdout (between DATA SUMMARY markers)
-    // Note: renamed to extractedDataSummary to avoid shadowing the function parameter 'dataSummary'
-    let extractedDataSummary: string | undefined;
-    if (result.stdout) {
-      const summaryMatch = result.stdout.match(/={60}\s*DATA SUMMARY\s*={60}([\s\S]*?)={60}/);
-      if (summaryMatch) {
-        extractedDataSummary = summaryMatch[1].trim();
-        console.log('[Visualizations] Data summary extracted:', extractedDataSummary.substring(0, 200) + '...');
-        onProgress?.('Data summary: ' + extractedDataSummary.substring(0, 100) + '...');
-      }
-    }
-
-    // Generate alert if synthetic data was used when real data was expected
-    let dataAlert: string | undefined;
-    if (dataFileName && usedSyntheticData) {
-      dataAlert = `*** DATA ALERT: Data file "${dataFileName}" was specified but synthetic/dummy data was used in visualizations. Check that the data file exists and is readable.`;
-      console.warn('[Visualizations] ' + dataAlert);
-      onProgress?.(dataAlert);
-    } else if (usedSyntheticData) {
-      console.log('[Visualizations] Using synthetic data (no data file specified)');
-    } else if (extractedDataSummary) {
-      // Real data was used - log the summary
-      console.log('[Visualizations] Real data used. Summary available.');
-    }
-
-    // Get list of generated figures
-    const figuresResult = await listGeneratedFigures();
-    const figures: GeneratedFigure[] = figuresResult.figures.map((f, i) => ({
-      filename: f.filename,
-      description: `Figure ${i + 1}`,
-      latexRef: `../Results/${f.filename}`
-    }));
-
-    console.log(`[Visualizations] Generated ${figures.length} figures`);
-    onProgress?.(`Generated ${figures.length} figures${usedSyntheticData ? ' (using synthetic data)' : ' (using real data)'}`);
-
-    return {
-      figures,
-      usedSyntheticData,
-      dataFileFound,
-      dataAlert,
-      dataSummary: extractedDataSummary || dataSummary  // Return extracted summary, or fall back to passed-in summary
-    };
   } catch (error) {
-    console.error('[Visualizations] Error:', error);
-    onProgress?.(`Visualization error: ${(error as Error).message}`);
-    return {
-      figures: [],
-      usedSyntheticData: true,
-      dataFileFound: false,
-      dataAlert: `*** VISUALIZATION ERROR: ${(error as Error).message}`
-    };
+    console.warn('[Visualizations] AI TikZ generation failed:', error);
   }
+
+  // No figures could be generated
+  return {
+    figures: [],
+    usedSyntheticData: true,
+    dataFileFound: false,
+    dataAlert: '*** VISUALIZATION ERROR: Could not generate any figures'
+  };
 }
+
 
 /**
  * Generate TikZ/PGFPlots code from cloud analysis chart data
