@@ -14,7 +14,7 @@ import {
   writeOversightFile,
   writeFeedbackFile
 } from './fileService';
-import { saveDataFile, executePythonScript, listGeneratedFigures, readPdfFile, getDataFilePreview } from './fileApi';
+import { saveDataFile, executePythonScript, listGeneratedFigures, readPdfFile, getDataFilePreview, getCloudDataFile } from './fileApi';
 
 // API Configuration
 // Supports three modes (in priority order):

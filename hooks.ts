@@ -13,7 +13,7 @@ import {
   INITIAL_STATE
 } from './types';
 import { clearAllFiles, writePaperFile, writeOversightFile, writeFeedbackFile, readPaperFile } from './services/fileService';
-import { backupAndClearFiles, savePaperFile, refreshManifest } from './services/fileApi';
+import { backupAndClearFiles, savePaperFile, refreshManifest, uploadDataFileToCloud, getCloudDataFile } from './services/fileApi';
 import { runBuilder, runReviewer, runReviser } from './services/geminiService';
 
 // ============================================================================
@@ -347,6 +347,15 @@ export function useFileUpload() {
         dataFile: file,
         dataFileContent: content
       }));
+
+      // Also upload to cloud storage for cloud-only mode
+      console.log('[handleFileChange] Uploading data file to cloud storage...');
+      const cloudResult = await uploadDataFileToCloud(file);
+      if (cloudResult.success) {
+        console.log('[handleFileChange] Cloud upload success:', cloudResult.blobUrl);
+      } else {
+        console.warn('[handleFileChange] Cloud upload failed:', cloudResult.error);
+      }
     }
   }, []);
 
@@ -881,33 +890,52 @@ export function useIcisWorkflow(params: WorkflowHookParams) {
         break;
 
       case 'START_BUILDER':
-        // Refresh manifest to ensure data file is detected before building
-        addLog('Setup: Refreshing file manifest...');
+        // Check for data file - prioritize cloud data file, then local manifest, then uploaded file
+        addLog('Setup: Checking for data files...');
         let detectedDataFileName: string | undefined;
-        try {
-          const manifestResult = await refreshManifest();
-          console.log(`[START_BUILDER] manifestResult:`, JSON.stringify(manifestResult, null, 2));
-          if (manifestResult.success && manifestResult.manifest) {
-            console.log(`[START_BUILDER] manifest.files:`, JSON.stringify(manifestResult.manifest.files, null, 2));
-            const dataFile = manifestResult.manifest.files?.find((f: any) => f.type === 'dataFile');
-            console.log(`[START_BUILDER] Found dataFile entry:`, dataFile);
-            if (dataFile) {
-              detectedDataFileName = dataFile.filename;
-              console.log(`[START_BUILDER] Manifest found dataFile: filename="${dataFile.filename}", setting detectedDataFileName="${detectedDataFileName}"`);
-              addLog(`Setup: Data file detected - ${dataFile.filename}`);
-              // Re-run auto-detection to update uploadedFiles state and WAIT for it to complete
-              if (refreshDetection) {
-                addLog('Setup: Loading data file into memory...');
-                await refreshDetection();
-                addLog('Setup: Data file loaded successfully');
+
+        // First check if we have a cloud data file (uploaded via the UI)
+        const cloudData = getCloudDataFile();
+        if (cloudData) {
+          detectedDataFileName = cloudData.filename;
+          console.log(`[START_BUILDER] Using cloud data file: ${cloudData.filename}`);
+          addLog(`Setup: Data file ready (cloud) - ${cloudData.filename}`);
+        } else if (uploadedFiles.dataFile) {
+          // Use the uploaded file from state
+          detectedDataFileName = uploadedFiles.dataFile.name;
+          console.log(`[START_BUILDER] Using uploaded data file: ${detectedDataFileName}`);
+          addLog(`Setup: Data file ready (uploaded) - ${detectedDataFileName}`);
+        } else {
+          // Try local backend manifest as fallback
+          try {
+            addLog('Setup: Refreshing file manifest...');
+            const manifestResult = await refreshManifest();
+            console.log(`[START_BUILDER] manifestResult:`, JSON.stringify(manifestResult, null, 2));
+            if (manifestResult.success && manifestResult.manifest) {
+              console.log(`[START_BUILDER] manifest.files:`, JSON.stringify(manifestResult.manifest.files, null, 2));
+              const dataFile = manifestResult.manifest.files?.find((f: any) => f.type === 'dataFile');
+              console.log(`[START_BUILDER] Found dataFile entry:`, dataFile);
+              if (dataFile) {
+                detectedDataFileName = dataFile.filename;
+                console.log(`[START_BUILDER] Manifest found dataFile: filename="${dataFile.filename}"`);
+                addLog(`Setup: Data file detected - ${dataFile.filename}`);
+                // Re-run auto-detection to update uploadedFiles state
+                if (refreshDetection) {
+                  addLog('Setup: Loading data file into memory...');
+                  await refreshDetection();
+                  addLog('Setup: Data file loaded successfully');
+                }
               }
-            } else {
-              addLog('Setup: No data file detected - will generate partial paper');
             }
+          } catch (error) {
+            console.log('[START_BUILDER] Manifest refresh failed (expected in cloud-only mode)');
           }
-        } catch (error) {
-          addLog('Setup: Manifest refresh failed, continuing with current files');
         }
+
+        if (!detectedDataFileName) {
+          addLog('Setup: No data file - will generate partial paper');
+        }
+
         // Move from Setup to Builder and start processing
         setStageStatus(Stage.SETUP, StageStatus.COMPLETED);
         moveToStage(Stage.BUILDER);

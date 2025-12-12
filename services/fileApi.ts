@@ -681,19 +681,118 @@ export interface DataFilePreview {
   filename?: string;
   firstLine?: string;
   totalLines?: number;
+  content?: string;
   error?: string;
+}
+
+// Store uploaded cloud data file info
+let cloudDataFile: { filename: string; blobUrl: string; content?: string } | null = null;
+
+/**
+ * Upload a data file to cloud storage (Vercel Blob)
+ * Returns the blob URL for later retrieval
+ */
+export async function uploadDataFileToCloud(file: File): Promise<{
+  success: boolean;
+  filename?: string;
+  blobUrl?: string;
+  error?: string;
+}> {
+  try {
+    // Read file as base64
+    const arrayBuffer = await file.arrayBuffer();
+    const base64 = btoa(
+      new Uint8Array(arrayBuffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
+    );
+
+    console.log(`[Cloud Upload] Uploading ${file.name} (${file.size} bytes)...`);
+
+    const response = await fetch(`${VERCEL_API_URL}/api/upload-data`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        filename: file.name,
+        content: base64,
+        contentType: file.type
+      })
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      // Store for later use
+      cloudDataFile = {
+        filename: file.name,
+        blobUrl: result.blobUrl
+      };
+      console.log(`[Cloud Upload] Success: ${result.blobUrl}`);
+    }
+
+    return result;
+  } catch (error) {
+    console.error('[Cloud Upload] Error:', error);
+    return {
+      success: false,
+      error: (error as Error).message
+    };
+  }
+}
+
+/**
+ * Get the currently uploaded cloud data file info
+ */
+export function getCloudDataFile(): { filename: string; blobUrl: string; content?: string } | null {
+  return cloudDataFile;
+}
+
+/**
+ * Read a data file from cloud storage
+ */
+export async function readCloudDataFile(blobUrl: string): Promise<DataFilePreview> {
+  try {
+    console.log(`[Cloud Read] Reading from: ${blobUrl}`);
+
+    const response = await fetch(`${VERCEL_API_URL}/api/read-data?url=${encodeURIComponent(blobUrl)}`);
+    const result = await response.json();
+
+    if (result.success && cloudDataFile) {
+      // Cache the content
+      cloudDataFile.content = result.content;
+    }
+
+    return result;
+  } catch (error) {
+    console.error('[Cloud Read] Error:', error);
+    return {
+      success: false,
+      error: (error as Error).message
+    };
+  }
 }
 
 /**
  * Get a preview of a data file (first line) for user confirmation
  * This helps users verify they're analyzing the correct data file
+ * Supports both local backend and cloud storage
  */
 export async function getDataFilePreview(filename: string): Promise<DataFilePreview> {
+  // First check if we have a cloud data file
+  if (cloudDataFile && cloudDataFile.filename === filename && cloudDataFile.blobUrl) {
+    console.log('[DataFilePreview] Using cloud data file');
+    return readCloudDataFile(cloudDataFile.blobUrl);
+  }
+
+  // Try local backend
   if (backendAvailable === null) {
     await checkBackendHealth();
   }
 
   if (!backendAvailable) {
+    // Check if we have any cloud file as fallback
+    if (cloudDataFile && cloudDataFile.blobUrl) {
+      console.log('[DataFilePreview] Falling back to cloud data file');
+      return readCloudDataFile(cloudDataFile.blobUrl);
+    }
     return { success: false, error: 'Backend server not available' };
   }
 
@@ -714,7 +813,8 @@ export async function getDataFilePreview(filename: string): Promise<DataFilePrev
       success: true,
       filename,
       firstLine,
-      totalLines
+      totalLines,
+      content
     };
   } catch (error) {
     return { success: false, error: (error as Error).message };
