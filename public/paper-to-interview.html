@@ -165,14 +165,16 @@
       </div>
 
       <!-- Generate Button -->
-      <button
-        id="generate-btn"
-        onclick="generateInterview()"
-        disabled
-        class="bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-colors"
-      >
-        Generate Open Research Interview
-      </button>
+      <div class="text-center">
+        <button
+          id="generate-btn"
+          onclick="generateInterview()"
+          disabled
+          class="bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+        >
+          Generate Open Research Interview
+        </button>
+      </div>
     </div>
 
     <!-- Processing Section -->
@@ -194,24 +196,29 @@
       </div>
 
       <!-- Download Button -->
-      <button
-        id="download-btn"
-        onclick="downloadInterview()"
-        class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
-      >
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-        </svg>
-        Download Interview File
-      </button>
+      <div class="text-center">
+        <button
+          id="download-btn"
+          onclick="downloadInterview()"
+          class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
+          style="display: inline-flex;"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+          </svg>
+          Download Interview File
+        </button>
+      </div>
 
       <!-- Generate Another -->
-      <button
-        onclick="resetForm()"
-        class="mt-3 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium py-2 px-6 rounded-lg transition-colors"
-      >
-        Generate Another
-      </button>
+      <div class="text-center">
+        <button
+          onclick="resetForm()"
+          class="mt-3 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium py-2 px-6 rounded-lg transition-colors"
+        >
+          Generate Another
+        </button>
+      </div>
     </div>
 
     <!-- Error Section -->
