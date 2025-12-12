@@ -42,8 +42,8 @@ const MODEL_CONFIG = {
     openai: 'gpt-4o-mini'
   },
   research: {
-    gemini: 'gemini-2.5-pro-preview-06-05',
-    openai: 'gpt-4.1'
+    gemini: 'gemini-3-pro-preview',
+    openai: 'gpt-5.2'
   }
 };
 
@@ -59,7 +59,7 @@ function getOpenAIModel(): string {
 /**
  * Set the paper mode (draft or research)
  * Draft mode: Uses fast models (gemini-2.0-flash-exp, gpt-4o-mini)
- * Research mode: Uses powerful models (gemini-2.5-pro-preview-06-05, gpt-4.1)
+ * Research mode: Uses powerful models (gemini-3-pro-preview, gpt-5.2)
  */
 export function setPaperMode(mode: PaperMode): void {
   currentPaperMode = mode;
