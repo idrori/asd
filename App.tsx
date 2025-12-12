@@ -12,7 +12,7 @@ import { setPaperMode } from './services/geminiService';
 
 const App: React.FC = () => {
   // Paper mode state (draft = fast models, research = powerful models)
-  const [paperMode, setPaperModeState] = useState<PaperMode>('draft');
+  const [paperMode, setPaperModeState] = useState<PaperMode>('research');
 
   // Update gemini service when mode changes
   const handlePaperModeChange = useCallback((mode: PaperMode) => {

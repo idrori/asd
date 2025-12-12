@@ -33,7 +33,7 @@ const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY || '';
 
 // Paper mode: 'draft' uses fast models, 'research' uses powerful models
 type PaperMode = 'draft' | 'research';
-let currentPaperMode: PaperMode = 'draft';
+let currentPaperMode: PaperMode = 'research';
 
 // Model selection based on paper mode
 const MODEL_CONFIG = {
