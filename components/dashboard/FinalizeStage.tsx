@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Send, Check, Save, FileText, Download, Loader2, Eye, Link, Copy, ExternalLink } from 'lucide-react';
+import JSZip from 'jszip';
 import LogPanel from './LogPanel';
 import {
   readPaperFile,
@@ -73,26 +74,33 @@ const FinalizeStage: React.FC<FinalizeStageProps> = ({
         savedFilesList.push(pdfData.filename);
       }
 
-      // Download PNG figures if available
+      // Download PNG figures as a single zip file if available
       const sessionFigures = getCurrentSessionFigures();
       if (sessionFigures.length > 0) {
-        console.log(`[Save] Downloading ${sessionFigures.length} PNG figures...`);
+        console.log(`[Save] Packing ${sessionFigures.length} PNG figures into figures.zip...`);
         const figureBlobs = await downloadAllFigures();
 
-        // Download each figure with a small delay to avoid browser blocking
-        for (const fig of figureBlobs) {
-          await new Promise(resolve => setTimeout(resolve, 200));
-          const url = URL.createObjectURL(fig.blob);
+        if (figureBlobs.length > 0) {
+          // Create zip file with all figures
+          const zip = new JSZip();
+          for (const fig of figureBlobs) {
+            zip.file(fig.filename, fig.blob);
+          }
+
+          // Generate and download the zip
+          const zipBlob = await zip.generateAsync({ type: 'blob' });
+          const url = URL.createObjectURL(zipBlob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = fig.filename;
+          a.download = 'figures.zip';
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
           URL.revokeObjectURL(url);
-          savedFilesList.push(fig.filename);
+
+          savedFilesList.push(`figures.zip (${figureBlobs.length} PNG files)`);
+          console.log(`[Save] Downloaded figures.zip with ${figureBlobs.length} PNG figures`);
         }
-        console.log(`[Save] Downloaded ${figureBlobs.length} PNG figures`);
       }
 
       setSavedFiles(savedFilesList);

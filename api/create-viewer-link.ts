@@ -69,7 +69,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Store in Vercel Blob with anonymous path (no identifiable info)
     // Use only the random token as the path - no username, no project name
-    const blob = await put(`papers/${token}.pdf`, pdfBuffer, {
+    // IMPORTANT: Use 'viewer/' prefix to match get-viewer-pdf.ts lookup
+    const blob = await put(`viewer/${token}.pdf`, pdfBuffer, {
       access: 'public',
       contentType: 'application/pdf',
       addRandomSuffix: false
