@@ -318,6 +318,12 @@ const FinalizeStage: React.FC<FinalizeStageProps> = ({
           <div className="text-sm text-red-600 text-center bg-red-50 border border-red-200 rounded-lg p-3">
             <p className="font-medium">Error:</p>
             <p className="text-xs">{saveError}</p>
+            {compileResult?.log && (
+              <details className="mt-2 text-left">
+                <summary className="cursor-pointer text-xs text-red-500 hover:text-red-700">Show compilation log</summary>
+                <pre className="mt-1 text-xs bg-red-100 p-2 rounded overflow-auto max-h-40 whitespace-pre-wrap">{compileResult.log}</pre>
+              </details>
+            )}
           </div>
         )}
 

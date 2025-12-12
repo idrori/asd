@@ -61,6 +61,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     let compileResponse: Response;
     try {
+      // Try latex.ytotech.com first (supports TikZ/PGFPlots better)
       compileResponse = await fetch('https://latex.ytotech.com/builds/sync', {
         method: 'POST',
         headers: {
@@ -77,6 +78,47 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           ]
         })
       });
+
+      // If we get SERVER_ERROR, try latex.ytotech.com with xelatex as fallback
+      if (!compileResponse.ok) {
+        const errorCheck = await compileResponse.clone().text();
+        if (errorCheck.includes('SERVER_ERROR')) {
+          console.log('[LaTeX Compiler] pdflatex returned SERVER_ERROR, trying xelatex...');
+
+          // Try with xelatex which handles some edge cases better
+          const fallbackResponse = await fetch('https://latex.ytotech.com/builds/sync', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            signal: controller.signal,
+            body: JSON.stringify({
+              compiler: 'xelatex',
+              resources: [
+                {
+                  main: true,
+                  content: content
+                }
+              ]
+            })
+          });
+
+          if (fallbackResponse.ok) {
+            console.log('[LaTeX Compiler] xelatex succeeded');
+            compileResponse = fallbackResponse;
+          } else {
+            const fallbackError = await fallbackResponse.text();
+            console.log('[LaTeX Compiler] xelatex also failed:', fallbackError.substring(0, 200));
+            // Return original error with more context
+            return res.status(200).json({
+              success: false,
+              error: `LaTeX compilation failed on both pdflatex and xelatex. The document (${Math.round(contentLength / 1024)} KB with ${tikzCount} TikZ figures) may have syntax errors or be too complex for the cloud compiler. Consider using a local LaTeX installation.`,
+              log: `pdflatex: ${errorCheck}\n\nxelatex: ${fallbackError.substring(0, 1500)}`
+            });
+          }
+        }
+      }
+
       clearTimeout(timeoutId);
     } catch (fetchError: any) {
       clearTimeout(timeoutId);

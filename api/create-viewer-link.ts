@@ -67,29 +67,32 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Convert base64 to buffer
     const pdfBuffer = Buffer.from(pdfBase64, 'base64');
 
-    // Store in Vercel Blob
-    const blob = await put(`viewer/${token}.pdf`, pdfBuffer, {
+    // Store in Vercel Blob with anonymous path (no identifiable info)
+    // Use only the random token as the path - no username, no project name
+    const blob = await put(`papers/${token}.pdf`, pdfBuffer, {
       access: 'public',
       contentType: 'application/pdf',
       addRandomSuffix: false
     });
 
-    // Build the viewer URL
-    const baseUrl = process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : 'https://icis-deploy-12-10-2025.vercel.app';
+    // Build the viewer URL using a clean base URL
+    // Use custom domain if available, otherwise use the generic vercel.app URL
+    const baseUrl = process.env.CUSTOM_DOMAIN
+      ? `https://${process.env.CUSTOM_DOMAIN}`
+      : 'https://iciscopilot.vercel.app';
 
+    // The shareable link only contains the random token - no personal info
     const viewerUrl = `/viewer/${token}`;
     const fullUrl = `${baseUrl}${viewerUrl}`;
 
-    console.log(`[Viewer Link] Created: ${token.substring(0, 8)}... -> ${blob.url}`);
+    console.log(`[Viewer Link] Created: ${token.substring(0, 8)}...`);
 
     return res.status(200).json({
       success: true,
       token,
       viewerUrl,
       fullUrl,
-      blobUrl: blob.url,
+      // Don't expose the blob URL directly - only use our viewer endpoint
       expiresIn: '7 days',
       filename: filename || 'paper.pdf'
     });
