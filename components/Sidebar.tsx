@@ -51,6 +51,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   onNewInterview
 }) => {
   const [menuOpen, setMenuOpen] = useState<Stage | null>(null);
+  const [modeToggle, setModeToggle] = useState<'draft' | 'research'>('draft');
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Close menu when clicking outside
@@ -207,7 +208,31 @@ const Sidebar: React.FC<SidebarProps> = ({
       )}
 
       {/* Action Buttons - Above Stage List */}
-      <div className="px-4 pt-4 pb-2 space-y-2">
+      <div className="px-4 pt-4 pb-2 space-y-3">
+        {/* Draft/Research Mode Toggle */}
+        <div className="flex items-center justify-between bg-slate-700 rounded-lg p-1">
+          <button
+            onClick={() => setModeToggle('draft')}
+            className={`flex-1 px-3 py-1.5 text-xs font-medium rounded transition-colors ${
+              modeToggle === 'draft'
+                ? 'bg-slate-500 text-white'
+                : 'text-slate-300 hover:text-white'
+            }`}
+          >
+            Draft
+          </button>
+          <button
+            onClick={() => setModeToggle('research')}
+            className={`flex-1 px-3 py-1.5 text-xs font-medium rounded transition-colors ${
+              modeToggle === 'research'
+                ? 'bg-slate-500 text-white'
+                : 'text-slate-300 hover:text-white'
+            }`}
+          >
+            Research
+          </button>
+        </div>
+
         {/* New Voice Interview Button */}
         {onNewInterview && (
           <button
