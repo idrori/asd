@@ -94,13 +94,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    // Request ephemeral token from OpenAI
-    const response = await fetch('https://api.openai.com/v1/realtime/sessions', {
+    // Request client secret from OpenAI Realtime GA API
+    // Note: Using /v1/realtime/client_secrets for GA (not /v1/realtime/sessions which is beta)
+    const response = await fetch('https://api.openai.com/v1/realtime/client_secrets', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
-        'OpenAI-Beta': 'realtime=v1',
       },
       body: JSON.stringify({
         model: 'gpt-4o-realtime-preview-2024-12-17',
@@ -133,13 +133,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const data = await response.json();
 
-    console.log('[OpenAI Realtime] Token created successfully');
+    console.log('[OpenAI Realtime] Client secret created successfully:', JSON.stringify(data).slice(0, 200));
 
+    // Handle both possible response formats (GA vs beta)
+    // GA format: { client_secret: { value: "...", expires_at: ... } }
+    // Beta format: { client_secret: { value: "..." }, id: "...", expires_at: ... }
     return res.status(200).json({
       success: true,
       client_secret: data.client_secret,
-      session_id: data.id,
-      expires_at: data.expires_at
+      session_id: data.id || data.session_id,
+      expires_at: data.expires_at || data.client_secret?.expires_at
     });
 
   } catch (error) {
