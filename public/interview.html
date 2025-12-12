@@ -874,28 +874,8 @@ ${'='.repeat(50)}
           interviewStartTime = Date.now();
           timerInterval = setInterval(updateTimer, 1000);
 
-          // Send session update with our configuration
-          ws.send(JSON.stringify({
-            type: 'session.update',
-            session: {
-              modalities: ['text', 'audio'],
-              voice: 'alloy',
-              input_audio_format: 'pcm16',
-              output_audio_format: 'pcm16',
-              input_audio_transcription: {
-                model: 'whisper-1'
-              },
-              turn_detection: {
-                type: 'server_vad',
-                threshold: 0.5,
-                prefix_padding_ms: 300,
-                silence_duration_ms: 500,
-                create_response: true
-              }
-            }
-          }));
-
-          // Start audio recording after a short delay
+          // Session is already configured via the token endpoint
+          // Just start audio recording and request initial greeting
           setTimeout(() => {
             startAudioRecording();
             // Request initial greeting from AI
@@ -1015,7 +995,7 @@ ${'='.repeat(50)}
           break;
 
         case 'error':
-          console.error('[Interview] Server error:', event.error);
+          console.error('[Interview] Server error:', JSON.stringify(event.error, null, 2));
           const errorMsg = event.error?.message || event.error?.code || JSON.stringify(event.error);
           showError(`Error: ${errorMsg}`);
           break;
