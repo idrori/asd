@@ -241,9 +241,12 @@
         const pdfBase64 = await fileToBase64(paperFile);
         const formatText = await readTextFile(formatFile);
 
-        // Call API
+        // Call API - use absolute URL to ensure it works from both Vercel and GitHub Pages
         updateStatus('Analyzing paper with Gemini AI...');
-        const response = await fetch('/api/paper-to-interview', {
+        const apiBase = window.location.hostname.includes('github.io')
+          ? 'https://icis-deploy-12-10-2025.vercel.app'
+          : '';
+        const response = await fetch(`${apiBase}/api/paper-to-interview`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -254,8 +257,14 @@
         });
 
         if (!response.ok) {
-          const error = await response.json();
-          throw new Error(error.details || error.error || 'Failed to generate interview');
+          let errorMessage = 'Failed to generate interview';
+          try {
+            const error = await response.json();
+            errorMessage = error.details || error.error || errorMessage;
+          } catch {
+            errorMessage = `Server error (${response.status}): API may not be available`;
+          }
+          throw new Error(errorMessage);
         }
 
         const result = await response.json();
