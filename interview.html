@@ -679,17 +679,27 @@
       }
     }
 
+    // SECURITY: Escape HTML to prevent XSS attacks
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
     // Add to transcript
     function addToTranscript(speaker, text) {
       const transcriptBox = document.getElementById('transcript');
       const timestamp = new Date().toLocaleTimeString();
+      // SECURITY: Escape text to prevent XSS from AI/user content
+      const safeText = escapeHtml(text);
+      const safeTimestamp = escapeHtml(timestamp);
 
       if (speaker === 'AI') {
         transcript += `\n[${timestamp}] AI: ${text}`;
-        transcriptBox.innerHTML += `<div class="ai">[${timestamp}] AI: ${text}</div>`;
+        transcriptBox.innerHTML += `<div class="ai">[${safeTimestamp}] AI: ${safeText}</div>`;
       } else {
         transcript += `\n[${timestamp}] You: ${text}`;
-        transcriptBox.innerHTML += `<div class="user">[${timestamp}] You: ${text}</div>`;
+        transcriptBox.innerHTML += `<div class="user">[${safeTimestamp}] You: ${safeText}</div>`;
       }
 
       transcriptBox.scrollTop = transcriptBox.scrollHeight;
