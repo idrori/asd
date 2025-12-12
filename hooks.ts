@@ -12,7 +12,7 @@ import {
   FileVerification,
   INITIAL_STATE
 } from './types';
-import { clearAllFiles, writePaperFile, writeOversightFile, writeFeedbackFile, readPaperFile } from './services/fileService';
+import { clearAllFiles, writePaperFile, writeOversightFile, writeFeedbackFile, readPaperFile, appendSupervisorDirectives, writeSupervisorDecision } from './services/fileService';
 import { backupAndClearFiles, savePaperFile, refreshManifest, uploadDataFileToCloud, getCloudDataFile } from './services/fileApi';
 import { runBuilder, runReviewer, runReviser } from './services/geminiService';
 
@@ -986,6 +986,11 @@ export function useIcisWorkflow(params: WorkflowHookParams) {
         // Store the comment in state for future reference
         if (payload) {
           updateLastRound({ supervisorComment: payload });
+          // Save supervisor comment to file for persistence
+          const currentVersion = simulationState.currentRound;
+          appendSupervisorDirectives(currentVersion, currentVersion, payload);
+          writeSupervisorDecision('CONTINUE', currentVersion);
+          addLog(`Supervisor: Saved directive to feedback file (round ${currentVersion})`);
         }
         setStageStatus(Stage.SUPERVISOR, StageStatus.COMPLETED);
         moveToStage(Stage.REVISER);
@@ -999,6 +1004,11 @@ export function useIcisWorkflow(params: WorkflowHookParams) {
         // Supervisor decision: finalize paper
         if (payload) {
           updateLastRound({ supervisorComment: payload });
+          // Save supervisor comment to file for persistence
+          const finalVersion = simulationState.currentRound;
+          appendSupervisorDirectives(finalVersion, finalVersion, payload);
+          writeSupervisorDecision('FINALIZE', finalVersion);
+          addLog(`Supervisor: Saved finalize decision to feedback file (round ${finalVersion})`);
         }
         setStageStatus(Stage.SUPERVISOR, StageStatus.COMPLETED);
         moveToStage(Stage.FINALIZE);

@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { RefreshCw, Check, Download, Upload, ChevronRight } from 'lucide-react';
 import LogPanel from './LogPanel';
 import StageControls from './StageControls';
-import { OversightFileData, FeedbackFileData, readOversightFile, readFeedbackFile, readPaperFile } from '../../services/fileService';
+import RoundScoreComparison from './RoundScoreComparison';
+import { OversightFileData, FeedbackFileData, readOversightFile, readFeedbackFile, readPaperFile, getOversightProgression } from '../../services/fileService';
 import { saveReviewOutputs } from '../../services/fileApi';
 
 interface ReviewerStageProps {
@@ -146,6 +147,16 @@ const ReviewerStage: React.FC<ReviewerStageProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Score Comparison Section - shown when review is complete */}
+      {isComplete && (
+        <div className="mt-6">
+          <RoundScoreComparison
+            allOversight={getOversightProgression()}
+            compact={true}
+          />
+        </div>
+      )}
 
       {/* Review Output Section - shown when review is complete */}
       {isComplete && (

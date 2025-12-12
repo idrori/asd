@@ -8,3 +8,4 @@ export type { ReviewOutputFiles } from './ReviewerStage';
 export { default as SupervisorStage } from './SupervisorStage';
 export { default as ReviserStage } from './ReviserStage';
 export { default as FinalizeStage } from './FinalizeStage';
+export { default as RoundScoreComparison } from './RoundScoreComparison';
