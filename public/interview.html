@@ -698,7 +698,9 @@ ${'='.repeat(50)}
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `research_interview_${new Date().toISOString().split('T')[0]}.txt`;
+      // Include email in filename (sanitize to remove invalid characters)
+      const sanitizedEmail = userEmail.replace(/[^a-zA-Z0-9@._-]/g, '_').replace(/@/g, '_at_');
+      a.download = `research_interview_${sanitizedEmail}_${new Date().toISOString().split('T')[0]}.txt`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
