@@ -305,15 +305,42 @@ let lastCompiledPdf: { filename: string; base64: string } | null = null;
  * Uses Vercel serverless function (cloud) or local backend
  */
 export async function compileLaTeX(filename: string, content: string): Promise<CompileResult> {
+  // Count TikZ figures for logging
+  const tikzCount = (content.match(/\\begin\{tikzpicture\}/g) || []).length;
+  const contentKB = Math.round(content.length / 1024);
+
   // Try Vercel cloud compilation first
   if (VERCEL_API_URL) {
     try {
-      console.log('[LaTeX] Compiling via Vercel cloud...');
-      const response = await fetch(`${VERCEL_API_URL}/api/compile-latex`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filename, content })
-      });
+      console.log(`[LaTeX] Compiling via Vercel cloud... (${contentKB} KB, ${tikzCount} TikZ figures)`);
+
+      // Use AbortController for 5 minute timeout on client side
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => {
+        console.error('[LaTeX] Client-side timeout after 5 minutes');
+        controller.abort();
+      }, 300000); // 5 minutes
+
+      let response: Response;
+      try {
+        response = await fetch(`${VERCEL_API_URL}/api/compile-latex`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          signal: controller.signal,
+          body: JSON.stringify({ filename, content })
+        });
+        clearTimeout(timeoutId);
+      } catch (fetchError: any) {
+        clearTimeout(timeoutId);
+        if (fetchError.name === 'AbortError') {
+          console.error('[LaTeX] Request timed out');
+          return {
+            success: false,
+            error: `LaTeX compilation timed out after 5 minutes. The document with ${tikzCount} TikZ figures may be too complex.`
+          };
+        }
+        throw fetchError;
+      }
 
       const result = await response.json();
 
@@ -324,6 +351,8 @@ export async function compileLaTeX(filename: string, content: string): Promise<C
           base64: result.pdfBase64
         };
         console.log(`[LaTeX] Cloud compilation success: ${result.pdfFilename}`);
+      } else if (!result.success) {
+        console.warn(`[LaTeX] Cloud compilation failed: ${result.error}`);
       }
 
       return result;

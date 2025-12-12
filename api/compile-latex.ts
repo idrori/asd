@@ -36,31 +36,59 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const { filename, content }: CompileRequest = req.body;
 
     if (!content) {
+      console.error('[LaTeX Compiler] No content provided');
       return res.status(400).json({
         success: false,
         error: 'No LaTeX content provided'
       });
     }
 
+    const contentLength = content.length;
+    const tikzCount = (content.match(/\\begin\{tikzpicture\}/g) || []).length;
+    const axisCount = (content.match(/\\begin\{axis\}/g) || []).length;
+
     console.log(`[LaTeX Compiler] Compiling ${filename}...`);
+    console.log(`[LaTeX Compiler] Content: ${Math.round(contentLength / 1024)} KB, ${tikzCount} tikz figures, ${axisCount} pgfplots`);
 
     // Use latex.ytotech.com API for compilation
     // This service accepts LaTeX and returns PDF
-    const compileResponse = await fetch('https://latex.ytotech.com/builds/sync', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        compiler: 'pdflatex',
-        resources: [
-          {
-            main: true,
-            content: content
-          }
-        ]
-      })
-    });
+    // Add AbortController with 4 minute timeout (leave 1 min buffer for Vercel)
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => {
+      console.error('[LaTeX Compiler] Aborting due to 4 minute timeout');
+      controller.abort();
+    }, 240000);
+
+    let compileResponse: Response;
+    try {
+      compileResponse = await fetch('https://latex.ytotech.com/builds/sync', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        signal: controller.signal,
+        body: JSON.stringify({
+          compiler: 'pdflatex',
+          resources: [
+            {
+              main: true,
+              content: content
+            }
+          ]
+        })
+      });
+      clearTimeout(timeoutId);
+    } catch (fetchError: any) {
+      clearTimeout(timeoutId);
+      if (fetchError.name === 'AbortError') {
+        console.error('[LaTeX Compiler] Request timed out after 4 minutes');
+        return res.status(200).json({
+          success: false,
+          error: `LaTeX compilation timed out. The document with ${tikzCount} TikZ figures may be too complex. Try reducing the number of figures.`
+        });
+      }
+      throw fetchError;
+    }
 
     if (!compileResponse.ok) {
       const errorText = await compileResponse.text();
