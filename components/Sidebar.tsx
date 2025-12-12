@@ -208,13 +208,13 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Action Buttons - Above Stage List */}
       <div className="px-4 pt-4 pb-2 space-y-2">
-        {/* New Interview Button */}
+        {/* New Voice Interview Button */}
         {onNewInterview && (
           <button
             onClick={onNewInterview}
             className="w-full px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded transition-colors"
           >
-            + New Interview
+            New Voice Interview
           </button>
         )}
 
@@ -228,7 +228,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             }}
             className="w-full px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded transition-colors"
           >
-            + New Project
+            New Project
           </button>
         )}
       </div>
