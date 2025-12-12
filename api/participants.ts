@@ -94,10 +94,11 @@ async function readParticipantsData(): Promise<ParticipantsData> {
   }
 }
 
-// Write participants data to Blob
+// Write participants data to Blob (private storage for PII protection)
 async function writeParticipantsData(data: ParticipantsData): Promise<void> {
+  // SECURITY: Store participant data privately - contains PII (names, emails, notes)
   await put(PARTICIPANTS_FILE, JSON.stringify(data, null, 2), {
-    access: 'public',
+    access: 'private',
     contentType: 'application/json',
     addRandomSuffix: false
   });
@@ -131,14 +132,42 @@ function assignGroup(participants: Participant[]): GroupId {
   return group1Count <= group2Count ? 1 : 2;
 }
 
+// SECURITY: Allowed origins for CORS
+const ALLOWED_ORIGINS = [
+  'https://iciscopilot.vercel.app',
+  'https://idrori.github.io',
+  'http://localhost:5173',
+  'http://localhost:3000'
+];
+
+function getCorsOrigin(req: VercelRequest): string {
+  const origin = req.headers.origin as string;
+  if (origin && ALLOWED_ORIGINS.some(allowed => origin.startsWith(allowed))) {
+    return origin;
+  }
+  return ALLOWED_ORIGINS[0];
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // Set CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  // SECURITY: Restrict CORS to known origins only
+  const corsOrigin = getCorsOrigin(req);
+  res.setHeader('Access-Control-Allow-Origin', corsOrigin);
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Internal-Secret');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
 
   if (req.method === 'OPTIONS') {
     return res.status(204).end();
+  }
+
+  // SECURITY: Verify internal API secret for PII-accessing endpoints
+  const apiSecret = process.env.INTERNAL_API_SECRET;
+  if (apiSecret) {
+    const providedSecret = req.headers['x-internal-secret'];
+    if (providedSecret !== apiSecret) {
+      console.warn('[Participants] Unauthorized request blocked');
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
   }
 
   // Check Blob storage is configured
@@ -261,8 +290,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         // Save transcript to separate file if provided
         if (transcript) {
           const transcriptPath = `research/transcripts/${participant.id}.txt`;
+          // SECURITY: Store transcripts privately - contains interview content
           await put(transcriptPath, transcript, {
-            access: 'public',
+            access: 'private',
             contentType: 'text/plain',
             addRandomSuffix: false
           });

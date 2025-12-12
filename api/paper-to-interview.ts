@@ -103,11 +103,29 @@ async function waitForFileProcessing(apiKey: string, fileUri: string): Promise<v
   throw new Error('File processing timeout');
 }
 
+// SECURITY: Allowed origins for CORS
+const ALLOWED_ORIGINS = [
+  'https://iciscopilot.vercel.app',
+  'https://idrori.github.io',
+  'http://localhost:5173',
+  'http://localhost:3000'
+];
+
+function getCorsOrigin(req: VercelRequest): string {
+  const origin = req.headers.origin as string;
+  if (origin && ALLOWED_ORIGINS.some(allowed => origin.startsWith(allowed))) {
+    return origin;
+  }
+  return ALLOWED_ORIGINS[0];
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // Set CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  // SECURITY: Restrict CORS to known origins only
+  const corsOrigin = getCorsOrigin(req);
+  res.setHeader('Access-Control-Allow-Origin', corsOrigin);
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Internal-Secret');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
 
   if (req.method === 'OPTIONS') {
     return res.status(204).end();
@@ -115,6 +133,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // SECURITY: Verify internal API secret if configured
+  const apiSecret = process.env.INTERNAL_API_SECRET;
+  if (apiSecret) {
+    const providedSecret = req.headers['x-internal-secret'];
+    if (providedSecret !== apiSecret) {
+      console.warn('[Paper-to-Interview] Unauthorized request blocked');
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
   }
 
   const apiKey = process.env.GEMINI_API_KEY;

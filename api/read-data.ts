@@ -37,6 +37,34 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       });
     }
 
+    // SECURITY: Validate URL is from allowed Vercel Blob domains only (SSRF prevention)
+    let parsedUrl: URL;
+    try {
+      parsedUrl = new URL(blobUrl);
+    } catch {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid URL format'
+      });
+    }
+
+    const allowedDomains = [
+      'blob.vercel-storage.com',
+      'public.blob.vercel-storage.com'
+    ];
+
+    const isAllowed = allowedDomains.some(domain =>
+      parsedUrl.hostname === domain || parsedUrl.hostname.endsWith(`.${domain}`)
+    );
+
+    if (!isAllowed) {
+      console.warn(`[Read Data] SSRF attempt blocked: ${parsedUrl.hostname}`);
+      return res.status(403).json({
+        success: false,
+        error: 'URL not from allowed domain'
+      });
+    }
+
     // Fetch the file from Blob storage
     const response = await fetch(blobUrl);
 
