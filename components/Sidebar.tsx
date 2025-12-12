@@ -25,6 +25,8 @@ import {
 // Stage control actions
 export type StageAction = 'abort' | 'restart' | 'skip' | 'start';
 
+export type PaperMode = 'draft' | 'research';
+
 interface SidebarProps {
   currentStage: Stage;
   currentBuilderStep?: BuilderStep;
@@ -36,6 +38,8 @@ interface SidebarProps {
   onStageAction?: (stage: Stage, action: StageAction) => void;
   onNewCase?: () => void;
   onNewInterview?: () => void;
+  paperMode?: PaperMode;
+  onPaperModeChange?: (mode: PaperMode) => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
@@ -48,10 +52,11 @@ const Sidebar: React.FC<SidebarProps> = ({
   onStageClick,
   onStageAction,
   onNewCase,
-  onNewInterview
+  onNewInterview,
+  paperMode = 'draft',
+  onPaperModeChange
 }) => {
   const [menuOpen, setMenuOpen] = useState<Stage | null>(null);
-  const [modeToggle, setModeToggle] = useState<'draft' | 'research'>('draft');
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Close menu when clicking outside
@@ -212,9 +217,9 @@ const Sidebar: React.FC<SidebarProps> = ({
         {/* Draft/Research Mode Toggle */}
         <div className="flex items-center justify-between bg-slate-700 rounded-lg p-1">
           <button
-            onClick={() => setModeToggle('draft')}
+            onClick={() => onPaperModeChange?.('draft')}
             className={`flex-1 px-3 py-1.5 text-xs font-medium rounded transition-colors ${
-              modeToggle === 'draft'
+              paperMode === 'draft'
                 ? 'bg-slate-500 text-white'
                 : 'text-slate-300 hover:text-white'
             }`}
@@ -222,9 +227,9 @@ const Sidebar: React.FC<SidebarProps> = ({
             Draft
           </button>
           <button
-            onClick={() => setModeToggle('research')}
+            onClick={() => onPaperModeChange?.('research')}
             className={`flex-1 px-3 py-1.5 text-xs font-medium rounded transition-colors ${
-              modeToggle === 'research'
+              paperMode === 'research'
                 ? 'bg-slate-500 text-white'
                 : 'text-slate-300 hover:text-white'
             }`}

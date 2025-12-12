@@ -27,19 +27,55 @@ const LOCAL_BACKEND_URL = 'http://localhost:3001';
 
 // Gemini configuration
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || '';
-const MODEL_ID = import.meta.env.VITE_GEMINI_MODEL || 'gemini-3-pro-preview';
 
 // OpenAI configuration
 const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY || '';
-const OPENAI_MODEL = import.meta.env.VITE_OPENAI_MODEL || 'gpt-5.2';
 
-// Direct API URLs (fallback only)
-const GEMINI_DIRECT_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_ID}:generateContent?key=${GEMINI_API_KEY}`;
+// Paper mode: 'draft' uses fast models, 'research' uses powerful models
+type PaperMode = 'draft' | 'research';
+let currentPaperMode: PaperMode = 'draft';
+
+// Model selection based on paper mode
+const MODEL_CONFIG = {
+  draft: {
+    gemini: 'gemini-2.0-flash-exp',
+    openai: 'gpt-4o-mini'
+  },
+  research: {
+    gemini: 'gemini-2.5-pro-preview-06-05',
+    openai: 'gpt-4.1'
+  }
+};
+
+// Dynamic model getters
+function getGeminiModel(): string {
+  return MODEL_CONFIG[currentPaperMode].gemini;
+}
+
+function getOpenAIModel(): string {
+  return MODEL_CONFIG[currentPaperMode].openai;
+}
+
+/**
+ * Set the paper mode (draft or research)
+ * Draft mode: Uses fast models (gemini-2.0-flash-exp, gpt-4o-mini)
+ * Research mode: Uses powerful models (gemini-2.5-pro-preview-06-05, gpt-4.1)
+ */
+export function setPaperMode(mode: PaperMode): void {
+  currentPaperMode = mode;
+  console.log(`[GeminiService] Paper mode set to: ${mode}`);
+  console.log(`[GeminiService] Using Gemini model: ${getGeminiModel()}`);
+  console.log(`[GeminiService] Using OpenAI model: ${getOpenAIModel()}`);
+}
+
+// Dynamic API URL getter for Gemini
+function getGeminiDirectUrl(): string {
+  return `https://generativelanguage.googleapis.com/v1beta/models/${getGeminiModel()}:generateContent?key=${GEMINI_API_KEY}`;
+}
 const OPENAI_DIRECT_URL = 'https://api.openai.com/v1/chat/completions';
 
 // Legacy compatibility
 const API_KEY = GEMINI_API_KEY;
-const BASE_URL = GEMINI_DIRECT_URL;
 
 // Log configuration status (no sensitive data)
 if (!API_BASE_URL && !GEMINI_API_KEY) {
@@ -181,7 +217,7 @@ async function callGeminiViaProxy(
   // Add model to request body for proxy
   const requestBody = {
     ...body,
-    model: MODEL_ID
+    model: getGeminiModel()
   };
 
   const controller = new AbortController();
@@ -272,8 +308,9 @@ async function callGemini(prompt: string, systemInstruction?: string): Promise<s
 
       console.log(`[Gemini] Starting direct API call (attempt ${attempt + 1}/${RETRY_CONFIG.maxRetries + 1})...`);
       console.log(`[Gemini] Prompt length: ${prompt.length} characters`);
+      console.log(`[Gemini] Using model: ${getGeminiModel()}`);
 
-      const response = await fetch(BASE_URL, {
+      const response = await fetch(getGeminiDirectUrl(), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
@@ -482,8 +519,9 @@ async function callGeminiWithPdf(
   };
 
   console.log('[Gemini] Calling API with PDF content...');
+  console.log(`[Gemini] Using model: ${getGeminiModel()}`);
 
-  const response = await fetch(BASE_URL, {
+  const response = await fetch(getGeminiDirectUrl(), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body)
@@ -2280,13 +2318,14 @@ async function callOpenAIViaProxy<T>(prompt: string, baseUrl: string): Promise<T
 
   console.log(`[OpenAI] Calling via proxy: ${proxyUrl}`);
 
+  console.log(`[OpenAI] Using model: ${getOpenAIModel()}`);
   const response = await fetch(proxyUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      model: OPENAI_MODEL,
+      model: getOpenAIModel(),
       messages: [
         {
           role: 'system',
@@ -2350,6 +2389,7 @@ async function callOpenAIDirect<T>(prompt: string): Promise<T> {
 
   console.log('[OpenAI] Calling directly via OpenAI API...');
 
+  console.log(`[OpenAI] Using model: ${getOpenAIModel()}`);
   const response = await fetch(OPENAI_DIRECT_URL, {
     method: 'POST',
     headers: {
@@ -2357,7 +2397,7 @@ async function callOpenAIDirect<T>(prompt: string): Promise<T> {
       'Authorization': `Bearer ${OPENAI_API_KEY}`
     },
     body: JSON.stringify({
-      model: OPENAI_MODEL,
+      model: getOpenAIModel(),
       messages: [
         {
           role: 'system',

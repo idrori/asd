@@ -1,5 +1,5 @@
-import React, { useEffect, useCallback } from 'react';
-import Sidebar from './components/Sidebar';
+import React, { useState, useEffect, useCallback } from 'react';
+import Sidebar, { PaperMode } from './components/Sidebar';
 import DashboardPanel from './components/DashboardPanel';
 import { Stage } from './types';
 import {
@@ -8,8 +8,18 @@ import {
   useIcisWorkflow,
   DataFileConfirmCallback
 } from './hooks';
+import { setPaperMode } from './services/geminiService';
 
 const App: React.FC = () => {
+  // Paper mode state (draft = fast models, research = powerful models)
+  const [paperMode, setPaperModeState] = useState<PaperMode>('draft');
+
+  // Update gemini service when mode changes
+  const handlePaperModeChange = useCallback((mode: PaperMode) => {
+    setPaperModeState(mode);
+    setPaperMode(mode);
+    console.log(`[App] Paper mode changed to: ${mode}`);
+  }, []);
   // State management hooks
   const {
     simulationState,
@@ -112,6 +122,8 @@ Is this the correct data file for your analysis?`;
             // TODO: Implement new interview functionality
             console.log('New Interview clicked');
           }}
+          paperMode={paperMode}
+          onPaperModeChange={handlePaperModeChange}
         />
       </div>
       <div className="flex-1 h-full">
