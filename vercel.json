@@ -1,5 +1,23 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "python": {
+    "exclude": [
+      "tests/**",
+      "**/*.pyc",
+      "**/__pycache__/**",
+      "*.egg-info/**",
+      "**/tests/**",
+      "**/test/**",
+      "**/testing/**",
+      "**/examples/**",
+      "**/docs/**",
+      "**/doc/**",
+      "**/*.md",
+      "**/*.rst",
+      "**/*.txt",
+      "**/sample_data/**"
+    ]
+  },
   "functions": {
     "api/**/*.ts": {
       "maxDuration": 300

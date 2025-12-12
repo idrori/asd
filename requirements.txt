@@ -1,4 +1,4 @@
-matplotlib==3.8.2
-pandas==2.1.4
-seaborn==0.13.0
-numpy==1.26.2
+# Minimal versions to reduce bundle size (Vercel 250MB limit)
+matplotlib
+pandas
+numpy

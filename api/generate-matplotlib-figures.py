@@ -21,9 +21,16 @@ from io import StringIO
 import matplotlib
 matplotlib.use('Agg')  # Use non-interactive backend for serverless
 import matplotlib.pyplot as plt
-import seaborn as sns
 import pandas as pd
 import numpy as np
+
+# Try to import seaborn, fall back to matplotlib if not available
+try:
+    import seaborn as sns
+    HAS_SEABORN = True
+except ImportError:
+    HAS_SEABORN = False
+    sns = None
 
 
 class handler(BaseHTTPRequestHandler):
@@ -55,7 +62,10 @@ class handler(BaseHTTPRequestHandler):
             print(f"[Matplotlib] Columns: {list(df.columns)}")
 
             # Set up matplotlib style for publication-quality figures
-            plt.style.use('seaborn-v0_8-whitegrid')
+            try:
+                plt.style.use('seaborn-v0_8-whitegrid')
+            except:
+                plt.style.use('ggplot')  # Fallback style
             plt.rcParams.update({
                 'font.size': 11,
                 'axes.titlesize': 12,
