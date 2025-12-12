@@ -92,19 +92,39 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (!compileResponse.ok) {
       const errorText = await compileResponse.text();
-      console.error('[LaTeX Compiler] API Error:', compileResponse.status, errorText);
+      console.error('[LaTeX Compiler] API Error:', compileResponse.status, errorText.substring(0, 1000));
 
       // Try to parse as JSON for better error message
       let errorMessage = 'LaTeX compilation failed';
+      let logContent = errorText;
       try {
         const errorJson = JSON.parse(errorText);
+        // latex.ytotech.com returns { error: "...", logs: "..." }
         errorMessage = errorJson.error || errorJson.message || errorMessage;
+        logContent = errorJson.logs || errorJson.log || errorText;
+
+        // Extract useful info from logs
+        if (logContent) {
+          // Look for the actual LaTeX error in the logs
+          const errorMatch = logContent.match(/!(.*?)\n/);
+          if (errorMatch) {
+            errorMessage = `LaTeX error: ${errorMatch[1].trim()}`;
+          }
+          // Look for line number
+          const lineMatch = logContent.match(/l\.(\d+)/);
+          if (lineMatch) {
+            errorMessage += ` (around line ${lineMatch[1]})`;
+          }
+        }
       } catch {
         // If not JSON, check for common LaTeX errors
         if (errorText.includes('Undefined control sequence')) {
-          errorMessage = 'LaTeX error: Undefined control sequence. Check for typos in commands.';
+          const match = errorText.match(/Undefined control sequence[^\\]*\\(\w+)/);
+          errorMessage = `LaTeX error: Undefined control sequence${match ? ` (\\${match[1]})` : ''}`;
         } else if (errorText.includes('Missing')) {
           errorMessage = 'LaTeX error: Missing bracket or brace.';
+        } else if (errorText.includes('Package pgfplots Error')) {
+          errorMessage = 'LaTeX error: PGFPlots package error. Check axis definitions.';
         } else if (errorText.length < 500) {
           errorMessage = errorText;
         }
@@ -113,7 +133,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(200).json({
         success: false,
         error: errorMessage,
-        log: errorText.substring(0, 2000)
+        log: logContent.substring(0, 3000)
       });
     }
 
