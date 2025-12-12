@@ -168,8 +168,8 @@ const FinalizeStage: React.FC<FinalizeStageProps> = ({
   };
 
   const handleOpenViewer = () => {
-    if (viewerLink?.viewerUrl) {
-      openPaperViewer(viewerLink.viewerUrl);
+    if (viewerLink?.fullUrl) {
+      openPaperViewer(viewerLink.fullUrl);
     }
   };
 
