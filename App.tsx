@@ -108,6 +108,10 @@ Is this the correct data file for your analysis?`;
           onStageClick={moveToStage}
           onStageAction={handleStageAction}
           onNewCase={() => handleWorkflowAction('NEW_CASE')}
+          onNewInterview={() => {
+            // TODO: Implement new interview functionality
+            console.log('New Interview clicked');
+          }}
         />
       </div>
       <div className="flex-1 h-full">
