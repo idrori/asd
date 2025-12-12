@@ -14,7 +14,7 @@ import {
   writeOversightFile,
   writeFeedbackFile
 } from './fileService';
-import { saveDataFile, executePythonScript, listGeneratedFigures, readPdfFile, getDataFilePreview, getCloudDataFile, analyzeDataWithPython, CloudAnalysisResult } from './fileApi';
+import { saveDataFile, executePythonScript, listGeneratedFigures, readPdfFile, getDataFilePreview, getCloudDataFile, analyzeDataWithPython, CloudAnalysisResult, storeBibliography } from './fileApi';
 
 // API Configuration
 // Supports three modes (in priority order):
@@ -660,29 +660,52 @@ Be specific and detailed enough for replication.`,
       {
         name: 'References',
         key: 'references',
-        prompt: `Generate a References section with 15-20 properly formatted academic references.
+        prompt: `Generate a BibTeX bibliography with 15-20 properly formatted academic references.
 
 ⚠️ CRITICAL: ALL references must be REAL papers that exist in academic databases (Semantic Scholar, Google Scholar).
 - NO fabricated references
-- NO placeholder text like "[Reference to be completed]"
+- NO placeholder text
 - If you cannot recall the exact details of a paper, use a well-known foundational paper instead
 
-FORMAT: Simple list in APA 7th edition style (NO \\bibitem commands needed):
+FORMAT: BibTeX entries. Output ONLY valid BibTeX, no explanatory text.
 
-Davis, F. D. (1989). Perceived usefulness, perceived ease of use, and user acceptance of information technology. \\textit{MIS Quarterly}, \\textit{13}(3), 319-340.
+@article{davis1989perceived,
+  author = {Davis, Fred D.},
+  title = {Perceived usefulness, perceived ease of use, and user acceptance of information technology},
+  journal = {MIS Quarterly},
+  volume = {13},
+  number = {3},
+  pages = {319--340},
+  year = {1989}
+}
 
-DeLone, W. H., \\& McLean, E. R. (2003). The DeLone and McLean model of information systems success: A ten-year update. \\textit{Journal of Management Information Systems}, \\textit{19}(4), 9-30.
+@article{delone2003delone,
+  author = {DeLone, William H. and McLean, Ephraim R.},
+  title = {The {DeLone} and {McLean} model of information systems success: A ten-year update},
+  journal = {Journal of Management Information Systems},
+  volume = {19},
+  number = {4},
+  pages = {9--30},
+  year = {2003}
+}
 
-Venkatesh, V., Morris, M. G., Davis, G. B., \\& Davis, F. D. (2003). User acceptance of information technology: Toward a unified view. \\textit{MIS Quarterly}, \\textit{27}(3), 425-478.
+@article{venkatesh2003user,
+  author = {Venkatesh, Viswanath and Morris, Michael G. and Davis, Gordon B. and Davis, Fred D.},
+  title = {User acceptance of information technology: Toward a unified view},
+  journal = {MIS Quarterly},
+  volume = {27},
+  number = {3},
+  pages = {425--478},
+  year = {2003}
+}
 
-APA 7TH EDITION FORMAT RULES (MUST FOLLOW EXACTLY):
-1. Author format: LastName, F. M., \\& LastName, F. M. (use ampersand before last author)
-2. For 3+ authors: List all authors up to 20
-3. Year in parentheses after authors: (2020).
-4. Article title in sentence case (only first word and proper nouns capitalized)
-5. Journal name in italics: \\textit{MIS Quarterly}
-6. Volume number in italics, issue in parentheses: \\textit{44}(2), 523-548.
-7. Sort alphabetically by first author's last name
+BIBTEX FORMAT RULES:
+1. Use @article for journal papers, @inproceedings for conference papers, @book for books
+2. Citation key format: authorYYYYfirstword (e.g., davis1989perceived)
+3. Author format: LastName, FirstName and LastName, FirstName
+4. Use double dashes for page ranges: pages = {123--145}
+5. Protect proper nouns with braces: title = {The {DeLone} and {McLean} model}
+6. Include: author, title, journal/booktitle, year, volume, number, pages
 
 WELL-KNOWN IS PAPERS TO USE (verified to exist):
 - Davis (1989) - TAM, MIS Quarterly
@@ -690,16 +713,14 @@ WELL-KNOWN IS PAPERS TO USE (verified to exist):
 - DeLone & McLean (1992, 2003) - IS Success Model
 - Orlikowski (1992) - Structuration, Organization Science
 - Walsham (1995) - Interpretive IS research
-- Eisenhardt (1989) - Case study methods
-- Yin (2018) - Case study research design
+- Eisenhardt (1989) - Case study methods, Academy of Management Review
+- Yin (2018) - Case study research design (book)
 
 Requirements:
-1. Use STRICT APA 7th edition format throughout
-2. ONLY include papers you are confident exist in academic databases
-3. References should match the inline citations used in the paper (Author, Year)
-4. All journal/conference names in \\textit{}
-5. Use \\& for multiple authors, not "and"
-6. Sort references alphabetically by first author's last name`,
+1. Output ONLY BibTeX entries, no other text
+2. ONLY include papers you are confident exist
+3. Citation keys must match the \\cite{} commands used in the paper
+4. Sort entries alphabetically by citation key`,
         minWords: 300
       }
     );
@@ -749,30 +770,58 @@ Use objective, factual language throughout.`,
       {
         name: 'References',
         key: 'references',
-        prompt: `Generate a References section with 20-30 properly formatted academic references.
+        prompt: `Generate a BibTeX bibliography with 20-30 properly formatted academic references.
 
 ⚠️ CRITICAL: ALL references must be REAL papers that exist in academic databases (Semantic Scholar, Google Scholar).
 - NO fabricated references
-- NO placeholder text like "[Reference to be completed]"
+- NO placeholder text
 - If you cannot recall the exact details of a paper, use a well-known foundational paper instead
 
-FORMAT: Simple list in APA 7th edition style (NO \\bibitem commands needed):
+FORMAT: BibTeX entries. Output ONLY valid BibTeX, no explanatory text.
 
-Davis, F. D. (1989). Perceived usefulness, perceived ease of use, and user acceptance of information technology. \\textit{MIS Quarterly}, \\textit{13}(3), 319-340.
+@article{davis1989perceived,
+  author = {Davis, Fred D.},
+  title = {Perceived usefulness, perceived ease of use, and user acceptance of information technology},
+  journal = {MIS Quarterly},
+  volume = {13},
+  number = {3},
+  pages = {319--340},
+  year = {1989}
+}
 
-DeLone, W. H., \\& McLean, E. R. (2003). The DeLone and McLean model of information systems success: A ten-year update. \\textit{Journal of Management Information Systems}, \\textit{19}(4), 9-30.
+@article{delone2003delone,
+  author = {DeLone, William H. and McLean, Ephraim R.},
+  title = {The {DeLone} and {McLean} model of information systems success: A ten-year update},
+  journal = {Journal of Management Information Systems},
+  volume = {19},
+  number = {4},
+  pages = {9--30},
+  year = {2003}
+}
 
-Venkatesh, V., Morris, M. G., Davis, G. B., \\& Davis, F. D. (2003). User acceptance of information technology: Toward a unified view. \\textit{MIS Quarterly}, \\textit{27}(3), 425-478.
+@inproceedings{smith2020icis,
+  author = {Smith, John and Jones, Mary},
+  title = {Example conference paper title},
+  booktitle = {Proceedings of the International Conference on Information Systems (ICIS)},
+  year = {2020},
+  pages = {1--15}
+}
 
-APA 7TH EDITION FORMAT RULES (MUST FOLLOW EXACTLY):
-1. Author format: LastName, F. M., \\& LastName, F. M. (use ampersand before last author)
-2. For 3+ authors: List all authors up to 20
-3. Year in parentheses after authors: (2020).
-4. Article title in sentence case (only first word and proper nouns capitalized)
-5. Journal name in italics: \\textit{MIS Quarterly}
-6. Volume number in italics, issue in parentheses: \\textit{44}(2), 523-548.
-7. Sort alphabetically by first author's last name
-8. Conference papers: Author, A. A. (Year). Title. In \\textit{Proceedings of Conference Name} (pp. xx-xx).
+@book{yin2018case,
+  author = {Yin, Robert K.},
+  title = {Case Study Research and Applications: Design and Methods},
+  publisher = {Sage Publications},
+  year = {2018},
+  edition = {6th}
+}
+
+BIBTEX FORMAT RULES:
+1. Use @article for journals, @inproceedings for conferences, @book for books
+2. Citation key format: authorYYYYfirstword (e.g., davis1989perceived)
+3. Author format: LastName, FirstName and LastName, FirstName
+4. Use double dashes for page ranges: pages = {123--145}
+5. Protect proper nouns with braces: title = {The {DeLone} and {McLean} model}
+6. Include: author, title, journal/booktitle, year, volume, number, pages
 
 WELL-KNOWN IS PAPERS TO USE (verified to exist):
 - Davis (1989) - TAM, MIS Quarterly
@@ -780,19 +829,17 @@ WELL-KNOWN IS PAPERS TO USE (verified to exist):
 - DeLone & McLean (1992, 2003) - IS Success Model
 - Orlikowski (1992) - Structuration, Organization Science
 - Walsham (1995) - Interpretive IS research
-- Eisenhardt (1989) - Case study methods
-- Yin (2018) - Case study research design
-- Rogers (2003) - Diffusion of Innovations
+- Eisenhardt (1989) - Case study methods, Academy of Management Review
+- Yin (2018) - Case study research design (book)
+- Rogers (2003) - Diffusion of Innovations (book)
 - Straub et al. (2004) - Validation guidelines, MIS Quarterly
 
 Requirements:
-1. Use STRICT APA 7th edition format throughout
-2. ONLY include papers you are confident exist in academic databases
-3. Include mix of: journal articles, conference papers (ICIS, ECIS, AMCIS), books
-4. References should match the inline citations used in the paper (Author, Year)
-5. All journal/conference names in \\textit{}
-6. Use \\& for multiple authors, not "and"
-7. Sort references alphabetically by first author's last name`,
+1. Output ONLY BibTeX entries, no other text
+2. ONLY include papers you are confident exist
+3. Include mix of: @article, @inproceedings (ICIS, ECIS, AMCIS), @book
+4. Citation keys must match the \\cite{} commands used in the paper
+5. Sort entries alphabetically by citation key`,
         minWords: 500
       }
     );
@@ -1193,6 +1240,54 @@ function cleanReferencesSection(content: string): string {
 }
 
 /**
+ * Clean up BibTeX content that may have been wrapped in markdown code fences
+ * or contain extraneous text from Gemini.
+ */
+function cleanBibTeXContent(content: string): string {
+  let cleaned = content;
+
+  // Remove markdown code fences (```bibtex, ```bib, ```)
+  cleaned = cleaned.replace(/^```(?:bibtex|bib|latex|tex)?\s*\n?/i, '');
+  cleaned = cleaned.replace(/\n?```\s*$/i, '');
+
+  // Remove any explanatory text before the first @entry
+  const firstEntry = cleaned.search(/@\w+\s*\{/);
+  if (firstEntry > 0) {
+    cleaned = cleaned.substring(firstEntry);
+  }
+
+  // Remove any trailing explanatory text after the last closing brace
+  // Find the last } that closes a BibTeX entry
+  let braceCount = 0;
+  let lastValidPos = cleaned.length;
+  for (let i = 0; i < cleaned.length; i++) {
+    if (cleaned[i] === '{') braceCount++;
+    if (cleaned[i] === '}') {
+      braceCount--;
+      if (braceCount === 0) {
+        lastValidPos = i + 1;
+      }
+    }
+  }
+  if (lastValidPos < cleaned.length) {
+    cleaned = cleaned.substring(0, lastValidPos);
+  }
+
+  // Ensure proper formatting
+  cleaned = cleaned.trim();
+
+  // Add header comment
+  const header = `% Bibliography generated by ICIScopilot
+% ${new Date().toISOString()}
+
+`;
+
+  console.log(`[BibTeX] Cleaned content: ${cleaned.length} chars, ${(cleaned.match(/@\w+\{/g) || []).length} entries`);
+
+  return header + cleaned;
+}
+
+/**
  * Fix common LaTeX escaping issues in AI-generated content.
  * Escapes special characters that appear in prose text but preserves LaTeX commands.
  */
@@ -1323,15 +1418,11 @@ The data, figures, and visualizations in this paper were generated by AI and do 
       } else if (key === 'abstract') {
         paper += `\\begin{abstract}\n${fixedContent}\n\\end{abstract}\n\n`;
       } else if (key === 'references') {
-        // Clean up references section and add it (don't escape - may break bibliography formatting)
-        const cleanedRefs = cleanReferencesSection(sections[key]);
-        // Add References section header for new APA format (simple list without thebibliography)
-        if (!cleanedRefs.includes('\\begin{thebibliography}')) {
-          paper += `\\section*{References}\n\n${cleanedRefs}\n`;
-        } else {
-          // Old format with thebibliography - no section header needed
-          paper += `\n${cleanedRefs}\n`;
-        }
+        // Store the bibliography as a separate .bib file and use \bibliography command
+        const bibContent = cleanBibTeXContent(sections[key]);
+        storeBibliography('references.bib', bibContent);
+        // Add bibliography commands to tex (natbib style)
+        paper += `\\bibliographystyle{apalike}\n\\bibliography{references}\n`;
       } else if (key === 'results' && figures.length > 0) {
         // Insert figures at the beginning of Results section
         paper += `\\section{${sectionTitles[key]}}\n\n`;

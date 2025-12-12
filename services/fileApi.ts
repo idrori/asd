@@ -325,10 +325,14 @@ export async function compileLaTeX(
   const pngCount = figures?.length || 0;
   const contentKB = Math.round(content.length / 1024);
 
+  // Get bibliography if available
+  const bibliography = getBibliographyForCompilation();
+  const hasBib = !!bibliography;
+
   // Try Vercel cloud compilation first
   if (VERCEL_API_URL) {
     try {
-      console.log(`[LaTeX] Compiling via Vercel cloud... (${contentKB} KB, ${tikzCount} TikZ, ${pngCount} PNG figures)`);
+      console.log(`[LaTeX] Compiling via Vercel cloud... (${contentKB} KB, ${tikzCount} TikZ, ${pngCount} PNG figures${hasBib ? ', with .bib' : ''})`);
 
       // Use AbortController for 5 minute timeout on client side
       const controller = new AbortController();
@@ -337,13 +341,19 @@ export async function compileLaTeX(
         controller.abort();
       }, 300000); // 5 minutes
 
+      // Build request body
+      const requestBody: any = { filename, content, figures };
+      if (bibliography) {
+        requestBody.bibliography = bibliography;
+      }
+
       let response: Response;
       try {
         response = await fetch(`${VERCEL_API_URL}/api/compile-latex`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           signal: controller.signal,
-          body: JSON.stringify({ filename, content, figures })
+          body: JSON.stringify(requestBody)
         });
         clearTimeout(timeoutId);
       } catch (fetchError: any) {
@@ -1379,4 +1389,46 @@ export function getPngFiguresForCompilation(): FigureResource[] {
  */
 export function clearPngFiguresForCompilation(): void {
   pngFiguresForCompilation = [];
+}
+
+// ============================================================================
+// Bibliography Storage (for BibTeX compilation)
+// ============================================================================
+
+interface BibliographyResource {
+  filename: string;
+  content: string;
+}
+
+let currentBibliography: BibliographyResource | null = null;
+
+/**
+ * Store bibliography content for LaTeX compilation
+ * @param filename - The .bib filename (e.g., "references.bib")
+ * @param content - The BibTeX content
+ */
+export function storeBibliography(filename: string, content: string): void {
+  currentBibliography = { filename, content };
+  console.log(`[Bibliography] Stored ${filename} (${content.length} chars, ${(content.match(/@\w+\{/g) || []).length} entries)`);
+}
+
+/**
+ * Get stored bibliography for LaTeX compilation
+ */
+export function getBibliographyForCompilation(): BibliographyResource | null {
+  return currentBibliography;
+}
+
+/**
+ * Get bibliography content for download/save
+ */
+export function getBibliographyContent(): { filename: string; content: string } | null {
+  return currentBibliography;
+}
+
+/**
+ * Clear stored bibliography (call when starting new paper)
+ */
+export function clearBibliography(): void {
+  currentBibliography = null;
 }
