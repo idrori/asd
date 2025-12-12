@@ -556,8 +556,8 @@ ${'='.repeat(50)}
     async function connectToGemini(apiKey) {
       updateStatus('idle', 'Connecting...', 'Establishing connection to AI');
 
-      const model = 'gemini-2.0-flash-live-001';
-      const wsUrl = `wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.BidiGenerateContent?key=${apiKey}`;
+      const model = 'gemini-2.0-flash-exp';
+      const wsUrl = `wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent?key=${apiKey}`;
 
       ws = new WebSocket(wsUrl);
 
