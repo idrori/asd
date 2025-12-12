@@ -540,8 +540,8 @@
           <button class="btn btn-secondary" onclick="downloadTranscript()">
             Download Transcript Again
           </button>
-          <button class="btn btn-primary" onclick="window.close()">
-            Close Window
+          <button class="btn btn-primary" onclick="goToMainApp()">
+            Return to ICIScopilot
           </button>
         </div>
       </div>
@@ -979,6 +979,16 @@ ${'='.repeat(50)}
       if (audioElement) {
         audioElement.srcObject = null;
         audioElement = null;
+      }
+    }
+
+    // Navigate to main app
+    function goToMainApp() {
+      // Determine the correct URL based on where we're hosted
+      if (window.location.hostname.includes('github.io')) {
+        window.location.href = '/asd/';
+      } else {
+        window.location.href = '/';
       }
     }
 
