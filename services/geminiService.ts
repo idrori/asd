@@ -1761,18 +1761,61 @@ export async function generateVisualizations(
   onProgress?: (message: string) => void,
   dataSummary?: string  // Pre-analyzed data summary with actual column names
 ): Promise<VisualizationResult> {
-  // STEP 1: Try cloud Python analysis for chart data → PNG generation
+  // STEP 1: Try matplotlib/seaborn Python serverless function (preferred - like Claude Code locally)
   const cloudData = getCloudDataFile();
   if (cloudData?.content) {
-    console.log('[Visualizations] Trying cloud Python analysis for chart data...');
-    onProgress?.('Analyzing data for visualizations...');
+    console.log('[Visualizations] Trying matplotlib/seaborn Python for figure generation...');
+    onProgress?.('Generating publication-quality figures with matplotlib...');
+
+    try {
+      // Call matplotlib serverless function directly with CSV content
+      const { generateMatplotlibFigures, uploadMatplotlibFiguresToBlob } = await import('./fileApi');
+      const matplotlibResult = await generateMatplotlibFigures(cloudData.content);
+
+      if (matplotlibResult.success && matplotlibResult.figures && matplotlibResult.figures.length > 0) {
+        console.log(`[Visualizations] Matplotlib generated ${matplotlibResult.count} figures`);
+        onProgress?.(`Uploading ${matplotlibResult.count} matplotlib figures to storage...`);
+
+        // Upload matplotlib-generated figures to Vercel Blob
+        const uploadResult = await uploadMatplotlibFiguresToBlob(matplotlibResult.figures);
+
+        if (uploadResult.success && uploadResult.figures && uploadResult.figures.length > 0) {
+          // Convert to GeneratedFigure format for LaTeX
+          const pngFigures: GeneratedFigure[] = uploadResult.figures.map((fig) => ({
+            filename: fig.filename,
+            description: fig.description,
+            latexRef: fig.blobUrl  // Use blob URL for includegraphics
+          }));
+
+          onProgress?.(`Generated ${pngFigures.length} publication-quality figures with matplotlib/seaborn`);
+          console.log(`[Visualizations] Matplotlib figures stored in Blob, session: ${uploadResult.sessionId}`);
+
+          return {
+            figures: pngFigures,
+            usedSyntheticData: false,
+            dataFileFound: true,
+            dataSummary: dataSummary
+          };
+        } else {
+          console.warn('[Visualizations] Blob upload failed:', uploadResult.error);
+        }
+      } else {
+        console.warn('[Visualizations] Matplotlib generation failed:', matplotlibResult.error);
+      }
+    } catch (error) {
+      console.warn('[Visualizations] Matplotlib generation failed, trying QuickChart fallback:', error);
+    }
+
+    // STEP 2: Fallback to QuickChart.io if matplotlib fails
+    console.log('[Visualizations] Falling back to QuickChart.io...');
+    onProgress?.('Trying QuickChart.io fallback...');
 
     try {
       const cloudResult = await analyzeDataWithPython(cloudData.content, 'full');
 
       if (cloudResult.success && cloudResult.chart_data && cloudResult.chart_data.length > 0) {
         console.log(`[Visualizations] Cloud analysis returned ${cloudResult.chart_data.length} chart datasets`);
-        onProgress?.(`Generating ${cloudResult.chart_data.length} PNG figures...`);
+        onProgress?.(`Generating ${cloudResult.chart_data.length} PNG figures via QuickChart...`);
 
         // Generate PNG figures from chart data (stored in Vercel Blob)
         const { generatePngFigures } = await import('./fileApi');
@@ -1786,8 +1829,8 @@ export async function generateVisualizations(
             latexRef: fig.blobUrl  // Use blob URL for includegraphics
           }));
 
-          onProgress?.(`Generated ${pngFigures.length} PNG figures from cloud data`);
-          console.log(`[Visualizations] PNG figures stored in Blob, session: ${pngResult.sessionId}`);
+          onProgress?.(`Generated ${pngFigures.length} PNG figures from QuickChart`);
+          console.log(`[Visualizations] QuickChart figures stored in Blob, session: ${pngResult.sessionId}`);
 
           return {
             figures: pngFigures,
@@ -1796,7 +1839,7 @@ export async function generateVisualizations(
             dataSummary: cloudResult.text_summary || dataSummary
           };
         } else {
-          console.warn('[Visualizations] PNG generation failed:', pngResult.error);
+          console.warn('[Visualizations] QuickChart PNG generation failed:', pngResult.error);
           // Fall back to TikZ if PNG fails
           onProgress?.('PNG generation failed, trying TikZ fallback...');
           const tikzFigures = await generateTikZFromChartData(cloudResult, interviewTranscript, researchContext);
@@ -1813,7 +1856,7 @@ export async function generateVisualizations(
         }
       }
     } catch (error) {
-      console.warn('[Visualizations] Cloud chart generation failed, falling back to local Python:', error);
+      console.warn('[Visualizations] QuickChart fallback failed:', error);
     }
   }
 

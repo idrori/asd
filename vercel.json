@@ -3,6 +3,13 @@
   "functions": {
     "api/**/*.ts": {
       "maxDuration": 300
+    },
+    "api/generate-matplotlib-figures.py": {
+      "maxDuration": 60,
+      "memory": 1024
+    },
+    "api/analyze-data.py": {
+      "maxDuration": 30
     }
   },
   "rewrites": [
