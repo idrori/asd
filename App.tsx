@@ -127,9 +127,10 @@ Is this the correct data file for your analysis?`;
           onNewInterview={() => {
             // Use BASE_URL to handle both Vercel (/) and GitHub Pages (/asd/)
             const baseUrl = import.meta.env.BASE_URL || '/';
-            window.open(`${baseUrl}interview.html`, '_blank', 'noopener,noreferrer');
+            // Pass mode to interview page (only register participants in research mode)
+            window.open(`${baseUrl}interview.html?mode=${paperMode}`, '_blank', 'noopener,noreferrer');
           }}
-          onResearchAdmin={() => setCurrentView(currentView === 'admin' ? 'main' : 'admin')}
+          onResearchAdmin={paperMode === 'research' ? () => setCurrentView(currentView === 'admin' ? 'main' : 'admin') : undefined}
           paperMode={paperMode}
           onPaperModeChange={handlePaperModeChange}
         />

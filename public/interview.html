@@ -608,6 +608,17 @@
     let currentAIText = '';
     let currentUserText = '';
 
+    // Get mode from URL query parameter (default to 'draft')
+    function getInterviewMode() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('mode') || 'draft';
+    }
+
+    // Check if we're in research mode (only register participants in research mode)
+    function isResearchMode() {
+      return getInterviewMode() === 'research';
+    }
+
     // Get API base URL
     function getApiUrl() {
       if (window.location.hostname.includes('github.io')) {
@@ -767,8 +778,12 @@ ${'='.repeat(50)}
       document.getElementById('start-btn').textContent = 'Connecting...';
 
       try {
-        // Register participant in research system
-        await registerParticipant(userEmail);
+        // Register participant in research system (only in research mode)
+        if (isResearchMode()) {
+          await registerParticipant(userEmail);
+        } else {
+          console.log('[Interview] Draft mode - skipping participant registration');
+        }
 
         // Step 1: Get ephemeral client secret from our server
         const apiUrl = getApiUrl();
@@ -1002,8 +1017,12 @@ References: ${userReferences || 'None provided'}
 ${'='.repeat(50)}
 ${transcript}`;
 
-      // Update participant status and save transcript to research system
-      await completeParticipantInterview(userEmail, transcriptText);
+      // Update participant status and save transcript to research system (only in research mode)
+      if (isResearchMode()) {
+        await completeParticipantInterview(userEmail, transcriptText);
+      } else {
+        console.log('[Interview] Draft mode - skipping participant status update');
+      }
 
       // Download transcript locally
       downloadTranscript();
