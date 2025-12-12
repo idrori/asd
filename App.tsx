@@ -119,7 +119,9 @@ Is this the correct data file for your analysis?`;
           onStageAction={handleStageAction}
           onNewCase={() => handleWorkflowAction('NEW_CASE')}
           onNewInterview={() => {
-            window.open('/interview.html', '_blank', 'noopener,noreferrer');
+            // Use BASE_URL to handle both Vercel (/) and GitHub Pages (/asd/)
+            const baseUrl = import.meta.env.BASE_URL || '/';
+            window.open(`${baseUrl}interview.html`, '_blank', 'noopener,noreferrer');
           }}
           paperMode={paperMode}
           onPaperModeChange={handlePaperModeChange}
