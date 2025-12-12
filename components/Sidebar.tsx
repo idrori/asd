@@ -204,18 +204,18 @@ const Sidebar: React.FC<SidebarProps> = ({
         </div>
       )}
 
-      {/* New Case Button - Above Stage List */}
+      {/* New Project Button - Above Stage List */}
       {onNewCase && (
         <div className="px-4 pt-4 pb-2">
           <button
             onClick={() => {
-              if (window.confirm('Start a new case? This will clear all current progress and generated files.')) {
+              if (window.confirm('Start a new project? This will clear all current progress and generated files.')) {
                 onNewCase();
               }
             }}
             className="w-full px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded transition-colors"
           >
-            + New Case
+            + New Project
           </button>
         </div>
       )}

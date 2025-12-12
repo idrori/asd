@@ -54,15 +54,15 @@ const SetupStage: React.FC<SetupStageProps> = ({
         Setup & File Selection
       </h2>
 
-      {/* New Case Banner - Shows when there's previous case data */}
+      {/* New Project Banner - Shows when there's previous project data */}
       {hasExistingCase && (
         <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Archive className="text-blue-600" size={24} />
               <div>
-                <p className="font-medium text-blue-800">Previous case data detected</p>
-                <p className="text-sm text-blue-600">Start a new case to backup and clear previous files</p>
+                <p className="font-medium text-blue-800">Previous project data detected</p>
+                <p className="text-sm text-blue-600">Start a new project to backup and clear previous files</p>
               </div>
             </div>
             <button
@@ -78,7 +78,7 @@ const SetupStage: React.FC<SetupStageProps> = ({
               ) : (
                 <>
                   <FolderPlus size={18} />
-                  New Case
+                  New Project
                 </>
               )}
             </button>
