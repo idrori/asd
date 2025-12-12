@@ -12,6 +12,10 @@
     {
       "source": "/viewer/:token",
       "destination": "/viewer.html"
+    },
+    {
+      "source": "/interview",
+      "destination": "/interview.html"
     }
   ],
   "headers": [

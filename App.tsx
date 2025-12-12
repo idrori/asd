@@ -119,8 +119,7 @@ Is this the correct data file for your analysis?`;
           onStageAction={handleStageAction}
           onNewCase={() => handleWorkflowAction('NEW_CASE')}
           onNewInterview={() => {
-            // TODO: Implement new interview functionality
-            console.log('New Interview clicked');
+            window.open('/interview.html', '_blank', 'noopener,noreferrer');
           }}
           paperMode={paperMode}
           onPaperModeChange={handlePaperModeChange}
