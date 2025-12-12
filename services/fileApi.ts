@@ -12,6 +12,20 @@
 
 const API_BASE = 'http://localhost:3001/api';
 
+// SECURITY: Internal API secret for authenticated requests
+const INTERNAL_API_SECRET = import.meta.env.VITE_INTERNAL_API_SECRET || '';
+
+// Helper to get auth headers for API requests
+function getAuthHeaders(): Record<string, string> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json'
+  };
+  if (INTERNAL_API_SECRET) {
+    headers['X-Internal-Secret'] = INTERNAL_API_SECRET;
+  }
+  return headers;
+}
+
 interface SaveFileResult {
   success: boolean;
   path?: string;
@@ -351,7 +365,7 @@ export async function compileLaTeX(
       try {
         response = await fetch(`${VERCEL_API_URL}/api/compile-latex`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: getAuthHeaders(),
           signal: controller.signal,
           body: JSON.stringify(requestBody)
         });
@@ -501,7 +515,7 @@ export async function createViewerLink(texFilename: string): Promise<ViewerLinkR
       console.log('[Viewer] Creating viewer link via Vercel cloud...');
       const response = await fetch(`${VERCEL_API_URL}/api/create-viewer-link`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify({
           filename: lastCompiledPdf.filename,
           pdfBase64: lastCompiledPdf.base64
@@ -670,7 +684,7 @@ export async function analyzeDataWithPython(csvContent: string, analysisType: st
 
     const response = await fetch(`${VERCEL_API_URL}/api/analyze-data`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders(),
       body: JSON.stringify({
         csvContent,
         analysisType
@@ -871,7 +885,7 @@ export async function uploadDataFileToCloud(file: File): Promise<{
 
     const response = await fetch(`${VERCEL_API_URL}/api/upload-data`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders(),
       body: JSON.stringify({
         filename: file.name,
         content: base64,
@@ -1027,7 +1041,7 @@ export async function generateQuickChartFigures(
 
     const response = await fetch(`${VERCEL_API_URL}/api/quickchart`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders(),
       body: JSON.stringify({ chartData })
     });
 
@@ -1092,7 +1106,7 @@ export async function generateMatplotlibFigures(csvContent: string): Promise<Mat
 
     const response = await fetch(`${VERCEL_API_URL}/api/generate-matplotlib-figures`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders(),
       body: JSON.stringify({ csvContent })
     });
 
@@ -1141,7 +1155,7 @@ export async function executeAIGeneratedFigureCode(
 
     const response = await fetch(`${VERCEL_API_URL}/api/execute-figure-code`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders(),
       body: JSON.stringify({
         code: pythonCode,
         csvContent
@@ -1199,7 +1213,7 @@ export async function uploadMatplotlibFiguresToBlob(
 
     const response = await fetch(`${VERCEL_API_URL}/api/upload-figures-to-blob`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders(),
       body: JSON.stringify({
         figures: figures.map(f => ({
           filename: f.filename,
@@ -1270,7 +1284,7 @@ export async function generatePngFigures(
 
     const response = await fetch(`${VERCEL_API_URL}/api/generate-figures`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders(),
       body: JSON.stringify({
         chartData,
         sessionId

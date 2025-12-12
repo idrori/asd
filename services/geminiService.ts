@@ -25,6 +25,20 @@ import { saveDataFile, executePythonScript, listGeneratedFigures, readPdfFile, g
 const API_BASE_URL = import.meta.env.VITE_API_URL || ''; // e.g., 'https://your-app.vercel.app'
 const LOCAL_BACKEND_URL = 'http://localhost:3001';
 
+// SECURITY: Internal API secret for authenticated requests
+const INTERNAL_API_SECRET = import.meta.env.VITE_INTERNAL_API_SECRET || '';
+
+// Helper to get auth headers for API requests
+export function getAuthHeaders(): Record<string, string> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json'
+  };
+  if (INTERNAL_API_SECRET) {
+    headers['X-Internal-Secret'] = INTERNAL_API_SECRET;
+  }
+  return headers;
+}
+
 // Gemini configuration
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || '';
 
@@ -228,7 +242,7 @@ async function callGeminiViaProxy(
 
   const response = await fetch(proxyUrl, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getAuthHeaders(),
     body: JSON.stringify(requestBody),
     signal: controller.signal
   });
@@ -2412,9 +2426,7 @@ async function callOpenAIViaProxy<T>(prompt: string, baseUrl: string): Promise<T
   console.log(`[OpenAI] Using model: ${getOpenAIModel()}`);
   const response = await fetch(proxyUrl, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
+    headers: getAuthHeaders(),
     body: JSON.stringify({
       model: getOpenAIModel(),
       messages: [

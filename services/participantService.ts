@@ -20,6 +20,20 @@ function getApiUrl(): string {
   return '';
 }
 
+// SECURITY: Internal API secret for authenticated requests
+const INTERNAL_API_SECRET = import.meta.env.VITE_INTERNAL_API_SECRET || '';
+
+// Helper to get auth headers for API requests
+function getAuthHeaders(): Record<string, string> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json'
+  };
+  if (INTERNAL_API_SECRET) {
+    headers['X-Internal-Secret'] = INTERNAL_API_SECRET;
+  }
+  return headers;
+}
+
 /**
  * Fetch all participants
  */
@@ -37,7 +51,7 @@ export async function getParticipants(filters?: {
 
   const url = `${apiUrl}/api/participants${params.toString() ? `?${params}` : ''}`;
 
-  const response = await fetch(url);
+  const response = await fetch(url, { headers: getAuthHeaders() });
   const data = await response.json();
 
   if (!data.success) {
@@ -66,7 +80,7 @@ export async function createParticipant(
 
   const response = await fetch(`${apiUrl}/api/participants`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getAuthHeaders(),
     body: JSON.stringify({
       ...request,
       auto_assign_group: autoAssignGroup
@@ -92,7 +106,7 @@ export async function updateParticipant(
 
   const response = await fetch(`${apiUrl}/api/participants`, {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getAuthHeaders(),
     body: JSON.stringify(request)
   });
 
@@ -133,7 +147,7 @@ export async function deleteParticipant(email: string): Promise<void> {
 
   const response = await fetch(`${apiUrl}/api/participants`, {
     method: 'DELETE',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getAuthHeaders(),
     body: JSON.stringify({ email })
   });
 
@@ -150,7 +164,7 @@ export async function deleteParticipant(email: string): Promise<void> {
 export async function getResearchStats(): Promise<ResearchStats> {
   const apiUrl = getApiUrl();
 
-  const response = await fetch(`${apiUrl}/api/research-stats`);
+  const response = await fetch(`${apiUrl}/api/research-stats`, { headers: getAuthHeaders() });
   const data = await response.json();
 
   if (!data.success) {
