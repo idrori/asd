@@ -46,8 +46,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       });
     }
 
-    // Find the blob by prefix - PDFs are stored at papers/{token}.pdf
-    const { blobs } = await list({ prefix: `papers/${token}` });
+    // Find the blob by prefix
+    const { blobs } = await list({ prefix: `viewer/${token}` });
 
     if (blobs.length === 0) {
       return res.status(404).json({
