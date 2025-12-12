@@ -1,8 +1,14 @@
 /**
  * Vercel Serverless Function: OpenAI Realtime API Ephemeral Token
  *
- * Creates an ephemeral token for secure client-side WebSocket connections
+ * Creates an ephemeral client secret for secure client-side WebRTC connections
  * to OpenAI's Realtime API (gpt-realtime model)
+ *
+ * Best Practices from OpenAI docs:
+ * - Use WebRTC for browser connections (lower latency, better performance)
+ * - Use gpt-realtime model (GA version)
+ * - Use marin or cedar voices for best quality
+ * - Configure server_vad for turn detection
  *
  * Endpoint: POST /api/openai-realtime-token
  */
@@ -109,22 +115,29 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         },
         session: {
           type: 'realtime',
-          model: 'gpt-4o-realtime-preview-2024-12-17',
+          model: 'gpt-realtime',  // GA model (recommended)
           instructions: INTERVIEW_INSTRUCTIONS,
+          // Lock output to audio only
+          output_modalities: ['audio'],
           audio: {
-            voice: 'alloy',
-            input_format: 'pcm16',
-            output_format: 'pcm16'
-          },
-          input_audio_transcription: {
-            model: 'whisper-1'
-          },
-          turn_detection: {
-            type: 'server_vad',
-            threshold: 0.5,
-            prefix_padding_ms: 300,
-            silence_duration_ms: 500,
-            create_response: true
+            input: {
+              format: {
+                type: 'audio/pcm',
+                rate: 24000
+              },
+              turn_detection: {
+                type: 'semantic_vad'  // semantic_vad works better for natural conversation
+              },
+              transcription: {
+                model: 'gpt-4o-transcribe'  // Better transcription model
+              }
+            },
+            output: {
+              format: {
+                type: 'audio/pcm'
+              },
+              voice: 'marin'  // New high-quality voice (marin or cedar recommended)
+            }
           }
         }
       }),
