@@ -21,8 +21,11 @@
     .mt-1 { margin-top: 0.25rem; }
     .mt-3 { margin-top: 0.75rem; }
     .mt-4 { margin-top: 1rem; }
-    .w-full { width: 100%; }
     .max-h-96 { max-height: 24rem; }
+    .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+    .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+    .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .px-4 { padding-left: 1rem; padding-right: 1rem; }
     .overflow-y-auto { overflow-y: auto; }
 
     /* Flexbox */
@@ -166,7 +169,7 @@
         id="generate-btn"
         onclick="generateInterview()"
         disabled
-        class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+        class="bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-colors"
       >
         Generate Open Research Interview
       </button>
@@ -194,7 +197,7 @@
       <button
         id="download-btn"
         onclick="downloadInterview()"
-        class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
+        class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
@@ -205,7 +208,7 @@
       <!-- Generate Another -->
       <button
         onclick="resetForm()"
-        class="w-full mt-3 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium py-2 px-6 rounded-lg transition-colors"
+        class="mt-3 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium py-2 px-6 rounded-lg transition-colors"
       >
         Generate Another
       </button>
