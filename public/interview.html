@@ -676,8 +676,22 @@ ${'='.repeat(50)}
 
         ws.onclose = (event) => {
           console.log('[Interview] WebSocket closed:', event.code, event.reason);
-          if (isRecording) {
-            endInterview();
+          // Only end interview if we were actually in an active interview
+          // Code 1000 = normal close, 1006 = abnormal (connection lost)
+          if (isRecording && interviewStartTime) {
+            // If interview just started (< 5 seconds), show error instead of ending
+            const elapsed = Date.now() - interviewStartTime;
+            if (elapsed < 5000) {
+              console.error('[Interview] Connection closed immediately after start');
+              showError(`Connection closed: ${event.reason || 'Unknown reason'} (code: ${event.code})`);
+              cleanup();
+              document.getElementById('interview-screen').classList.add('hidden');
+              document.getElementById('welcome-screen').classList.remove('hidden');
+              document.getElementById('start-btn').disabled = false;
+              document.getElementById('start-btn').textContent = 'Start Voice Interview';
+            } else {
+              endInterview();
+            }
           }
         };
 
@@ -752,9 +766,8 @@ ${'='.repeat(50)}
 
         case 'error':
           console.error('[Interview] Server error:', event.error);
-          if (event.error?.message) {
-            showError(`Error: ${event.error.message}`);
-          }
+          const errorMsg = event.error?.message || event.error?.code || JSON.stringify(event.error);
+          showError(`Error: ${errorMsg}`);
           break;
 
         default:
