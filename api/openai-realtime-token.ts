@@ -134,7 +134,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             },
             output: {
               format: {
-                type: 'audio/pcm'
+                type: 'audio/pcm',
+                rate: 24000  // Required: output sample rate
               },
               voice: 'marin'  // New high-quality voice (marin or cedar recommended)
             }
