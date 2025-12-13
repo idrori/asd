@@ -5,6 +5,31 @@ interface LoginScreenProps {
   onLogin: () => void;
 }
 
+// Session token includes timestamp to prevent simple replay
+function generateSessionToken(): string {
+  const timestamp = Date.now();
+  const randomArray = new Uint8Array(16);
+  crypto.getRandomValues(randomArray);
+  const randomHex = Array.from(randomArray).map(b => b.toString(16).padStart(2, '0')).join('');
+  return `${timestamp}_${randomHex}`;
+}
+
+// Verify session token is recent (within 24 hours)
+export function isValidSession(): boolean {
+  const token = sessionStorage.getItem('icis_session_token');
+  if (!token) return false;
+
+  const parts = token.split('_');
+  if (parts.length !== 2) return false;
+
+  const timestamp = parseInt(parts[0], 10);
+  if (isNaN(timestamp)) return false;
+
+  const age = Date.now() - timestamp;
+  const maxAge = 24 * 60 * 60 * 1000; // 24 hours
+  return age < maxAge;
+}
+
 const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -16,10 +41,15 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
     setError('');
     setIsLoading(true);
 
-    // Simple authentication check
+    // Credentials configurable via env vars, with defaults for development
+    const expectedUser = import.meta.env.VITE_AUTH_USERNAME || 'asd';
+    const expectedPass = import.meta.env.VITE_AUTH_PASSWORD || 'tennessee';
+
     setTimeout(() => {
-      if (username === 'asd' && password === 'tennessee') {
-        // Store auth state in sessionStorage (cleared when browser closes)
+      if (username === expectedUser && password === expectedPass) {
+        // Generate session token with timestamp for expiry validation
+        const token = generateSessionToken();
+        sessionStorage.setItem('icis_session_token', token);
         sessionStorage.setItem('icis_authenticated', 'true');
         onLogin();
       } else {

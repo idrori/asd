@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import LoginScreen from './components/LoginScreen';
+import LoginScreen, { isValidSession } from './components/LoginScreen';
 
 const AuthWrapper: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   useEffect(() => {
-    // Check if user is already authenticated (session storage)
+    // Check if user has valid session (not just flag, but also token expiry)
+    const hasValidSession = isValidSession();
     const authStatus = sessionStorage.getItem('icis_authenticated');
-    setIsAuthenticated(authStatus === 'true');
+    setIsAuthenticated(authStatus === 'true' && hasValidSession);
   }, []);
 
   const handleLogin = () => {
