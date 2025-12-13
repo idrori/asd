@@ -977,8 +977,10 @@ CITATION FORMAT (CRITICAL - Inline APA 7th Edition Style):
 - Multiple citations: Separate with semicolons, alphabetical order: "(Davis, 1989; Venkatesh et al., 2003)"
 - Use \\& for ampersand in parenthetical citations, "and" in narrative citations
 - Do NOT use \\cite{} or \\citep{} commands - write the author names and year directly
-- Do NOT include a bibliography or reference list at the end of this section
-- References will be collected at the end of the paper`;
+- NEVER include a "References:" section, bibliography, or reference list at the end of your content
+- NEVER list out the references you cited - just use inline citations
+- Your output should contain ONLY the section content, ending with the last paragraph of prose
+- References are generated separately and will appear at the end of the full paper`;
 
   const content = await callGemini(prompt,
     "You are an expert academic writer specializing in Information Systems research. Write in formal academic style following top-tier IS journal standards."
@@ -3318,6 +3320,7 @@ CRITICAL OUTPUT FORMAT:
 - END with the complete Results section (do NOT add \\end{document} yet)
 - The Results section MUST include both figures AND explanatory text
 - Do NOT include any code blocks, markdown, or explanations
+- Do NOT include a "References:" section or bibliography list - references are in Part 2
 - Output raw LaTeX content only
 
 Produce the revised PART 1:`;
