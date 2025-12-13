@@ -953,14 +953,14 @@ ${'='.repeat(50)}
           updateStatus('listening', 'Ready', 'Waiting for AI to speak...');
           break;
 
-        case 'response.audio_transcript.delta':
+        case 'response.output_audio_transcript.delta':
           // AI speech transcription (streaming)
           if (event.delta) {
             currentAIText += event.delta;
           }
           break;
 
-        case 'response.audio_transcript.done':
+        case 'response.output_audio_transcript.done':
           // AI finished speaking - add to transcript
           if (currentAIText) {
             addToTranscript('AI', currentAIText);
