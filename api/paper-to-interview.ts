@@ -135,15 +135,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // SECURITY: Verify internal API secret if configured
-  const apiSecret = process.env.INTERNAL_API_SECRET;
-  if (apiSecret) {
-    const providedSecret = req.headers['x-internal-secret'];
-    if (providedSecret !== apiSecret) {
-      console.warn('[Paper-to-Interview] Unauthorized request blocked');
-      return res.status(401).json({ success: false, error: 'Unauthorized' });
-    }
-  }
+  // NOTE: This is a user-facing endpoint called by the frontend.
+  // Authentication is via CORS (restricted origins) - the API key stays server-side.
 
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {

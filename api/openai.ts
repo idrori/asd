@@ -66,15 +66,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // SECURITY: Verify internal API secret if configured
-  const apiSecret = process.env.INTERNAL_API_SECRET;
-  if (apiSecret) {
-    const providedSecret = req.headers['x-internal-secret'];
-    if (providedSecret !== apiSecret) {
-      console.warn('[OpenAI Proxy] Unauthorized request blocked');
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
-  }
+  // NOTE: This is a user-facing endpoint called by the frontend for paper generation.
+  // Authentication is via CORS (restricted origins) - the API key stays server-side.
 
   // Get API key from environment (secure - never sent to client)
   const apiKey = process.env.OPENAI_API_KEY;

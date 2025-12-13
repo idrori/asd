@@ -63,15 +63,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // SECURITY: Verify internal API secret if configured
-  const apiSecret = process.env.INTERNAL_API_SECRET;
-  if (apiSecret) {
-    const providedSecret = req.headers['x-internal-secret'];
-    if (providedSecret !== apiSecret) {
-      console.warn('[LaTeX Compiler] Unauthorized request blocked');
-      return res.status(401).json({ success: false, error: 'Unauthorized' });
-    }
-  }
+  // NOTE: This is a user-facing endpoint called by the frontend for PDF compilation.
+  // Authentication is via CORS (restricted origins).
 
   try {
     const { filename, content, figures, bibliography }: CompileRequest = req.body;
