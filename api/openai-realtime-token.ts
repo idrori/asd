@@ -107,15 +107,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // SECURITY: Verify internal API secret if configured
-  const apiSecret = process.env.INTERNAL_API_SECRET;
-  if (apiSecret) {
-    const providedSecret = req.headers['x-internal-secret'];
-    if (providedSecret !== apiSecret) {
-      console.warn('[OpenAI Realtime] Unauthorized request blocked');
-      return res.status(401).json({ success: false, error: 'Unauthorized' });
-    }
-  }
+  // NOTE: This endpoint is called by the public interview page for research participants.
+  // Authentication is via CORS (restricted origins) rather than X-Internal-Secret,
+  // since participants can't provide the secret.
 
   const apiKey = process.env.OPENAI_API_KEY;
 
