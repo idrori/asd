@@ -35,6 +35,7 @@ interface DashboardPanelProps {
   filePrefix?: string;
   dataFileName?: string;
   dataFileContent?: string;
+  participantEmail?: string;  // For saving oversight/feedback to Vercel blob
 }
 
 const DashboardPanel: React.FC<DashboardPanelProps> = ({
@@ -49,7 +50,8 @@ const DashboardPanel: React.FC<DashboardPanelProps> = ({
   onStageRestart,
   filePrefix,
   dataFileName,
-  dataFileContent
+  dataFileContent,
+  participantEmail
 }) => {
   // State for files passed from Reviewer to Supervisor
   const [reviewOutputFiles, setReviewOutputFiles] = useState<ReviewOutputFiles | undefined>();
@@ -105,6 +107,7 @@ const DashboardPanel: React.FC<DashboardPanelProps> = ({
             onAbort={() => onStageAbort?.(Stage.REVIEWER)}
             onRestart={() => onStageRestart?.(Stage.REVIEWER)}
             filePrefix={filePrefix}
+            participantEmail={participantEmail}
           />
         );
 

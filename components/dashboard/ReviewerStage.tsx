@@ -15,6 +15,7 @@ interface ReviewerStageProps {
   onAbort?: () => void;
   onRestart?: () => void;
   filePrefix?: string;
+  participantEmail?: string;  // For saving oversight/feedback to Vercel blob
 }
 
 export interface ReviewOutputFiles {
@@ -32,7 +33,8 @@ const ReviewerStage: React.FC<ReviewerStageProps> = ({
   onProceedToSupervisor,
   onAbort,
   onRestart,
-  filePrefix
+  filePrefix,
+  participantEmail
 }) => {
   const [savedFiles, setSavedFiles] = useState<string[]>([]);
   const [saveError, setSaveError] = useState<string | null>(null);
@@ -56,7 +58,7 @@ const ReviewerStage: React.FC<ReviewerStageProps> = ({
       return;
     }
 
-    const result = await saveReviewOutputs(currentRound, oversight, feedback, paper, filePrefix);
+    const result = await saveReviewOutputs(currentRound, oversight, feedback, paper, filePrefix, participantEmail);
 
     if (result.success) {
       setSavedFiles(result.files || []);

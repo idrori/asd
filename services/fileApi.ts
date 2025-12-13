@@ -225,20 +225,49 @@ export async function saveFiles(files: {
 /**
  * Save all review outputs (called at end of Reviewer stage)
  * @param filePrefix - participantId_timestamp prefix for filenames
+ * @param participantEmail - Optional email to also save to Vercel blob storage
  */
 export async function saveReviewOutputs(
   round: number,
   oversight: object,
   feedback: object,
   paperContent: string,
-  filePrefix?: string
+  filePrefix?: string,
+  participantEmail?: string
 ): Promise<SaveFilesResult> {
   const prefix = filePrefix ? `${filePrefix}_` : '';
-  return saveFiles([
+
+  // Save to local/downloads
+  const result = await saveFiles([
     { directory: 'data', filename: `${prefix}oversight_v${round}.json`, content: oversight },
     { directory: 'data', filename: `${prefix}feedback_v${round}.json`, content: feedback },
     { directory: 'paper', filename: `${prefix}icis_paper_v${round}.tex`, content: paperContent }
   ]);
+
+  // Also save oversight/feedback to Vercel blob if participant email is provided
+  if (participantEmail) {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || '';
+      if (apiUrl) {
+        await fetch(`${apiUrl}/api/participants`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: participantEmail,
+            oversight,
+            feedback,
+            round
+          })
+        });
+        console.log(`[FileApi] Saved oversight/feedback v${round} to blob for ${participantEmail}`);
+      }
+    } catch (error) {
+      console.warn('[FileApi] Failed to save to blob:', error);
+      // Don't fail the whole operation if blob save fails
+    }
+  }
+
+  return result;
 }
 
 /**

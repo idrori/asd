@@ -25,6 +25,7 @@ export interface DetectedFiles {
   template: { filename: string; path: string } | null;
   dataFile: { filename: string; path: string } | null;
   participantId: string | null;
+  participantEmail: string | null;  // Original email for blob storage
 }
 
 // Base path for data files - served by backend server (port 3001) from icis/Data folder
@@ -175,6 +176,7 @@ export interface UploadedFiles {
   templateContent?: string;
   dataFileContent?: string;
   participantId?: string;
+  participantEmail?: string | null;  // Original email for blob storage
 }
 
 export interface DetectionStatus {
@@ -188,7 +190,7 @@ export function useFileUpload() {
   const [detectionStatus, setDetectionStatus] = useState<DetectionStatus>({
     loading: true,
     error: null,
-    detected: { interview: null, template: null, dataFile: null, participantId: null }
+    detected: { interview: null, template: null, dataFile: null, participantId: null, participantEmail: null }
   });
 
   // Auto-detect files from manifest on mount
@@ -248,7 +250,7 @@ export function useFileUpload() {
       setDetectionStatus({
         loading: false,
         error: 'Auto-detection not available. Please upload files manually.',
-        detected: { interview: null, template: null, dataFile: null, participantId: null }
+        detected: { interview: null, template: null, dataFile: null, participantId: null, participantEmail: null }
       });
     }
   };
@@ -322,16 +324,20 @@ export function useFileUpload() {
       const content = await file.text();
       // Extract participant ID from filename or content
       let participantId = file.name.replace(/\.txt$/i, '').replace(/^INTERVIEW_?/i, '');
-      // Try to extract from email in content
-      const emailMatch = content.match(/Participant\s*[Ee]mail[:\s]+([^\s\n]+@[^\s\n]+)/i);
+      let participantEmail: string | null = null;
+      // Try to extract email from content (for blob storage)
+      const emailMatch = content.match(/Participant\s*[Ee]mail[:\s]+([^\s\n]+@[^\s\n]+)/i) ||
+                        content.match(/Email[:\s]+([^\s\n]+@[^\s\n]+)/i);
       if (emailMatch) {
-        participantId = emailMatch[1].replace(/@/g, '_').replace(/\./g, '_');
+        participantEmail = emailMatch[1].trim();
+        participantId = participantEmail.replace(/@/g, '_').replace(/\./g, '_');
       }
       setUploadedFiles(prev => ({
         ...prev,
         interview: file,
         interviewContent: content,
-        participantId
+        participantId,
+        participantEmail
       }));
     } else if (fileType === 'template') {
       const content = await file.text();
@@ -375,12 +381,18 @@ export function useFileUpload() {
     await autoDetectFiles();
   }, []);
 
+  // Get participant email for blob storage
+  const getParticipantEmail = useCallback(() => {
+    return uploadedFiles.participantEmail || null;
+  }, [uploadedFiles.participantEmail]);
+
   return {
     uploadedFiles,
     handleFileChange,
     getInterviewContent,
     getDataFileContent,
     getDataFileName,
+    getParticipantEmail,
     detectionStatus,
     refreshDetection
   };
