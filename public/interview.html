@@ -236,6 +236,101 @@
       resize: vertical;
     }
 
+    .reference-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .btn-small {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      border-radius: 0.375rem;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-small:hover {
+      background: #2563eb;
+    }
+
+    .btn-small:disabled {
+      background: #64748b;
+      cursor: not-allowed;
+    }
+
+    .reference-results {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 0.5rem;
+    }
+
+    .reference-results.error {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    .reference-results h4 {
+      margin-bottom: 0.75rem;
+      color: #10b981;
+      font-size: 0.9rem;
+    }
+
+    .reference-results.error h4 {
+      color: #f87171;
+    }
+
+    .reference-item {
+      padding: 0.75rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 0.375rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .reference-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .reference-item.found {
+      border-left: 3px solid #10b981;
+    }
+
+    .reference-item.not-found {
+      border-left: 3px solid #f87171;
+    }
+
+    .reference-query {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      margin-bottom: 0.25rem;
+    }
+
+    .reference-title {
+      font-weight: 500;
+      color: #e2e8f0;
+      margin-bottom: 0.25rem;
+    }
+
+    .reference-meta {
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+
+    .reference-link {
+      color: #60a5fa;
+      text-decoration: none;
+      font-size: 0.8rem;
+    }
+
+    .reference-link:hover {
+      text-decoration: underline;
+    }
+
     .btn {
       display: inline-flex;
       align-items: center;
@@ -492,6 +587,12 @@
       <div class="form-group">
         <label for="references">Key References (1-3 papers that inspire your research)</label>
         <textarea id="references" placeholder="e.g., Smith et al. 2023 - 'AI in Healthcare'&#10;Johnson 2022 - 'Machine Learning Methods'"></textarea>
+        <div class="reference-actions">
+          <button type="button" class="btn-small" id="verify-refs-btn" onclick="verifyReferences()">
+            Verify References
+          </button>
+        </div>
+        <div id="reference-results" class="reference-results hidden"></div>
       </div>
 
       <div id="error-message" class="error-box hidden"></div>
@@ -637,6 +738,107 @@
     // Hide error message
     function hideError() {
       document.getElementById('error-message').classList.add('hidden');
+    }
+
+    // Store verified references for use in transcript
+    let verifiedReferences = [];
+
+    // Verify references using Semantic Scholar API
+    async function verifyReferences() {
+      const refsInput = document.getElementById('references').value.trim();
+      const resultsDiv = document.getElementById('reference-results');
+      const verifyBtn = document.getElementById('verify-refs-btn');
+
+      if (!refsInput) {
+        resultsDiv.innerHTML = '<h4>No References</h4><p style="color: #94a3b8;">Enter some references to verify.</p>';
+        resultsDiv.classList.remove('hidden', 'error');
+        return;
+      }
+
+      // Parse references (split by newlines, filter empty)
+      const queries = refsInput.split('\n')
+        .map(line => line.trim())
+        .filter(line => line.length > 0);
+
+      if (queries.length === 0) {
+        resultsDiv.innerHTML = '<h4>No References</h4><p style="color: #94a3b8;">Enter some references to verify.</p>';
+        resultsDiv.classList.remove('hidden', 'error');
+        return;
+      }
+
+      // Show loading state
+      verifyBtn.disabled = true;
+      verifyBtn.textContent = 'Verifying...';
+      resultsDiv.innerHTML = '<h4>Searching Semantic Scholar...</h4><p style="color: #94a3b8;">This may take a few seconds.</p>';
+      resultsDiv.classList.remove('hidden', 'error');
+
+      try {
+        const apiUrl = getApiUrl();
+        const response = await fetch(`${apiUrl}/api/semantic-scholar`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ queries })
+        });
+
+        if (!response.ok) {
+          throw new Error('API request failed');
+        }
+
+        const data = await response.json();
+
+        if (!data.success || !data.results) {
+          throw new Error('Invalid response');
+        }
+
+        // Store verified references for transcript
+        verifiedReferences = data.results.filter(r => r.found).map(r => r.paper);
+
+        // Build results HTML
+        const foundCount = data.results.filter(r => r.found).length;
+        let html = `<h4>Found ${foundCount} of ${data.results.length} References</h4>`;
+
+        for (const result of data.results) {
+          if (result.found && result.paper) {
+            html += `
+              <div class="reference-item found">
+                <div class="reference-query">Query: ${escapeHtml(result.query)}</div>
+                <div class="reference-title">${escapeHtml(result.paper.title)}</div>
+                <div class="reference-meta">
+                  ${escapeHtml(result.paper.authors)} (${result.paper.year || 'n.d.'})
+                  - ${result.paper.citationCount || 0} citations
+                </div>
+                <a href="${result.paper.url}" target="_blank" class="reference-link">View on Semantic Scholar</a>
+              </div>
+            `;
+          } else {
+            html += `
+              <div class="reference-item not-found">
+                <div class="reference-query">Query: ${escapeHtml(result.query)}</div>
+                <div class="reference-title" style="color: #f87171;">Not found in Semantic Scholar</div>
+                <div class="reference-meta">Try a more specific search term (author name + year + key words)</div>
+              </div>
+            `;
+          }
+        }
+
+        resultsDiv.innerHTML = html;
+        resultsDiv.classList.remove('error');
+
+      } catch (error) {
+        console.error('[Interview] Reference verification error:', error);
+        resultsDiv.innerHTML = `<h4>Verification Failed</h4><p style="color: #f87171;">${error.message || 'Could not verify references'}</p>`;
+        resultsDiv.classList.add('error');
+      }
+
+      verifyBtn.disabled = false;
+      verifyBtn.textContent = 'Verify References';
+    }
+
+    // Escape HTML for safe display
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text || '';
+      return div.innerHTML;
     }
 
     // Update status display
@@ -1028,11 +1230,20 @@ ${'='.repeat(50)}
 
       cleanup();
 
+      // Build verified references section
+      let referencesSection = userReferences || 'None provided';
+      if (verifiedReferences.length > 0) {
+        referencesSection = '\nVerified References:\n';
+        for (const ref of verifiedReferences) {
+          referencesSection += `- ${ref.apaReference}\n  URL: ${ref.url}\n`;
+        }
+      }
+
       // Build full transcript text for saving
       const transcriptText = `Research Interview Transcript
 Date: ${new Date().toLocaleString()}
 Email: ${userEmail}
-References: ${userReferences || 'None provided'}
+References: ${referencesSection}
 ${'='.repeat(50)}
 ${transcript}`;
 
