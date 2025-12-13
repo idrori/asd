@@ -159,10 +159,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 type: 'audio/pcm',
                 rate: 24000  // Required: output sample rate
               },
-              voice: 'marin',  // New high-quality voice (marin or cedar recommended)
-              transcription: {
-                model: 'gpt-4o-transcribe'  // Enable transcription of AI speech
-              }
+              voice: 'marin'  // New high-quality voice (marin or cedar recommended)
             }
           }
         }
