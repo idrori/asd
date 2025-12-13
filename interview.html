@@ -946,6 +946,11 @@ ${'='.repeat(50)}
 
     // Handle server events from data channel
     function handleServerEvent(event) {
+      // Debug: log transcript-related events
+      if (event.type && event.type.includes('transcript')) {
+        console.log('[Interview] Transcript event:', event.type, event);
+      }
+
       switch (event.type) {
         case 'session.created':
         case 'session.updated':
@@ -955,6 +960,7 @@ ${'='.repeat(50)}
 
         case 'response.output_audio_transcript.delta':
           // AI speech transcription (streaming)
+          console.log('[Interview] AI transcript delta:', event.delta);
           if (event.delta) {
             currentAIText += event.delta;
           }
@@ -962,10 +968,13 @@ ${'='.repeat(50)}
 
         case 'response.output_audio_transcript.done':
           // AI finished speaking - add to transcript
-          if (currentAIText) {
-            addToTranscript('AI', currentAIText);
-            currentAIText = '';
+          // Use event.transcript (complete text) or accumulated currentAIText
+          const aiText = event.transcript || currentAIText;
+          console.log('[Interview] AI transcript done:', aiText);
+          if (aiText) {
+            addToTranscript('AI', aiText);
           }
+          currentAIText = '';
           break;
 
         case 'conversation.item.input_audio_transcription.completed':
