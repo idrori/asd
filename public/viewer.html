@@ -109,7 +109,8 @@
 
       // Get token from URL path: /viewer/TOKEN or /viewer.html?token=TOKEN
       let token = null;
-      const pathMatch = window.location.pathname.match(/\/viewer\/([A-Za-z0-9]+)/);
+      // base64url uses A-Za-z0-9, hyphen (-), and underscore (_)
+      const pathMatch = window.location.pathname.match(/\/viewer\/([A-Za-z0-9_-]+)/);
       if (pathMatch) {
         token = pathMatch[1];
       } else {
