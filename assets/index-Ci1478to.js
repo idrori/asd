@@ -2306,7 +2306,7 @@ This revision workflow has 9 steps (-1 to 8) to execute consecutively. Step -1 a
 \r
 a) Copy previous .tex → new version number\r
 b) Use Edit tool (NOT Write tool) - preserves surrounding content\r
-c) Preserve ALL empirical content (tables, figures, results)\r
+c) Preserve ALL empirical content (data). You may only change or improve tables, figures, and results based on feedback (review) if you preserve the original data and don't make up results. You may improve the analysis of the data based on feedback (review).\r
 d) Verify preservation using checklist below\r
 \r
 **VERIFICATION CHECKLIST:**\r
