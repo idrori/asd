@@ -45,3 +45,4 @@ Code/*.py
 # Keep Data folder structure but not contents (user uploads)
 Data/*
 !Data/.gitkeep
+.env*.local

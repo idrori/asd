@@ -38,7 +38,6 @@ export interface Participant {
   notes: string;
   // Optional fields for tracking
   paper_link?: string;
-  transcript_path?: string;
   oversight_paths?: string[];  // Paths to oversight_v1.json, oversight_v2.json, etc.
   feedback_paths?: string[];   // Paths to feedback_v1.json, feedback_v2.json, etc.
 }

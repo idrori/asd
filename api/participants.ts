@@ -47,7 +47,6 @@ interface Participant {
   updated_at: string;
   notes: string;
   paper_link?: string;
-  transcript_path?: string;
 }
 
 interface ActivityLogEntry {
@@ -283,17 +282,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         if (paper_link !== undefined) participant.paper_link = paper_link;
         participant.updated_at = new Date().toISOString();
 
-        // Save transcript to separate file if provided
-        if (transcript) {
-          const transcriptPath = `research/transcripts/${participant.id}.txt`;
-          // SECURITY: Store transcripts privately - contains interview content
-          await put(transcriptPath, transcript, {
-            access: 'private',
-            contentType: 'text/plain',
-            addRandomSuffix: false
-          });
-          participant.transcript_path = transcriptPath;
-        }
+        // Note: Transcripts are downloaded locally by participants, not stored in blob
 
         // Save oversight file if provided (with round number)
         if (oversight && round) {
@@ -375,15 +364,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         data.activity_log = data.activity_log.filter(l => l.participant_id !== participant.id);
 
         await writeParticipantsData(data);
-
-        // Delete transcript if exists
-        if (participant.transcript_path) {
-          try {
-            await del(participant.transcript_path);
-          } catch (e) {
-            console.warn('[Participants] Failed to delete transcript:', e);
-          }
-        }
 
         console.log(`[Participants] Deleted: ${email}`);
 
