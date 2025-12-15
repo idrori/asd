@@ -7,7 +7,7 @@ import {
   readFeedbackFile,
   getOversightProgression
 } from '../../services/fileService';
-import { saveFinalSubmission, compileLaTeX, downloadCompiledPdf, createViewerLink, openPaperViewer, getLastCompiledPdfBlob, downloadAllFigures, getCurrentSessionFigures, getPngFiguresForCompilation, getBibliographyContent, getChartDataContent, CompileResult, ViewerLinkResult } from '../../services/fileApi';
+import { saveFinalSubmission, compileLaTeX, downloadCompiledPdf, createViewerLink, openPaperViewer, getLastCompiledPdfBlob, downloadAllFigures, getCurrentSessionFigures, getPngFiguresForCompilation, getBibliographyContent, getChartDataContent, deleteCloudDataFile, CompileResult, ViewerLinkResult } from '../../services/fileApi';
 
 interface FinalizeStageProps {
   logs: string[];
@@ -145,6 +145,14 @@ const FinalizeStage: React.FC<FinalizeStageProps> = ({
 
       console.log(`[SaveAll] Downloaded ${zipFilename} with ${filesList.length} files`);
       setSavedFiles([zipFilename, ...filesList]);
+
+      // Clean up: Delete the CSV data file from Vercel Blob after successful download
+      const deleteResult = await deleteCloudDataFile();
+      if (deleteResult.success) {
+        console.log('[SaveAll] Data file cleaned up from cloud storage');
+      } else {
+        console.warn('[SaveAll] Failed to clean up data file:', deleteResult.error);
+      }
 
     } catch (error) {
       console.error('[SaveAll] Error:', error);

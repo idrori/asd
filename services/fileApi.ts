@@ -951,6 +951,49 @@ export function getCloudDataFile(): { filename: string; blobUrl: string; content
 }
 
 /**
+ * Delete the cloud data file from Vercel Blob storage
+ * Called after Save All to clean up user data
+ */
+export async function deleteCloudDataFile(): Promise<{ success: boolean; error?: string }> {
+  if (!cloudDataFile || !cloudDataFile.blobUrl) {
+    console.log('[Cloud Delete] No data file to delete');
+    return { success: true };
+  }
+
+  try {
+    console.log(`[Cloud Delete] Deleting: ${cloudDataFile.blobUrl}`);
+
+    const response = await fetch(`${VERCEL_API_URL}/api/delete-data`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ blobUrl: cloudDataFile.blobUrl })
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      console.log('[Cloud Delete] Data file deleted successfully');
+      cloudDataFile = null;  // Clear the reference
+    }
+
+    return result;
+  } catch (error) {
+    console.error('[Cloud Delete] Error:', error);
+    return {
+      success: false,
+      error: (error as Error).message
+    };
+  }
+}
+
+/**
+ * Clear the cloud data file reference (without deleting from blob)
+ */
+export function clearCloudDataFile(): void {
+  cloudDataFile = null;
+}
+
+/**
  * Read a data file from cloud storage
  */
 export async function readCloudDataFile(blobUrl: string): Promise<DataFilePreview> {
