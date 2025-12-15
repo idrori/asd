@@ -2296,7 +2296,7 @@ This revision workflow has 9 steps (-1 to 8) to execute consecutively. Step -1 a
    - Add to RevisionPlan: "Add missing [section name] section"\r
    - Ensure the section is created with proper content (see STEP 8 Check 5 for requirements)\r
 \r
-**GOLDEN RULE:** Revisions ADD and IMPROVE—they NEVER SUBTRACT (unless explicitly told)\r
+**GOLDEN RULE:** Revisions ADD and IMPROVE—make the best effort not to subtract content (unless explicitly told)\r
 \r
 **MATHEMATICAL FORMULATION RULE:** If the original paper (from ICISbuilder) did NOT include a mathematical formulation section (Step 3 was skipped), do NOT add one during revision UNLESS:\r
 - Critical feedback EXPLICITLY requests mathematical formulation, proofs, or novel algorithms\r
@@ -4532,7 +4532,7 @@ Return your assessment as JSON:
   "goalAlignmentRationale": "<2-3 sentences explaining your rating as the author>"
 }`,f=await Hs(d);if(f.reliability===void 0||f.benevolence===void 0||f.goalAlignment===void 0)throw new Error("[Trustworthiness] API response missing required fields");return console.log("[Trustworthiness] Assessment complete:",{reliability:f.reliability,benevolence:f.benevolence,goalAlignment:f.goalAlignment}),{reliability:f.reliability,benevolence:f.benevolence,goalAlignment:f.goalAlignment,rationales:{reliability:f.reliabilityRationale,benevolence:f.benevolenceRationale,goalAlignment:f.goalAlignmentRationale}}};function Xv(u){const o=[/\\section\{Discussion\}/i,/\\section\*\{Discussion\}/i,/\\section\{Conclusions?\}/i,/\\section\*\{Conclusions?\}/i,/\\section\{Implications\}/i];let l=-1,c="";for(const d of o){const f=u.match(d);if(f&&f.index!==void 0){l=f.index,c=f[0];break}}if(l===-1){const d=Math.floor(u.length*.5),f=u.substring(d).match(/\\section\*?\{[^}]+\}/);f&&f.index!==void 0&&(l=d+f.index,c=f[0])}return l===-1?{part1:u,part2:"",splitPoint:""}:{part1:u.substring(0,l),part2:u.substring(l),splitPoint:c}}const Zv=async(u,o,l,c,d)=>{console.log("[Reviser] Starting revision process..."),console.log(`[Reviser] Paper content length: ${u.length} characters`),console.log(`[Reviser] Feedback length: ${o.length} characters`),console.log("[Reviser] Loading reviser prompt...");const f=await Hp("REVISER");console.log(`[Reviser] Prompt loaded (${f.length} chars)`);const y=u.length>2e4;let v;if(y){console.log("[Reviser] Large paper detected - using two-part revision strategy"),d==null||d("Large paper - revising in two parts...");const{part1:m,part2:E,splitPoint:w}=Xv(u);console.log(`[Reviser] Split at "${w}" - Part 1: ${m.length} chars, Part 2: ${E.length} chars`),console.log("[Reviser] Revising Part 1 (front matter)..."),d==null||d("Revising Part 1: Abstract through Results...");const I=`${f}
 
-GOLDEN RULE: Revisions ADD and IMPROVE - they NEVER SUBTRACT content.
+GOLDEN RULE: Revisions ADD and IMPROVE - make the best effort not to subtract content.
 
 IMPORTANT - ACKNOWLEDGE LIMITATIONS:
 If the requested improvements CANNOT be made because the interview lacks necessary information or no data file was provided to support empirical claims, acknowledge this limitation rather than fabricating content. It is better to return the paper with minimal changes and explain what cannot be improved than to invent information.
@@ -4573,7 +4573,7 @@ CRITICAL OUTPUT FORMAT:
 
 Produce the revised PART 1:`;let O=await hr(I,"You are an expert academic reviser. Revise only the front matter sections. Output ONLY the revised LaTeX content - no explanations.");O=mc(O),O=O.replace(/\\end\{document\}\s*$/i,""),console.log(`[Reviser] Part 1 complete: ${O.length} chars`),await qp(1e3),console.log("[Reviser] Revising Part 2 (back matter)..."),d==null||d("Revising Part 2: Discussion, Conclusion, References...");const F=`${f}
 
-GOLDEN RULE: Revisions ADD and IMPROVE - they NEVER SUBTRACT content.
+GOLDEN RULE: Revisions ADD and IMPROVE - make the best effort not to subtract content.
 
 You are revising PART 2 of a two-part paper (back matter: Discussion, Conclusions, References).
 The front matter has already been revised separately.
@@ -4607,7 +4607,7 @@ Produce the revised PART 2:`;let D=await hr(F,"You are an expert academic revise
 
 `+D,console.log(`[Reviser] Combined revised paper: ${v.length} chars`)}else{console.log("[Reviser] Paper within size limits - using single-pass revision"),d==null||d("Revising paper content...");const m=`${f}
 
-GOLDEN RULE: Revisions ADD and IMPROVE - they NEVER SUBTRACT content.
+GOLDEN RULE: Revisions ADD and IMPROVE - make the best effort not to subtract content.
 
 IMPORTANT - ACKNOWLEDGE LIMITATIONS:
 If the requested improvements CANNOT be made because the interview lacks necessary information or no data file was provided to support empirical claims, acknowledge this limitation rather than fabricating content. It is better to return the paper with minimal changes and explain what cannot be improved than to invent information. Honest recognition of limits is valued over forced improvements.
