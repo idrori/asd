@@ -3344,7 +3344,7 @@ export const runReviser = async (
 
     const part1Prompt = `${reviserPrompt}
 
-GOLDEN RULE: Revisions ADD and IMPROVE - they NEVER SUBTRACT content.
+GOLDEN RULE: Revisions ADD and IMPROVE - make the best effort not to subtract content.
 
 IMPORTANT - ACKNOWLEDGE LIMITATIONS:
 If the requested improvements CANNOT be made because the interview lacks necessary information or no data file was provided to support empirical claims, acknowledge this limitation rather than fabricating content. It is better to return the paper with minimal changes and explain what cannot be improved than to invent information.
@@ -3402,7 +3402,7 @@ Produce the revised PART 1:`;
 
     const part2Prompt = `${reviserPrompt}
 
-GOLDEN RULE: Revisions ADD and IMPROVE - they NEVER SUBTRACT content.
+GOLDEN RULE: Revisions ADD and IMPROVE - make the best effort not to subtract content.
 
 You are revising PART 2 of a two-part paper (back matter: Discussion, Conclusions, References).
 The front matter has already been revised separately.
@@ -3450,7 +3450,7 @@ Produce the revised PART 2:`;
 
     const prompt = `${reviserPrompt}
 
-GOLDEN RULE: Revisions ADD and IMPROVE - they NEVER SUBTRACT content.
+GOLDEN RULE: Revisions ADD and IMPROVE - make the best effort not to subtract content.
 
 IMPORTANT - ACKNOWLEDGE LIMITATIONS:
 If the requested improvements CANNOT be made because the interview lacks necessary information or no data file was provided to support empirical claims, acknowledge this limitation rather than fabricating content. It is better to return the paper with minimal changes and explain what cannot be improved than to invent information. Honest recognition of limits is valued over forced improvements.

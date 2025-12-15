@@ -66,7 +66,7 @@ This revision workflow has 9 steps (-1 to 8) to execute consecutively. Step -1 a
    - Add to RevisionPlan: "Add missing [section name] section"
    - Ensure the section is created with proper content (see STEP 8 Check 5 for requirements)
 
-**GOLDEN RULE:** Revisions ADD and IMPROVE—they NEVER SUBTRACT (unless explicitly told)
+**GOLDEN RULE:** Revisions ADD and IMPROVE—make the best effort not to subtract content (unless explicitly told)
 
 **MATHEMATICAL FORMULATION RULE:** If the original paper (from ICISbuilder) did NOT include a mathematical formulation section (Step 3 was skipped), do NOT add one during revision UNLESS:
 - Critical feedback EXPLICITLY requests mathematical formulation, proofs, or novel algorithms
