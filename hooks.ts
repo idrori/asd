@@ -13,7 +13,7 @@ import {
   INITIAL_STATE
 } from './types';
 import { clearAllFiles, writePaperFile, writeOversightFile, writeFeedbackFile, readPaperFile, appendSupervisorDirectives, writeSupervisorDecision } from './services/fileService';
-import { backupAndClearFiles, savePaperFile, refreshManifest, uploadDataFileToCloud, getCloudDataFile } from './services/fileApi';
+import { backupAndClearFiles, savePaperFile, refreshManifest, uploadDataFileToCloud, getCloudDataFile, clearChartData } from './services/fileApi';
 import { runBuilder, runReviewer, runReviser } from './services/geminiService';
 
 // ============================================================================
@@ -139,7 +139,10 @@ export function useSimulationState() {
     // This ensures supervisor dashboard doesn't show V2 scores from previous cases
     clearAllFiles();
 
-    // 3. Generate new session timestamp
+    // 3. Clear in-memory chart data and Python code
+    clearChartData();
+
+    // 4. Generate new session timestamp
     const newTimestamp = new Date().toISOString().replace(/[-:]/g, '').replace('T', '_').substring(0, 15);
     setSimulationState({
       ...INITIAL_STATE,

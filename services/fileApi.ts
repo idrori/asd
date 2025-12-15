@@ -1475,3 +1475,169 @@ export function getBibliographyContent(): { filename: string; content: string } 
 export function clearBibliography(): void {
   currentBibliography = null;
 }
+
+// ============================================================================
+// Chart Data & Visualization Code Storage
+// ============================================================================
+
+interface ChartDataResource {
+  chartData: CloudAnalysisResult['chart_data'];
+  pythonCode: string;
+  isSynthetic: boolean;
+  generatedAt: string;
+}
+
+let currentChartData: ChartDataResource | null = null;
+
+/**
+ * Generate Python matplotlib code from chart_data JSON
+ * This allows users to reproduce the figures locally
+ */
+function generatePythonFromChartData(chartData: CloudAnalysisResult['chart_data'], isSynthetic: boolean): string {
+  const lines: string[] = [
+    '"""',
+    'ICIScopilot - Visualization Code',
+    `Generated: ${new Date().toISOString()}`,
+    isSynthetic ? 'Data Source: AI-synthesized illustrative data' : 'Data Source: User-provided data file',
+    '',
+    'This script reproduces the figures generated for your research paper.',
+    'Requirements: pip install matplotlib numpy',
+    '"""',
+    '',
+    'import matplotlib.pyplot as plt',
+    'import numpy as np',
+    '',
+    '# Set publication-quality defaults',
+    'plt.rcParams.update({',
+    '    "font.size": 12,',
+    '    "axes.titlesize": 14,',
+    '    "axes.labelsize": 12,',
+    '    "figure.figsize": (10, 6),',
+    '    "figure.dpi": 150',
+    '})',
+    ''
+  ];
+
+  chartData.forEach((chart, idx) => {
+    lines.push(`# ============================================================================`);
+    lines.push(`# Figure ${idx + 1}: ${chart.title || 'Untitled'}`);
+    lines.push(`# ============================================================================`);
+    lines.push('');
+    lines.push(`fig${idx + 1}, ax${idx + 1} = plt.subplots()`);
+    lines.push('');
+
+    if (chart.type === 'bar') {
+      lines.push(`# Bar chart data`);
+      lines.push(`labels_${idx + 1} = ${JSON.stringify(chart.labels || [])}`);
+
+      if (chart.datasets && chart.datasets.length > 0) {
+        chart.datasets.forEach((ds, dsIdx) => {
+          lines.push(`data_${idx + 1}_${dsIdx} = ${JSON.stringify(ds.data || [])}`);
+        });
+
+        if (chart.datasets.length === 1) {
+          lines.push(`ax${idx + 1}.bar(labels_${idx + 1}, data_${idx + 1}_0, color='steelblue')`);
+        } else {
+          lines.push(`x = np.arange(len(labels_${idx + 1}))`);
+          lines.push(`width = ${(0.8 / chart.datasets.length).toFixed(2)}`);
+          chart.datasets.forEach((ds, dsIdx) => {
+            const offset = dsIdx - (chart.datasets!.length - 1) / 2;
+            lines.push(`ax${idx + 1}.bar(x + ${offset.toFixed(2)}*width, data_${idx + 1}_${dsIdx}, width, label='${ds.label || `Series ${dsIdx + 1}`}')`);
+          });
+          lines.push(`ax${idx + 1}.set_xticks(x)`);
+          lines.push(`ax${idx + 1}.set_xticklabels(labels_${idx + 1})`);
+          lines.push(`ax${idx + 1}.legend()`);
+        }
+      }
+    } else if (chart.type === 'line') {
+      lines.push(`# Line chart data`);
+      lines.push(`labels_${idx + 1} = ${JSON.stringify(chart.labels || [])}`);
+
+      if (chart.datasets && chart.datasets.length > 0) {
+        chart.datasets.forEach((ds, dsIdx) => {
+          lines.push(`data_${idx + 1}_${dsIdx} = ${JSON.stringify(ds.data || [])}`);
+          lines.push(`ax${idx + 1}.plot(labels_${idx + 1}, data_${idx + 1}_${dsIdx}, marker='o', label='${ds.label || `Series ${dsIdx + 1}`}')`);
+        });
+        if (chart.datasets.length > 1) {
+          lines.push(`ax${idx + 1}.legend()`);
+        }
+      }
+    } else if (chart.type === 'pie' || chart.type === 'doughnut') {
+      lines.push(`# Pie chart data`);
+      lines.push(`labels_${idx + 1} = ${JSON.stringify(chart.labels || [])}`);
+      if (chart.datasets && chart.datasets[0]) {
+        lines.push(`data_${idx + 1} = ${JSON.stringify(chart.datasets[0].data || [])}`);
+        lines.push(`ax${idx + 1}.pie(data_${idx + 1}, labels=labels_${idx + 1}, autopct='%1.1f%%')`);
+      }
+    } else if (chart.type === 'scatter') {
+      lines.push(`# Scatter plot data`);
+      if (chart.datasets && chart.datasets[0] && chart.datasets[0].data) {
+        const data = chart.datasets[0].data as Array<{x: number, y: number}>;
+        lines.push(`x_${idx + 1} = ${JSON.stringify(data.map(d => d.x || d))}`);
+        lines.push(`y_${idx + 1} = ${JSON.stringify(data.map(d => d.y || d))}`);
+        lines.push(`ax${idx + 1}.scatter(x_${idx + 1}, y_${idx + 1}, alpha=0.6)`);
+      }
+    } else {
+      lines.push(`# ${chart.type} chart - data structure:`);
+      lines.push(`chart_config_${idx + 1} = ${JSON.stringify(chart, null, 2).split('\n').map((l, i) => i === 0 ? l : '# ' + l).join('\n')}`);
+    }
+
+    lines.push('');
+    lines.push(`ax${idx + 1}.set_title('${(chart.title || '').replace(/'/g, "\\'")}')`);
+    if (chart.options?.scales?.x?.title?.text) {
+      lines.push(`ax${idx + 1}.set_xlabel('${chart.options.scales.x.title.text}')`);
+    }
+    if (chart.options?.scales?.y?.title?.text) {
+      lines.push(`ax${idx + 1}.set_ylabel('${chart.options.scales.y.title.text}')`);
+    }
+    lines.push(`plt.tight_layout()`);
+    lines.push(`fig${idx + 1}.savefig('figure_${idx + 1}.png', dpi=300, bbox_inches='tight')`);
+    lines.push(`print(f"Saved figure_${idx + 1}.png")`);
+    lines.push('');
+  });
+
+  lines.push('# Show all figures');
+  lines.push('plt.show()');
+  lines.push('');
+  lines.push(`print("\\nGenerated ${chartData.length} figures successfully!")`);
+
+  return lines.join('\n');
+}
+
+/**
+ * Store chart data and generated Python code for download
+ * @param chartData - The chart configuration data
+ * @param isSynthetic - Whether the data is AI-generated (vs from user file)
+ */
+export function storeChartData(chartData: CloudAnalysisResult['chart_data'], isSynthetic: boolean): void {
+  const pythonCode = generatePythonFromChartData(chartData, isSynthetic);
+
+  currentChartData = {
+    chartData,
+    pythonCode,
+    isSynthetic,
+    generatedAt: new Date().toISOString()
+  };
+
+  console.log(`[Chart Data] Stored ${chartData.length} chart configs and Python code (${pythonCode.length} chars)`);
+}
+
+/**
+ * Get stored chart data for download
+ */
+export function getChartDataContent(): { chartDataJson: string; pythonCode: string; isSynthetic: boolean } | null {
+  if (!currentChartData) return null;
+
+  return {
+    chartDataJson: JSON.stringify(currentChartData.chartData, null, 2),
+    pythonCode: currentChartData.pythonCode,
+    isSynthetic: currentChartData.isSynthetic
+  };
+}
+
+/**
+ * Clear stored chart data (call when starting new paper)
+ */
+export function clearChartData(): void {
+  currentChartData = null;
+}

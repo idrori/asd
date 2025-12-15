@@ -2154,11 +2154,14 @@ export async function generateVisualizations(
           }));
 
           // Store PNG figures for LaTeX compilation
-          const { storePngFiguresForCompilation } = await import('./fileApi');
+          const { storePngFiguresForCompilation, storeChartData } = await import('./fileApi');
           storePngFiguresForCompilation(quickchartResult.figures.map(fig => ({
             filename: fig.filename,
             base64: fig.base64
           })));
+
+          // Store chart data and Python code for download
+          storeChartData(cloudResult.chart_data, false);
 
           onProgress?.(`Generated ${pngFigures.length} publication-quality figures`);
           console.log(`[Visualizations] QuickChart.io generated ${pngFigures.length} PNG figures`);
@@ -2194,7 +2197,7 @@ export async function generateVisualizations(
       onProgress?.(`Rendering ${aiChartData.length} PNG figures via QuickChart.io...`);
 
       // Render PNG figures via QuickChart.io
-      const { generateQuickChartFigures, storePngFiguresForCompilation } = await import('./fileApi');
+      const { generateQuickChartFigures, storePngFiguresForCompilation, storeChartData } = await import('./fileApi');
       const quickchartResult = await generateQuickChartFigures(aiChartData);
 
       if (quickchartResult.success && quickchartResult.figures && quickchartResult.figures.length > 0) {
@@ -2210,6 +2213,9 @@ export async function generateVisualizations(
           filename: fig.filename,
           base64: fig.base64
         })));
+
+        // Store chart data and Python code for download (synthetic data)
+        storeChartData(aiChartData, true);
 
         onProgress?.(`Generated ${pngFigures.length} AI-based PNG figures`);
         console.log(`[Visualizations] QuickChart.io rendered ${pngFigures.length} AI-generated PNG figures`);

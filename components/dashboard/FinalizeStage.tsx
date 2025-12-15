@@ -7,7 +7,7 @@ import {
   readFeedbackFile,
   getOversightProgression
 } from '../../services/fileService';
-import { saveFinalSubmission, compileLaTeX, downloadCompiledPdf, createViewerLink, openPaperViewer, getLastCompiledPdfBlob, downloadAllFigures, getCurrentSessionFigures, getPngFiguresForCompilation, getBibliographyContent, CompileResult, ViewerLinkResult } from '../../services/fileApi';
+import { saveFinalSubmission, compileLaTeX, downloadCompiledPdf, createViewerLink, openPaperViewer, getLastCompiledPdfBlob, downloadAllFigures, getCurrentSessionFigures, getPngFiguresForCompilation, getBibliographyContent, getChartDataContent, CompileResult, ViewerLinkResult } from '../../services/fileApi';
 
 interface FinalizeStageProps {
   logs: string[];
@@ -112,6 +112,22 @@ const FinalizeStage: React.FC<FinalizeStageProps> = ({
           zip.file(oversightFilename, JSON.stringify(oversight, null, 2));
           filesList.push(oversightFilename);
         }
+      }
+
+      // 7. Add chart data JSON and Python visualization code
+      const chartDataContent = getChartDataContent();
+      if (chartDataContent) {
+        // Add chart_data.json
+        const chartDataFilename = `${prefix}chart_data${chartDataContent.isSynthetic ? '_synthetic' : ''}.json`;
+        zip.file(chartDataFilename, chartDataContent.chartDataJson);
+        filesList.push(chartDataFilename);
+        console.log(`[SaveAll] Added chart data: ${chartDataFilename}`);
+
+        // Add Python visualization code
+        const pythonFilename = `${prefix}visualization_code.py`;
+        zip.file(pythonFilename, chartDataContent.pythonCode);
+        filesList.push(pythonFilename);
+        console.log(`[SaveAll] Added Python code: ${pythonFilename}`);
       }
 
       // Generate and download the zip
@@ -365,7 +381,7 @@ const FinalizeStage: React.FC<FinalizeStageProps> = ({
         </button>
 
         <p className="text-xs text-slate-500 text-center">
-          Downloads ZIP with PDF, .tex, .bib, PNG figures, and data files
+          Downloads ZIP with PDF, .tex, .bib, PNG figures, chart data JSON, Python code, and data files
         </p>
 
         {savedFiles.length > 0 && (
