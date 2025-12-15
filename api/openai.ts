@@ -90,6 +90,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       messages: body.messages,
       temperature: body.temperature ?? 0.7,
       max_completion_tokens: body.max_completion_tokens || body.max_tokens || 16000,
+      reasoning_effort: 'high',
     };
 
     // Add response_format if specified
