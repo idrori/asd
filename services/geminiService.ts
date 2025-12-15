@@ -3308,17 +3308,16 @@ ${supervisorComment}
 
 Instructions:
 1. Address feedback relevant to the front sections (Abstract, Introduction, Literature Review, Methodology, Results)
-2. CRITICAL: You MUST preserve the COMPLETE Results section with ALL figures and text
-3. Preserve ALL existing tables, figures, and empirical results - do NOT remove any
-4. Add new content to strengthen weak areas
-5. Maintain academic writing style
-6. NEVER use placeholder text
+2. Preserve ALL empirical content (data). You may only change or improve tables, figures, and results based on feedback (review) if you preserve the original data and don't make up results. You may improve the analysis of the data based on feedback (review).
+3. Add new content to strengthen weak areas
+4. Maintain academic writing style
+5. NEVER use placeholder text
 
 SECTION PRESERVATION CHECK - Your output MUST contain these sections IN ORDER:
 - \\section{Introduction}
 - \\section{Literature Review} (or Theoretical Framework)
 - \\section{Methodology}
-- \\section{Results} (CRITICAL - preserve ALL figures AND text from Results)
+- \\section{Results} (preserve data, may improve analysis based on feedback)
 
 CRITICAL OUTPUT FORMAT:
 - Output ONLY the revised LaTeX content for PART 1
@@ -3411,7 +3410,7 @@ Instructions:
 1. Address all major concerns from the feedback
 2. Fix minor corrections where possible
 3. Incorporate supervisor directives
-4. Preserve ALL existing tables, figures, and empirical results
+4. Preserve ALL empirical content (data). You may only change or improve tables, figures, and results based on feedback (review) if you preserve the original data and don't make up results. You may improve the analysis of the data based on feedback (review).
 5. Add new content to strengthen weak areas
 6. Maintain academic writing style
 7. NEVER use placeholder text like "[To be completed]", "[TBD]", or "[Results pending]"
