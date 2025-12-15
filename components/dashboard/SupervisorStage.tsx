@@ -82,6 +82,36 @@ const SupervisorStage: React.FC<SupervisorStageProps> = ({
         </div>
       </div>
 
+      {/* Convergence Assessment Banner */}
+      {oversightData?.improvementPotential && (
+        <div className={`p-4 font-mono text-sm border-x border-b ${
+          oversightData.improvementPotential === 'exhausted' ? 'bg-blue-100 border-blue-300' :
+          oversightData.improvementPotential === 'low' ? 'bg-yellow-100 border-yellow-300' :
+          'bg-slate-100 border-slate-300'
+        }`}>
+          <div className="font-bold mb-1">
+            IMPROVEMENT POTENTIAL: {
+              oversightData.improvementPotential === 'exhausted' ? '🏁 EXHAUSTED - Paper has reached its potential' :
+              oversightData.improvementPotential === 'low' ? '📉 LOW - Minor improvements only' :
+              oversightData.improvementPotential === 'medium' ? '📊 MEDIUM - Moderate improvements possible' :
+              '📈 HIGH - Significant improvements possible'
+            }
+          </div>
+          {oversightData.convergenceReason && (
+            <div className="text-xs mt-2 text-slate-700">
+              <span className="font-semibold">Reason: </span>
+              {oversightData.convergenceReason}
+            </div>
+          )}
+          {(oversightData.improvementPotential === 'exhausted' || oversightData.canImprove === false) && (
+            <div className="text-xs mt-2 text-blue-700 font-medium">
+              ℹ️ The paper has reached its maximum quality given the available interview and data.
+              You may finalize or provide additional source materials for further improvement.
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Input Files Banner - shows what files are being used */}
       <div className="bg-slate-100 border border-slate-300 p-3 mt-4 rounded-lg">
         <div className="flex items-center justify-between">

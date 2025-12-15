@@ -2411,6 +2411,11 @@ export interface ReviewResult {
   // File paths created
   oversightFilePath?: string;
   feedbackFilePath?: string;
+
+  // Convergence assessment - can the paper be further improved?
+  canImprove: boolean;
+  improvementPotential: 'high' | 'medium' | 'low' | 'exhausted';
+  convergenceReason?: string;  // Explains why improvement is limited
 }
 
 /**
@@ -2700,8 +2705,15 @@ You MUST return a complete JSON object with ALL of these fields:
     "goalAlignment": <1-7>,
     "goalAlignmentRationale": "<rationale>"
   },
-  "criticalAlerts": []
-}`;
+  "criticalAlerts": [],
+  "canImprove": <true or false>,
+  "improvementPotential": "<high|medium|low|exhausted>",
+  "convergenceReason": "<if improvement is limited, explain why given source materials>"
+}
+
+CONVERGENCE ASSESSMENT: Determine if the paper can be meaningfully improved:
+- Set canImprove=false and improvementPotential="exhausted" if the paper has reached its maximum potential given the source materials
+- Honest acknowledgment of limits is valued over forcing unnecessary changes`;
 
     // No fallback - let error propagate to caller
     result = await callOpenAIJson<any>(prompt);
@@ -2770,8 +2782,19 @@ You MUST return a complete JSON object with ALL of these fields:
       goalAlignmentRationale: "Pending assessment"
     },
 
-    criticalAlerts: result.criticalAlerts ?? []
+    criticalAlerts: result.criticalAlerts ?? [],
+
+    // Convergence assessment
+    canImprove: result.canImprove ?? true,
+    improvementPotential: result.improvementPotential ?? 'medium',
+    convergenceReason: result.convergenceReason
   };
+
+  // Log convergence assessment
+  console.log(`[Reviewer] Convergence assessment: canImprove=${reviewResult.canImprove}, potential=${reviewResult.improvementPotential}`);
+  if (reviewResult.convergenceReason) {
+    console.log(`[Reviewer] Convergence reason: ${reviewResult.convergenceReason}`);
+  }
 
   // STEP 2: Assess trustworthiness separately (from author's perspective)
   // This requires the interview transcript to compare against the generated paper
@@ -2854,7 +2877,12 @@ You MUST return a complete JSON object with ALL of these fields:
       details: alert.details,
       actionRequired: alert.actionRequired,
       consequence: alert.consequence
-    }))
+    })),
+
+    // Convergence assessment
+    canImprove: reviewResult.canImprove,
+    improvementPotential: reviewResult.improvementPotential,
+    convergenceReason: reviewResult.convergenceReason
   };
 
   // Create and write feedback file as specified in ICISreview.txt
@@ -3103,8 +3131,27 @@ Based on this comprehensive review, provide the FINAL assessment as JSON:
       "actionRequired": "<what to do>",
       "consequence": "<if not fixed>"
     }
-  ]
-}`;
+  ],
+
+  "canImprove": <true or false>,
+  "improvementPotential": "<high|medium|low|exhausted>",
+  "convergenceReason": "<if canImprove is false or improvementPotential is 'low'/'exhausted', explain WHY the paper cannot be further improved given the source materials (interview content and available data). Be specific about what information is missing or what limits have been reached. If canImprove is true, this can be null.>"
+}
+
+IMPORTANT - CONVERGENCE ASSESSMENT:
+Assess whether this paper can be MEANINGFULLY improved given its source materials:
+- "high": Major improvements possible - clear gaps that can be addressed
+- "medium": Moderate improvements possible - some refinements available
+- "low": Minor improvements only - paper is near its potential given sources
+- "exhausted": No meaningful improvements possible - paper has reached maximum quality achievable from the interview/data
+
+Set canImprove=false if:
+1. All scores are 4+ and no major concerns exist
+2. The interview transcript lacks depth needed for requested improvements
+3. No data file was provided to support empirical claims
+4. Requested improvements would require fabricating content
+
+HONEST ASSESSMENT IS VALUED: It is better to acknowledge limits than to force unnecessary changes.`;
 
   return await callOpenAIJson<any>(aggregationPrompt);
 }
@@ -3201,6 +3248,10 @@ export interface ReviserResult {
   paperContent: string;
   dataAlert?: string;  // Alert for supervisor if data issues occurred
   usedSyntheticData: boolean;
+
+  // Limitation acknowledgment - when revision cannot meaningfully improve
+  limitedBySource: boolean;
+  limitationExplanation?: string;  // Why improvement is limited
 }
 
 /**
@@ -3295,6 +3346,9 @@ export const runReviser = async (
 
 GOLDEN RULE: Revisions ADD and IMPROVE - they NEVER SUBTRACT content.
 
+IMPORTANT - ACKNOWLEDGE LIMITATIONS:
+If the requested improvements CANNOT be made because the interview lacks necessary information or no data file was provided to support empirical claims, acknowledge this limitation rather than fabricating content. It is better to return the paper with minimal changes and explain what cannot be improved than to invent information.
+
 You are revising PART 1 of a two-part paper (front matter: Abstract through Results/Analysis).
 
 Original Paper PART 1:
@@ -3309,9 +3363,10 @@ ${supervisorComment}
 Instructions:
 1. Address feedback relevant to the front sections (Abstract, Introduction, Literature Review, Methodology, Results)
 2. Preserve ALL empirical content (data). You may only change or improve tables, figures, and results based on feedback (review) if you preserve the original data and don't make up results. You may improve the analysis of the data based on feedback (review).
-3. Add new content to strengthen weak areas
+3. Add new content to strengthen weak areas - but ONLY if the source materials support it
 4. Maintain academic writing style
 5. NEVER use placeholder text
+6. If you cannot meaningfully improve a section due to source limitations, leave it unchanged
 
 SECTION PRESERVATION CHECK - Your output MUST contain these sections IN ORDER:
 - \\section{Introduction}
@@ -3397,6 +3452,9 @@ Produce the revised PART 2:`;
 
 GOLDEN RULE: Revisions ADD and IMPROVE - they NEVER SUBTRACT content.
 
+IMPORTANT - ACKNOWLEDGE LIMITATIONS:
+If the requested improvements CANNOT be made because the interview lacks necessary information or no data file was provided to support empirical claims, acknowledge this limitation rather than fabricating content. It is better to return the paper with minimal changes and explain what cannot be improved than to invent information. Honest recognition of limits is valued over forced improvements.
+
 Original Paper:
 ${paperContent}
 
@@ -3407,14 +3465,15 @@ Supervisor Directives:
 ${supervisorComment}
 
 Instructions:
-1. Address all major concerns from the feedback
+1. Address all major concerns from the feedback - but ONLY if source materials support the improvement
 2. Fix minor corrections where possible
 3. Incorporate supervisor directives
 4. Preserve ALL empirical content (data). You may only change or improve tables, figures, and results based on feedback (review) if you preserve the original data and don't make up results. You may improve the analysis of the data based on feedback (review).
-5. Add new content to strengthen weak areas
+5. Add new content to strengthen weak areas - but ONLY if the interview/data supports it
 6. Maintain academic writing style
 7. NEVER use placeholder text like "[To be completed]", "[TBD]", or "[Results pending]"
 8. If any section has placeholder text, replace it with realistic, complete content
+9. If you cannot meaningfully improve the paper due to source limitations, return it with minimal changes
 
 CRITICAL OUTPUT FORMAT:
 - Output ONLY the complete revised LaTeX document
@@ -3531,10 +3590,23 @@ Abstract: ${abstractMatch ? abstractMatch[1].substring(0, 400) : ''}
   }
 
   console.log(`[Reviser] Revision complete! Final output length: ${result.length} characters`);
+
+  // Check if revision made minimal changes (potential sign of convergence)
+  const changeRatio = Math.abs(result.length - paperContent.length) / paperContent.length;
+  const limitedBySource = changeRatio < 0.02;  // Less than 2% change suggests limited improvement possible
+
+  if (limitedBySource) {
+    console.log(`[Reviser] Minimal changes detected (${(changeRatio * 100).toFixed(1)}% change) - paper may have reached its potential`);
+  }
+
   return {
     paperContent: result,
     dataAlert,
-    usedSyntheticData
+    usedSyntheticData,
+    limitedBySource,
+    limitationExplanation: limitedBySource
+      ? 'The revision resulted in minimal changes, suggesting the paper has reached its improvement potential given the available source materials (interview and data).'
+      : undefined
   };
 };
 

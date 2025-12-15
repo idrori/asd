@@ -75,6 +75,11 @@ export interface OversightFileData {
     reviewScores: ReviewScores;
     errorCounts: ErrorCounts;
   }[];
+
+  // Convergence assessment - can the paper be further improved?
+  canImprove?: boolean;
+  improvementPotential?: 'high' | 'medium' | 'low' | 'exhausted';
+  convergenceReason?: string;
 }
 
 /**
