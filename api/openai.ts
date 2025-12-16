@@ -85,13 +85,25 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // Build OpenAI request
-    // Note: reasoning_effort requires temperature=1 (default), so we omit temperature when using it
+    const modelToUse = body.model || process.env.OPENAI_MODEL || 'gpt-5.2';
+
+    // Models that support reasoning_effort (reasoning models)
+    const supportsReasoningEffort = modelToUse.includes('gpt-5') || modelToUse.includes('o1') || modelToUse.includes('o3');
+
     const openaiRequest: Record<string, any> = {
-      model: body.model || process.env.OPENAI_MODEL || 'gpt-5.2',
+      model: modelToUse,
       messages: body.messages,
       max_completion_tokens: body.max_completion_tokens || body.max_tokens || 16000,
-      reasoning_effort: 'high',
     };
+
+    // Add reasoning_effort only for models that support it
+    // Note: reasoning_effort requires temperature=1 (default), so we omit temperature when using it
+    if (supportsReasoningEffort) {
+      openaiRequest.reasoning_effort = 'high';
+    } else {
+      // For non-reasoning models, we can set temperature
+      openaiRequest.temperature = body.temperature ?? 0.7;
+    }
 
     // Add response_format if specified
     if (body.response_format) {
