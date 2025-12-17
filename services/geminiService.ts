@@ -1208,6 +1208,8 @@ IMPORTANT:
 - Align content with the paper TITLE (if already generated)
 - Do NOT include section headers in your response - just the content paragraphs
 - Do NOT repeat the section name at the start (no "**Introduction**", "# Introduction", etc.)
+- For SUBSECTIONS within a section, use LaTeX format: \\subsection{Subsection Title}
+- Do NOT use markdown bold **Subsection Title** for subsections - use \\subsection{} instead
 - NEVER use placeholder text like "[To be completed]", "[TBD]", "[Insert X here]", or "[Reference to be completed]"
 - ALL references in the bibliography MUST be complete with real author names, paper titles, journal/venue names, and publication years
 - Generate complete, realistic content based on the research context provided${context.dataSummary ? '\n- This is an EMPIRICAL study with real data - make this clear in your writing\n- For Methodology/Results: USE the actual data characteristics from the DATA FILE ANALYSIS above\n- Reference the data-driven nature of the research where appropriate' : ''}
@@ -1237,11 +1239,12 @@ CITATION FORMAT (CRITICAL - Inline APA 7th Edition Style):
     content = await callGemini(prompt, systemInstruction);
   }
 
-  // Strip any markdown headers that Gemini might have included (e.g., "**Introduction**", "# Title")
+  // Convert markdown subsection headers to LaTeX and strip main section headers
   content = content
-    .replace(/^\s*\*\*[^*]+\*\*\s*\n/gm, '')  // Remove **Header** lines
-    .replace(/^\s*#{1,3}\s+.+\n/gm, '')        // Remove # Header lines
-    .replace(/^\s*\*\*\d+\.?\s*[^*]+\*\*\s*\n/gm, '')  // Remove **1. Header** lines
+    // Convert standalone **Header** lines to \subsection{Header}
+    .replace(/^\s*\*\*([^*\n]+)\*\*\s*$/gm, '\\subsection{$1}')
+    // Remove # Header lines (main section duplicates)
+    .replace(/^\s*#{1,3}\s+.+\n/gm, '')
     .trim();
 
   return content;
