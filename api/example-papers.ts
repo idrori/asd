@@ -59,10 +59,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       });
     }
 
-    // Read all PDF files from the directory
-    const files = fs.readdirSync(examplesDir)
+    // Read all PDF files from the directory, sorted by size (smallest first)
+    // This helps stay under Vercel's 4.5MB payload limit
+    const allFiles = fs.readdirSync(examplesDir)
       .filter(f => f.toLowerCase().endsWith('.pdf'))
+      .map(f => ({
+        name: f,
+        size: fs.statSync(path.join(examplesDir, f)).size
+      }))
+      .sort((a, b) => a.size - b.size)  // Smallest first
       .slice(0, count);
+
+    const files = allFiles.map(f => f.name);
 
     console.log(`[Example Papers] Found ${files.length} PDF files, returning ${count}`);
 
