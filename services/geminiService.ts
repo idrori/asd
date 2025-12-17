@@ -192,15 +192,6 @@ async function callGeminiWithExamples(
   systemInstruction: string,
   examplePapers: ExamplePaper[]
 ): Promise<string> {
-  if (!API_KEY) {
-    throw new GeminiError(
-      GeminiErrorType.API_KEY_INVALID,
-      'Gemini API key is not configured',
-      'Missing VITE_GEMINI_API_KEY',
-      false
-    );
-  }
-
   // Build content parts: first the PDFs, then the text prompt
   const parts: Array<{ text?: string; inlineData?: { mimeType: string; data: string } }> = [];
 
@@ -250,6 +241,9 @@ Your output should match the quality, depth, and academic rigor of these exempla
   console.log(`[Gemini] Using model: ${getGeminiModel()}`);
   console.log(`[Gemini] Total parts: ${parts.length} (${examplePapers.length} PDFs + 1 text)`);
 
+  // Check for proxy availability first (like callGemini does)
+  const endpoint = await getApiEndpoint();
+
   // Use a longer timeout for multimodal requests
   const controller = new AbortController();
   const timeoutId = setTimeout(() => {
@@ -258,12 +252,38 @@ Your output should match the quality, depth, and academic rigor of these exempla
   }, 300000); // 5 minute timeout for large multimodal requests
 
   try {
-    const response = await fetch(getGeminiDirectUrl(), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-      signal: controller.signal
-    });
+    let response: Response;
+
+    if (endpoint.type === 'vercel') {
+      // Use Vercel proxy (recommended - keeps API key secure)
+      const proxyUrl = `${endpoint.baseUrl}/api/gemini`;
+      console.log(`[Gemini] Using Vercel proxy for multimodal request: ${proxyUrl}`);
+
+      response = await fetch(proxyUrl, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ ...body, model: getGeminiModel() }),
+        signal: controller.signal
+      });
+    } else {
+      // Direct API call (requires API key)
+      if (!API_KEY) {
+        throw new GeminiError(
+          GeminiErrorType.API_KEY_INVALID,
+          'Gemini API key is not configured and no proxy available',
+          'Missing VITE_GEMINI_API_KEY',
+          false
+        );
+      }
+
+      console.log('[Gemini] Using direct API for multimodal request');
+      response = await fetch(getGeminiDirectUrl(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+        signal: controller.signal
+      });
+    }
 
     clearTimeout(timeoutId);
 
