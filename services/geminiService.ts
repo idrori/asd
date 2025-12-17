@@ -1320,7 +1320,7 @@ export const runBuilder = async (
     try {
       onProgress?.('Loading Examples', 'starting');
       console.log('[Builder] Research mode - loading ICIS 2024 example papers...');
-      examplePapers = await loadExamplePapers(3);  // Load 3 exemplar papers (Vercel 4.5MB payload limit)
+      examplePapers = await loadExamplePapers(7);  // Load 7 smallest exemplar papers (~4MB, under Vercel limit)
       console.log(`[Builder] Loaded ${examplePapers.length} example papers for quality calibration`);
       onProgress?.('Loading Examples', 'completed');
     } catch (error) {
