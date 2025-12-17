@@ -15,8 +15,8 @@ export const config = {
   maxDuration: 30,
 };
 
-// SECURITY: Viewer password - configurable via environment variable
-const VIEWER_PASSWORD = process.env.VIEWER_PASSWORD || 'tennessee2025';
+// SECURITY: Viewer password - must be set via VIEWER_PASSWORD environment variable
+const VIEWER_PASSWORD = process.env.VIEWER_PASSWORD;
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Set CORS headers
@@ -44,6 +44,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // SECURITY: Validate password before serving PDF
+    if (!VIEWER_PASSWORD) {
+      console.error('[Viewer PDF] VIEWER_PASSWORD environment variable not configured');
+      return res.status(503).json({
+        success: false,
+        error: 'Viewer not configured'
+      });
+    }
+
     if (!password) {
       return res.status(401).json({
         success: false,
