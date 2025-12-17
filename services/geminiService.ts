@@ -1206,7 +1206,8 @@ IMPORTANT:
 - No bullet points in the main narrative
 - Maintain consistency with previous sections
 - Align content with the paper TITLE (if already generated)
-- Do NOT include section headers in your response - just the content
+- Do NOT include section headers in your response - just the content paragraphs
+- Do NOT repeat the section name at the start (no "**Introduction**", "# Introduction", etc.)
 - NEVER use placeholder text like "[To be completed]", "[TBD]", "[Insert X here]", or "[Reference to be completed]"
 - ALL references in the bibliography MUST be complete with real author names, paper titles, journal/venue names, and publication years
 - Generate complete, realistic content based on the research context provided${context.dataSummary ? '\n- This is an EMPIRICAL study with real data - make this clear in your writing\n- For Methodology/Results: USE the actual data characteristics from the DATA FILE ANALYSIS above\n- Reference the data-driven nature of the research where appropriate' : ''}
@@ -1235,6 +1236,13 @@ CITATION FORMAT (CRITICAL - Inline APA 7th Edition Style):
   } else {
     content = await callGemini(prompt, systemInstruction);
   }
+
+  // Strip any markdown headers that Gemini might have included (e.g., "**Introduction**", "# Title")
+  content = content
+    .replace(/^\s*\*\*[^*]+\*\*\s*\n/gm, '')  // Remove **Header** lines
+    .replace(/^\s*#{1,3}\s+.+\n/gm, '')        // Remove # Header lines
+    .replace(/^\s*\*\*\d+\.?\s*[^*]+\*\*\s*\n/gm, '')  // Remove **1. Header** lines
+    .trim();
 
   return content;
 }
