@@ -10,11 +10,12 @@ This set of prompts is designed to help you REVISE an existing ICIS (Internation
 
 Verify that the following files exist in directory "icis" (using participantId):
 - 'icisTemplate.txt' - template for writing a 16-page paper
-- 'icis2024Examples/' - 11 representative ICIS papers for calibration
 - 'feedback_{participantId}_v*.txt' - feedback file for revision
 - Previous paper version: icis_paper_{participantId}_v{N}.tex
 - Existing figures in Results/ directory
 - Existing code in Code/ directory
+
+**CALIBRATION:** Quality standards from 11 ICIS 2024 exemplar papers are embedded in APPENDIX E of this document. Use these patterns when revising to ensure paper maintains conference quality standards.
 
 # For running Python: Use 'py' on Windows, 'python3' on Linux/Mac
 
@@ -886,4 +887,166 @@ Familiarity breeds ownership.
 ✅ **Flowing:**
 ```
 Three routes develop psychological ownership. First, controlling the target enhances feelings as individuals exercise decisions over use. Second, intimately knowing develops through deep engagement and familiarity. Third, self-investment incorporates objects into extended self-concept.
+```
+
+---
+
+# APPENDIX E: ICIS REVISION CALIBRATION GUIDE
+
+This appendix provides calibration guidance for revisions, extracted from analysis of 11 exemplar ICIS 2024 papers. Use these patterns to ensure revised papers meet ICIS quality standards.
+
+## E.1 Section Quality Benchmarks (Target Standards)
+
+When revising, ensure each section meets these quality thresholds derived from exemplar papers:
+
+| Section | Target Words | Target Citations | Quality Markers |
+|---------|-------------|------------------|-----------------|
+| Introduction | 600-800 | 8-12 | Clear hook, explicit gap, numbered contributions |
+| Literature Review | 800-1200 | 25-35 | Thematic organization, synthesis not summary |
+| Theory/Framework | 500-800 | 10-15 | Established theory base, logical hypothesis derivation |
+| Methodology | 800-1200 | 8-12 | Replicable detail, justified design choices |
+| Results | 700-1000 | 2-5 | Tables/figures, systematic hypothesis reporting |
+| Discussion | 600-900 | 10-15 | Theory + practice implications, limitations |
+| Conclusion | 200-400 | 0-2 | Summary, contributions recap, future directions |
+
+## E.2 Common Revision Feedback Categories
+
+Based on typical ICIS review feedback, prioritize revisions in this order:
+
+**1. Contribution Clarity (Most Critical)**
+- Reviewers ask: "What is the contribution?"
+- Fix: Add explicit contribution statement in introduction (3-4 numbered points)
+- Pattern: "This paper makes three contributions to IS research. First, we [theoretical contribution]. Second, we [methodological contribution]. Third, we [practical contribution]."
+
+**2. Theoretical Grounding**
+- Reviewers ask: "What theory justifies this?"
+- Fix: Anchor research in established IS/behavioral/economic theory
+- Pattern: Add theoretical lens section, derive hypotheses from theory
+
+**3. Methodological Rigor**
+- Reviewers ask: "How was this done?"
+- Fix: Add procedural details, justify design choices
+- Pattern: Include sample justification, measure details, analysis rationale
+
+**4. Results Interpretation**
+- Reviewers ask: "What do these findings mean?"
+- Fix: Connect findings to hypotheses and prior literature
+- Pattern: "H1 was supported (β = X.XX, p < 0.01), consistent with [prior work]"
+
+**5. Implications Development**
+- Reviewers ask: "So what?"
+- Fix: Develop theoretical AND practical implications
+- Pattern: Numbered implications with specific guidance
+
+## E.3 Adding Content Without Disrupting Flow
+
+When feedback requires adding new content, use these integration patterns:
+
+**Adding Citations to Existing Paragraphs:**
+```
+Original: "Prior research has examined this phenomenon."
+Revised: "Prior research has examined this phenomenon (Smith et al., 2020; Jones, 2019), establishing that [key finding] while noting [limitation this paper addresses]."
+```
+
+**Expanding Methodology Details:**
+```
+Original: "We collected data from participants."
+Revised: "We collected data from 247 participants (54% female, mean age = 32.4, SD = 8.7) recruited through Prolific Academic, following power analysis indicating 200+ participants for detecting medium effects (Cohen's d = 0.5) at α = 0.05, power = 0.80."
+```
+
+**Strengthening Hypothesis Justification:**
+```
+Original: "We hypothesize that X affects Y."
+Revised: "Drawing on [Theory] (Author, Year), which posits that [mechanism], we expect [application to context]. The theoretical logic suggests that when [condition], individuals will [response], leading to [outcome]. Therefore: H1: X is positively associated with Y."
+```
+
+## E.4 Preserving Empirical Integrity During Revision
+
+**Never Change:**
+- Reported statistical values (β, p, R², F)
+- Sample sizes and demographics
+- Measurement items
+- Data collection procedures
+
+**Can Enhance:**
+- Interpretation of results
+- Additional analyses (robustness checks, post-hoc tests)
+- Tables/figures for visualization
+- Connection to literature
+
+**If Reviewer Requests Different Analysis:**
+- Add new analysis as supplementary
+- Keep original analysis intact
+- Explain methodological choice
+
+## E.5 Addressing Limitations Constructively
+
+Exemplar pattern for limitations section:
+
+```
+While this study contributes to understanding of [topic], several limitations warrant discussion. First, [limitation 1] may affect [aspect]. Future research could address this by [mitigation]. Second, [limitation 2] constrains generalizability to [boundary condition]. Third, [limitation 3] suggests caution in interpreting [finding]. Despite these limitations, our findings provide [value] and establish a foundation for [future direction].
+```
+
+Key principles:
+- Acknowledge genuine limitations honestly
+- Suggest how future research can address them
+- End on constructive note about study's value
+- Avoid defensive language
+
+## E.6 Theory Integration Patterns
+
+When reviewers request stronger theoretical grounding:
+
+**Theory Introduction Pattern:**
+```
+We draw on [Theory Name] (Foundational Author, Year) to develop our theoretical framework. [Theory Name] posits that [core theoretical premise]. This theory is particularly relevant to our context because [specific application to research problem]. Building on this theoretical foundation, we develop hypotheses regarding [key relationships].
+```
+
+**Commonly Used IS Theories (from exemplars):**
+- Technology Acceptance Model (TAM) - adoption decisions
+- Theory of Planned Behavior (TPB) - behavioral intentions
+- Self-Determination Theory - motivation, autonomy
+- Information Processing Theory - attention, cognitive load
+- Signaling Theory - information asymmetry
+- Resource-Based View - capabilities, competitive advantage
+- Power-Dependence Theory - exchange relationships
+- Platform Entrepreneurship Theory - digital platform dynamics
+
+## E.7 Results Enhancement Patterns
+
+When adding figures or tables to Results:
+
+**Table Presentation:**
+```latex
+\begin{table}[h]
+\centering
+\caption{Hypothesis Test Results}
+\label{tab:results}
+\begin{tabular}{lccc}
+\hline
+Hypothesis & β & SE & p-value \\
+\hline
+H1: X → Y & 0.35*** & 0.08 & <0.001 \\
+H2: M × X → Y & 0.22** & 0.09 & 0.014 \\
+\hline
+\multicolumn{4}{l}{\small Notes: *** p<0.01, ** p<0.05, * p<0.10} \\
+\end{tabular}
+\end{table}
+```
+
+**Results Narrative Pattern:**
+```
+Table X reports the hypothesis test results. H1 predicted that [X affects Y], and this hypothesis was supported (β = 0.35, p < 0.001). This finding is consistent with [prior work] and suggests that [interpretation]. H2 predicted [moderation effect], which was also supported (β = 0.22, p = 0.014), indicating that [interpretation of interaction].
+```
+
+## E.8 Discussion Enhancement Patterns
+
+**Theoretical Implications Pattern:**
+```
+Our findings advance understanding of [phenomenon] in several ways. First, we demonstrate that [key finding 1], which extends prior work by [Author] (Year) that found [related finding]. This suggests that [theoretical insight]. Second, we reveal that [key finding 2], challenging the prevailing assumption that [prior belief]. Third, our results highlight the importance of [factor], adding nuance to [existing theory].
+```
+
+**Practical Implications Pattern:**
+```
+For practitioners, our findings offer actionable guidance. First, managers should [specific recommendation 1] because [rationale from findings]. Specifically, [detailed guidance]. Second, organizations can [recommendation 2] to [achieve outcome]. Our results suggest that [timing/condition] is particularly important for [action].
 ```

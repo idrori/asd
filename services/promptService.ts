@@ -14,10 +14,11 @@ import setupPrompt from '../prompts/ICISsetup.txt?raw';
 import supervisorPrompt from '../prompts/ICISsupervisor.txt?raw';
 import finalizePrompt from '../prompts/ICISfinalize.txt?raw';
 import templatePrompt from '../prompts/icisTemplate.txt?raw';
+import misqCriteriaPrompt from '../prompts/misqReviewCriteria.txt?raw';
 import { ICIS_BASE_PATH } from '../constants';
 
 // Prompt keys
-export type PromptKey = 'SETUP' | 'BUILDER' | 'REVIEWER' | 'SUPERVISOR' | 'REVISER' | 'FINALIZE' | 'TEMPLATE';
+export type PromptKey = 'SETUP' | 'BUILDER' | 'REVIEWER' | 'SUPERVISOR' | 'REVISER' | 'FINALIZE' | 'TEMPLATE' | 'MISQ_CRITERIA';
 
 // Map of prompt keys to their raw content
 const RAW_PROMPTS: Record<PromptKey, string> = {
@@ -27,7 +28,8 @@ const RAW_PROMPTS: Record<PromptKey, string> = {
   SUPERVISOR: supervisorPrompt,
   REVISER: reviserPrompt,
   FINALIZE: finalizePrompt,
-  TEMPLATE: templatePrompt
+  TEMPLATE: templatePrompt,
+  MISQ_CRITERIA: misqCriteriaPrompt
 };
 
 /**

@@ -17,7 +17,7 @@ export interface SetupResult {
   foundFiles: {
     interview: boolean;
     template: boolean;
-    examples: boolean;
+    calibrationEmbedded: boolean;  // Quality patterns embedded in prompts (always true)
     dataFile: boolean;
   };
   errors: string[];
@@ -41,7 +41,7 @@ export async function verifySetup(_config: SetupConfig): Promise<SetupResult> {
     foundFiles: {
       interview: true,
       template: true,
-      examples: true,
+      calibrationEmbedded: true,  // Quality patterns from 11 ICIS 2024 papers embedded in ICISbuilder.txt Appendix F and ICISreviser.txt Appendix E
       dataFile: false,
     },
     errors: [],

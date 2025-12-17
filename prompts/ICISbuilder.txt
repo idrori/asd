@@ -3,8 +3,9 @@ This set of prompts is designed to help you build a NEW research paper for ICIS 
 Verify that the following files exist in directory "icis" or its subdirectories {ICIS_PATH}\Data, {ICIS_PATH}\Code, {ICIS_PATH}\Templates:
 - 'icisTemplate.txt' - template for writing a 16-page paper
 - 'INTERVIEW_{participantId}_{timestamp}.txt' - interview transcript
-- 'icis2024Examples/' - 11 representative ICIS papers for calibration
 - 'Data_file_{participantId}.*' - [Optional] data supplied by participant
+
+**CALIBRATION:** Quality standards and structural patterns from 11 ICIS 2024 exemplar papers are embedded in APPENDIX F of this document. Use these patterns to calibrate paper generation.
 
 # For running Python: Use 'py' on Windows, 'python3' on Linux/Mac
 ---
@@ -139,7 +140,7 @@ Document result:
 
 ## STEP 2: PLAN ACCORDING TO RESEARCH TYPE
 
-Read 11 papers in ICIS2024Examples/ to familiarize with ICIS standards and similar research.
+**CALIBRATION:** Refer to APPENDIX F (ICIS Paper Calibration Guide) for quality standards, structural patterns, and methodology-specific guidance extracted from 11 exemplar ICIS 2024 papers. Use these patterns to ensure paper meets conference standards.
 
 According to research type from STEP 1, follow appropriate sub-step:
 
@@ -1495,3 +1496,245 @@ Refer to ISR/MISQ editorials on theoretical contributions
 ## E.3 Experimental Design
 
 Refer to experimental design standards in IS journals
+
+---
+
+# APPENDIX F: ICIS PAPER CALIBRATION GUIDE
+
+This appendix provides calibration guidance extracted from analysis of 11 exemplar ICIS 2024 papers. Use these patterns to ensure generated papers meet ICIS quality standards.
+
+## F.1 Structural Patterns (All Research Types)
+
+**Paper Length and Format:**
+- Completed Research Papers: 15-17 pages (including references)
+- All sections present, flowing narrative (no bullet points in body)
+- 2-level heading structure only: \section{} and \subsection{}
+
+**Section Length Benchmarks (from exemplar papers):**
+
+| Section | Pages | Word Count | Key Elements |
+|---------|-------|------------|--------------|
+| Abstract | - | 250-300 words | Problem, method, findings, contribution |
+| Introduction | 1.5-2 | 600-800 | Hook, gap, RQ, contributions (3-4), roadmap |
+| Literature/Background | 2-3 | 800-1200 | Thematic organization, gap identification |
+| Theoretical Framework | 1-2 | 500-800 | Theory basis, constructs, hypotheses |
+| Methodology | 2-3 | 800-1200 | Design, data, measures, analysis plan |
+| Results | 2-3 | 700-1000 | Tables, figures, statistical findings |
+| Discussion | 1.5-2 | 600-900 | Implications (theoretical + practical), limitations |
+| Conclusion | 0.5-1 | 200-400 | Summary, contributions, future research |
+| References | 1-2 | 40-60 citations | APA format, recent + foundational |
+
+## F.2 Introduction Patterns
+
+**Opening Hook Patterns (from exemplars):**
+- Start with concrete phenomenon or statistic that motivates research
+- Example pattern: "[Domain] has witnessed [significant trend/phenomenon], yet [gap remains]."
+- Avoid generic openings; be specific to research context
+
+**Research Gap Articulation:**
+- Explicitly state what prior research has NOT addressed
+- Use language: "However, prior research has largely overlooked...", "Despite this importance, we lack understanding of..."
+- Connect gap to practical significance
+
+**Contribution Statement Pattern (exemplar structure):**
+```
+This paper makes [three/four] contributions to IS research. First, we [primary theoretical contribution]. Second, we [methodological or additional theoretical contribution]. Third, we [practical/empirical contribution]. [Optional: Fourth, we...]
+```
+
+**Roadmap Pattern:**
+- Final paragraph of introduction
+- One sentence per remaining section
+- Example: "The remainder of this paper is organized as follows. Section 2 reviews... Section 3 presents... Section 4 describes... Section 5 reports... Section 6 discusses... Section 7 concludes."
+
+## F.3 Theoretical Framework Patterns
+
+**Theory Selection (from 11 exemplars):**
+Successful papers anchor in established theories:
+- Power-Dependence Theory (social exchange contexts)
+- Theory of Effective Use (technology adoption/usage)
+- Self-Determination Theory (motivation, autonomy)
+- Protection Motivation Theory (security behaviors)
+- Signaling Theory (information asymmetry contexts)
+- Information Processing Theory (cognitive load, attention)
+- Platform Entrepreneurship Theory (digital platform contexts)
+- Organizational Learning Theory (learning, exploration/exploitation)
+- Resource-Based View (strategic capabilities)
+
+**Hypothesis Development Pattern:**
+1. State theoretical premise (with citations)
+2. Apply to research context
+3. Derive logical prediction
+4. State formal hypothesis (H1, H2, etc.)
+
+Example structure:
+```
+According to [Theory] (Author, Year), [theoretical mechanism]. In the context of [research domain], this suggests that [application to context]. Therefore, we hypothesize:
+
+H1: [Independent variable] is [positively/negatively] associated with [dependent variable].
+```
+
+## F.4 Methodology Patterns by Research Type
+
+### Empirical/Quantitative Research:
+- Sample size justification (power analysis or precedent)
+- Measurement scales with reliability (Cronbach's alpha ≥ 0.70)
+- Control variables explicitly listed and justified
+- Analysis techniques matched to hypotheses
+
+### Qualitative Research:
+- Sampling strategy (purposive, theoretical)
+- Interview protocol or observation guide
+- Coding process (open, axial, selective for grounded theory)
+- Trustworthiness measures (member checking, triangulation)
+
+### Design Science Research:
+- Clear problem identification and motivation
+- Design objectives derived from problem
+- Artifact description and development process
+- Demonstration and evaluation methods
+- Contribution to knowledge base
+
+### Computational/Simulation Research:
+- Model specification (parameters, assumptions)
+- Validation approach (stylized facts, empirical patterns)
+- Sensitivity analysis plan
+- Reproducibility details (seeds, configurations)
+
+### Experimental Research:
+- Experimental design (between/within subjects)
+- Randomization procedure
+- Manipulation checks
+- Balance tests for conditions
+
+## F.5 Results Presentation Patterns
+
+**Table Standards (from exemplars):**
+- Table 1: Descriptive statistics (means, SDs, correlations)
+- Table 2+: Hypothesis test results (coefficients, SEs, p-values)
+- Clear column headers with variable names
+- Notes explaining significance levels (*** p<0.01, ** p<0.05, * p<0.10)
+- Effect sizes where appropriate (Cohen's d, R², η²)
+
+**Figure Standards:**
+- Figure 1: Research model/theoretical framework
+- Additional figures: Key results visualization
+- Clear axis labels and legends
+- Publication quality (300 DPI minimum)
+- Referenced and discussed in text
+
+**Results Narrative Pattern:**
+- Lead with overview of findings
+- Report each hypothesis result systematically
+- Use consistent language: "H1 was supported (β = X.XX, p < 0.01)"
+- Discuss unexpected findings
+- Connect to research questions
+
+## F.6 Discussion Patterns
+
+**Theoretical Implications Structure:**
+```
+Our findings contribute to [theory/literature] in several ways. First, [contribution 1 with connection to prior work]. This extends [prior finding] by showing [how this study advances understanding]. Second, [contribution 2]...
+```
+
+**Practical Implications Structure:**
+```
+For practitioners, our findings suggest [actionable recommendation 1]. Specifically, [detailed guidance]. Additionally, [recommendation 2]...
+```
+
+**Limitations Pattern (honest but not undermining):**
+- Acknowledge genuine limitations
+- Suggest how future research can address them
+- Example: "While our [sample/method] provides [advantages], future research could extend these findings by [addressing limitation]."
+
+## F.7 Quality Benchmarks (from MISQ Review Criteria)
+
+**Contribution Assessment:**
+- Does it address important IS problems?
+- Is the work intellectually novel?
+- Will it have significant impact?
+
+**Theoretical Development:**
+- Is the theory well-justified and aligned with RQ?
+- Are claims substantiated with logic and evidence?
+
+**Methodological Rigor:**
+- Is research design appropriate for questions asked?
+- Are methods executed properly?
+
+**Clarity and Presentation:**
+- Is the work coherent and well-organized?
+- Is writing clear and accessible?
+
+## F.8 Common Quality Issues to Avoid
+
+**Fatal Issues (render paper unpublishable):**
+- No clear contribution statement
+- Theory-method misalignment
+- Fabricated or unverifiable data
+- Missing core sections
+
+**Major Issues (must address):**
+- Weak theoretical grounding
+- Insufficient sample size or data
+- Improper statistical methods
+- Overstated claims
+
+**Minor Issues (should address):**
+- Unclear writing in places
+- Missing details in methodology
+- Incomplete literature review
+- Formatting inconsistencies
+
+## F.9 Methodology-Specific Exemplar Patterns
+
+### Multimodal/ML Research Pattern:
+- Problem: prediction/classification task in IS domain
+- Method: deep learning architecture (CNN, LSTM, Transformer)
+- Data: multimodal inputs (text, images, structured data)
+- Evaluation: accuracy, F1, AUC with ablation studies
+- Theory: connect ML approach to IS theory (e.g., Theory of Effective Use)
+
+### Analytical Modeling Pattern:
+- Problem: strategic interaction or optimization
+- Method: game theory, economic modeling
+- Analysis: equilibrium derivation, comparative statics
+- Validation: numerical examples or empirical data
+- Contribution: novel theoretical insights
+
+### Qualitative/Grounded Theory Pattern:
+- Problem: understanding emergent phenomenon
+- Method: interviews (15-30 participants typical)
+- Analysis: coding (open, axial, selective), constant comparison
+- Output: theoretical framework or typology
+- Validation: member checking, theoretical saturation
+
+### Design Science Pattern:
+- Problem: identified practical problem
+- Method: artifact design and development
+- Evaluation: demonstration, experimental evaluation, or expert review
+- Contribution: design principles, instantiation
+
+### Experimental Pattern:
+- Problem: test causal relationships
+- Method: factorial design, randomized assignment
+- Analysis: ANOVA, regression, mediation/moderation
+- Validation: manipulation checks, robustness tests
+
+## F.10 Reference Integration Patterns
+
+**Citation Density Benchmarks:**
+- Introduction: 8-12 citations
+- Literature Review: 25-35 citations
+- Theoretical Framework: 10-15 citations
+- Methodology: 8-12 citations (methods papers, scales)
+- Discussion: 10-15 citations (comparing to prior work)
+
+**Citation Integration Styles:**
+- Parenthetical: "Prior research has shown [finding] (Author, Year)."
+- Narrative: "Author (Year) demonstrated that [finding]."
+- Multiple sources: "Several studies have found [finding] (Author1, Year; Author2, Year; Author3, Year)."
+
+**Foundational vs. Recent Citations:**
+- Include seminal/foundational papers (pre-2010)
+- Emphasize recent work (last 5 years)
+- Balance: ~30% foundational, ~70% recent

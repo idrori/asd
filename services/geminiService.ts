@@ -2633,24 +2633,12 @@ export const runReviewer = async (
   // Load the reviewer prompt from file
   const reviewerPrompt = await loadPrompt('REVIEWER');
 
-  // Try to load MISQ review criteria PDF
+  // Load pre-extracted MISQ review criteria from static file (no PDF extraction needed)
   let misqReviewCriteria = '';
   try {
-    console.log('[Reviewer] Loading MISQ review criteria PDF...');
-    const pdfResult = await readPdfFile('reviewingMISQ.pdf');
-    if (pdfResult.success && pdfResult.base64) {
-      // Ask Gemini to extract key review criteria from the PDF
-      console.log('[Reviewer] Extracting review criteria from PDF...');
-      misqReviewCriteria = await callGeminiWithPdf(
-        `Extract and summarize the key IS journal review criteria from this document.
-         Focus on: evaluation dimensions, quality standards, common issues to look for,
-         and what makes a strong contribution.
-         Keep the summary under 500 words, in bullet point format.`,
-        pdfResult.base64,
-        pdfResult.mimeType
-      );
-      console.log('[Reviewer] MISQ criteria loaded successfully');
-    }
+    console.log('[Reviewer] Loading MISQ review criteria...');
+    misqReviewCriteria = await loadPrompt('MISQ_CRITERIA');
+    console.log('[Reviewer] MISQ criteria loaded successfully');
   } catch (error) {
     console.warn('[Reviewer] Could not load MISQ review criteria:', error);
     // Continue without MISQ criteria - not critical

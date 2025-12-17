@@ -53,9 +53,10 @@ REQUIRED FILES
    - File: icisTemplate.txt
    - Contains: ICIS formatting guidelines
 
-3. EXAMPLE PAPERS (Bundled)
-   - Location: icis2024Examples/
-   - Contains: 11 reference papers (pre-loaded)
+3. QUALITY CALIBRATION (Embedded)
+   - Location: ICISbuilder.txt Appendix F, ICISreviser.txt Appendix E
+   - Contains: Quality standards, structural patterns, and methodology guidance extracted from 11 ICIS 2024 exemplar papers
+   - Status: Embedded in prompts (no file loading required)
 
 4. DATA FILE (Optional)
    - Format: .xlsx, .csv
