@@ -650,6 +650,14 @@
   </div>
 
   <script>
+    // Get API base URL - use Vercel when on GitHub Pages
+    function getApiUrl() {
+      if (window.location.hostname.includes('github.io')) {
+        return 'https://icis-deploy-12-10-2025.vercel.app';
+      }
+      return window.location.origin;
+    }
+
     // Authentication - credentials validated via API (not stored in client code)
     const AUTH_STORAGE_KEY = 'icis_authenticated';
 
@@ -683,7 +691,8 @@
       submitBtn.textContent = 'Signing in...';
 
       try {
-        const response = await fetch('/api/validate-auth', {
+        const apiBase = getApiUrl();
+        const response = await fetch(`${apiBase}/api/validate-auth`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, password })
@@ -736,14 +745,6 @@
     // Check if we're in research mode (only register participants in research mode)
     function isResearchMode() {
       return getInterviewMode() === 'research';
-    }
-
-    // Get API base URL
-    function getApiUrl() {
-      if (window.location.hostname.includes('github.io')) {
-        return 'https://icis-deploy-12-10-2025.vercel.app';
-      }
-      return window.location.origin;
     }
 
     // Show error message
