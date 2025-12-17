@@ -322,6 +322,63 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Example papers endpoint - returns ICIS 2024 exemplar papers as base64
+// Used for research mode quality calibration with Gemini
+app.get('/api/example-papers', (req, res) => {
+  try {
+    const count = Math.min(Math.max(1, parseInt(req.query.count) || 10), 11);
+    const examplesDir = path.join(__dirname, 'icis2024Examples');
+
+    if (!fs.existsSync(examplesDir)) {
+      console.error(`[Example Papers] Directory not found: ${examplesDir}`);
+      return res.status(404).json({
+        success: false,
+        error: 'Example papers directory not found'
+      });
+    }
+
+    // Read all PDF files from the directory
+    const files = fs.readdirSync(examplesDir)
+      .filter(f => f.toLowerCase().endsWith('.pdf'))
+      .slice(0, count);
+
+    console.log(`[Example Papers] Found ${files.length} PDF files, returning ${count}`);
+
+    // Read each PDF and convert to base64
+    const papers = [];
+    for (const filename of files) {
+      const filePath = path.join(examplesDir, filename);
+      const fileBuffer = fs.readFileSync(filePath);
+      const base64 = fileBuffer.toString('base64');
+
+      papers.push({
+        filename,
+        base64,
+        mimeType: 'application/pdf',
+        size: fileBuffer.length
+      });
+
+      console.log(`[Example Papers] Loaded: ${filename} (${Math.round(fileBuffer.length / 1024)}KB)`);
+    }
+
+    const totalSize = papers.reduce((sum, p) => sum + p.size, 0);
+    console.log(`[Example Papers] Total: ${papers.length} papers, ${Math.round(totalSize / 1024 / 1024)}MB`);
+
+    res.json({
+      success: true,
+      count: papers.length,
+      totalSize,
+      papers
+    });
+  } catch (error) {
+    console.error('[Example Papers] Error:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Failed to load example papers'
+    });
+  }
+});
+
 // OpenAI proxy endpoint - securely proxies requests to OpenAI API
 // This keeps the API key on the server side only
 app.post('/api/openai/chat', async (req, res) => {

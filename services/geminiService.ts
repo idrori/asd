@@ -100,6 +100,227 @@ if (!API_BASE_URL && !GEMINI_API_KEY) {
   console.log('[API] Using direct API calls (development mode)');
 }
 
+// ============================================================================
+// Example Papers for Research Mode
+// ============================================================================
+
+interface ExamplePaper {
+  filename: string;
+  base64: string;
+  mimeType: string;
+  size: number;
+}
+
+// Cache for loaded example papers (to avoid repeated fetches)
+let cachedExamplePapers: ExamplePaper[] | null = null;
+let examplePapersLoadPromise: Promise<ExamplePaper[]> | null = null;
+
+/**
+ * Load ICIS 2024 example papers for use as exemplars in research mode
+ * Papers are cached after first load to avoid repeated API calls
+ *
+ * @param count - Number of papers to load (default: 10, max: 11)
+ * @returns Array of example papers with base64-encoded PDF content
+ */
+async function loadExamplePapers(count: number = 10): Promise<ExamplePaper[]> {
+  // Return cached papers if available
+  if (cachedExamplePapers && cachedExamplePapers.length >= count) {
+    console.log(`[ExamplePapers] Using cached papers (${cachedExamplePapers.length} available)`);
+    return cachedExamplePapers.slice(0, count);
+  }
+
+  // If a load is already in progress, wait for it
+  if (examplePapersLoadPromise) {
+    console.log('[ExamplePapers] Load already in progress, waiting...');
+    const papers = await examplePapersLoadPromise;
+    return papers.slice(0, count);
+  }
+
+  // Start loading
+  console.log(`[ExamplePapers] Loading ${count} example papers...`);
+
+  examplePapersLoadPromise = (async () => {
+    try {
+      // Determine API URL
+      const apiUrl = API_BASE_URL
+        ? `${API_BASE_URL}/api/example-papers?count=${count}`
+        : `${LOCAL_BACKEND_URL}/api/example-papers?count=${count}`;
+
+      console.log(`[ExamplePapers] Fetching from: ${apiUrl}`);
+
+      const response = await fetch(apiUrl, {
+        method: 'GET',
+        headers: getAuthHeaders()
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to load example papers: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      if (!data.success || !data.papers) {
+        throw new Error(data.error || 'Invalid response from example papers API');
+      }
+
+      cachedExamplePapers = data.papers;
+      console.log(`[ExamplePapers] Loaded ${data.papers.length} papers (${Math.round(data.totalSize / 1024 / 1024)}MB total)`);
+
+      return data.papers;
+    } catch (error) {
+      console.error('[ExamplePapers] Failed to load:', error);
+      // Don't cache the failure
+      examplePapersLoadPromise = null;
+      throw error;
+    }
+  })();
+
+  return examplePapersLoadPromise;
+}
+
+/**
+ * Call Gemini with example papers as context (research mode only)
+ * Includes up to 10 ICIS 2024 exemplar papers as multimodal PDF content
+ *
+ * @param prompt - The text prompt
+ * @param systemInstruction - System instruction for the model
+ * @param examplePapers - Array of example papers to include
+ * @returns The model's response text
+ */
+async function callGeminiWithExamples(
+  prompt: string,
+  systemInstruction: string,
+  examplePapers: ExamplePaper[]
+): Promise<string> {
+  if (!API_KEY) {
+    throw new GeminiError(
+      GeminiErrorType.API_KEY_INVALID,
+      'Gemini API key is not configured',
+      'Missing VITE_GEMINI_API_KEY',
+      false
+    );
+  }
+
+  // Build content parts: first the PDFs, then the text prompt
+  const parts: Array<{ text?: string; inlineData?: { mimeType: string; data: string } }> = [];
+
+  // Add each example paper as inline PDF data
+  for (const paper of examplePapers) {
+    parts.push({
+      inlineData: {
+        mimeType: paper.mimeType,
+        data: paper.base64
+      }
+    });
+  }
+
+  // Add instruction about the examples
+  const exampleInstruction = `
+You have been provided with ${examplePapers.length} exemplar ICIS (International Conference on Information Systems) papers as PDFs above.
+These are high-quality, published papers that represent the standard of excellence for ICIS publications.
+
+CRITICAL INSTRUCTION: Use these papers as examples of:
+1. Academic writing style and tone appropriate for top-tier IS venues
+2. Paper structure and section organization
+3. Depth and rigor of theoretical development
+4. Quality of literature review and citation practices
+5. Methodology presentation standards
+6. Results presentation and interpretation
+7. Discussion and contribution articulation
+
+Your output should match the quality, depth, and academic rigor of these exemplar papers.
+
+`;
+
+  // Add the actual prompt with the example instruction
+  parts.push({
+    text: exampleInstruction + prompt
+  });
+
+  const body = {
+    contents: [{ parts }],
+    systemInstruction: systemInstruction ? { parts: [{ text: systemInstruction }] } : undefined,
+    generationConfig: {
+      maxOutputTokens: 8192,
+      temperature: 0.7
+    }
+  };
+
+  console.log(`[Gemini] Calling with ${examplePapers.length} example papers...`);
+  console.log(`[Gemini] Using model: ${getGeminiModel()}`);
+  console.log(`[Gemini] Total parts: ${parts.length} (${examplePapers.length} PDFs + 1 text)`);
+
+  // Use a longer timeout for multimodal requests
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => {
+    console.log('[Gemini] Request timeout - aborting after 5 minutes');
+    controller.abort();
+  }, 300000); // 5 minute timeout for large multimodal requests
+
+  try {
+    const response = await fetch(getGeminiDirectUrl(), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: controller.signal
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw parseApiError(response.status, errorText);
+    }
+
+    const data = await response.json();
+    const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+    if (!content) {
+      const finishReason = data.candidates?.[0]?.finishReason;
+      if (finishReason === 'SAFETY') {
+        throw new GeminiError(
+          GeminiErrorType.CONTENT_FILTERED,
+          'Response was filtered due to safety settings.',
+          `Finish reason: ${finishReason}`,
+          false
+        );
+      }
+      throw new GeminiError(
+        GeminiErrorType.INVALID_RESPONSE,
+        'Empty response from AI with examples.',
+        JSON.stringify(data).substring(0, 200),
+        true
+      );
+    }
+
+    console.log(`[Gemini] Response received with examples (${content.length} chars)`);
+    return content;
+  } catch (error) {
+    clearTimeout(timeoutId);
+
+    if (error instanceof GeminiError) {
+      throw error;
+    }
+
+    const networkError = error as Error;
+    if (networkError.name === 'AbortError') {
+      throw new GeminiError(
+        GeminiErrorType.NETWORK_ERROR,
+        'Request timed out (5 min). The request with example papers may be too large.',
+        'AbortError: Request timeout',
+        false
+      );
+    }
+
+    throw new GeminiError(
+      GeminiErrorType.UNKNOWN,
+      `Error with example papers: ${networkError.message}`,
+      networkError.stack || networkError.message,
+      false
+    );
+  }
+}
+
 // Retry configuration
 const RETRY_CONFIG = {
   maxRetries: 3,
@@ -864,6 +1085,7 @@ Requirements:
 
 /**
  * Generate a single paper section
+ * In research mode with example papers, uses multimodal Gemini call with PDF exemplars
  */
 async function generateSection(
   section: PaperSection,
@@ -872,6 +1094,7 @@ async function generateSection(
     previousSections: Record<string, string>;
     researchType?: string;
     dataSummary?: string;  // Data analysis summary to inform Methodology and Results
+    examplePapers?: ExamplePaper[];  // ICIS exemplar papers for research mode
   }
 ): Promise<string> {
   const previousContent = Object.entries(context.previousSections)
@@ -982,9 +1205,16 @@ CITATION FORMAT (CRITICAL - Inline APA 7th Edition Style):
 - Your output should contain ONLY the section content, ending with the last paragraph of prose
 - References are generated separately and will appear at the end of the full paper`;
 
-  const content = await callGemini(prompt,
-    "You are an expert academic writer specializing in Information Systems research. Write in formal academic style following top-tier IS journal standards."
-  );
+  const systemInstruction = "You are an expert academic writer specializing in Information Systems research. Write in formal academic style following top-tier IS journal standards.";
+
+  // Use example papers in research mode for higher quality output
+  let content: string;
+  if (context.examplePapers && context.examplePapers.length > 0 && currentPaperMode === 'research') {
+    console.log(`[generateSection] Using ${context.examplePapers.length} example papers for ${section.name} (research mode)`);
+    content = await callGeminiWithExamples(prompt, systemInstruction, context.examplePapers);
+  } else {
+    content = await callGemini(prompt, systemInstruction);
+  }
 
   return content;
 }
@@ -1063,6 +1293,26 @@ export const runBuilder = async (
     console.log('[Builder] No data file provided - proceeding without data analysis');
   }
 
+  // STEP 2: Load example papers for research mode
+  // These are used as exemplars for Gemini to match quality and style
+  let examplePapers: ExamplePaper[] = [];
+  if (currentPaperMode === 'research') {
+    try {
+      onProgress?.('Loading Examples', 'starting');
+      console.log('[Builder] Research mode - loading ICIS 2024 example papers...');
+      examplePapers = await loadExamplePapers(10);  // Load 10 exemplar papers
+      console.log(`[Builder] Loaded ${examplePapers.length} example papers for quality calibration`);
+      onProgress?.('Loading Examples', 'completed');
+    } catch (error) {
+      console.warn('[Builder] Could not load example papers:', (error as Error).message);
+      console.warn('[Builder] Proceeding without example papers - quality may be lower');
+      onProgress?.('Loading Examples', 'error');
+      // Continue without example papers - don't fail the build
+    }
+  } else {
+    console.log('[Builder] Draft mode - skipping example papers for faster generation');
+  }
+
   // Generate visualizations BEFORE Results section (for full papers)
   // This allows the Results section to reference the actual figures
   // Figures are generated regardless of whether data is available:
@@ -1133,7 +1383,8 @@ export const runBuilder = async (
       const content = await generateSection(section, {
         interviewTranscript,
         previousSections: generatedSections,
-        dataSummary: sectionDataSummary  // Pass data summary + figure info for Results
+        dataSummary: sectionDataSummary,  // Pass data summary + figure info for Results
+        examplePapers  // ICIS exemplar papers for research mode quality calibration
       });
 
       generatedSections[section.key] = content;
