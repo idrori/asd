@@ -675,9 +675,11 @@ export function useIcisWorkflow(params: WorkflowHookParams) {
           }
 
           // Save paper to both state and localStorage (for Reviewer to access)
+          // Reset currentRound to 1 to ensure first review is v1 (fixes stale state from previous runs)
           updateState({
             paperContent: builderResult.paperContent,
             currentPaperVersion: 1,
+            currentRound: 1,  // Ensure round starts at 1 for new paper
             dataAlert: builderResult.dataAlert,  // Store alert for supervisor
             dataSummary: builderResult.dataSummary  // Store data summary for supervisor
           });
