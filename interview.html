@@ -658,68 +658,12 @@
       return window.location.origin;
     }
 
-    // Authentication - credentials validated via API (not stored in client code)
-    const AUTH_STORAGE_KEY = 'icis_authenticated';
-
-    // Check authentication on page load
-    function checkAuth() {
-      const isAuthenticated = sessionStorage.getItem(AUTH_STORAGE_KEY) === 'true';
+    // No authentication required - show main content directly
+    document.addEventListener('DOMContentLoaded', () => {
       const loginScreen = document.getElementById('login-screen');
       const mainContainer = document.getElementById('main-container');
-
-      if (isAuthenticated) {
-        loginScreen.classList.add('hidden');
-        mainContainer.classList.remove('hidden');
-      } else {
-        loginScreen.classList.remove('hidden');
-        mainContainer.classList.add('hidden');
-      }
-    }
-
-    // Handle login form submission
-    async function handleLogin(e) {
-      e.preventDefault();
-
-      const username = document.getElementById('login-username').value.trim();
-      const password = document.getElementById('login-password').value;
-      const errorDiv = document.getElementById('login-error');
-      const errorText = document.getElementById('login-error-text');
-      const submitBtn = e.target.querySelector('button[type="submit"]');
-
-      // Disable button while validating
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Signing in...';
-
-      try {
-        const apiBase = getApiUrl();
-        const response = await fetch(`${apiBase}/api/validate-auth`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, password })
-        });
-        const data = await response.json();
-
-        if (data.success) {
-          sessionStorage.setItem(AUTH_STORAGE_KEY, 'true');
-          errorDiv.classList.add('hidden');
-          checkAuth();
-        } else {
-          errorText.textContent = 'Invalid username or password';
-          errorDiv.classList.remove('hidden');
-        }
-      } catch (err) {
-        errorText.textContent = 'Authentication failed. Please try again.';
-        errorDiv.classList.remove('hidden');
-      }
-
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Sign In';
-    }
-
-    // Initialize auth on page load
-    document.addEventListener('DOMContentLoaded', () => {
-      checkAuth();
-      document.getElementById('login-form').addEventListener('submit', handleLogin);
+      if (loginScreen) loginScreen.classList.add('hidden');
+      if (mainContainer) mainContainer.classList.remove('hidden');
     });
 
     // Interview state - Using WebRTC (recommended by OpenAI for browser apps)
