@@ -14,8 +14,9 @@ export const config = {
 };
 
 // SECURITY: Credentials from environment variables only
-const AUTH_USERNAME = process.env.VITE_AUTH_USERNAME;
-const AUTH_PASSWORD = process.env.VITE_AUTH_PASSWORD;
+// Try both VITE_ prefixed (for consistency) and non-prefixed versions
+const AUTH_USERNAME = process.env.AUTH_USERNAME || process.env.VITE_AUTH_USERNAME;
+const AUTH_PASSWORD = process.env.AUTH_PASSWORD || process.env.VITE_AUTH_PASSWORD;
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Set CORS headers
