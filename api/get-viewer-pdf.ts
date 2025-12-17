@@ -3,8 +3,9 @@
  *
  * Retrieves stored PDF by token from Vercel Blob storage
  * Returns PDF data as base64 for rendering in viewer
+ * SECURITY: Requires password authentication to view PDFs
  *
- * Endpoint: GET /api/get-viewer-pdf?token=xxx
+ * Endpoint: GET /api/get-viewer-pdf?token=xxx&password=yyy
  */
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
@@ -13,6 +14,9 @@ import { list } from '@vercel/blob';
 export const config = {
   maxDuration: 30,
 };
+
+// SECURITY: Viewer password - configurable via environment variable
+const VIEWER_PASSWORD = process.env.VIEWER_PASSWORD || 'tennessee2025';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Set CORS headers
@@ -30,11 +34,30 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const token = req.query.token as string;
+    const password = req.query.password as string;
 
     if (!token) {
       return res.status(400).json({
         success: false,
         error: 'No token provided'
+      });
+    }
+
+    // SECURITY: Validate password before serving PDF
+    if (!password) {
+      return res.status(401).json({
+        success: false,
+        error: 'Password required',
+        passwordRequired: true
+      });
+    }
+
+    if (password !== VIEWER_PASSWORD) {
+      console.warn(`[Viewer PDF] Invalid password attempt for token: ${token.substring(0, 8)}...`);
+      return res.status(401).json({
+        success: false,
+        error: 'Invalid password',
+        passwordRequired: true
       });
     }
 
