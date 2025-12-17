@@ -41,9 +41,9 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
     setError('');
     setIsLoading(true);
 
-    // Credentials configurable via env vars, with defaults for development
-    const expectedUser = import.meta.env.VITE_AUTH_USERNAME || 'asd';
-    const expectedPass = import.meta.env.VITE_AUTH_PASSWORD || 'tennessee';
+    // Credentials must be configured via environment variables
+    const expectedUser = import.meta.env.VITE_AUTH_USERNAME;
+    const expectedPass = import.meta.env.VITE_AUTH_PASSWORD;
 
     setTimeout(() => {
       if (username === expectedUser && password === expectedPass) {
