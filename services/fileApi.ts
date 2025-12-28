@@ -1461,12 +1461,40 @@ export function storePngFiguresForCompilation(figures: Array<{ filename: string;
   }));
 
   console.log(`[PNG Storage] Stored ${pngFiguresForCompilation.length} PNG figures for LaTeX compilation and download`);
+
+  // Persist to localStorage for page refresh recovery
+  try {
+    localStorage.setItem('icis_png_figures', JSON.stringify(pngFiguresForCompilation));
+  } catch (e) {
+    console.warn('[PNG Storage] Could not persist to localStorage:', e);
+  }
 }
 
 /**
  * Get stored PNG figures for LaTeX compilation
+ * Recovers from localStorage if in-memory array is empty (page refresh recovery)
  */
 export function getPngFiguresForCompilation(): FigureResource[] {
+  // If in-memory array is populated, use it
+  if (pngFiguresForCompilation.length > 0) {
+    return pngFiguresForCompilation;
+  }
+
+  // Try to recover from localStorage
+  try {
+    const stored = localStorage.getItem('icis_png_figures');
+    if (stored) {
+      const parsed = JSON.parse(stored) as FigureResource[];
+      if (parsed && parsed.length > 0) {
+        console.log(`[PNG Storage] Recovered ${parsed.length} figures from localStorage`);
+        pngFiguresForCompilation = parsed;
+        return pngFiguresForCompilation;
+      }
+    }
+  } catch (e) {
+    console.warn('[PNG Storage] Could not read from localStorage:', e);
+  }
+
   return pngFiguresForCompilation;
 }
 
@@ -1475,6 +1503,11 @@ export function getPngFiguresForCompilation(): FigureResource[] {
  */
 export function clearPngFiguresForCompilation(): void {
   pngFiguresForCompilation = [];
+  try {
+    localStorage.removeItem('icis_png_figures');
+  } catch (e) {
+    // Ignore localStorage errors
+  }
 }
 
 // ============================================================================
@@ -1496,12 +1529,40 @@ let currentBibliography: BibliographyResource | null = null;
 export function storeBibliography(filename: string, content: string): void {
   currentBibliography = { filename, content };
   console.log(`[Bibliography] Stored ${filename} (${content.length} chars, ${(content.match(/@\w+\{/g) || []).length} entries)`);
+
+  // Persist to localStorage for page refresh recovery
+  try {
+    localStorage.setItem('icis_bibliography', JSON.stringify(currentBibliography));
+  } catch (e) {
+    console.warn('[Bibliography] Could not persist to localStorage:', e);
+  }
 }
 
 /**
  * Get stored bibliography for LaTeX compilation
+ * Recovers from localStorage if in-memory value is empty (page refresh recovery)
  */
 export function getBibliographyForCompilation(): BibliographyResource | null {
+  // If in-memory value exists, use it
+  if (currentBibliography) {
+    return currentBibliography;
+  }
+
+  // Try to recover from localStorage
+  try {
+    const stored = localStorage.getItem('icis_bibliography');
+    if (stored) {
+      const parsed = JSON.parse(stored) as BibliographyResource;
+      if (parsed && parsed.content) {
+        console.log(`[Bibliography] Recovered from localStorage: ${parsed.filename}`);
+        currentBibliography = parsed;
+        return currentBibliography;
+      }
+    }
+  } catch (e) {
+    console.warn('[Bibliography] Could not read from localStorage:', e);
+  }
+
   return currentBibliography;
 }
 
@@ -1517,6 +1578,11 @@ export function getBibliographyContent(): { filename: string; content: string } 
  */
 export function clearBibliography(): void {
   currentBibliography = null;
+  try {
+    localStorage.removeItem('icis_bibliography');
+  } catch (e) {
+    // Ignore localStorage errors
+  }
 }
 
 // ============================================================================
