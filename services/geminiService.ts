@@ -336,9 +336,18 @@ Your output should match the quality, depth, and academic rigor of these exempla
         );
       }
       if (finishReason === 'RECITATION') {
-        // RECITATION means Gemini detected potential copyright issues with example papers
-        // This is retryable - the caller should retry without example papers
-        console.warn('[Gemini] RECITATION detected - example papers may have triggered copyright filter');
+        // RECITATION means Gemini's OUTPUT would be too similar to training data
+        // Log full response details for debugging
+        const candidate = data.candidates?.[0];
+        const citationMetadata = candidate?.citationMetadata;
+        const safetyRatings = candidate?.safetyRatings;
+        console.warn('[Gemini] RECITATION detected - output blocked due to similarity to training data');
+        console.warn('[Gemini] RECITATION details:', JSON.stringify({
+          citationMetadata,
+          safetyRatings,
+          contentBlockReason: candidate?.contentBlockReason,
+          candidateCount: data.candidates?.length
+        }, null, 2));
         throw new GeminiError(
           GeminiErrorType.CONTENT_FILTERED,
           'Response blocked due to similarity to training data (RECITATION). Retrying without example papers.',
