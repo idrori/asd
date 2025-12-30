@@ -179,6 +179,31 @@ async function loadExamplePapers(count: number = 10): Promise<ExamplePaper[]> {
 }
 
 /**
+ * Extract all text content from Gemini response parts.
+ * Gemini can return multiple parts when responses are long - concatenate them all.
+ */
+function extractAllTextParts(data: any): string | null {
+  const parts = data.candidates?.[0]?.content?.parts;
+  if (!parts || !Array.isArray(parts)) {
+    return null;
+  }
+
+  const textParts = parts
+    .filter((part: any) => part.text)
+    .map((part: any) => part.text);
+
+  if (textParts.length === 0) {
+    return null;
+  }
+
+  if (textParts.length > 1) {
+    console.log(`[Gemini] Concatenating ${textParts.length} text parts`);
+  }
+
+  return textParts.join('');
+}
+
+/**
  * Call Gemini with example papers as context (research mode only)
  * Includes up to 10 ICIS 2024 exemplar papers as multimodal PDF content
  *
@@ -293,7 +318,7 @@ Your output should match the quality, depth, and academic rigor of these exempla
     }
 
     const data = await response.json();
-    const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    const content = extractAllTextParts(data);
 
     if (!content) {
       const finishReason = data.candidates?.[0]?.finishReason;
@@ -501,7 +526,7 @@ async function callGeminiViaProxy(
   }
 
   const data = await response.json();
-  const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  const content = extractAllTextParts(data);
 
   if (!content) {
     throw new GeminiError(
@@ -595,7 +620,7 @@ async function callGemini(prompt: string, systemInstruction?: string): Promise<s
       }
 
       const data = await response.json();
-      const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      const content = extractAllTextParts(data);
 
       if (!content) {
         // Check for content filtering
@@ -788,7 +813,7 @@ async function callGeminiWithPdf(
   }
 
   const data = await response.json();
-  const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  const content = extractAllTextParts(data);
 
   if (!content) {
     throw new GeminiError(
