@@ -788,7 +788,34 @@ Execute these commands and report results:
 
 **EXECUTE FOR ALL RESEARCH TYPES.**
 
-Generate publication-quality figures using matplotlib/seaborn.
+This step generates TWO types of figures:
+1. **CONCEPTUAL FIGURES** - Research model diagrams, theoretical framework overviews (via Gemini image generation)
+2. **DATA-DRIVEN FIGURES** - Charts and plots based on data analysis (via QuickChart.io)
+
+---
+
+### 6.1 CONCEPTUAL FIGURES (Required)
+
+**Purpose:** Illustrate theories, relationships between constructs, cause-effect logical flows
+- These explain the research design, NOT present specific data
+- Generated automatically via Gemini image generation
+
+**Required Conceptual Figures:**
+1. **Research Model Diagram** - Box-and-arrow showing constructs and hypothesized relationships (H1, H2, etc.)
+2. **Theoretical Framework Overview** - Visual summary of the research approach
+
+**Design Standards for Conceptual Figures:**
+- Clean, academic, flat design (MISQ/ISR quality)
+- Use human-readable labels (e.g., "Perceived Usefulness" not "PU_VAR")
+- Hypothesis labels on arrows (H1, H2, H3)
+- White/light background, consistent typography
+- Self-explanatory: Reader can understand without body text
+
+---
+
+### 6.2 DATA-DRIVEN FIGURES (Required)
+
+Generate publication-quality charts using matplotlib/seaborn or QuickChart.io.
 
 **Create visualization script in Code/** directory (e.g., `Code/generate_visualizations.py`)
 
@@ -800,18 +827,18 @@ plt.style.use('seaborn-v0_8-paper')
 sns.set_palette("husl")
 ```
 
-Required figures (as applicable):
+**Required Data-Driven Figures (as applicable):**
 
-**FOR ALL RESEARCH TYPES - Data Analysis Figures:**
+**FOR ALL RESEARCH TYPES:**
 - Descriptive statistics visualization (histograms, box plots, distribution plots)
 - Correlation heatmaps or matrices
 - Main results visualization (bar charts with error bars, line plots with confidence intervals)
 - Comparison charts (treatment vs control, before vs after)
+- Statistical significance indicators (*, **, *** annotations)
 
 **FOR EXPERIMENTAL/SURVEY RESEARCH (2D/2E):**
 - Hypothesis test results visualization (group comparisons with significance markers)
 - Interaction plots for factorial designs
-- Structural equation model diagrams (if applicable)
 - Measurement model results (factor loadings, reliability indicators)
 
 **FOR SIMULATION/COMPUTATIONAL RESEARCH (2A/2B):**
@@ -821,17 +848,34 @@ Required figures (as applicable):
 - Sensitivity analysis plots
 - Convergence plots
 
-**FOR ALL TYPES:**
-- Statistical significance indicators (*, **, *** annotations)
-- Effect size visualizations where appropriate
+**Design Standards for Data-Driven Figures:**
+- Use human-readable labels (e.g., "Level of Education" not "EDU_LVL_01")
+- Axis labels must precisely match variables discussed in the text
+- Ensure scales are accurate for collected data
+- Label figures as "(Illustrative)" if using simulated/synthetic data
+
+---
+
+### 6.3 FIGURE QUALITY CHECKLIST
+
+Apply to ALL figures (conceptual and data-driven):
+
+- [ ] **Self-Explanatory:** Can a reader understand the main takeaway without reading body text?
+- [ ] **Consistency:** Same font, color palette, line weights throughout the paper
+- [ ] **Captioning:** Titles and numbers placed correctly (typically below figures)
+- [ ] **Citation:** Every figure referenced in text (e.g., "See Figure 1") close to where it appears
+- [ ] **Publication Quality:** 300 DPI, clear labels, proper font sizes
 
 **File locations:**
 - Visualization script → Code/ directory
 - Generated figures → Results/ directory (save as .png and .pdf)
 
-Guidelines: 300 DPI, clear labels, consistent colors, PDF+PNG, proper font sizes
+---
 
-DELIVERABLE: Visualization script in Code/, publication-ready figures in Results/
+DELIVERABLE:
+- 2 conceptual figures (research model + framework overview)
+- 2-4 data-driven figures
+- Visualization script in Code/, publication-ready figures in Results/
 
 **CRITICAL - After Saving Figures:**
 

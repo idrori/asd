@@ -1374,7 +1374,8 @@ export interface BuilderResult {
   exceedsPageLimit?: boolean;  // True if paper exceeds ICIS 16-page limit
   warnings?: string[];     // List of warnings to display to user
   // Generated assets for download
-  infographicBase64?: string;  // Base64 PNG of generated infographic
+  // NOTE: infographicBase64 deprecated - conceptual figures now generated within generateVisualizations()
+  // and included in the paper figures. Use getPngFiguresForCompilation() to access all figures.
   dataTableCsv?: string;       // CSV content of extracted data table
 }
 
@@ -1627,57 +1628,10 @@ Methodology: ${generatedSections.methodology?.substring(0, 500) || ''}
     }
   }
 
-  // STEP 4: Generate infographic from the paper content (full papers only)
-  // This creates a visual summary using Gemini image generation
-  let infographicBase64: string | undefined;
-  if (!isPartialPaper) {
-    try {
-      onProgress?.('Infographic', 'starting');
-      console.log('[Builder] Generating research infographic...');
+  // NOTE: Conceptual figures (research model, framework) are now generated as part of generateVisualizations()
+  // The separate infographic step has been replaced by integrated conceptual figure generation
 
-      const infographicResult = await generateInfographic(
-        generatedSections,
-        (msg) => console.log(`[Builder] ${msg}`)
-      );
-
-      if (infographicResult.success && infographicResult.figure) {
-        // Add infographic to the figures array
-        generatedFigures.push(infographicResult.figure);
-
-        // Store the infographic PNG for LaTeX compilation
-        const { storePngFiguresForCompilation, getPngFiguresForCompilation } = await import('./fileApi');
-        const existingPngs = getPngFiguresForCompilation();
-        storePngFiguresForCompilation([
-          ...existingPngs,
-          {
-            filename: infographicResult.figure.filename,
-            base64: infographicResult.figure.base64 || ''
-          }
-        ]);
-
-        // Store base64 for zip download
-        infographicBase64 = infographicResult.figure.base64;
-
-        // Store in fileApi for later retrieval
-        if (infographicBase64) {
-          const { storeInfographic } = await import('./fileApi');
-          storeInfographic(infographicBase64);
-        }
-
-        console.log('[Builder] Infographic added to figures');
-        onProgress?.('Infographic', 'completed');
-      } else {
-        console.warn('[Builder] Infographic generation failed:', infographicResult.error);
-        onProgress?.('Infographic', 'error');
-      }
-    } catch (error) {
-      console.error('[Builder] Infographic generation error:', error);
-      onProgress?.('Infographic', 'error');
-      // Non-fatal - continue without infographic
-    }
-  }
-
-  // STEP 5: Generate structured data table from the paper (full papers only)
+  // STEP 4: Generate structured data table from the paper (full papers only)
   // Uses GPT-5.2 to extract key structured information as CSV
   let dataTableCsv: string | undefined;
   let generatedTable: string | undefined;
@@ -1725,7 +1679,8 @@ Methodology: ${generatedSections.methodology?.substring(0, 500) || ''}
     dataAlert,
     usedSyntheticData,
     dataSummary,
-    infographicBase64,
+    // NOTE: infographicBase64 removed - conceptual figures now generated within generateVisualizations()
+    // and stored via storePngFiguresForCompilation along with data figures
     dataTableCsv
   };
 };
@@ -2677,10 +2632,17 @@ export async function generateVisualizations(
 ): Promise<VisualizationResult> {
   const cloudData = getCloudDataFile();
 
-  // STEP 1: Use QuickChart.io (PRIMARY METHOD)
-  // This works reliably with Vercel's 250MB limit - no Python dependencies
+  // Collect all figures (data charts + conceptual figures)
+  let dataFigures: GeneratedFigure[] = [];
+  let usedSyntheticData = false;
+  let dataFileFound = false;
+  let dataAlert: string | undefined;
+  let resultDataSummary: string | undefined = dataSummary;
+
+  // STEP 1: Generate DATA FIGURES using QuickChart.io
+  // Try with real data first, then AI-generated data
   if (cloudData?.content) {
-    console.log('[Visualizations] Using QuickChart.io for figure generation...');
+    console.log('[Visualizations] Using QuickChart.io for data figure generation...');
     onProgress?.('Analyzing data for visualization...');
 
     try {
@@ -2689,7 +2651,7 @@ export async function generateVisualizations(
 
       if (cloudResult.success && cloudResult.chart_data && cloudResult.chart_data.length > 0) {
         console.log(`[Visualizations] Data analysis returned ${cloudResult.chart_data.length} chart configs`);
-        onProgress?.(`Generating ${cloudResult.chart_data.length} PNG figures via QuickChart.io...`);
+        onProgress?.(`Generating ${cloudResult.chart_data.length} data figures via QuickChart.io...`);
 
         // Step 1b: Generate PNG figures via QuickChart.io
         const { generateQuickChartFigures } = await import('./fileApi');
@@ -2697,33 +2659,21 @@ export async function generateVisualizations(
 
         if (quickchartResult.success && quickchartResult.figures && quickchartResult.figures.length > 0) {
           // Convert to GeneratedFigure format for LaTeX
-          // Store base64 PNGs - they'll be embedded or uploaded later
-          const pngFigures: GeneratedFigure[] = quickchartResult.figures.map((fig) => ({
+          dataFigures = quickchartResult.figures.map((fig) => ({
             filename: fig.filename,
             description: fig.description,
-            latexRef: fig.filename,  // Use filename - will be uploaded as separate resource
-            base64: fig.base64  // Store raw base64 for later upload
+            latexRef: fig.filename,
+            base64: fig.base64
           }));
 
-          // Store PNG figures for LaTeX compilation
-          const { storePngFiguresForCompilation, storeChartData } = await import('./fileApi');
-          storePngFiguresForCompilation(quickchartResult.figures.map(fig => ({
-            filename: fig.filename,
-            base64: fig.base64
-          })));
-
           // Store chart data and Python code for download
+          const { storeChartData } = await import('./fileApi');
           storeChartData(cloudResult.chart_data, false);
 
-          onProgress?.(`Generated ${pngFigures.length} publication-quality figures`);
-          console.log(`[Visualizations] QuickChart.io generated ${pngFigures.length} PNG figures`);
-
-          return {
-            figures: pngFigures,
-            usedSyntheticData: false,
-            dataFileFound: true,
-            dataSummary: cloudResult.text_summary || dataSummary
-          };
+          dataFileFound = true;
+          resultDataSummary = cloudResult.text_summary || dataSummary;
+          onProgress?.(`Generated ${dataFigures.length} data figures from uploaded data`);
+          console.log(`[Visualizations] QuickChart.io generated ${dataFigures.length} data figures`);
         } else {
           console.warn('[Visualizations] QuickChart.io generation failed:', quickchartResult.error);
         }
@@ -2735,53 +2685,91 @@ export async function generateVisualizations(
     }
   }
 
-  // STEP 3: Generate AI-based PNG figures via QuickChart.io (no data file)
-  // AI generates illustrative chart_data based on the paper content, then QuickChart renders PNGs
-  console.log('[Visualizations] No data available, generating AI-based PNG figures via QuickChart.io...');
-  onProgress?.('Generating AI-based visualizations...');
+  // If no data figures from real data, try AI-generated data figures
+  if (dataFigures.length === 0) {
+    console.log('[Visualizations] No data figures yet, generating AI-based data figures...');
+    onProgress?.('Generating AI-based data visualizations...');
 
-  try {
-    // Generate chart_data from AI based on research context
-    const aiChartData = await generateAIChartData(interviewTranscript, researchContext, dataSummary);
+    try {
+      const aiChartData = await generateAIChartData(interviewTranscript, researchContext, dataSummary);
 
-    if (aiChartData && aiChartData.length > 0) {
-      console.log(`[Visualizations] AI generated ${aiChartData.length} chart configurations`);
-      onProgress?.(`Rendering ${aiChartData.length} PNG figures via QuickChart.io...`);
+      if (aiChartData && aiChartData.length > 0) {
+        console.log(`[Visualizations] AI generated ${aiChartData.length} chart configurations`);
+        onProgress?.(`Rendering ${aiChartData.length} AI data figures via QuickChart.io...`);
 
-      // Render PNG figures via QuickChart.io
-      const { generateQuickChartFigures, storePngFiguresForCompilation, storeChartData } = await import('./fileApi');
-      const quickchartResult = await generateQuickChartFigures(aiChartData);
+        const { generateQuickChartFigures, storeChartData } = await import('./fileApi');
+        const quickchartResult = await generateQuickChartFigures(aiChartData);
 
-      if (quickchartResult.success && quickchartResult.figures && quickchartResult.figures.length > 0) {
-        const pngFigures: GeneratedFigure[] = quickchartResult.figures.map((fig) => ({
-          filename: fig.filename,
-          description: fig.description,
-          latexRef: fig.filename,
-          base64: fig.base64
-        }));
+        if (quickchartResult.success && quickchartResult.figures && quickchartResult.figures.length > 0) {
+          dataFigures = quickchartResult.figures.map((fig) => ({
+            filename: fig.filename,
+            description: fig.description,
+            latexRef: fig.filename,
+            base64: fig.base64
+          }));
 
-        // Store PNG figures for LaTeX compilation
-        storePngFiguresForCompilation(quickchartResult.figures.map(fig => ({
-          filename: fig.filename,
-          base64: fig.base64
-        })));
+          storeChartData(aiChartData, true);
+          usedSyntheticData = true;
+          dataAlert = '*** NOTE: Data visualizations generated using AI-synthesized illustrative data. No data file was provided.';
 
-        // Store chart data and Python code for download (synthetic data)
-        storeChartData(aiChartData, true);
-
-        onProgress?.(`Generated ${pngFigures.length} AI-based PNG figures`);
-        console.log(`[Visualizations] QuickChart.io rendered ${pngFigures.length} AI-generated PNG figures`);
-
-        return {
-          figures: pngFigures,
-          usedSyntheticData: true,
-          dataFileFound: false,
-          dataAlert: '*** NOTE: Visualizations generated using AI-synthesized illustrative data. No data file was provided.'
-        };
+          onProgress?.(`Generated ${dataFigures.length} AI-based data figures`);
+          console.log(`[Visualizations] QuickChart.io rendered ${dataFigures.length} AI data figures`);
+        }
       }
+    } catch (error) {
+      console.warn('[Visualizations] AI QuickChart generation failed:', error);
+    }
+  }
+
+  // STEP 2: Generate CONCEPTUAL FIGURES using Gemini Image Generation
+  // These are research model diagrams and framework overviews
+  console.log('[Visualizations] Generating conceptual figures (research model, framework)...');
+  onProgress?.('Generating conceptual research figures...');
+
+  let conceptualFigures: GeneratedFigure[] = [];
+  try {
+    const conceptualResult = await generateConceptualFigures(
+      interviewTranscript,
+      researchContext,
+      (msg) => {
+        console.log(`[Visualizations] ${msg}`);
+        onProgress?.(msg);
+      }
+    );
+
+    if (conceptualResult.success && conceptualResult.figures.length > 0) {
+      conceptualFigures = conceptualResult.figures;
+      console.log(`[Visualizations] Generated ${conceptualFigures.length} conceptual figures`);
+      onProgress?.(`Generated ${conceptualFigures.length} conceptual figures`);
+    } else {
+      console.warn('[Visualizations] Conceptual figure generation failed:', conceptualResult.error);
     }
   } catch (error) {
-    console.warn('[Visualizations] AI QuickChart generation failed:', error);
+    console.warn('[Visualizations] Conceptual figure generation error:', error);
+    // Non-fatal - continue with just data figures
+  }
+
+  // STEP 3: Combine all figures and store for LaTeX compilation
+  const allFigures = [...conceptualFigures, ...dataFigures]; // Conceptual figures first (research model, framework)
+
+  if (allFigures.length > 0) {
+    // Store all PNG figures for LaTeX compilation
+    const { storePngFiguresForCompilation } = await import('./fileApi');
+    storePngFiguresForCompilation(allFigures.map(fig => ({
+      filename: fig.filename,
+      base64: fig.base64 || ''
+    })));
+
+    console.log(`[Visualizations] Total figures: ${allFigures.length} (${conceptualFigures.length} conceptual + ${dataFigures.length} data)`);
+    onProgress?.(`Generated ${allFigures.length} total figures`);
+
+    return {
+      figures: allFigures,
+      usedSyntheticData,
+      dataFileFound,
+      dataSummary: resultDataSummary,
+      dataAlert
+    };
   }
 
   // No figures could be generated
@@ -2795,7 +2783,8 @@ export async function generateVisualizations(
 
 /**
  * Generate AI-based chart_data for QuickChart.io when no data file is available
- * Creates CONCEPTUAL figures based on the paper content - NOT fabricated numerical data
+ * Creates DATA-DRIVEN figures based on the paper content
+ * NOTE: These are ILLUSTRATIVE data figures - NOT conceptual diagrams
  */
 async function generateAIChartData(
   interviewTranscript: string,
@@ -2803,50 +2792,56 @@ async function generateAIChartData(
   dataSummary?: string
 ): Promise<CloudAnalysisResult['chart_data']> {
   // Use Gemini to generate chart configurations based on research context
-  const prompt = `You are generating CONCEPTUAL chart data for a research paper visualization.
+  const prompt = `You are generating DATA-DRIVEN chart configurations for academic paper visualizations.
 
-CRITICAL RULES - DO NOT VIOLATE:
-1. DO NOT fabricate or hallucinate specific numbers, percentages, or statistics
-2. DO NOT make up sample sizes, means, standard deviations, or correlations
-3. ONLY use numbers/statistics that are EXPLICITLY stated in the research context below
-4. If no specific data is mentioned, create CONCEPTUAL/QUALITATIVE visualizations:
-   - Use relative comparisons (High/Medium/Low) instead of fake percentages
-   - Use category labels without fabricated numeric values
-   - Create framework/model diagrams conceptually represented as bar charts
-5. All figure titles MUST include "(Conceptual)" or "(Based on Paper)" to indicate these are illustrative
+**FIGURE TYPE:** These are DATA-DRIVEN figures (evidence-based), not conceptual diagrams.
+- Purpose: Present illustrative results or expected findings
+- Examples: Bar charts comparing groups, scatterplots showing relationships, boxplots showing variance
 
-RESEARCH CONTEXT:
+**CRITICAL RULES:**
+1. DO NOT fabricate specific numbers unless EXPLICITLY stated in the research context
+2. If no specific data mentioned, create ILLUSTRATIVE comparisons using:
+   - Relative values (1, 2, 3) to show expected differences
+   - Equal values for framework components
+   - Percentage placeholders clearly labeled as "(Illustrative)"
+3. All figure titles MUST include "(Illustrative)" or "(Based on Paper)" to indicate these are not from collected data
+
+**QUALITY REQUIREMENTS (Data-Driven Figures):**
+- Use human-readable labels (e.g., "Level of Education" not "EDU_LVL_01")
+- Axis labels should precisely match variables discussed in the text
+- Each figure should be self-explanatory
+- Consistent styling across all figures
+
+**RESEARCH CONTEXT:**
 ${researchContext.substring(0, 2000)}
 
-INTERVIEW EXCERPT:
+**INTERVIEW EXCERPT:**
 ${interviewTranscript.substring(0, 1500)}
 
-Generate 1-2 CONCEPTUAL charts. Return ONLY a valid JSON array, no other text.
+Generate 1-2 data-driven charts. Return ONLY a valid JSON array, no other text.
 
-For CONCEPTUAL figures without specific data, use these patterns:
+**Chart Patterns:**
 
-1. Relative comparison bar chart (NO fake numbers):
+1. Group comparison bar chart (for hypothesis testing):
 {
   "type": "bar",
-  "column": "Key Factors (Conceptual)",
-  "data": {"Factor A": 3, "Factor B": 2, "Factor C": 1}
+  "column": "Group Comparison (Illustrative)",
+  "data": {"Treatment Group": 3, "Control Group": 1.5}
 }
-(Use 1/2/3 to show relative importance, NOT fabricated percentages)
 
-2. Framework visualization:
+2. Multiple factor comparison:
 {
   "type": "bar",
-  "column": "Research Model Components (Conceptual)",
-  "data": {"Construct 1": 1, "Construct 2": 1, "Construct 3": 1, "Construct 4": 1}
+  "column": "Factor Importance (Illustrative)",
+  "data": {"Factor A": 4, "Factor B": 3, "Factor C": 2}
 }
-(Equal values to show model components without implying measured data)
 
-ONLY if the paper EXPLICITLY mentions specific numbers, you may use them:
-- If paper says "72% of respondents...", you can use 72
-- If paper says "mean score of 4.2", you can use 4.2
-- Otherwise, use relative values (1, 2, 3) or equal values (1, 1, 1)
+3. If paper EXPLICITLY mentions numbers, use them:
+- "72% of respondents..." → use 72
+- "mean score of 4.2" → use 4.2
+- Otherwise, use relative values clearly labeled as illustrative
 
-Return ONLY the JSON array with 1-2 conceptual figures.`;
+Return ONLY the JSON array with 1-2 data-driven figures.`;
 
   try {
     const response = await callGemini(prompt, 'Generate chart data');
@@ -3030,6 +3025,217 @@ function buildPaperSummaryForInfographic(sections: Record<string, string>): stri
   }
 
   return parts.join('\n\n');
+}
+
+// ============================================================================
+// Conceptual Figures Generation (Research Model, Framework Diagrams)
+// ============================================================================
+
+/**
+ * Result of conceptual figures generation
+ */
+export interface ConceptualFiguresResult {
+  success: boolean;
+  figures: GeneratedFigure[];
+  error?: string;
+}
+
+/**
+ * Generate conceptual figures (research model, framework diagrams) using Gemini image generation.
+ * These are visual representations of the theoretical framework, not data charts.
+ *
+ * @param interviewTranscript - The interview transcript for research context
+ * @param researchContext - Additional research context (paper summary if available)
+ * @param onProgress - Optional progress callback
+ * @returns ConceptualFiguresResult with generated figures or error
+ */
+export async function generateConceptualFigures(
+  interviewTranscript: string,
+  researchContext: string,
+  onProgress?: (message: string) => void
+): Promise<ConceptualFiguresResult> {
+  console.log('[ConceptualFigures] Starting conceptual figure generation...');
+  onProgress?.('Generating conceptual research figures...');
+
+  const figures: GeneratedFigure[] = [];
+
+  try {
+    // Generate Research Model Figure (Primary conceptual figure)
+    const researchModelPrompt = buildResearchModelPrompt(interviewTranscript, researchContext);
+    console.log('[ConceptualFigures] Generating research model diagram...');
+    onProgress?.('Creating research model visualization...');
+
+    const modelResult = await callGeminiImageGeneration(researchModelPrompt, onProgress);
+
+    if (modelResult.success && modelResult.base64) {
+      figures.push({
+        filename: 'research_model.png',
+        description: 'Research model showing the theoretical framework, constructs, and hypothesized relationships',
+        latexRef: 'research_model.png',
+        base64: modelResult.base64
+      });
+      console.log('[ConceptualFigures] Research model figure generated successfully');
+    } else {
+      console.warn('[ConceptualFigures] Research model generation failed:', modelResult.error);
+    }
+
+    // Generate Framework Overview Figure (Secondary conceptual figure)
+    const frameworkPrompt = buildFrameworkPrompt(interviewTranscript, researchContext);
+    console.log('[ConceptualFigures] Generating framework overview...');
+    onProgress?.('Creating framework overview visualization...');
+
+    const frameworkResult = await callGeminiImageGeneration(frameworkPrompt, onProgress);
+
+    if (frameworkResult.success && frameworkResult.base64) {
+      figures.push({
+        filename: 'theoretical_framework.png',
+        description: 'Theoretical framework overview illustrating the key concepts and their relationships',
+        latexRef: 'theoretical_framework.png',
+        base64: frameworkResult.base64
+      });
+      console.log('[ConceptualFigures] Framework overview figure generated successfully');
+    } else {
+      console.warn('[ConceptualFigures] Framework overview generation failed:', frameworkResult.error);
+    }
+
+    if (figures.length > 0) {
+      console.log(`[ConceptualFigures] Successfully generated ${figures.length} conceptual figures`);
+      onProgress?.(`Generated ${figures.length} conceptual figures`);
+      return {
+        success: true,
+        figures
+      };
+    }
+
+    return {
+      success: false,
+      figures: [],
+      error: 'Failed to generate any conceptual figures'
+    };
+
+  } catch (error) {
+    const errorMessage = (error as Error).message;
+    console.error('[ConceptualFigures] Generation failed:', errorMessage);
+    onProgress?.(`Conceptual figure generation failed: ${errorMessage}`);
+    return {
+      success: false,
+      figures: [],
+      error: errorMessage
+    };
+  }
+}
+
+/**
+ * Build prompt for research model diagram generation
+ * This creates a CONCEPTUAL figure showing theoretical relationships (not data-driven)
+ */
+function buildResearchModelPrompt(interviewTranscript: string, researchContext: string): string {
+  return `**Role:** You are an expert academic visual designer specializing in research model diagrams for top-tier IS journals (MISQ, ISR, JMIS).
+
+**Task:** Create a CONCEPTUAL RESEARCH MODEL DIAGRAM showing the theoretical framework and hypothesized relationships.
+
+**FIGURE TYPE:** This is a CONCEPTUAL figure (explanatory), NOT a data-driven figure.
+- Purpose: Explain theories, relationships between constructs, and cause-effect logical flows
+- Example: A cause-effect diagram showing with arrows the relationships between constructs (variables), as described in hypotheses or propositions
+
+**Design Requirements:**
+
+1. **Layout & Structure:**
+   - Create a clear box-and-arrow diagram showing constructs and their relationships
+   - Use rectangular boxes for constructs/variables
+   - Use arrows to show hypothesized relationships (with H1, H2, etc. labels)
+   - Arrange from left to right or top to bottom showing logical flow
+   - Independent variables on the left, dependent variables on the right
+   - Mediating/moderating variables in appropriate positions
+   - Include control variables if mentioned in the research
+
+2. **Visual Style:**
+   - Clean, professional academic style (MISQ/ISR quality)
+   - White or very light gray background
+   - Dark blue or black text
+   - Boxes with subtle borders (navy, dark gray)
+   - Clear sans-serif font (Arial, Helvetica style)
+   - Consistent line weights throughout
+   - NO 3D effects, gradients, or decorative elements
+
+3. **Content Elements:**
+   - Use human-readable labels (e.g., "Perceived Usefulness" not "PU_VAR")
+   - Hypothesis labels on arrows (H1, H2, H3, etc.)
+   - Use + or - signs to indicate relationship direction
+   - Each construct clearly labeled and readable
+
+4. **Quality Checklist:**
+   - Self-Explanatory: Can a reader understand the main takeaway without reading body text?
+   - Consistency: Same font, color palette, and line weights throughout
+   - Captioning: Title can be added below (e.g., "Figure 1. Research Model")
+   - Publication-ready quality at journal article size
+
+**RESEARCH CONTEXT:**
+${researchContext.substring(0, 2500)}
+
+**INTERVIEW EXCERPT:**
+${interviewTranscript.substring(0, 1500)}
+
+Generate a professional research model diagram. This figure should stand alone and be self-explanatory.`;
+}
+
+/**
+ * Build prompt for theoretical framework overview
+ * This creates a CONCEPTUAL figure showing the overall research framework
+ */
+function buildFrameworkPrompt(interviewTranscript: string, researchContext: string): string {
+  return `**Role:** You are an expert academic visual designer for Information Systems research publications.
+
+**Task:** Create a THEORETICAL FRAMEWORK OVERVIEW diagram that summarizes the research approach, key constructs, and their relationships.
+
+**FIGURE TYPE:** This is a CONCEPTUAL figure (explanatory), NOT a data-driven figure.
+- Purpose: Illustrate the overall theoretical framework, time-based sequences, or system architecture
+- Examples:
+  - A flowchart illustrating stages of a process
+  - A Venn diagram showing overlapping concepts
+  - A system architecture showing relationships between components
+
+**Design Requirements:**
+
+1. **Layout & Structure:**
+   - Clear title at top indicating the framework/model name
+   - 3-4 distinct conceptual sections or stages
+   - Visual flow showing logical progression (problem → mechanism → outcome)
+   - Each component clearly separated and labeled
+
+2. **Visual Style:**
+   - Clean, academic, flat design (no 3D effects)
+   - Professional color palette (blues, grays, one accent color)
+   - Sans-serif fonts for clarity
+   - Consistent line weights and spacing
+   - White or very light background
+
+3. **Content Elements:**
+   - Core theoretical constructs clearly labeled
+   - Relationships/flows indicated with arrows
+   - Use human-readable labels (e.g., "Trust" not "TRUST_VAR")
+   - Each component self-contained and readable
+
+4. **Visual Metaphors (choose ONE appropriate style):**
+   - Flowchart: For sequential processes or stages
+   - Box-and-arrow: For cause-effect relationships
+   - Layers: For hierarchical concepts
+   - Timeline: For temporal sequences
+   - Network: For interconnected concepts
+
+5. **Quality Checklist:**
+   - Self-Explanatory: Reader can understand main takeaway without body text
+   - Consistency: Same font, color palette, line weights throughout
+   - Publication-ready: Suitable for MISQ/ISR quality journals
+   - Clear labeling: All components named descriptively
+
+**RESEARCH CONTEXT:**
+${researchContext.substring(0, 2500)}
+
+**INTERVIEW EXCERPT:**
+${interviewTranscript.substring(0, 1500)}
+
+Generate a professional theoretical framework diagram. This figure should stand alone, be distinct from the research model diagram, and clearly illustrate the conceptual approach of this research.`;
 }
 
 /**

@@ -7,7 +7,7 @@ import {
   readFeedbackFile,
   getOversightProgression
 } from '../../services/fileService';
-import { saveFinalSubmission, compileLaTeX, downloadCompiledPdf, createViewerLink, openPaperViewer, getLastCompiledPdfBlob, downloadAllFigures, getCurrentSessionFigures, getPngFiguresForCompilation, getBibliographyContent, getChartDataContent, deleteCloudDataFile, getInfographicBase64, getDataTableCsv, CompileResult, ViewerLinkResult } from '../../services/fileApi';
+import { saveFinalSubmission, compileLaTeX, downloadCompiledPdf, createViewerLink, openPaperViewer, getLastCompiledPdfBlob, downloadAllFigures, getCurrentSessionFigures, getPngFiguresForCompilation, getBibliographyContent, getChartDataContent, deleteCloudDataFile, getDataTableCsv, CompileResult, ViewerLinkResult } from '../../services/fileApi';
 
 interface FinalizeStageProps {
   logs: string[];
@@ -130,25 +130,11 @@ const FinalizeStage: React.FC<FinalizeStageProps> = ({
         console.log(`[SaveAll] Added Python code: ${pythonFilename}`);
       }
 
-      // 8. Add infographic PNG if available
-      const infographicBase64 = getInfographicBase64();
-      if (infographicBase64) {
-        // Convert base64 to blob
-        const binaryStr = atob(infographicBase64);
-        const len = binaryStr.length;
-        const bytes = new Uint8Array(len);
-        for (let i = 0; i < len; i++) {
-          bytes[i] = binaryStr.charCodeAt(i);
-        }
-        const infographicBlob = new Blob([bytes], { type: 'image/png' });
+      // NOTE: Conceptual figures (research_model.png, theoretical_framework.png) are now included
+      // with all other figures in step 4 above via getCurrentSessionFigures()
+      // The separate infographic step has been removed.
 
-        const infographicFilename = `${prefix}infographic.png`;
-        zip.file(infographicFilename, infographicBlob);
-        filesList.push(infographicFilename);
-        console.log(`[SaveAll] Added infographic: ${infographicFilename}`);
-      }
-
-      // 9. Add data table CSV if available
+      // 8. Add data table CSV if available
       const dataTableCsv = getDataTableCsv();
       if (dataTableCsv) {
         const csvFilename = `${prefix}datatable.csv`;
