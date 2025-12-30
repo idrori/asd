@@ -1388,6 +1388,31 @@ export async function generatePngFigures(
  * Get the current session's generated figures
  */
 export function getCurrentSessionFigures(): GeneratedPngFigure[] {
+  // If in-memory array is populated, use it
+  if (currentSessionFigures.length > 0) {
+    return currentSessionFigures;
+  }
+
+  // Try to recover from localStorage (same data as pngFiguresForCompilation but different format)
+  try {
+    const stored = localStorage.getItem('icis_png_figures');
+    if (stored) {
+      const parsed = JSON.parse(stored) as FigureResource[];
+      if (parsed && parsed.length > 0) {
+        console.log(`[PNG Storage] Recovered ${parsed.length} session figures from localStorage`);
+        // Convert to GeneratedPngFigure format with blobUrl
+        currentSessionFigures = parsed.map(fig => ({
+          filename: fig.filename,
+          blobUrl: `data:image/png;base64,${fig.base64}`,
+          description: ''
+        }));
+        return currentSessionFigures;
+      }
+    }
+  } catch (e) {
+    console.warn('[PNG Storage] Could not read session figures from localStorage:', e);
+  }
+
   return currentSessionFigures;
 }
 
@@ -1568,8 +1593,29 @@ export function getBibliographyForCompilation(): BibliographyResource | null {
 
 /**
  * Get bibliography content for download/save
+ * Recovers from localStorage if in-memory value is empty (page refresh recovery)
  */
 export function getBibliographyContent(): { filename: string; content: string } | null {
+  // If in-memory value exists, use it
+  if (currentBibliography) {
+    return currentBibliography;
+  }
+
+  // Try to recover from localStorage
+  try {
+    const stored = localStorage.getItem('icis_bibliography');
+    if (stored) {
+      const parsed = JSON.parse(stored) as BibliographyResource;
+      if (parsed && parsed.content) {
+        console.log(`[Bibliography] Recovered from localStorage for download: ${parsed.filename}`);
+        currentBibliography = parsed;
+        return currentBibliography;
+      }
+    }
+  } catch (e) {
+    console.warn('[Bibliography] Could not read from localStorage:', e);
+  }
+
   return currentBibliography;
 }
 
