@@ -1796,3 +1796,113 @@ export function getChartDataContent(): { chartDataJson: string; pythonCode: stri
 export function clearChartData(): void {
   currentChartData = null;
 }
+
+// ============================================================================
+// Infographic Storage
+// ============================================================================
+
+let currentInfographicBase64: string | null = null;
+
+/**
+ * Store infographic base64 data for download
+ */
+export function storeInfographic(base64: string): void {
+  currentInfographicBase64 = base64;
+  console.log('[FileApi] Stored infographic base64 data');
+
+  // Also persist to localStorage for page refresh recovery
+  try {
+    localStorage.setItem('icis_infographic_base64', base64);
+  } catch (e) {
+    console.warn('[FileApi] Could not persist infographic to localStorage');
+  }
+}
+
+/**
+ * Get stored infographic base64 data
+ */
+export function getInfographicBase64(): string | null {
+  // Try memory first, then localStorage
+  if (currentInfographicBase64) {
+    return currentInfographicBase64;
+  }
+
+  try {
+    const stored = localStorage.getItem('icis_infographic_base64');
+    if (stored) {
+      currentInfographicBase64 = stored;
+      return stored;
+    }
+  } catch (e) {
+    console.warn('[FileApi] Could not read infographic from localStorage');
+  }
+
+  return null;
+}
+
+/**
+ * Clear stored infographic data
+ */
+export function clearInfographic(): void {
+  currentInfographicBase64 = null;
+  try {
+    localStorage.removeItem('icis_infographic_base64');
+  } catch (e) {
+    // Ignore localStorage errors
+  }
+}
+
+// ============================================================================
+// Data Table CSV Storage
+// ============================================================================
+
+let currentDataTableCsv: string | null = null;
+
+/**
+ * Store data table CSV content for download
+ */
+export function storeDataTableCsv(csvContent: string): void {
+  currentDataTableCsv = csvContent;
+  console.log('[FileApi] Stored data table CSV');
+
+  // Also persist to localStorage for page refresh recovery
+  try {
+    localStorage.setItem('icis_datatable_csv', csvContent);
+  } catch (e) {
+    console.warn('[FileApi] Could not persist data table CSV to localStorage');
+  }
+}
+
+/**
+ * Get stored data table CSV content
+ */
+export function getDataTableCsv(): string | null {
+  // Try memory first, then localStorage
+  if (currentDataTableCsv) {
+    return currentDataTableCsv;
+  }
+
+  try {
+    const stored = localStorage.getItem('icis_datatable_csv');
+    if (stored) {
+      currentDataTableCsv = stored;
+      return stored;
+    }
+  } catch (e) {
+    console.warn('[FileApi] Could not read data table CSV from localStorage');
+  }
+
+  return null;
+}
+
+/**
+ * Clear stored data table CSV
+ */
+export function clearDataTableCsv(): void {
+  currentDataTableCsv = null;
+  try {
+    localStorage.removeItem('icis_datatable_csv');
+  } catch (e) {
+    // Ignore localStorage errors
+  }
+}
