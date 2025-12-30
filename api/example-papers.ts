@@ -1,8 +1,9 @@
 /**
  * Vercel Serverless Function: Example Papers
  *
- * Returns ICIS 2024 example papers as base64-encoded PDFs from Vercel Blob storage
+ * Returns open-access CC-BY licensed papers as base64-encoded PDFs from Vercel Blob storage
  * Used to provide exemplar papers to Gemini for paper quality calibration
+ * Papers sourced from arXiv (CC-BY licensed) covering IS research topics
  *
  * Endpoint: GET /api/example-papers
  * Query params:
@@ -25,8 +26,8 @@ interface ExamplePaper {
   size: number;
 }
 
-// Base URL for the blob storage
-const BLOB_BASE_URL = 'https://qtr4njdgvzsdurlu.public.blob.vercel-storage.com/icis2024Examples/';
+// Blob storage prefix for open access papers
+const BLOB_PREFIX = 'openAccessExamples/';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Set CORS headers
@@ -47,11 +48,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const requestedCount = parseInt(req.query.count as string) || 10;
     const count = Math.min(Math.max(1, requestedCount), 11);
 
-    // List blobs in the icis2024Examples folder
-    const { blobs } = await list({ prefix: 'icis2024Examples/' });
+    // List blobs in the openAccessExamples folder
+    const { blobs } = await list({ prefix: BLOB_PREFIX });
 
     if (!blobs || blobs.length === 0) {
-      console.error('[Example Papers] No blobs found in icis2024Examples/');
+      console.error(`[Example Papers] No blobs found in ${BLOB_PREFIX}`);
       return res.status(404).json({
         success: false,
         error: 'No example papers found in blob storage'
@@ -76,7 +77,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const base64 = buffer.toString('base64');
 
       // Extract filename from pathname
-      const filename = blob.pathname.replace('icis2024Examples/', '');
+      const filename = blob.pathname.replace(BLOB_PREFIX, '');
 
       papers.push({
         filename,

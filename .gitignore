@@ -47,3 +47,4 @@ Data/*
 !Data/.gitkeep
 .env*.local
 icis2024Examples/
+openAccessExamples/
