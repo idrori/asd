@@ -284,3 +284,107 @@ export const STAGE_TRANSITIONS: Record<Stage, Stage[]> = {
   [Stage.REVISER]: [Stage.REVIEWER],  // Loop back for another review
   [Stage.FINALIZE]: [],  // Terminal state
 };
+
+// ============================================================
+// Reference Validation Types (Semantic Scholar Integration)
+// ============================================================
+
+/**
+ * Validation status for a reference
+ * Based on NVIDIA citation validation best practices
+ */
+export enum ReferenceValidationStatus {
+  VERIFIED = 'VERIFIED',       // Full match in Semantic Scholar (title + authors + year)
+  PARTIAL = 'PARTIAL',         // Title matches, minor discrepancies
+  UNVERIFIED = 'UNVERIFIED',   // No match found, but reference appears well-formed
+  REJECTED = 'REJECTED',       // Contradicts SS data or clearly hallucinated
+  DISCOVERED = 'DISCOVERED'    // Found via Semantic Scholar search (not from LLM)
+}
+
+/**
+ * Semantic Scholar paper data
+ */
+export interface SemanticScholarPaper {
+  paperId: string;
+  title: string;
+  authors: { authorId: string; name: string }[];
+  year?: number;
+  venue?: string;
+  journal?: { name: string; volume?: string; pages?: string };
+  citationCount?: number;
+  influentialCitationCount?: number;
+  doi?: string;
+  url?: string;
+  abstract?: string;
+  fieldsOfStudy?: string[];
+  openAccessPdf?: { url: string };
+}
+
+/**
+ * Result of validating a single reference
+ */
+export interface ReferenceValidationResult {
+  bibKey: string;                           // Citation key from BibTeX
+  originalTitle: string;                    // Title from LLM-generated reference
+  originalAuthors?: string[];               // Authors from LLM-generated reference
+  originalYear?: number;                    // Year from LLM-generated reference
+  status: ReferenceValidationStatus;
+  confidence: number;                       // 0-1 confidence score
+  ssMatch?: SemanticScholarPaper;           // Matched paper from Semantic Scholar
+  discrepancies?: string[];                 // List of differences found
+  source: 'LLM' | 'SS_SEARCH' | 'SS_CITATION_GRAPH';
+}
+
+/**
+ * Complete validation report for all references
+ */
+export interface ReferenceValidationReport {
+  timestamp: string;
+  totalReferences: number;
+  verified: number;
+  partial: number;
+  unverified: number;
+  rejected: number;
+  discovered: number;
+  recencyScore: number;                     // % from 2020-2025
+  verificationRate: number;                 // % VERIFIED or PARTIAL
+  hallucinationRate: number;                // % REJECTED
+  validatedReferences: ReferenceValidationResult[];
+  discoveredReferences: ReferenceValidationResult[];
+  errors: string[];
+}
+
+/**
+ * Request to Semantic Scholar API for validation
+ */
+export interface SSValidateRequest {
+  action: 'validate';
+  bibtex: string;
+}
+
+/**
+ * Request to Semantic Scholar API for keyword search
+ */
+export interface SSSearchRequest {
+  action: 'search';
+  keywords: string[];
+  fieldsOfStudy?: string[];
+  yearMin?: number;
+  yearMax?: number;
+  limit?: number;
+}
+
+/**
+ * Request to Semantic Scholar API for citation graph traversal
+ */
+export interface SSCitationsRequest {
+  action: 'citations';
+  paperId: string;
+  type: 'references' | 'citations';
+  limit?: number;
+}
+
+/**
+ * Union type for all Semantic Scholar API requests
+ */
+export type SSRequest = SSValidateRequest | SSSearchRequest | SSCitationsRequest;

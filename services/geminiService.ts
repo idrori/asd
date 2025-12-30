@@ -995,8 +995,14 @@ Be specific and detailed enough for replication.`,
 ⚠️ RECENCY REQUIREMENT: At least 10 references (60%+) must be from 2020-2025.
 Include 3-5 foundational/seminal papers from earlier years where appropriate for theoretical grounding.
 
-FORMAT: BibTeX entries. Output ONLY valid BibTeX, no explanatory text.
+⚠️ VALIDATION NOTE: All references will be automatically verified against Semantic Scholar.
+- References that cannot be verified may be supplemented with discovered papers
+- For best results, use well-known papers with standard citation formats
+- Include DOI when known: doi = {10.xxxx/xxxxx}
 
+FORMAT: BibTeX entries with relevance comments. Output ONLY valid BibTeX.
+
+% Relevance: Foundational TAM paper for technology acceptance framework
 @article{davis1989perceived,
   author = {Davis, Fred D.},
   title = {Perceived usefulness, perceived ease of use, and user acceptance of information technology},
@@ -1004,9 +1010,11 @@ FORMAT: BibTeX entries. Output ONLY valid BibTeX, no explanatory text.
   volume = {13},
   number = {3},
   pages = {319--340},
-  year = {1989}
+  year = {1989},
+  doi = {10.2307/249008}
 }
 
+% Relevance: Updated IS success model for measuring system effectiveness
 @article{delone2003delone,
   author = {DeLone, William H. and McLean, Ephraim R.},
   title = {The {DeLone} and {McLean} model of information systems success: A ten-year update},
@@ -1017,6 +1025,7 @@ FORMAT: BibTeX entries. Output ONLY valid BibTeX, no explanatory text.
   year = {2003}
 }
 
+% Relevance: Unified theory integrating multiple technology acceptance models
 @article{venkatesh2003user,
   author = {Venkatesh, Viswanath and Morris, Michael G. and Davis, Gordon B. and Davis, Fred D.},
   title = {User acceptance of information technology: Toward a unified view},
@@ -1034,6 +1043,7 @@ BIBTEX FORMAT RULES:
 4. Use double dashes for page ranges: pages = {123--145}
 5. Protect proper nouns with braces: title = {The {DeLone} and {McLean} model}
 6. Include: author, title, journal/booktitle, year, volume, number, pages
+7. Add a % Relevance: comment before each entry explaining why it's cited
 
 WELL-KNOWN IS PAPERS TO USE (verified to exist):
 - Davis (1989) - TAM, MIS Quarterly
@@ -1045,7 +1055,7 @@ WELL-KNOWN IS PAPERS TO USE (verified to exist):
 - Yin (2018) - Case study research design (book)
 
 Requirements:
-1. Output ONLY BibTeX entries, no other text
+1. Output ONLY BibTeX entries with % Relevance comments, no other text
 2. ONLY include papers you are confident exist
 3. Citation keys must match the \\cite{} commands used in the paper
 4. Sort entries alphabetically by citation key
@@ -1109,8 +1119,14 @@ Use objective, factual language throughout.`,
 ⚠️ RECENCY REQUIREMENT: At least 15 references (60%+) must be from 2020-2025.
 Include 5-8 foundational/seminal papers from earlier years where appropriate for theoretical grounding.
 
-FORMAT: BibTeX entries. Output ONLY valid BibTeX, no explanatory text.
+⚠️ VALIDATION NOTE: All references will be automatically verified against Semantic Scholar.
+- References that cannot be verified may be supplemented with discovered papers
+- For best results, use well-known papers with standard citation formats
+- Include DOI when known: doi = {10.xxxx/xxxxx}
 
+FORMAT: BibTeX entries with relevance comments. Output ONLY valid BibTeX.
+
+% Relevance: Foundational TAM paper for technology acceptance framework
 @article{davis1989perceived,
   author = {Davis, Fred D.},
   title = {Perceived usefulness, perceived ease of use, and user acceptance of information technology},
@@ -1118,9 +1134,11 @@ FORMAT: BibTeX entries. Output ONLY valid BibTeX, no explanatory text.
   volume = {13},
   number = {3},
   pages = {319--340},
-  year = {1989}
+  year = {1989},
+  doi = {10.2307/249008}
 }
 
+% Relevance: Updated IS success model for measuring system effectiveness
 @article{delone2003delone,
   author = {DeLone, William H. and McLean, Ephraim R.},
   title = {The {DeLone} and {McLean} model of information systems success: A ten-year update},
@@ -1131,14 +1149,18 @@ FORMAT: BibTeX entries. Output ONLY valid BibTeX, no explanatory text.
   year = {2003}
 }
 
-@inproceedings{smith2020icis,
-  author = {Smith, John and Jones, Mary},
-  title = {Example conference paper title},
-  booktitle = {Proceedings of the International Conference on Information Systems (ICIS)},
-  year = {2020},
-  pages = {1--15}
+% Relevance: Unified theory integrating multiple technology acceptance models
+@article{venkatesh2003user,
+  author = {Venkatesh, Viswanath and Morris, Michael G. and Davis, Gordon B. and Davis, Fred D.},
+  title = {User acceptance of information technology: Toward a unified view},
+  journal = {MIS Quarterly},
+  volume = {27},
+  number = {3},
+  pages = {425--478},
+  year = {2003}
 }
 
+% Relevance: Canonical case study research methodology
 @book{yin2018case,
   author = {Yin, Robert K.},
   title = {Case Study Research and Applications: Design and Methods},
@@ -1154,6 +1176,7 @@ BIBTEX FORMAT RULES:
 4. Use double dashes for page ranges: pages = {123--145}
 5. Protect proper nouns with braces: title = {The {DeLone} and {McLean} model}
 6. Include: author, title, journal/booktitle, year, volume, number, pages
+7. Add a % Relevance: comment before each entry explaining why it's cited
 
 WELL-KNOWN IS PAPERS TO USE (verified to exist):
 - Davis (1989) - TAM, MIS Quarterly
@@ -1167,7 +1190,7 @@ WELL-KNOWN IS PAPERS TO USE (verified to exist):
 - Straub et al. (2004) - Validation guidelines, MIS Quarterly
 
 Requirements:
-1. Output ONLY BibTeX entries, no other text
+1. Output ONLY BibTeX entries with % Relevance comments, no other text
 2. ONLY include papers you are confident exist
 3. Include mix of: @article, @inproceedings (ICIS, ECIS, AMCIS), @book
 4. Citation keys must match the \\cite{} commands used in the paper
@@ -1519,6 +1542,46 @@ export const runBuilder = async (
       onProgress?.(section.name, 'error');
       console.error(`[Builder] Error generating ${section.name}:`, error);
       throw new Error(`Failed to generate ${section.name}: ${(error as Error).message}`);
+    }
+  }
+
+  // STEP: Validate and enrich references with Semantic Scholar
+  // This validates LLM-generated references and discovers additional relevant papers
+  if (generatedSections.references) {
+    try {
+      onProgress?.('Reference Validation', 'starting');
+      console.log('[Builder] Validating references with Semantic Scholar...');
+
+      const { validateAndEnrichReferences } = await import('./referenceValidationService');
+      const validationResult = await validateAndEnrichReferences(
+        generatedSections.references,
+        interviewTranscript,
+        {
+          targetMin: isPartialPaper ? 15 : 25,
+          targetMax: isPartialPaper ? 25 : 40
+        }
+      );
+
+      // Update references with validated BibTeX
+      generatedSections.references = validationResult.bibtex;
+
+      // Log validation metrics
+      const report = validationResult.report;
+      console.log(`[Builder] Reference validation complete:
+  - Total: ${report.totalReferences}
+  - Verified: ${report.verified} (${(report.verificationRate * 100).toFixed(0)}%)
+  - Discovered: ${report.discovered}
+  - Recency (2020-2025): ${(report.recencyScore * 100).toFixed(0)}%`);
+
+      // Store validation report for oversight
+      const { storeValidationReport } = await import('./fileApi');
+      storeValidationReport(report);
+
+      onProgress?.('Reference Validation', 'completed');
+    } catch (error) {
+      console.error('[Builder] Reference validation failed:', error);
+      onProgress?.('Reference Validation', 'error');
+      // Non-fatal - continue with original LLM references
     }
   }
 

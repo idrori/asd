@@ -10,6 +10,8 @@
  *   - Files are downloaded to user's Downloads folder
  */
 
+import type { ReferenceValidationReport } from '../types';
+
 const API_BASE = 'http://localhost:3001/api';
 
 // SECURITY: Internal API secret for authenticated requests
@@ -2010,6 +2012,61 @@ export function clearDataTableCsv(): void {
   currentDataTableCsv = null;
   try {
     localStorage.removeItem('icis_datatable_csv');
+  } catch (e) {
+    // Ignore localStorage errors
+  }
+}
+
+// ============================================================================
+// Reference Validation Report Storage
+// ============================================================================
+
+let currentValidationReport: ReferenceValidationReport | null = null;
+
+/**
+ * Store reference validation report for oversight review
+ */
+export function storeValidationReport(report: ReferenceValidationReport): void {
+  currentValidationReport = report;
+  console.log(`[FileApi] Stored validation report: ${report.verified} verified, ${report.discovered} discovered`);
+
+  // Persist to localStorage for page refresh recovery
+  try {
+    localStorage.setItem('icis_validation_report', JSON.stringify(report));
+  } catch (e) {
+    console.warn('[FileApi] Could not persist validation report to localStorage');
+  }
+}
+
+/**
+ * Get stored reference validation report
+ */
+export function getValidationReport(): ReferenceValidationReport | null {
+  // Try memory first, then localStorage
+  if (currentValidationReport) {
+    return currentValidationReport;
+  }
+
+  try {
+    const stored = localStorage.getItem('icis_validation_report');
+    if (stored) {
+      currentValidationReport = JSON.parse(stored);
+      return currentValidationReport;
+    }
+  } catch (e) {
+    console.warn('[FileApi] Could not read validation report from localStorage');
+  }
+
+  return null;
+}
+
+/**
+ * Clear stored validation report
+ */
+export function clearValidationReport(): void {
+  currentValidationReport = null;
+  try {
+    localStorage.removeItem('icis_validation_report');
   } catch (e) {
     // Ignore localStorage errors
   }
