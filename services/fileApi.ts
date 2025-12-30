@@ -296,6 +296,39 @@ export async function saveFinalSubmission(
     });
   });
 
+  // Add data table CSV if available
+  const dataTableCsv = getDataTableCsv();
+  if (dataTableCsv) {
+    files.push({
+      directory: 'data',
+      filename: `${prefix}datatable.csv`,
+      content: dataTableCsv
+    });
+    console.log('[FileApi] Including data table CSV in final submission');
+  }
+
+  // Add bibliography if available
+  const bibData = getBibliographyContent();
+  if (bibData) {
+    files.push({
+      directory: 'paper',
+      filename: `${prefix}${bibData.filename}`,
+      content: bibData.content
+    });
+    console.log('[FileApi] Including bibliography in final submission');
+  }
+
+  // Save infographic blob URL reference
+  const infographicUrl = getInfographicBlobUrl();
+  if (infographicUrl) {
+    files.push({
+      directory: 'data',
+      filename: `${prefix}infographic_url.txt`,
+      content: infographicUrl
+    });
+    console.log('[FileApi] Including infographic blob URL in final submission');
+  }
+
   return saveFiles(files);
 }
 
@@ -1802,6 +1835,7 @@ export function clearChartData(): void {
 // ============================================================================
 
 let currentInfographicBase64: string | null = null;
+let currentInfographicBlobUrl: string | null = null;
 
 /**
  * Store infographic base64 data for download
@@ -1816,6 +1850,78 @@ export function storeInfographic(base64: string): void {
   } catch (e) {
     console.warn('[FileApi] Could not persist infographic to localStorage');
   }
+
+  // Also upload to Vercel Blob for permanent storage
+  uploadInfographicToBlob(base64).catch(err => {
+    console.warn('[FileApi] Failed to upload infographic to blob:', err);
+  });
+}
+
+/**
+ * Upload infographic to Vercel Blob storage
+ */
+export async function uploadInfographicToBlob(base64: string): Promise<string | null> {
+  try {
+    const apiUrl = import.meta.env.VITE_API_URL || '';
+    if (!apiUrl) {
+      console.warn('[FileApi] No API URL configured for infographic upload');
+      return null;
+    }
+
+    // Get session ID from current session
+    const sessionId = getCurrentSessionId() || `infographic_${Date.now()}`;
+
+    const response = await fetch(`${apiUrl}/api/upload-infographic`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        base64,
+        sessionId,
+        filename: 'research_infographic.png'
+      })
+    });
+
+    const result = await response.json();
+    if (result.success && result.url) {
+      currentInfographicBlobUrl = result.url;
+      console.log(`[FileApi] Infographic uploaded to blob: ${result.url}`);
+
+      // Store URL in localStorage too
+      try {
+        localStorage.setItem('icis_infographic_blob_url', result.url);
+      } catch (e) {
+        // Ignore localStorage errors
+      }
+
+      return result.url;
+    }
+
+    return null;
+  } catch (error) {
+    console.error('[FileApi] Error uploading infographic to blob:', error);
+    return null;
+  }
+}
+
+/**
+ * Get infographic blob URL
+ */
+export function getInfographicBlobUrl(): string | null {
+  if (currentInfographicBlobUrl) {
+    return currentInfographicBlobUrl;
+  }
+
+  try {
+    const stored = localStorage.getItem('icis_infographic_blob_url');
+    if (stored) {
+      currentInfographicBlobUrl = stored;
+      return stored;
+    }
+  } catch (e) {
+    // Ignore localStorage errors
+  }
+
+  return null;
 }
 
 /**
@@ -1845,8 +1951,10 @@ export function getInfographicBase64(): string | null {
  */
 export function clearInfographic(): void {
   currentInfographicBase64 = null;
+  currentInfographicBlobUrl = null;
   try {
     localStorage.removeItem('icis_infographic_base64');
+    localStorage.removeItem('icis_infographic_blob_url');
   } catch (e) {
     // Ignore localStorage errors
   }
