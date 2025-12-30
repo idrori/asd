@@ -46,3 +46,4 @@ Code/*.py
 Data/*
 !Data/.gitkeep
 .env*.local
+icis2024Examples/
