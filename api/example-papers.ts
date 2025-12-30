@@ -1,7 +1,7 @@
 /**
  * Vercel Serverless Function: Example Papers
  *
- * Returns ICIS 2024 example papers as base64-encoded PDFs
+ * Returns ICIS 2024 example papers as base64-encoded PDFs from Vercel Blob storage
  * Used to provide exemplar papers to Gemini for paper quality calibration
  *
  * Endpoint: GET /api/example-papers
@@ -12,8 +12,7 @@
  */
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import * as fs from 'fs';
-import * as path from 'path';
+import { list } from '@vercel/blob';
 
 export const config = {
   maxDuration: 60,
@@ -25,6 +24,9 @@ interface ExamplePaper {
   mimeType: string;
   size: number;
 }
+
+// Base URL for the blob storage
+const BLOB_BASE_URL = 'https://qtr4njdgvzsdurlu.public.blob.vercel-storage.com/icis2024Examples/';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Set CORS headers
@@ -45,51 +47,45 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const requestedCount = parseInt(req.query.count as string) || 10;
     const count = Math.min(Math.max(1, requestedCount), 11);
 
-    // Path to example papers directory
-    // In Vercel, the project root is accessible
-    const examplesDir = path.join(process.cwd(), 'icis2024Examples');
+    // List blobs in the icis2024Examples folder
+    const { blobs } = await list({ prefix: 'icis2024Examples/' });
 
-    // Check if directory exists
-    if (!fs.existsSync(examplesDir)) {
-      console.error(`[Example Papers] Directory not found: ${examplesDir}`);
+    if (!blobs || blobs.length === 0) {
+      console.error('[Example Papers] No blobs found in icis2024Examples/');
       return res.status(404).json({
         success: false,
-        error: 'Example papers directory not found',
-        path: examplesDir
+        error: 'No example papers found in blob storage'
       });
     }
 
-    // Read all PDF files from the directory, sorted by size (smallest first)
-    // This helps stay under Vercel's 4.5MB payload limit
-    const allFiles = fs.readdirSync(examplesDir)
-      .filter(f => f.toLowerCase().endsWith('.pdf'))
-      .map(f => ({
-        name: f,
-        size: fs.statSync(path.join(examplesDir, f)).size
-      }))
-      .sort((a, b) => a.size - b.size)  // Smallest first
+    // Filter PDFs and sort by size (smallest first)
+    const pdfBlobs = blobs
+      .filter(b => b.pathname.toLowerCase().endsWith('.pdf'))
+      .sort((a, b) => a.size - b.size)
       .slice(0, count);
 
-    const files = allFiles.map(f => f.name);
+    console.log(`[Example Papers] Found ${pdfBlobs.length} PDF blobs, returning ${count}`);
 
-    console.log(`[Example Papers] Found ${files.length} PDF files, returning ${count}`);
-
-    // Read each PDF and convert to base64
+    // Fetch each PDF and convert to base64
     const papers: ExamplePaper[] = [];
 
-    for (const filename of files) {
-      const filePath = path.join(examplesDir, filename);
-      const fileBuffer = fs.readFileSync(filePath);
-      const base64 = fileBuffer.toString('base64');
+    for (const blob of pdfBlobs) {
+      const response = await fetch(blob.url);
+      const arrayBuffer = await response.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      const base64 = buffer.toString('base64');
+
+      // Extract filename from pathname
+      const filename = blob.pathname.replace('icis2024Examples/', '');
 
       papers.push({
         filename,
         base64,
         mimeType: 'application/pdf',
-        size: fileBuffer.length
+        size: buffer.length
       });
 
-      console.log(`[Example Papers] Loaded: ${filename} (${Math.round(fileBuffer.length / 1024)}KB)`);
+      console.log(`[Example Papers] Loaded: ${filename} (${Math.round(buffer.length / 1024)}KB)`);
     }
 
     const totalSize = papers.reduce((sum, p) => sum + p.size, 0);
