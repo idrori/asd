@@ -319,9 +319,14 @@ Your output should match the quality, depth, and academic rigor of these exempla
 
     const data = await response.json();
     const content = extractAllTextParts(data);
+    const finishReason = data.candidates?.[0]?.finishReason;
+
+    // Log finish reason to diagnose truncation issues
+    if (finishReason && finishReason !== 'STOP') {
+      console.warn(`[Gemini] Response finished with reason: ${finishReason} (content length: ${content?.length || 0})`);
+    }
 
     if (!content) {
-      const finishReason = data.candidates?.[0]?.finishReason;
       if (finishReason === 'SAFETY') {
         throw new GeminiError(
           GeminiErrorType.CONTENT_FILTERED,
@@ -527,6 +532,12 @@ async function callGeminiViaProxy(
 
   const data = await response.json();
   const content = extractAllTextParts(data);
+  const finishReason = data.candidates?.[0]?.finishReason;
+
+  // Log finish reason to diagnose truncation issues
+  if (finishReason && finishReason !== 'STOP') {
+    console.warn(`[Gemini Proxy] Response finished with reason: ${finishReason} (content length: ${content?.length || 0})`);
+  }
 
   if (!content) {
     throw new GeminiError(
@@ -621,10 +632,15 @@ async function callGemini(prompt: string, systemInstruction?: string): Promise<s
 
       const data = await response.json();
       const content = extractAllTextParts(data);
+      const finishReason = data.candidates?.[0]?.finishReason;
+
+      // Log finish reason to diagnose truncation issues
+      if (finishReason && finishReason !== 'STOP') {
+        console.warn(`[Gemini Direct] Response finished with reason: ${finishReason} (content length: ${content?.length || 0})`);
+      }
 
       if (!content) {
         // Check for content filtering
-        const finishReason = data.candidates?.[0]?.finishReason;
         if (finishReason === 'SAFETY') {
           throw new GeminiError(
             GeminiErrorType.CONTENT_FILTERED,
@@ -814,6 +830,12 @@ async function callGeminiWithPdf(
 
   const data = await response.json();
   const content = extractAllTextParts(data);
+  const finishReason = data.candidates?.[0]?.finishReason;
+
+  // Log finish reason to diagnose truncation issues
+  if (finishReason && finishReason !== 'STOP') {
+    console.warn(`[Gemini PDF] Response finished with reason: ${finishReason} (content length: ${content?.length || 0})`);
+  }
 
   if (!content) {
     throw new GeminiError(
