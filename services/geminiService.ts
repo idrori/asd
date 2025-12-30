@@ -335,6 +335,17 @@ Your output should match the quality, depth, and academic rigor of these exempla
           false
         );
       }
+      if (finishReason === 'RECITATION') {
+        // RECITATION means Gemini detected potential copyright issues with example papers
+        // This is retryable - the caller should retry without example papers
+        console.warn('[Gemini] RECITATION detected - example papers may have triggered copyright filter');
+        throw new GeminiError(
+          GeminiErrorType.CONTENT_FILTERED,
+          'Response blocked due to similarity to training data (RECITATION). Retrying without example papers.',
+          `Finish reason: ${finishReason}`,
+          true  // Mark as retryable
+        );
+      }
       throw new GeminiError(
         GeminiErrorType.INVALID_RESPONSE,
         'Empty response from AI with examples.',
@@ -1281,7 +1292,17 @@ CITATION FORMAT (CRITICAL - Inline APA 7th Edition Style):
   let content: string;
   if (context.examplePapers && context.examplePapers.length > 0 && currentPaperMode === 'research') {
     console.log(`[generateSection] Using ${context.examplePapers.length} example papers for ${section.name} (research mode)`);
-    content = await callGeminiWithExamples(prompt, systemInstruction, context.examplePapers);
+    try {
+      content = await callGeminiWithExamples(prompt, systemInstruction, context.examplePapers);
+    } catch (error) {
+      // If RECITATION error (copyright filter), retry without example papers
+      if (error instanceof GeminiError && error.details?.includes('RECITATION')) {
+        console.warn(`[generateSection] RECITATION error for ${section.name} - retrying without example papers`);
+        content = await callGemini(prompt, systemInstruction);
+      } else {
+        throw error;
+      }
+    }
   } else {
     content = await callGemini(prompt, systemInstruction);
   }
