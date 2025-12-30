@@ -347,7 +347,9 @@ Save as: Code/research_metadata_{participantId}.json
       "usage": "How this paper contributes to your work"
     }
     // Begin with 1-3 references from INTERVIEW (initialReferences) and continue for 20-25 total key references covering all aspects:
-    // - Foundational theory papers (IS theories, behavioral theories, economic theories)
+    // ⚠️ RECENCY: At least 60% of papers should be from 2020-2025
+    // - Foundational/seminal papers (any year) for theoretical grounding (5-8 papers max)
+    // - Recent papers (2020-2025) for current state of the field (15+ papers)
     // - Methodological papers matching your research type
     // - Prior empirical work in your domain
     // - Papers addressing similar research questions
@@ -1734,7 +1736,9 @@ For practitioners, our findings suggest [actionable recommendation 1]. Specifica
 - Narrative: "Author (Year) demonstrated that [finding]."
 - Multiple sources: "Several studies have found [finding] (Author1, Year; Author2, Year; Author3, Year)."
 
-**Foundational vs. Recent Citations:**
-- Include seminal/foundational papers (pre-2010)
-- Emphasize recent work (last 5 years)
-- Balance: ~30% foundational, ~70% recent
+**Citation Recency Distribution (CRITICAL):**
+- Recent papers (2020-2025): 60% minimum - current state of the field
+- Established papers (2015-2019): 20-25% - bridge literature
+- Foundational/seminal papers (pre-2015): 15-20% - theoretical grounding only
+
+⚠️ PRIORITIZE RECENT LITERATURE: The majority of citations should reflect the current state of research (2020-2025).

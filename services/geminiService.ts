@@ -937,7 +937,10 @@ Use flowing paragraphs (150-250 words each). No bullet points.`,
 3. Identifies gaps and tensions in existing research
 4. Positions this study within the broader literature
 5. Builds toward the theoretical framework
-Include at least 15-20 citations. Use flowing paragraphs.`,
+Include at least 15-20 citations. Use flowing paragraphs.
+
+⚠️ PRIORITIZE RECENT LITERATURE: At least 60% of citations should be from 2020-2025.
+Include foundational papers where necessary, but emphasize recent developments and current state of the field.`,
       minWords: 1200
     },
     {
@@ -988,6 +991,9 @@ Be specific and detailed enough for replication.`,
 - NO fabricated references
 - NO placeholder text
 - If you cannot recall the exact details of a paper, use a well-known foundational paper instead
+
+⚠️ RECENCY REQUIREMENT: At least 10 references (60%+) must be from 2020-2025.
+Include 3-5 foundational/seminal papers from earlier years where appropriate for theoretical grounding.
 
 FORMAT: BibTeX entries. Output ONLY valid BibTeX, no explanatory text.
 
@@ -1042,7 +1048,8 @@ Requirements:
 1. Output ONLY BibTeX entries, no other text
 2. ONLY include papers you are confident exist
 3. Citation keys must match the \\cite{} commands used in the paper
-4. Sort entries alphabetically by citation key`,
+4. Sort entries alphabetically by citation key
+5. Prioritize recent papers (2020-2025) while including necessary foundational works`,
         minWords: 300
       }
     );
@@ -1098,6 +1105,9 @@ Use objective, factual language throughout.`,
 - NO fabricated references
 - NO placeholder text
 - If you cannot recall the exact details of a paper, use a well-known foundational paper instead
+
+⚠️ RECENCY REQUIREMENT: At least 15 references (60%+) must be from 2020-2025.
+Include 5-8 foundational/seminal papers from earlier years where appropriate for theoretical grounding.
 
 FORMAT: BibTeX entries. Output ONLY valid BibTeX, no explanatory text.
 
@@ -1161,7 +1171,8 @@ Requirements:
 2. ONLY include papers you are confident exist
 3. Include mix of: @article, @inproceedings (ICIS, ECIS, AMCIS), @book
 4. Citation keys must match the \\cite{} commands used in the paper
-5. Sort entries alphabetically by citation key`,
+5. Sort entries alphabetically by citation key
+6. Prioritize recent papers (2020-2025) while including necessary foundational works`,
         minWords: 500
       }
     );
