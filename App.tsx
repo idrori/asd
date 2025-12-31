@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import Sidebar, { PaperMode } from './components/Sidebar';
+import Sidebar, { PaperMode, SourceType } from './components/Sidebar';
 import DashboardPanel from './components/DashboardPanel';
 import { AdminPanel } from './components/admin';
 import { Stage } from './types';
@@ -19,6 +19,9 @@ const App: React.FC = () => {
 
   // Paper mode state (draft = fast models, research = powerful models)
   const [paperMode, setPaperModeState] = useState<PaperMode>('research');
+
+  // Source type state
+  const [sourceType, setSourceType] = useState<SourceType>('transcript-upload');
 
   // Update gemini service when mode changes
   const handlePaperModeChange = useCallback((mode: PaperMode) => {
@@ -141,6 +144,7 @@ Is this the correct data file for your analysis?`;
           onResearchAdmin={paperMode === 'research' ? () => setCurrentView(currentView === 'admin' ? 'main' : 'admin') : undefined}
           paperMode={paperMode}
           onPaperModeChange={handlePaperModeChange}
+          sourceType={sourceType}
         />
       </div>
       <div className="flex-1 h-full">
@@ -169,6 +173,7 @@ Is this the correct data file for your analysis?`;
               const baseUrl = import.meta.env.BASE_URL || '/';
               window.open(`${baseUrl}paper-to-interview.html`, '_blank', 'noopener,noreferrer');
             }}
+            onSourceTypeChange={setSourceType}
           />
         )}
       </div>

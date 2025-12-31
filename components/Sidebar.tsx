@@ -27,6 +27,7 @@ import {
 export type StageAction = 'abort' | 'restart' | 'skip' | 'start';
 
 export type PaperMode = 'draft' | 'research';
+export type SourceType = 'voice-interview' | 'transcript-upload' | 'paper';
 
 interface SidebarProps {
   currentStage: Stage;
@@ -43,6 +44,7 @@ interface SidebarProps {
   onResearchAdmin?: () => void;
   paperMode?: PaperMode;
   onPaperModeChange?: (mode: PaperMode) => void;
+  sourceType?: SourceType;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
@@ -59,10 +61,26 @@ const Sidebar: React.FC<SidebarProps> = ({
   onPaperToInterview,
   onResearchAdmin,
   paperMode = 'draft',
-  onPaperModeChange
+  onPaperModeChange,
+  sourceType = 'transcript-upload'
 }) => {
   const [menuOpen, setMenuOpen] = useState<Stage | null>(null);
+  const [builderManualExpanded, setBuilderManualExpanded] = useState<boolean | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  // Get builder description based on source type
+  const getBuilderDescription = () => {
+    switch (sourceType) {
+      case 'voice-interview':
+        return 'Build paper from research interview';
+      case 'transcript-upload':
+        return 'Build paper from interview transcript';
+      case 'paper':
+        return 'Build paper based on previous paper';
+      default:
+        return 'Build paper from research interview';
+    }
+  };
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -183,8 +201,15 @@ const Sidebar: React.FC<SidebarProps> = ({
     return 'pending';
   };
 
-  const isBuilderExpanded = currentStage === Stage.BUILDER ||
-    stagesState[Stage.BUILDER] === StageStatus.ACTIVE;
+  // Builder expansion: manual toggle takes precedence, otherwise auto-expand when active
+  const autoExpanded = currentStage === Stage.BUILDER || stagesState[Stage.BUILDER] === StageStatus.ACTIVE;
+  const isBuilderExpanded = builderManualExpanded !== null ? builderManualExpanded : autoExpanded;
+
+  // Toggle builder expansion
+  const toggleBuilderExpanded = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setBuilderManualExpanded(prev => prev === null ? !autoExpanded : !prev);
+  };
 
   return (
     <div className="h-full w-full bg-slate-900 text-slate-200 flex flex-col border-r border-slate-800 shadow-xl">
@@ -310,7 +335,11 @@ const Sidebar: React.FC<SidebarProps> = ({
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    {stage === Stage.BUILDER && (isBuilderExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />)}
+                    {stage === Stage.BUILDER && (
+                      <button onClick={toggleBuilderExpanded} className="p-0.5 hover:bg-slate-700 rounded">
+                        {isBuilderExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+                      </button>
+                    )}
                     {getStatusIcon(status)}
                     {/* Menu button */}
                     {onStageAction && availableActions.length > 0 && (
@@ -327,7 +356,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                   </div>
                 </div>
                 <p className="text-xs text-slate-500 leading-relaxed pl-6">
-                  {info.description}
+                  {stage === Stage.BUILDER ? getBuilderDescription() : info.description}
                 </p>
 
                 {/* Prompt file indicator */}

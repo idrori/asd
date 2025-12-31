@@ -22,6 +22,8 @@ interface UploadedFiles {
   participantId?: string;
 }
 
+type SourceType = 'voice-interview' | 'transcript-upload' | 'paper';
+
 interface DashboardPanelProps {
   state: SimulationState;
   isProcessing: boolean;
@@ -39,6 +41,7 @@ interface DashboardPanelProps {
   onNewInterview?: () => void;
   onPaperToInterview?: () => void;
   onVenueChange?: (venueId: string) => void;
+  onSourceTypeChange?: (sourceType: SourceType) => void;
 }
 
 const DashboardPanel: React.FC<DashboardPanelProps> = ({
@@ -57,7 +60,8 @@ const DashboardPanel: React.FC<DashboardPanelProps> = ({
   participantEmail,
   onNewInterview,
   onPaperToInterview,
-  onVenueChange
+  onVenueChange,
+  onSourceTypeChange
 }) => {
   // State for files passed from Reviewer to Supervisor
   const [reviewOutputFiles, setReviewOutputFiles] = useState<ReviewOutputFiles | undefined>();
@@ -88,6 +92,7 @@ const DashboardPanel: React.FC<DashboardPanelProps> = ({
             onNewInterview={onNewInterview}
             onPaperToInterview={onPaperToInterview}
             onVenueChange={onVenueChange}
+            onSourceTypeChange={onSourceTypeChange}
           />
         );
 

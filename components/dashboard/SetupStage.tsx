@@ -30,6 +30,7 @@ interface SetupStageProps {
   onVenueChange?: (venueId: VenueId) => void;
   onNewInterview?: () => void;
   onPaperToInterview?: () => void;
+  onSourceTypeChange?: (sourceType: SourceType) => void;
 }
 
 const SetupStage: React.FC<SetupStageProps> = ({
@@ -44,7 +45,8 @@ const SetupStage: React.FC<SetupStageProps> = ({
   hasExistingCase = false,
   onVenueChange,
   onNewInterview,
-  onPaperToInterview
+  onPaperToInterview,
+  onSourceTypeChange
 }) => {
   const [isStartingNewCase, setIsStartingNewCase] = useState(false);
   const [sourceType, setSourceType] = useState<SourceType>('transcript-upload');
@@ -82,6 +84,11 @@ const SetupStage: React.FC<SetupStageProps> = ({
     setTemplateLoaded(false);
     onVenueChange?.(venueId);
   };
+
+  // Notify parent of source type changes
+  useEffect(() => {
+    onSourceTypeChange?.(sourceType);
+  }, [sourceType, onSourceTypeChange]);
 
   const handleSourceSelect = (type: SourceType) => {
     setSourceType(type);
