@@ -49,7 +49,7 @@ export async function loadConferenceRegistry(): Promise<ConferenceRegistry> {
 
   try {
     const basePath = getBasePath();
-    const response = await fetch(`${basePath}/conferences/registry.json`);
+    const response = await fetch(`${basePath}/venues/registry.json`);
     if (!response.ok) {
       throw new Error(`Failed to load conference registry: ${response.status}`);
     }
@@ -109,7 +109,7 @@ export async function loadConferenceConfig(conferenceId: ConferenceId): Promise<
     }
 
     const basePath = getBasePath();
-    const response = await fetch(`${basePath}/conferences/${conferenceId}/config.json`);
+    const response = await fetch(`${basePath}/venues/conferences/${conferenceId}/config.json`);
     if (!response.ok) {
       throw new Error(`Failed to load conference config for ${conferenceId}: ${response.status}`);
     }
@@ -206,11 +206,11 @@ export async function loadConferencePrompt(
 
   try {
     const basePath = getBasePath();
-    const response = await fetch(`${basePath}/conferences/${config.id}/${promptPath}`);
+    const response = await fetch(`${basePath}/venues/conferences/${config.id}/${promptPath}`);
     if (!response.ok) {
       // Fallback to shared prompts if conference-specific not found
       console.warn(`[ConferenceService] Conference-specific prompt not found, trying shared...`);
-      const sharedResponse = await fetch(`${basePath}/conferences/shared/${promptPath}`);
+      const sharedResponse = await fetch(`${basePath}/venues/shared/${promptPath}`);
       if (!sharedResponse.ok) {
         throw new Error(`Prompt file not found: ${promptPath}`);
       }

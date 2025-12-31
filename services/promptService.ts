@@ -97,7 +97,7 @@ async function loadConferencePrompt(conferenceId: ConferenceId, promptKey: Promp
 
   // Try loading from conference-specific directory
   try {
-    const response = await fetch(`/conferences/${conferenceId}/${fileName}`);
+    const response = await fetch(`/venues/conferences/${conferenceId}/${fileName}`);
     if (response.ok) {
       const content = await response.text();
       const substituted = substitutePathPlaceholders(content, conferenceId);
@@ -110,7 +110,7 @@ async function loadConferencePrompt(conferenceId: ConferenceId, promptKey: Promp
 
   // Try loading from shared directory
   try {
-    const response = await fetch(`/conferences/shared/${fileName}`);
+    const response = await fetch(`/venues/shared/${fileName}`);
     if (response.ok) {
       const content = await response.text();
       const substituted = substitutePathPlaceholders(content, conferenceId);

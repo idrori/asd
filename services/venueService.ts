@@ -246,13 +246,6 @@ export async function loadVenueConfig(venueId: VenueId): Promise<VenueConfig> {
     const response = await fetch(`${basePath}/venues/${venueType}/${venueId}/config.json`);
 
     if (!response.ok) {
-      // Try legacy path for backwards compatibility
-      const legacyResponse = await fetch(`${basePath}/conferences/${venueId}/config.json`);
-      if (legacyResponse.ok) {
-        const config = await legacyResponse.json();
-        venueCache[venueId] = config;
-        return config;
-      }
       throw new Error(`Failed to load venue config: ${response.status}`);
     }
 
@@ -423,18 +416,8 @@ export async function loadVenuePrompt(
     let response = await fetch(`${basePath}/venues/${venueType}/${config.id}/${promptPath}`);
 
     if (!response.ok) {
-      // Try legacy conference path
-      response = await fetch(`${basePath}/conferences/${config.id}/${promptPath}`);
-    }
-
-    if (!response.ok) {
       // Try shared prompts
       response = await fetch(`${basePath}/venues/shared/${promptPath}`);
-    }
-
-    if (!response.ok) {
-      // Try legacy shared path
-      response = await fetch(`${basePath}/conferences/shared/${promptPath}`);
     }
 
     if (!response.ok) {
