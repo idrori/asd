@@ -47,7 +47,7 @@ const SetupStage: React.FC<SetupStageProps> = ({
   onPaperToInterview
 }) => {
   const [isStartingNewCase, setIsStartingNewCase] = useState(false);
-  const [sourceType, setSourceType] = useState<SourceType | null>(null);
+  const [sourceType, setSourceType] = useState<SourceType>('transcript-upload');
   const [selectedVenueId, setSelectedVenueId] = useState<VenueId | null>(null);
   const [templateLoaded, setTemplateLoaded] = useState(false);
   const [templateLoading, setTemplateLoading] = useState(false);
