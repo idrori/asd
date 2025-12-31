@@ -172,7 +172,7 @@ const SetupStage: React.FC<SetupStageProps> = ({
 
         <div className="space-y-3">
           <FileUpload
-            label="icisTemplate.txt (Required)"
+            label="Template.txt (Required)"
             accept=".txt"
             required={true}
             file={uploadedFiles.template}
