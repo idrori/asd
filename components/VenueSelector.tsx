@@ -92,6 +92,13 @@ const VenueSelector: React.FC<VenueSelectorProps> = ({
     loadInitialData();
   }, []);
 
+  // Notify parent of initial selection on mount
+  useEffect(() => {
+    if (!loading && selectedVenueId && onVenueChange) {
+      onVenueChange(selectedVenueId);
+    }
+  }, [loading]);
+
   // Load subcategories when category changes
   useEffect(() => {
     if (selectedCategory) {
