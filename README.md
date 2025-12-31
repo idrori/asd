@@ -30,4 +30,4 @@ Information Technologies and Systems: workshop on exploring generative AI to tra
 ![Recommendation Supervisor Decision](screenshots/recommendation-supervisor-decision-screenshot.png)
 
 ### Completed
-![Completed](screenshots/completed-screenshot.png)
+![Completed](screenshots/completed-screenshot.png?v=2)
