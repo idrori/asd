@@ -315,17 +315,6 @@ const VenueSelector: React.FC<VenueSelectorProps> = ({
   // Full mode
   return (
     <div className="space-y-4">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-gray-900">Target Venue</h3>
-        {selected && !selected.verified && (
-          <span className="flex items-center gap-1 text-xs text-yellow-600 bg-yellow-50 px-2 py-1 rounded">
-            <AlertCircle className="w-3 h-3" />
-            Configuration needs verification
-          </span>
-        )}
-      </div>
-
       {/* Search Bar */}
       <div className="relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />

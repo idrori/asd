@@ -222,9 +222,6 @@ const SetupStage: React.FC<SetupStageProps> = ({
             <Target className="text-indigo-600" size={20} />
             Target
           </h2>
-          <p className="text-sm text-slate-500 mb-4">
-            Select your target venue - template will load automatically
-          </p>
 
           {/* Venue Selector */}
           <VenueSelector
