@@ -266,7 +266,7 @@ const SetupStage: React.FC<SetupStageProps> = ({
         {uploadedFiles.participantId && (
           <div className="p-3 bg-indigo-50 rounded-lg mb-4">
             <p className="text-sm text-indigo-800">
-              <strong>Participant ID:</strong> {uploadedFiles.participantId}
+              <strong>ID:</strong> {uploadedFiles.participantId}
             </p>
           </div>
         )}
