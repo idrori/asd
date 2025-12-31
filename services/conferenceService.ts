@@ -18,6 +18,17 @@ let currentConferenceId: ConferenceId = 'icis';
 let registryCache: ConferenceRegistry | null = null;
 
 /**
+ * Get the base path for static assets
+ * On GitHub Pages this is /asd/, on Vercel/local it's /
+ */
+function getBasePath(): string {
+  if (typeof window !== 'undefined' && window.location.hostname.includes('github.io')) {
+    return '/asd';
+  }
+  return '';
+}
+
+/**
  * Load the conference registry from the conferences directory
  */
 export async function loadConferenceRegistry(): Promise<ConferenceRegistry> {
@@ -26,7 +37,8 @@ export async function loadConferenceRegistry(): Promise<ConferenceRegistry> {
   }
 
   try {
-    const response = await fetch('/conferences/registry.json');
+    const basePath = getBasePath();
+    const response = await fetch(`${basePath}/conferences/registry.json`);
     if (!response.ok) {
       throw new Error(`Failed to load conference registry: ${response.status}`);
     }
@@ -73,7 +85,8 @@ export async function loadConferenceConfig(conferenceId: ConferenceId): Promise<
   }
 
   try {
-    const response = await fetch(`/conferences/${conferenceId}/config.json`);
+    const basePath = getBasePath();
+    const response = await fetch(`${basePath}/conferences/${conferenceId}/config.json`);
     if (!response.ok) {
       throw new Error(`Failed to load conference config for ${conferenceId}: ${response.status}`);
     }
@@ -169,11 +182,12 @@ export async function loadConferencePrompt(
   }
 
   try {
-    const response = await fetch(`/conferences/${config.id}/${promptPath}`);
+    const basePath = getBasePath();
+    const response = await fetch(`${basePath}/conferences/${config.id}/${promptPath}`);
     if (!response.ok) {
       // Fallback to shared prompts if conference-specific not found
       console.warn(`[ConferenceService] Conference-specific prompt not found, trying shared...`);
-      const sharedResponse = await fetch(`/conferences/shared/${promptPath}`);
+      const sharedResponse = await fetch(`${basePath}/conferences/shared/${promptPath}`);
       if (!sharedResponse.ok) {
         throw new Error(`Prompt file not found: ${promptPath}`);
       }
