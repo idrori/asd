@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Play, RefreshCw, CheckCircle, AlertCircle, Loader, FolderPlus, Archive, Mic, Upload, Target } from 'lucide-react';
+import { FileText, Play, RefreshCw, CheckCircle, AlertCircle, Loader, FolderPlus, Archive, Mic, Upload, Target, BookOpen } from 'lucide-react';
 import { StageStatus } from '../../types';
 import FileUpload from '../FileUpload';
 import LogPanel from './LogPanel';
@@ -15,7 +15,7 @@ interface UploadedFiles {
   participantId?: string;
 }
 
-type SourceType = 'voice-interview' | 'transcript-upload';
+type SourceType = 'voice-interview' | 'transcript-upload' | 'paper';
 
 interface SetupStageProps {
   logs: string[];
@@ -29,6 +29,7 @@ interface SetupStageProps {
   hasExistingCase?: boolean;  // True if there's data from a previous case
   onVenueChange?: (venueId: VenueId) => void;
   onNewInterview?: () => void;
+  onPaperToInterview?: () => void;
 }
 
 const SetupStage: React.FC<SetupStageProps> = ({
@@ -42,7 +43,8 @@ const SetupStage: React.FC<SetupStageProps> = ({
   onRefreshDetection,
   hasExistingCase = false,
   onVenueChange,
-  onNewInterview
+  onNewInterview,
+  onPaperToInterview
 }) => {
   const [isStartingNewCase, setIsStartingNewCase] = useState(false);
   const [sourceType, setSourceType] = useState<SourceType | null>(null);
@@ -85,6 +87,8 @@ const SetupStage: React.FC<SetupStageProps> = ({
     setSourceType(type);
     if (type === 'voice-interview' && onNewInterview) {
       onNewInterview();
+    } else if (type === 'paper' && onPaperToInterview) {
+      onPaperToInterview();
     }
   };
 
@@ -133,39 +137,33 @@ const SetupStage: React.FC<SetupStageProps> = ({
         </div>
       )}
 
-      {/* Two-Column Layout: Source (left) and Target (right) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-        {/* SOURCE Section (Left) */}
-        <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-          <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2 mb-6">
-            <Upload className="text-emerald-600" />
+      {/* Two-Column Layout: Source (left, smaller) and Target (right, larger) */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        {/* SOURCE Section (Left - 1/3 width) */}
+        <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+          <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2 mb-4">
+            <Upload className="text-emerald-600" size={20} />
             Source
           </h2>
-          <p className="text-sm text-slate-500 mb-6">
-            Choose how to provide your research content
-          </p>
 
-          {/* Source Type Selection */}
-          <div className="space-y-4">
+          {/* Source Type Selection - Compact */}
+          <div className="space-y-2">
             {/* Voice Interview Option */}
             <button
               onClick={() => handleSourceSelect('voice-interview')}
-              className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
+              className={`w-full p-3 rounded-lg border-2 transition-all text-left ${
                 sourceType === 'voice-interview'
                   ? 'border-emerald-500 bg-emerald-50'
                   : 'border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/50'
               }`}
             >
-              <div className="flex items-center gap-3">
-                <div className={`p-3 rounded-lg ${sourceType === 'voice-interview' ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-600'}`}>
-                  <Mic size={24} />
+              <div className="flex items-center gap-2">
+                <div className={`p-2 rounded-md ${sourceType === 'voice-interview' ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-600'}`}>
+                  <Mic size={18} />
                 </div>
-                <div>
-                  <h3 className="font-semibold text-slate-800">Voice Interview</h3>
-                  <p className="text-sm text-slate-500">Record a live interview session</p>
-                </div>
+                <span className="font-medium text-slate-800 text-sm">Voice Interview</span>
                 {sourceType === 'voice-interview' && (
-                  <CheckCircle className="ml-auto text-emerald-500" size={24} />
+                  <CheckCircle className="ml-auto text-emerald-500" size={18} />
                 )}
               </div>
             </button>
@@ -173,22 +171,39 @@ const SetupStage: React.FC<SetupStageProps> = ({
             {/* Interview Transcript Upload Option */}
             <button
               onClick={() => setSourceType('transcript-upload')}
-              className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
+              className={`w-full p-3 rounded-lg border-2 transition-all text-left ${
                 sourceType === 'transcript-upload'
                   ? 'border-purple-500 bg-purple-50'
                   : 'border-slate-200 hover:border-purple-300 hover:bg-purple-50/50'
               }`}
             >
-              <div className="flex items-center gap-3">
-                <div className={`p-3 rounded-lg ${sourceType === 'transcript-upload' ? 'bg-purple-500 text-white' : 'bg-slate-100 text-slate-600'}`}>
-                  <FileText size={24} />
+              <div className="flex items-center gap-2">
+                <div className={`p-2 rounded-md ${sourceType === 'transcript-upload' ? 'bg-purple-500 text-white' : 'bg-slate-100 text-slate-600'}`}>
+                  <FileText size={18} />
                 </div>
-                <div>
-                  <h3 className="font-semibold text-slate-800">Interview Transcript</h3>
-                  <p className="text-sm text-slate-500">Upload an existing transcript file</p>
-                </div>
+                <span className="font-medium text-slate-800 text-sm">Transcript</span>
                 {sourceType === 'transcript-upload' && (
-                  <CheckCircle className="ml-auto text-purple-500" size={24} />
+                  <CheckCircle className="ml-auto text-purple-500" size={18} />
+                )}
+              </div>
+            </button>
+
+            {/* Paper Option */}
+            <button
+              onClick={() => handleSourceSelect('paper')}
+              className={`w-full p-3 rounded-lg border-2 transition-all text-left ${
+                sourceType === 'paper'
+                  ? 'border-blue-500 bg-blue-50'
+                  : 'border-slate-200 hover:border-blue-300 hover:bg-blue-50/50'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <div className={`p-2 rounded-md ${sourceType === 'paper' ? 'bg-blue-500 text-white' : 'bg-slate-100 text-slate-600'}`}>
+                  <BookOpen size={18} />
+                </div>
+                <span className="font-medium text-slate-800 text-sm">Paper</span>
+                {sourceType === 'paper' && (
+                  <CheckCircle className="ml-auto text-blue-500" size={18} />
                 )}
               </div>
             </button>
@@ -196,16 +211,16 @@ const SetupStage: React.FC<SetupStageProps> = ({
 
           {/* File Upload Section - Shows when transcript-upload is selected */}
           {sourceType === 'transcript-upload' && (
-            <div className="mt-6 space-y-4 border-t border-slate-100 pt-6">
+            <div className="mt-4 space-y-3 border-t border-slate-100 pt-4">
               <FileUpload
-                label="Interview Transcript"
+                label="Transcript"
                 accept=".txt"
                 required={true}
                 file={uploadedFiles.interview}
                 onFileSelect={(file) => onFileChange('interview', file)}
               />
               <FileUpload
-                label="Data File (Optional)"
+                label="Data (Optional)"
                 accept=".txt,.csv,.xlsx,.json"
                 required={false}
                 file={uploadedFiles.dataFile}
@@ -216,28 +231,22 @@ const SetupStage: React.FC<SetupStageProps> = ({
 
           {/* Auto-Detection Status */}
           {detectionStatus && detectionStatus.detected.interview && (
-            <div className="mt-6 p-4 rounded-lg bg-green-50 border border-green-200">
+            <div className="mt-4 p-3 rounded-lg bg-green-50 border border-green-200">
               <div className="flex items-center gap-2">
-                <CheckCircle className="text-green-600" size={18} />
-                <span className="text-green-800 font-medium">Files auto-detected!</span>
-              </div>
-              <div className="mt-2 text-sm text-green-700">
-                <p><strong>Interview:</strong> {detectionStatus.detected.interview.filename}</p>
-                {detectionStatus.detected.participantId && (
-                  <p><strong>Participant ID:</strong> {detectionStatus.detected.participantId}</p>
-                )}
+                <CheckCircle className="text-green-600" size={16} />
+                <span className="text-green-800 font-medium text-sm">Auto-detected</span>
               </div>
             </div>
           )}
         </div>
 
-        {/* TARGET Section (Right) */}
-        <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-          <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2 mb-6">
-            <Target className="text-indigo-600" />
+        {/* TARGET Section (Right - 2/3 width) */}
+        <div className="lg:col-span-2 bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+          <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2 mb-4">
+            <Target className="text-indigo-600" size={20} />
             Target
           </h2>
-          <p className="text-sm text-slate-500 mb-6">
+          <p className="text-sm text-slate-500 mb-4">
             Select your target venue - template will load automatically
           </p>
 

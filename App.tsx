@@ -165,6 +165,10 @@ Is this the correct data file for your analysis?`;
               const baseUrl = import.meta.env.BASE_URL || '/';
               window.open(`${baseUrl}interview.html?mode=${paperMode}`, '_blank', 'noopener,noreferrer');
             }}
+            onPaperToInterview={() => {
+              const baseUrl = import.meta.env.BASE_URL || '/';
+              window.open(`${baseUrl}paper-to-interview.html`, '_blank', 'noopener,noreferrer');
+            }}
           />
         )}
       </div>

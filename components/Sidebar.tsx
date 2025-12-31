@@ -192,7 +192,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       <div className="p-6 border-b border-slate-800 bg-slate-950">
         <h1 className="font-bold text-xl text-white tracking-tight flex items-center gap-2">
           <div className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></div>
-          ConferenceCopilot
+          Automated Scientific Discovery
         </h1>
         <p className="text-xs text-slate-500 mt-1">AI-Powered Research Paper Authoring</p>
       </div>

@@ -37,6 +37,7 @@ interface DashboardPanelProps {
   dataFileContent?: string;
   participantEmail?: string;  // For saving oversight/feedback to Vercel blob
   onNewInterview?: () => void;
+  onPaperToInterview?: () => void;
   onVenueChange?: (venueId: string) => void;
 }
 
@@ -55,6 +56,7 @@ const DashboardPanel: React.FC<DashboardPanelProps> = ({
   dataFileContent,
   participantEmail,
   onNewInterview,
+  onPaperToInterview,
   onVenueChange
 }) => {
   // State for files passed from Reviewer to Supervisor
@@ -84,6 +86,7 @@ const DashboardPanel: React.FC<DashboardPanelProps> = ({
             onRefreshDetection={onRefreshDetection}
             hasExistingCase={hasExistingCase}
             onNewInterview={onNewInterview}
+            onPaperToInterview={onPaperToInterview}
             onVenueChange={onVenueChange}
           />
         );
