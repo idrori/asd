@@ -1,0 +1,103 @@
+{
+  "id": "science",
+  "name": "Science",
+  "acronym": "Science",
+  "venueType": "journal",
+  "category": "life-sciences-earth-sciences",
+  "subcategory": "multidisciplinary",
+  "year": 2025,
+  "h5Index": 415,
+  "website": "https://www.science.org/",
+  "description": "Science is a leading outlet for scientific news and cutting-edge research, published by AAAS. It covers all scientific disciplines.",
+
+  "publisher": "American Association for the Advancement of Science (AAAS)",
+  "openAccess": false,
+  "impactFactor": 56.9,
+  "publicationFrequency": "weekly",
+  "averageReviewTime": "4-6 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.science.org/content/page/science-information-authors",
+    "authorGuidelines": "https://www.science.org/content/page/instructions-preparing-initial-manuscript",
+    "submissionPortal": "https://cts.sciencemag.org/"
+  },
+
+  "paperLimits": {
+    "minPages": 6,
+    "maxPages": 10,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 50,
+    "titleMaxChars": 96
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Results",
+      "Discussion",
+      "Materials and Methods",
+      "References",
+      "Acknowledgments",
+      "Supplementary Materials"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 125,
+    "keywordsRequired": false
+  },
+
+  "template": {
+    "formatStyle": "science",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "science",
+    "lineSpacing": 2.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "dimensions": [
+      "novelty",
+      "significance",
+      "technicalQuality",
+      "clarity",
+      "reproducibility"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "Science publishes groundbreaking research across all scientific disciplines with global impact.",
+    "topJournals": ["Science", "Nature", "Cell", "PNAS", "Science Advances"],
+    "methodologyEmphasis": ["Breakthrough Research", "Reproducibility", "Broad Impact", "Data Sharing"]
+  },
+
+  "notes": [
+    "Online submission only via cts.sciencemag.org",
+    "Single .docx file preferred with figures/tables",
+    "Title max 96 characters",
+    "All authors must be listed (no et al.)",
+    "Preprints allowed (arXiv, bioRxiv)",
+    "Vector-based figures preferred (PDF, EPS, AI)",
+    "PowerPoint figures not allowed",
+    "Authors retain copyright with exclusive license to AAAS"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

@@ -1,0 +1,103 @@
+{
+  "id": "cell",
+  "name": "Cell",
+  "acronym": "Cell",
+  "venueType": "journal",
+  "category": "life-sciences-earth-sciences",
+  "subcategory": "cell-biology",
+  "year": 2025,
+  "h5Index": 317,
+  "website": "https://www.cell.com/cell",
+  "description": "Cell is a premier journal in life sciences, publishing groundbreaking research in molecular and cell biology, genetics, and related fields.",
+
+  "publisher": "Cell Press / Elsevier",
+  "openAccess": false,
+  "impactFactor": 64.5,
+  "publicationFrequency": "biweekly",
+  "averageReviewTime": "4-6 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.cell.com/cell/information-for-authors",
+    "authorGuidelines": "https://www.cell.com/cell/journal-policies",
+    "submissionPortal": "https://www.editorialmanager.com/cell/"
+  },
+
+  "paperLimits": {
+    "minPages": 10,
+    "maxPages": 15,
+    "referencesCountTowardLimit": false,
+    "minReferences": 40,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Summary",
+      "Introduction",
+      "Results",
+      "Discussion",
+      "STAR Methods",
+      "Acknowledgments",
+      "Author Contributions",
+      "Declaration of Interests",
+      "References",
+      "Supplemental Information"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 150,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "cell",
+    "fontFamily": "Arial",
+    "fontSize": 12,
+    "citationStyle": "cell",
+    "lineSpacing": 2.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "multiJournalSubmissionAvailable": true,
+    "dimensions": [
+      "novelty",
+      "significance",
+      "technicalQuality",
+      "clarity",
+      "reproducibility"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "Cell publishes findings of exceptional significance in all areas of experimental biology.",
+    "topJournals": ["Cell", "Nature", "Science", "Cell Stem Cell", "Molecular Cell"],
+    "methodologyEmphasis": ["Mechanistic Insights", "Novel Discoveries", "Reproducibility", "STAR Methods"]
+  },
+
+  "notes": [
+    "Multi-Journal Submission (MJS) available for Cell Press journals",
+    "STAR Methods format required",
+    "Originality checked via Crossref Similarity Check",
+    "Revised papers inactive >1 year auto-withdrawn",
+    "Cover image submissions welcomed after acceptance",
+    "Template available for formatting"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

@@ -1,0 +1,103 @@
+{
+  "id": "lancet",
+  "name": "The Lancet",
+  "acronym": "Lancet",
+  "venueType": "journal",
+  "category": "health-medical-sciences",
+  "subcategory": "medicine-general-internal",
+  "year": 2025,
+  "h5Index": 375,
+  "website": "https://www.thelancet.com/",
+  "description": "The Lancet is one of the world's oldest and most prestigious general medical journals, known for publishing high-impact clinical research.",
+
+  "publisher": "Elsevier",
+  "openAccess": false,
+  "impactFactor": 168.9,
+  "publicationFrequency": "weekly",
+  "averageReviewTime": "2-4 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.thelancet.com/submission-guidelines",
+    "authorGuidelines": "https://www.thelancet.com/pb-assets/Lancet/authors/tl-info-for-authors.pdf",
+    "submissionPortal": "https://www.editorialmanager.com/thelancet/",
+    "forms": "https://www.thelancet.com/forms?journal=lancet"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 12,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 50
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Summary",
+      "Introduction",
+      "Methods",
+      "Results",
+      "Discussion",
+      "Contributors",
+      "Declaration of Interests",
+      "Acknowledgments",
+      "References"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 300,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "lancet",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "vancouver",
+    "lineSpacing": 2.0,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "fastTrackAvailable": true,
+    "dimensions": [
+      "clinicalSignificance",
+      "novelty",
+      "methodologicalRigor",
+      "clarity",
+      "ethicalConsiderations"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "The Lancet is a world-leading medical journal with emphasis on global health and clinical impact.",
+    "topJournals": ["Lancet", "NEJM", "JAMA", "BMJ", "Lancet Oncology"],
+    "methodologyEmphasis": ["Clinical Trials", "Global Health", "Evidence-Based Medicine", "Policy Impact"]
+  },
+
+  "notes": [
+    "Fast-track publication available (4 weeks)",
+    "ICMJE and COPE guidelines followed",
+    "Sex and gender reporting guidelines apply",
+    "Translation services available (Chinese, Portuguese, Spanish)",
+    "Conflict of interest disclosure required",
+    "Electronic signatures accepted"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}
