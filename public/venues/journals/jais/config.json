@@ -1,0 +1,120 @@
+{
+  "id": "jais",
+  "name": "Journal of the Association for Information Systems",
+  "acronym": "JAIS",
+  "venueType": "journal",
+  "category": "business-economics-management",
+  "subcategory": "databases-information-systems",
+  "year": 2025,
+  "h5Index": 48,
+  "website": "https://aisel.aisnet.org/jais/",
+  "description": "JAIS is the flagship journal of the Association for Information Systems. It publishes high-quality research across all areas of information systems.",
+
+  "publisher": "Association for Information Systems",
+  "openAccess": true,
+  "impactFactor": 4.5,
+  "publicationFrequency": "monthly",
+  "averageReviewTime": "3-4 months",
+
+  "officialLinks": {
+    "submissionInstructions": "https://aisel.aisnet.org/jais/aimsandscope.html",
+    "authorGuidelines": "https://aisel.aisnet.org/jais/guidelines.html",
+    "submissionPortal": "https://mc.manuscriptcentral.com/jais"
+  },
+
+  "paperLimits": {
+    "minPages": 25,
+    "maxPages": 50,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Background",
+      "Theory",
+      "Research Method",
+      "Results",
+      "Discussion",
+      "Conclusion",
+      "References"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": true,
+    "keywordsCount": { "min": 3, "max": 6 },
+    "appendicesAllowed": true,
+    "supplementaryAllowed": true
+  },
+
+  "template": {
+    "formatStyle": "icis",
+    "fontFamily": "Times New Roman",
+    "fontSize": 12,
+    "citationStyle": "apa7",
+    "lineSpacing": 2.0,
+    "marginInches": 1.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 3.5,
+    "maxRevisionRounds": 3,
+    "dimensions": [
+      "novelty",
+      "significance",
+      "methodologicalRigor",
+      "clarity",
+      "relevance"
+    ],
+    "includeTrustworthiness": true
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "JAIS is the flagship journal of AIS, open access and covering all IS topics.",
+    "exemplarCount": 0,
+    "topJournals": [
+      "Journal of the Association for Information Systems",
+      "MIS Quarterly",
+      "Information Systems Research",
+      "European Journal of Information Systems"
+    ],
+    "topConferences": [
+      "ICIS",
+      "ECIS",
+      "AMCIS",
+      "PACIS"
+    ],
+    "methodologyEmphasis": [
+      "Survey Research",
+      "Design Science",
+      "Case Studies",
+      "Mixed Methods"
+    ]
+  },
+
+  "notes": [
+    "Open access journal",
+    "AIS flagship journal",
+    "Double-blind peer review"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

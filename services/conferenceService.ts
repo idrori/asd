@@ -1,6 +1,9 @@
 /**
  * Conference Service
  *
+ * DEPRECATED: This service is maintained for backwards compatibility.
+ * New code should use venueService.ts instead.
+ *
  * Manages loading, switching, and accessing conference configurations.
  * Provides a centralized way to get conference-specific settings.
  */
@@ -11,6 +14,14 @@ import type {
   ConferenceMetadata,
   ConferenceRegistry
 } from '../types/conference';
+
+import {
+  loadVenueConfig,
+  setCurrentVenue,
+  getCurrentVenueId,
+  loadVenuePrompt
+} from './venueService';
+import type { VenueConfig } from '../types/venue';
 
 // In-memory cache of loaded conference configurations
 let conferenceCache: Record<string, ConferenceConfig> = {};
@@ -77,6 +88,7 @@ function getDefaultRegistry(): ConferenceRegistry {
 
 /**
  * Load a specific conference configuration
+ * @deprecated Use loadVenueConfig from venueService instead
  */
 export async function loadConferenceConfig(conferenceId: ConferenceId): Promise<ConferenceConfig> {
   // Check cache first
@@ -85,6 +97,17 @@ export async function loadConferenceConfig(conferenceId: ConferenceId): Promise<
   }
 
   try {
+    // Try new venue service first (for venues in /venues/ directory)
+    try {
+      const venueConfig = await loadVenueConfig(conferenceId);
+      // Convert VenueConfig to ConferenceConfig for backwards compatibility
+      const config = venueConfig as unknown as ConferenceConfig;
+      conferenceCache[conferenceId] = config;
+      return config;
+    } catch {
+      // Fall back to legacy path
+    }
+
     const basePath = getBasePath();
     const response = await fetch(`${basePath}/conferences/${conferenceId}/config.json`);
     if (!response.ok) {

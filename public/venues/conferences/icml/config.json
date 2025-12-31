@@ -1,0 +1,157 @@
+{
+  "id": "icml",
+  "name": "International Conference on Machine Learning",
+  "acronym": "ICML",
+  "venueType": "conference",
+  "category": "engineering-computer-science",
+  "subcategory": "artificial-intelligence",
+  "year": 2026,
+  "h5Index": 237,
+  "website": "https://icml.cc/",
+  "description": "ICML is a flagship machine learning conference organized by IMLS. It covers all aspects of machine learning including supervised, unsupervised, reinforcement learning, and learning theory.",
+
+  "officialLinks": {
+    "callForPapers": "https://icml.cc/Conferences/2026/CallForPapers",
+    "submissionInstructions": "https://icml.cc/Conferences/2026/AuthorInstructions",
+    "reviewerGuidelines": "https://icml.cc/Conferences/2025/ReviewerInstructions",
+    "styleFiles": "https://media.icml.cc/Conferences/ICML2026/Styles/icml2026.zip"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 8,
+    "cameraReadyMaxPages": 9,
+    "referencesCountTowardLimit": false,
+    "minReferences": 20,
+    "maxReferences": 50
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Related Work",
+      "Preliminaries",
+      "Method",
+      "Theoretical Analysis",
+      "Experiments",
+      "Impact Statement",
+      "Conclusion",
+      "References",
+      "Appendix"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": false,
+    "keywordsCount": { "min": 0, "max": 0 },
+    "appendicesAllowed": true,
+    "supplementaryAllowed": true,
+    "impactStatementRequired": true
+  },
+
+  "template": {
+    "formatStyle": "icml",
+    "fontFamily": "Times",
+    "fontSize": 10,
+    "citationStyle": "ieee",
+    "lineSpacing": 1.0,
+    "marginInches": 1.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": true,
+    "styleFile": "https://media.icml.cc/Conferences/ICML2026/Styles/icml2026.zip"
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 1,
+    "ratingScale": {
+      "min": 1,
+      "max": 5,
+      "labels": {
+        "5": "Strong Accept",
+        "4": "Accept",
+        "3": "Weak Accept",
+        "2": "Weak Reject",
+        "1": "Reject"
+      }
+    },
+    "confidenceScale": {
+      "min": 1,
+      "max": 5,
+      "labels": {
+        "5": "Absolutely certain",
+        "4": "Confident but not certain",
+        "3": "Fairly confident",
+        "2": "Willing to defend but gaps likely",
+        "1": "Educated guess"
+      }
+    },
+    "dimensions": [
+      "claimsAndEvidence",
+      "priorWork",
+      "originality",
+      "significance",
+      "clarity",
+      "ethicalConsiderations"
+    ],
+    "includeTrustworthiness": false
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt",
+    "infographic": "infographic.txt",
+    "dataTable": "datatable.txt"
+  },
+
+  "calibration": {
+    "description": "ICML emphasizes algorithmic novelty and theoretical contributions. Strong experimental validation expected. Impact statements are mandatory.",
+    "exemplarCount": 0,
+    "topJournals": [
+      "Journal of Machine Learning Research",
+      "IEEE Transactions on Pattern Analysis and Machine Intelligence",
+      "Machine Learning",
+      "Neural Networks",
+      "Artificial Intelligence"
+    ],
+    "topConferences": [
+      "ICML",
+      "NeurIPS",
+      "ICLR",
+      "AAAI",
+      "COLT",
+      "AISTATS"
+    ],
+    "methodologyEmphasis": [
+      "Algorithm Development",
+      "Theoretical Analysis",
+      "Convergence Proofs",
+      "Benchmark Experiments",
+      "Ablation Studies",
+      "Computational Complexity Analysis"
+    ]
+  },
+
+  "notes": [
+    "Main paper limited to 8 pages (excluding references, impact statement, and appendix)",
+    "Camera-ready version allows 9 pages",
+    "ICML 2026 LaTeX style file required - no other typesetting software supported",
+    "Impact statement required (does not count toward page limit)",
+    "Lay summary required at camera-ready stage",
+    "Supplementary material for proofs, code, and additional experiments",
+    "Code submission strongly encouraged for reproducibility",
+    "Double-blind review - anonymized submissions required",
+    "50MB max file size for submission, 20MB for camera-ready",
+    "Highly competitive (acceptance rate ~20-25%)"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

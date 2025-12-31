@@ -1,0 +1,152 @@
+{
+  "id": "iclr",
+  "name": "International Conference on Learning Representations",
+  "acronym": "ICLR",
+  "venueType": "conference",
+  "category": "engineering-computer-science",
+  "subcategory": "artificial-intelligence",
+  "year": 2026,
+  "h5Index": 303,
+  "website": "https://iclr.cc/",
+  "description": "ICLR is a top venue for deep learning and representation learning research. It pioneered open peer review and focuses on neural networks, deep learning, and learned representations.",
+
+  "officialLinks": {
+    "callForPapers": "https://iclr.cc/Conferences/2026/CallForPapers",
+    "submissionInstructions": "https://iclr.cc/Conferences/2026/AuthorGuide",
+    "reviewerGuidelines": "https://iclr.cc/Conferences/2025/ReviewerGuide",
+    "openReview": "https://openreview.net/group?id=ICLR.cc"
+  },
+
+  "paperLimits": {
+    "minPages": 9,
+    "maxPages": 9,
+    "cameraReadyMaxPages": 10,
+    "referencesCountTowardLimit": false,
+    "minReferences": 20,
+    "maxReferences": 50
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Related Work",
+      "Method",
+      "Experiments",
+      "Results",
+      "Ethics Statement",
+      "Reproducibility Statement",
+      "Conclusion",
+      "Acknowledgements",
+      "References",
+      "Appendix"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": false,
+    "keywordsCount": { "min": 0, "max": 0 },
+    "appendicesAllowed": true,
+    "supplementaryAllowed": true,
+    "ethicsStatementOptional": true,
+    "ethicsStatementMaxPages": 1,
+    "reproducibilityStatementRecommended": true
+  },
+
+  "template": {
+    "formatStyle": "iclr",
+    "fontFamily": "Exo",
+    "fontSize": 10,
+    "citationStyle": "ieee",
+    "lineSpacing": 1.0,
+    "marginInches": 1.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": true,
+    "styleFile": "https://github.com/ICLR/Master-Template/raw/master/iclr2026.zip"
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 5.0,
+    "maxRevisionRounds": 1,
+    "openReview": true,
+    "dimensions": [
+      "problemDefinition",
+      "motivationAndContext",
+      "scientificRigor",
+      "significanceAndImpact",
+      "clarity",
+      "technicalCorrectness",
+      "experimentalRigor",
+      "reproducibility",
+      "novelContributions"
+    ],
+    "reviewStructure": [
+      "Summary",
+      "Strengths",
+      "Weaknesses",
+      "Initial Recommendation",
+      "Supporting Arguments",
+      "Clarifying Questions",
+      "Suggestions for Improvement"
+    ],
+    "includeTrustworthiness": false,
+    "stateOfArtNotRequired": true
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt",
+    "infographic": "infographic.txt",
+    "dataTable": "datatable.txt"
+  },
+
+  "calibration": {
+    "description": "ICLR focuses on representation learning and deep learning. Open peer review with author responses during discussion period.",
+    "exemplarCount": 0,
+    "topJournals": [
+      "Journal of Machine Learning Research",
+      "IEEE Transactions on Pattern Analysis and Machine Intelligence",
+      "Neural Computation",
+      "Transactions on Machine Learning Research"
+    ],
+    "topConferences": [
+      "ICLR",
+      "NeurIPS",
+      "ICML",
+      "CVPR",
+      "ACL",
+      "EMNLP"
+    ],
+    "methodologyEmphasis": [
+      "Deep Learning",
+      "Representation Learning",
+      "Neural Architecture Design",
+      "Transfer Learning",
+      "Self-Supervised Learning",
+      "Generative Models"
+    ]
+  },
+
+  "notes": [
+    "Main paper limited to 9 pages (excluding references and appendix)",
+    "Camera-ready version allows 10 pages",
+    "Page limit strictly enforced - desk rejection for overages",
+    "ICLR 2026 LaTeX template required (uses Exo font family)",
+    "Open peer review on OpenReview.net",
+    "Authors can respond to reviews during discussion period",
+    "Ethics statement optional (max 1 page, does not count toward limit)",
+    "Reproducibility statement recommended (paragraph-length)",
+    "Code submission as .zip files encouraged",
+    "Double-blind submission",
+    "Highly competitive (acceptance rate ~25-30%)"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

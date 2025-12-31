@@ -1,0 +1,511 @@
+{
+  "schemaVersion": "2.0",
+  "defaultVenue": "icis",
+  "lastUpdated": "2025-12-31",
+  "venues": {
+    "icis": {
+      "type": "conference",
+      "category": "business-economics-management",
+      "subcategory": "databases-information-systems",
+      "name": "International Conference on Information Systems",
+      "acronym": "ICIS",
+      "verified": true,
+      "h5Index": 47
+    },
+    "ecis": {
+      "type": "conference",
+      "category": "business-economics-management",
+      "subcategory": "databases-information-systems",
+      "name": "European Conference on Information Systems",
+      "acronym": "ECIS",
+      "verified": true,
+      "h5Index": 35
+    },
+    "pacis": {
+      "type": "conference",
+      "category": "business-economics-management",
+      "subcategory": "databases-information-systems",
+      "name": "Pacific Asia Conference on Information Systems",
+      "acronym": "PACIS",
+      "verified": true,
+      "h5Index": 28
+    },
+    "amcis": {
+      "type": "conference",
+      "category": "business-economics-management",
+      "subcategory": "databases-information-systems",
+      "name": "Americas Conference on Information Systems",
+      "acronym": "AMCIS",
+      "verified": true,
+      "h5Index": 32
+    },
+    "hicss": {
+      "type": "conference",
+      "category": "business-economics-management",
+      "subcategory": "databases-information-systems",
+      "name": "Hawaii International Conference on System Sciences",
+      "acronym": "HICSS",
+      "verified": true,
+      "h5Index": 45
+    },
+    "misq": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "databases-information-systems",
+      "name": "MIS Quarterly",
+      "acronym": "MISQ",
+      "verified": true,
+      "h5Index": 89
+    },
+    "isr": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "databases-information-systems",
+      "name": "Information Systems Research",
+      "acronym": "ISR",
+      "verified": true,
+      "h5Index": 72
+    },
+    "jais": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "databases-information-systems",
+      "name": "Journal of the Association for Information Systems",
+      "acronym": "JAIS",
+      "verified": true,
+      "h5Index": 48
+    },
+    "jmis": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "databases-information-systems",
+      "name": "Journal of Management Information Systems",
+      "acronym": "JMIS",
+      "verified": false,
+      "h5Index": 56
+    },
+    "ejis": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "databases-information-systems",
+      "name": "European Journal of Information Systems",
+      "acronym": "EJIS",
+      "verified": false,
+      "h5Index": 52
+    },
+    "isj": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "databases-information-systems",
+      "name": "Information Systems Journal",
+      "acronym": "ISJ",
+      "verified": false,
+      "h5Index": 49
+    },
+    "inm": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "databases-information-systems",
+      "name": "Information & Management",
+      "acronym": "I&M",
+      "verified": false,
+      "h5Index": 75
+    },
+    "aom": {
+      "type": "conference",
+      "category": "business-economics-management",
+      "subcategory": "strategic-management",
+      "name": "Academy of Management Annual Meeting",
+      "acronym": "AOM",
+      "verified": false,
+      "h5Index": 85
+    },
+    "informs": {
+      "type": "conference",
+      "category": "business-economics-management",
+      "subcategory": "operations-research",
+      "name": "INFORMS Annual Meeting",
+      "acronym": "INFORMS",
+      "verified": false,
+      "h5Index": 42
+    },
+    "dsi": {
+      "type": "conference",
+      "category": "business-economics-management",
+      "subcategory": "game-theory-decision-science",
+      "name": "Decision Sciences Institute Annual Meeting",
+      "acronym": "DSI",
+      "verified": false,
+      "h5Index": 25
+    },
+    "neurips": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "artificial-intelligence",
+      "name": "Conference on Neural Information Processing Systems",
+      "acronym": "NeurIPS",
+      "verified": true,
+      "h5Index": 278
+    },
+    "icml": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "artificial-intelligence",
+      "name": "International Conference on Machine Learning",
+      "acronym": "ICML",
+      "verified": true,
+      "h5Index": 237
+    },
+    "iclr": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "artificial-intelligence",
+      "name": "International Conference on Learning Representations",
+      "acronym": "ICLR",
+      "verified": true,
+      "h5Index": 303
+    },
+    "aaai": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "artificial-intelligence",
+      "name": "AAAI Conference on Artificial Intelligence",
+      "acronym": "AAAI",
+      "verified": true,
+      "h5Index": 180
+    },
+    "cvpr": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "computer-vision-pattern-recognition",
+      "name": "IEEE/CVF Conference on Computer Vision and Pattern Recognition",
+      "acronym": "CVPR",
+      "verified": false,
+      "h5Index": 422
+    },
+    "iccv": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "computer-vision-pattern-recognition",
+      "name": "IEEE/CVF International Conference on Computer Vision",
+      "acronym": "ICCV",
+      "verified": false,
+      "h5Index": 239
+    },
+    "eccv": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "computer-vision-pattern-recognition",
+      "name": "European Conference on Computer Vision",
+      "acronym": "ECCV",
+      "verified": false,
+      "h5Index": 186
+    },
+    "chi": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "human-computer-interaction",
+      "name": "ACM CHI Conference on Human Factors in Computing Systems",
+      "acronym": "CHI",
+      "verified": false,
+      "h5Index": 125
+    },
+    "cscw": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "human-computer-interaction",
+      "name": "ACM Conference on Computer-Supported Cooperative Work",
+      "acronym": "CSCW",
+      "verified": false,
+      "h5Index": 72
+    },
+    "uist": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "human-computer-interaction",
+      "name": "ACM Symposium on User Interface Software and Technology",
+      "acronym": "UIST",
+      "verified": false,
+      "h5Index": 58
+    },
+    "acl": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "computational-linguistics",
+      "name": "Annual Meeting of the Association for Computational Linguistics",
+      "acronym": "ACL",
+      "verified": false,
+      "h5Index": 182
+    },
+    "emnlp": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "computational-linguistics",
+      "name": "Conference on Empirical Methods in Natural Language Processing",
+      "acronym": "EMNLP",
+      "verified": false,
+      "h5Index": 149
+    },
+    "naacl": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "computational-linguistics",
+      "name": "North American Chapter of the ACL",
+      "acronym": "NAACL",
+      "verified": false,
+      "h5Index": 97
+    },
+    "kdd": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "data-mining-analysis",
+      "name": "ACM SIGKDD Conference on Knowledge Discovery and Data Mining",
+      "acronym": "KDD",
+      "verified": false,
+      "h5Index": 115
+    },
+    "www": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "data-mining-analysis",
+      "name": "The Web Conference",
+      "acronym": "WWW",
+      "verified": false,
+      "h5Index": 98
+    },
+    "sigmod": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "databases-information-systems",
+      "name": "ACM SIGMOD Conference",
+      "acronym": "SIGMOD",
+      "verified": false,
+      "h5Index": 65
+    },
+    "vldb": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "databases-information-systems",
+      "name": "International Conference on Very Large Data Bases",
+      "acronym": "VLDB",
+      "verified": false,
+      "h5Index": 72
+    },
+    "icse": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "software-systems",
+      "name": "International Conference on Software Engineering",
+      "acronym": "ICSE",
+      "verified": false,
+      "h5Index": 74
+    },
+    "fse": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "software-systems",
+      "name": "ACM SIGSOFT Symposium on Foundations of Software Engineering",
+      "acronym": "FSE",
+      "verified": false,
+      "h5Index": 52
+    },
+    "sp": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "computer-security-cryptography",
+      "name": "IEEE Symposium on Security and Privacy",
+      "acronym": "S&P",
+      "verified": false,
+      "h5Index": 98
+    },
+    "ccs": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "computer-security-cryptography",
+      "name": "ACM Conference on Computer and Communications Security",
+      "acronym": "CCS",
+      "verified": false,
+      "h5Index": 85
+    },
+    "usenix-security": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "computer-security-cryptography",
+      "name": "USENIX Security Symposium",
+      "acronym": "USENIX Security",
+      "verified": false,
+      "h5Index": 95
+    },
+    "icra": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "robotics",
+      "name": "IEEE International Conference on Robotics and Automation",
+      "acronym": "ICRA",
+      "verified": false,
+      "h5Index": 115
+    },
+    "iros": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "robotics",
+      "name": "IEEE/RSJ International Conference on Intelligent Robots and Systems",
+      "acronym": "IROS",
+      "verified": false,
+      "h5Index": 85
+    },
+    "siggraph": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "computer-graphics",
+      "name": "ACM SIGGRAPH Conference",
+      "acronym": "SIGGRAPH",
+      "verified": false,
+      "h5Index": 62
+    },
+    "jmlr": {
+      "type": "journal",
+      "category": "engineering-computer-science",
+      "subcategory": "artificial-intelligence",
+      "name": "Journal of Machine Learning Research",
+      "acronym": "JMLR",
+      "verified": false,
+      "h5Index": 112
+    },
+    "tpami": {
+      "type": "journal",
+      "category": "engineering-computer-science",
+      "subcategory": "computer-vision-pattern-recognition",
+      "name": "IEEE Transactions on Pattern Analysis and Machine Intelligence",
+      "acronym": "TPAMI",
+      "verified": false,
+      "h5Index": 158
+    },
+    "ijcv": {
+      "type": "journal",
+      "category": "engineering-computer-science",
+      "subcategory": "computer-vision-pattern-recognition",
+      "name": "International Journal of Computer Vision",
+      "acronym": "IJCV",
+      "verified": false,
+      "h5Index": 98
+    },
+    "tacl": {
+      "type": "journal",
+      "category": "engineering-computer-science",
+      "subcategory": "computational-linguistics",
+      "name": "Transactions of the Association for Computational Linguistics",
+      "acronym": "TACL",
+      "verified": false,
+      "h5Index": 78
+    },
+    "tochi": {
+      "type": "journal",
+      "category": "engineering-computer-science",
+      "subcategory": "human-computer-interaction",
+      "name": "ACM Transactions on Computer-Human Interaction",
+      "acronym": "TOCHI",
+      "verified": false,
+      "h5Index": 52
+    },
+    "nature": {
+      "type": "journal",
+      "category": "life-sciences-earth-sciences",
+      "subcategory": "life-sciences-earth-sciences-general",
+      "name": "Nature",
+      "acronym": "Nature",
+      "verified": false,
+      "h5Index": 442
+    },
+    "science": {
+      "type": "journal",
+      "category": "life-sciences-earth-sciences",
+      "subcategory": "life-sciences-earth-sciences-general",
+      "name": "Science",
+      "acronym": "Science",
+      "verified": false,
+      "h5Index": 353
+    },
+    "cell": {
+      "type": "journal",
+      "category": "life-sciences-earth-sciences",
+      "subcategory": "cell-biology",
+      "name": "Cell",
+      "acronym": "Cell",
+      "verified": false,
+      "h5Index": 325
+    },
+    "nejm": {
+      "type": "journal",
+      "category": "health-medical-sciences",
+      "subcategory": "health-medical-sciences-general",
+      "name": "New England Journal of Medicine",
+      "acronym": "NEJM",
+      "verified": false,
+      "h5Index": 401
+    },
+    "lancet": {
+      "type": "journal",
+      "category": "health-medical-sciences",
+      "subcategory": "health-medical-sciences-general",
+      "name": "The Lancet",
+      "acronym": "Lancet",
+      "verified": false,
+      "h5Index": 398
+    },
+    "jama": {
+      "type": "journal",
+      "category": "health-medical-sciences",
+      "subcategory": "health-medical-sciences-general",
+      "name": "JAMA",
+      "acronym": "JAMA",
+      "verified": false,
+      "h5Index": 312
+    },
+    "psychological-science": {
+      "type": "journal",
+      "category": "social-sciences",
+      "subcategory": "cognitive-science",
+      "name": "Psychological Science",
+      "acronym": "Psych Sci",
+      "verified": false,
+      "h5Index": 85
+    },
+    "amr": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "strategic-management",
+      "name": "Academy of Management Review",
+      "acronym": "AMR",
+      "verified": false,
+      "h5Index": 82
+    },
+    "amj": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "strategic-management",
+      "name": "Academy of Management Journal",
+      "acronym": "AMJ",
+      "verified": false,
+      "h5Index": 95
+    },
+    "ms": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "operations-research",
+      "name": "Management Science",
+      "acronym": "MS",
+      "verified": false,
+      "h5Index": 108
+    },
+    "or": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "operations-research",
+      "name": "Operations Research",
+      "acronym": "OR",
+      "verified": false,
+      "h5Index": 62
+    }
+  }
+}

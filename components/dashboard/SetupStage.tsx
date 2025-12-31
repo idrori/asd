@@ -4,8 +4,8 @@ import { StageStatus } from '../../types';
 import FileUpload from '../FileUpload';
 import LogPanel from './LogPanel';
 import { DetectionStatus } from '../../hooks';
-import ConferenceSelector from '../ConferenceSelector';
-import type { ConferenceId } from '../../types/conference';
+import VenueSelector from '../VenueSelector';
+import type { VenueId } from '../../types/venue';
 
 interface UploadedFiles {
   template?: File | null;
@@ -24,7 +24,7 @@ interface SetupStageProps {
   detectionStatus?: DetectionStatus;
   onRefreshDetection?: () => void;
   hasExistingCase?: boolean;  // True if there's data from a previous case
-  onConferenceChange?: (conferenceId: ConferenceId) => void;
+  onVenueChange?: (venueId: VenueId) => void;
 }
 
 const SetupStage: React.FC<SetupStageProps> = ({
@@ -37,7 +37,7 @@ const SetupStage: React.FC<SetupStageProps> = ({
   detectionStatus,
   onRefreshDetection,
   hasExistingCase = false,
-  onConferenceChange
+  onVenueChange
 }) => {
   const [isStartingNewCase, setIsStartingNewCase] = useState(false);
   const canProceed = uploadedFiles.template && uploadedFiles.interview;
@@ -58,10 +58,10 @@ const SetupStage: React.FC<SetupStageProps> = ({
         Setup & File Selection
       </h2>
 
-      {/* Conference Selector */}
+      {/* Venue Selector */}
       <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-        <ConferenceSelector
-          onConferenceChange={onConferenceChange}
+        <VenueSelector
+          onVenueChange={onVenueChange}
           disabled={isProcessing || stageStatus === StageStatus.COMPLETED}
         />
       </div>

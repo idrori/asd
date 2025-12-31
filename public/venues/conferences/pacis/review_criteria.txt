@@ -1,0 +1,74 @@
+# MISQ IS Journal Review Criteria
+# Extracted from "Writing a Virtuous Review" by Arun Rai, MIS Quarterly Vol. 40 No. 3, September 2016
+
+## Core Evaluation Dimensions
+
+**1. Contribution Assessment**
+• Does the paper address important problems/issues related to information systems?
+• Is the work intellectually novel and of high quality?
+• Is it likely to have significant impact on the field?
+• Assess both current contribution and potential contribution with rationale
+
+**2. Key Strengths Identification**
+• Identify what makes the work valuable
+• Recognize ambitious and intellectually novel work
+• Provide open-minded assessment of novel aspects without dogmatically invoking established paradigms
+
+**3. Major Issues Assessment**
+• Differentiate between:
+  - Fatal issues that render work unpublishable
+  - Showstoppers that are addressable
+  - Minor blemishes
+  - Personal preferences (do not conflate with major issues)
+• Focus on issues that affect publishability, not exhaustive laundry lists
+• Provide rationale and evidence for all concerns raised
+
+## Quality Standards
+
+**Theoretical Development**
+• Is the theory well-justified and aligned with the research question?
+• Are claims substantiated with logic and evidence?
+• Does the framing serve the paper's goals?
+
+**Methodological Rigor**
+• Is the research design appropriate for the questions asked?
+• Are methods executed properly?
+• Note: Methodological blemishes should not overshadow intellectual novelty
+
+**Clarity and Presentation**
+• Is the work coherent and well-organized?
+• Is the writing clear and accessible?
+• Are arguments logically structured?
+
+**Significance and Relevance**
+• Does the paper make a meaningful contribution to IS knowledge?
+• Is it relevant to the IS discipline and its stakeholders?
+• Will it influence future research or practice?
+
+## What Makes a Strong Contribution
+
+• Addresses important problems in information systems
+• Demonstrates intellectual novelty - pushes frontiers of knowledge
+• Shows potential for significant impact
+• Balances creativity/originality with accuracy/reliability
+• Takes on big problems or breaks new intellectual ground
+• Novel/ambitious papers may be less "buttoned down" than conventional ones - assess holistically
+
+## Common Issues to Look For
+
+• Unsubstantiated claims (e.g., "findings are not interesting" without rationale)
+• Misalignment between theory and research question
+• Research design flaws that affect validity
+• Lack of coherence between paper sections
+• Insufficient justification for hypotheses or methods
+• Missing or weak contribution statement
+
+## Review Best Practices (for AI Reviewer Context)
+
+• Substantiate all claims with rationale - adhere to same standards expected of authors
+• Distinguish major issues from minor ones clearly
+• Provide constructive suggestions for improvement
+• Preserve author voice - evaluate on their framework, not imposed preferences
+• Focus on paper's potential, not solely its flaws
+• Provide holistic assessment weighing pros and cons
+• Be specific about what aspects fall within assessment scope
