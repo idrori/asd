@@ -113,7 +113,10 @@ const VenueSelector: React.FC<VenueSelectorProps> = ({
     if (selectedVenueId) {
       loadVenueConfig(selectedVenueId)
         .then(setSelectedConfig)
-        .catch(console.error);
+        .catch(() => {
+          // Venue doesn't have a full config file - set to null
+          setSelectedConfig(null);
+        });
     }
   }, [selectedVenueId]);
 
@@ -371,7 +374,7 @@ const VenueSelector: React.FC<VenueSelectorProps> = ({
       </div>
 
       {/* Selected Venue Display */}
-      {selected && selectedConfig && (
+      {selected && (
         <div className={`p-4 rounded-lg border ${CATEGORY_COLORS[selected.category]?.light || 'bg-blue-50'} border-${CATEGORY_COLORS[selected.category]?.border || 'blue-200'}`}>
           <div className="flex items-center gap-3">
             <div className={`flex-shrink-0 w-12 h-12 ${CATEGORY_COLORS[selected.category]?.bg || 'bg-blue-600'} rounded-lg flex items-center justify-center`}>
@@ -396,8 +399,8 @@ const VenueSelector: React.FC<VenueSelectorProps> = ({
             </button>
           </div>
 
-          {/* Official Links */}
-          {selectedConfig.officialLinks && (
+          {/* Official Links - only show if we have a full config */}
+          {selectedConfig && selectedConfig.officialLinks && (
             <div className="mt-4 pt-4 border-t border-gray-200/50">
               <h5 className="text-sm font-medium text-gray-700 mb-2">Official Guidelines</h5>
               <div className="flex flex-wrap gap-2">
@@ -450,6 +453,16 @@ const VenueSelector: React.FC<VenueSelectorProps> = ({
                   </a>
                 )}
               </div>
+            </div>
+          )}
+
+          {/* Message when no config available */}
+          {!selectedConfig && !selected.verified && (
+            <div className="mt-4 pt-4 border-t border-gray-200/50">
+              <p className="text-sm text-gray-500 flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-yellow-500" />
+                Full configuration not yet available for this venue. Using default settings.
+              </p>
             </div>
           )}
         </div>
