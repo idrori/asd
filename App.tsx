@@ -142,7 +142,7 @@ Is this the correct data file for your analysis?`;
           onPaperToInterview={() => {
             // Open Paper to Interview page in new tab
             const baseUrl = import.meta.env.BASE_URL || '/';
-            window.open(`${baseUrl}paper-to-interview.html`, '_blank', 'noopener,noreferrer');
+            window.open(`${baseUrl}research-followup-paper.html`, '_blank', 'noopener,noreferrer');
           }}
           onResearchAdmin={paperMode === 'research' ? () => setCurrentView(currentView === 'admin' ? 'main' : 'admin') : undefined}
           paperMode={paperMode}
@@ -175,7 +175,7 @@ Is this the correct data file for your analysis?`;
             }}
             onPaperToInterview={() => {
               const baseUrl = import.meta.env.BASE_URL || '/';
-              window.open(`${baseUrl}paper-to-interview.html`, '_blank', 'noopener,noreferrer');
+              window.open(`${baseUrl}research-followup-paper.html`, '_blank', 'noopener,noreferrer');
             }}
             onSourceTypeChange={setSourceType}
             onVenueChange={setSelectedVenueId}
