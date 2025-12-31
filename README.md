@@ -13,3 +13,9 @@ Information Technologies and Systems: workshop on exploring generative AI to tra
 
 ### Builder Stage
 ![Builder Stage](screenshots/source-target-builder-screenshot.png)
+
+### Research Interview
+![Research Interview](screenshots/research-interview-screenshot.png)
+
+### Followup Paper
+![Followup Paper](screenshots/followup-paper-screenshot.png)
