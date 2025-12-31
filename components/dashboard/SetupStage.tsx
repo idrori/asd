@@ -4,6 +4,8 @@ import { StageStatus } from '../../types';
 import FileUpload from '../FileUpload';
 import LogPanel from './LogPanel';
 import { DetectionStatus } from '../../hooks';
+import ConferenceSelector from '../ConferenceSelector';
+import type { ConferenceId } from '../../types/conference';
 
 interface UploadedFiles {
   template?: File | null;
@@ -22,6 +24,7 @@ interface SetupStageProps {
   detectionStatus?: DetectionStatus;
   onRefreshDetection?: () => void;
   hasExistingCase?: boolean;  // True if there's data from a previous case
+  onConferenceChange?: (conferenceId: ConferenceId) => void;
 }
 
 const SetupStage: React.FC<SetupStageProps> = ({
@@ -33,7 +36,8 @@ const SetupStage: React.FC<SetupStageProps> = ({
   onAction,
   detectionStatus,
   onRefreshDetection,
-  hasExistingCase = false
+  hasExistingCase = false,
+  onConferenceChange
 }) => {
   const [isStartingNewCase, setIsStartingNewCase] = useState(false);
   const canProceed = uploadedFiles.template && uploadedFiles.interview;
@@ -53,6 +57,14 @@ const SetupStage: React.FC<SetupStageProps> = ({
         <FileText className="text-indigo-600" />
         Setup & File Selection
       </h2>
+
+      {/* Conference Selector */}
+      <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+        <ConferenceSelector
+          onConferenceChange={onConferenceChange}
+          disabled={isProcessing || stageStatus === StageStatus.COMPLETED}
+        />
+      </div>
 
       {/* New Project Banner - Shows when there's previous project data */}
       {hasExistingCase && (

@@ -1,0 +1,166 @@
+{
+  "id": "dsi",
+  "name": "Decision Sciences Institute Annual Meeting",
+  "acronym": "DSI",
+  "year": 2025,
+  "tier": 2,
+  "domain": "decision-sciences",
+  "website": "https://decisionsciences.org/",
+  "description": "The 56th Annual Conference of DSI focuses on 'Revolutionizing Decision-Making: Technology and Human Collaboration'. Papers are positioned for publication in Decision Sciences Journal and DSJIE.",
+
+  "officialLinks": {
+    "callForPapers": "https://decisionsciences.org/conference/annual-2025/2025-annual-conference/",
+    "submissionInstructions": "https://decisionsciences.org/conference/annual-2025/2025-submission-process-2/",
+    "tracksAndChairs": "https://decisionsciences.org/conference/annual-2025/2025-tracks-and-chairs/",
+    "submissionPortal": "https://convention2.allacademic.com/one/dsi/dsi25/"
+  },
+
+  "paperLimits": {
+    "minPages": 10,
+    "maxPages": 15,
+    "referencesCountTowardLimit": false,
+    "minReferences": 20,
+    "maxReferences": 50
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Literature Review",
+      "Theoretical Framework",
+      "Methodology",
+      "Results",
+      "Discussion",
+      "Implications",
+      "Conclusion",
+      "References"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": true,
+    "keywordsCount": { "min": 3, "max": 5 },
+    "appendicesAllowed": true,
+    "supplementaryAllowed": true
+  },
+
+  "submissionTypes": [
+    {
+      "type": "fullPaper",
+      "description": "Complete research papers",
+      "deadline": "June 15, 2025"
+    },
+    {
+      "type": "abstract",
+      "description": "Extended abstracts",
+      "deadline": "June 23, 2025"
+    },
+    {
+      "type": "panel",
+      "description": "Panel proposals",
+      "deadline": "June 23, 2025"
+    },
+    {
+      "type": "workshop",
+      "description": "Workshop proposals",
+      "deadline": "June 23, 2025"
+    }
+  ],
+
+  "specialTracks": [
+    {
+      "name": "Doctoral Student Papers",
+      "description": "High-quality doctoral student papers from all fields. $300 prize for best paper."
+    },
+    {
+      "name": "Pedagogical Research Track",
+      "description": "Expedited review for Decision Sciences Journal of Innovative Education (DSJIE)"
+    },
+    {
+      "name": "Emerging Economies Showcase",
+      "description": "Mentorship and feedback for researchers from emerging markets (sub-Saharan Africa, MENA, Latin America, Asia excluding developed countries)"
+    }
+  ],
+
+  "template": {
+    "formatStyle": "dsi",
+    "fontFamily": "Times New Roman",
+    "fontSize": 12,
+    "citationStyle": "apa7",
+    "lineSpacing": 2.0,
+    "marginInches": 1.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 3.0,
+    "maxRevisionRounds": 3,
+    "dimensions": [
+      "novelty",
+      "significance",
+      "methodologicalRigor",
+      "clarity",
+      "practicalRelevance"
+    ],
+    "includeTrustworthiness": false
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt",
+    "infographic": "infographic.txt",
+    "dataTable": "datatable.txt"
+  },
+
+  "calibration": {
+    "description": "DSI welcomes interdisciplinary research. Papers are positioned for publication in Decision Sciences Journal and DSJIE plus other high-impact journals.",
+    "exemplarCount": 0,
+    "topJournals": [
+      "Decision Sciences",
+      "Decision Sciences Journal of Innovative Education",
+      "Production and Operations Management",
+      "Journal of Operations Management",
+      "MIS Quarterly",
+      "Information Systems Research"
+    ],
+    "topConferences": [
+      "DSI Annual Meeting",
+      "INFORMS",
+      "POMS",
+      "ICIS",
+      "AMCIS"
+    ],
+    "methodologyEmphasis": [
+      "Survey Research",
+      "Behavioral Experiments",
+      "Case Studies",
+      "Analytical Modeling",
+      "Simulation",
+      "Pedagogical Research"
+    ]
+  },
+
+  "notes": [
+    "Theme: 'Revolutionizing Decision-Making: Technology and Human Collaboration'",
+    "Conference: November 22-24, 2025 in Orlando, FL",
+    "Full papers and awards deadline: June 15, 2025",
+    "Abstracts, panels, workshops deadline: June 23, 2025",
+    "At least one author must be registered by September 15 for program inclusion",
+    "Use DSI Submission Templates provided on website",
+    "Submit through conference portal (new accounts required)",
+    "VISA invitation letters available upon request",
+    "Strong emphasis on both research and teaching innovation",
+    "Interdisciplinary work connecting IS, OM, and decision making valued"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

@@ -1,0 +1,124 @@
+{
+  "schemaVersion": "1.0",
+  "defaultConference": "icis",
+  "lastUpdated": "2025-12-31",
+  "conferences": {
+    "icis": {
+      "id": "icis",
+      "name": "International Conference on Information Systems",
+      "acronym": "ICIS",
+      "tier": 1,
+      "domain": "information-systems",
+      "description": "Premier global conference for Information Systems research, hosted by AIS",
+      "verified": true
+    },
+    "ecis": {
+      "id": "ecis",
+      "name": "European Conference on Information Systems",
+      "acronym": "ECIS",
+      "tier": 1,
+      "domain": "information-systems",
+      "description": "Leading European conference for Information Systems research",
+      "verified": true
+    },
+    "pacis": {
+      "id": "pacis",
+      "name": "Pacific Asia Conference on Information Systems",
+      "acronym": "PACIS",
+      "tier": 1,
+      "domain": "information-systems",
+      "description": "Premier Asia-Pacific conference for Information Systems research",
+      "verified": true
+    },
+    "amcis": {
+      "id": "amcis",
+      "name": "Americas Conference on Information Systems",
+      "acronym": "AMCIS",
+      "tier": 1,
+      "domain": "information-systems",
+      "description": "Major Americas conference for Information Systems, more applied focus",
+      "verified": true
+    },
+    "hicss": {
+      "id": "hicss",
+      "name": "Hawaii International Conference on System Sciences",
+      "acronym": "HICSS",
+      "tier": 1,
+      "domain": "information-systems",
+      "description": "Multidisciplinary conference covering IS, CS, and system sciences",
+      "verified": true
+    },
+    "aom": {
+      "id": "aom",
+      "name": "Academy of Management Annual Meeting",
+      "acronym": "AOM",
+      "tier": 2,
+      "domain": "management",
+      "description": "Premier management conference with OCIS division for IS research",
+      "verified": false
+    },
+    "informs": {
+      "id": "informs",
+      "name": "INFORMS Annual Meeting",
+      "acronym": "INFORMS",
+      "tier": 2,
+      "domain": "operations-research",
+      "description": "Operations research and management science conference",
+      "verified": false
+    },
+    "dsi": {
+      "id": "dsi",
+      "name": "Decision Sciences Institute Annual Meeting",
+      "acronym": "DSI",
+      "tier": 2,
+      "domain": "decision-sciences",
+      "description": "Decision sciences conference with IS track",
+      "verified": false
+    },
+    "chi": {
+      "id": "chi",
+      "name": "ACM CHI Conference on Human Factors in Computing Systems",
+      "acronym": "CHI",
+      "tier": 3,
+      "domain": "human-computer-interaction",
+      "description": "Premier HCI conference, ACM SIGCHI sponsored",
+      "verified": false
+    },
+    "neurips": {
+      "id": "neurips",
+      "name": "Conference on Neural Information Processing Systems",
+      "acronym": "NeurIPS",
+      "tier": 3,
+      "domain": "machine-learning",
+      "description": "Top machine learning and computational neuroscience conference",
+      "verified": true
+    },
+    "icml": {
+      "id": "icml",
+      "name": "International Conference on Machine Learning",
+      "acronym": "ICML",
+      "tier": 3,
+      "domain": "machine-learning",
+      "description": "Premier machine learning conference, IMLS flagship",
+      "verified": true
+    },
+    "iclr": {
+      "id": "iclr",
+      "name": "International Conference on Learning Representations",
+      "acronym": "ICLR",
+      "tier": 3,
+      "domain": "machine-learning",
+      "description": "Top venue for deep learning and representation learning research",
+      "verified": true
+    },
+    "aaai": {
+      "id": "aaai",
+      "name": "AAAI Conference on Artificial Intelligence",
+      "acronym": "AAAI",
+      "tier": 3,
+      "domain": "artificial-intelligence",
+      "description": "Premier artificial intelligence conference",
+      "verified": true
+    }
+  }
+}

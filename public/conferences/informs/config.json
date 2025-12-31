@@ -1,0 +1,139 @@
+{
+  "id": "informs",
+  "name": "INFORMS Annual Meeting",
+  "acronym": "INFORMS",
+  "year": 2025,
+  "tier": 2,
+  "domain": "operations-research",
+  "website": "https://www.informs.org/",
+  "description": "The INFORMS Annual Meeting is the largest operations research and analytics conference. It features presentations on optimization, simulation, decision analysis, and data science.",
+
+  "officialLinks": {
+    "callForPapers": "https://meetings.informs.org/wordpress/annual/",
+    "submissionInstructions": "https://meetings.informs.org/wordpress/annual/submit/",
+    "submissionPortal": "https://submissions.mirasmart.com/InformsAnnual2025/"
+  },
+
+  "paperLimits": {
+    "abstractMaxWords": 250,
+    "minReferences": 30,
+    "maxReferences": 60
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Literature Review",
+      "Model Formulation",
+      "Methodology",
+      "Computational Experiments",
+      "Results",
+      "Managerial Implications",
+      "Conclusion",
+      "References"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true,
+    "keywordsCount": { "min": 3, "max": 6 },
+    "appendicesAllowed": true,
+    "supplementaryAllowed": true
+  },
+
+  "submissionTypes": [
+    {
+      "type": "invited",
+      "description": "Organized by session chairs with 4-5 presentations (15-18 minutes each)"
+    },
+    {
+      "type": "contributed",
+      "description": "Individual speaker submissions (~10 presentations per session, 7 minutes each)"
+    },
+    {
+      "type": "poster",
+      "description": "Physical poster display with poster contest at meeting"
+    }
+  ],
+
+  "template": {
+    "formatStyle": "informs",
+    "fontFamily": "Times New Roman",
+    "fontSize": 11,
+    "citationStyle": "chicago",
+    "lineSpacing": 1.5,
+    "marginInches": 1.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 3.5,
+    "maxRevisionRounds": 3,
+    "dimensions": [
+      "technicalContribution",
+      "methodologicalRigor",
+      "novelty",
+      "practicalRelevance",
+      "clarity"
+    ],
+    "includeTrustworthiness": false
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt",
+    "infographic": "infographic.txt",
+    "dataTable": "datatable.txt"
+  },
+
+  "calibration": {
+    "description": "INFORMS emphasizes rigorous mathematical modeling and computational experiments. Managerial implications are important.",
+    "exemplarCount": 0,
+    "topJournals": [
+      "Management Science",
+      "Operations Research",
+      "Manufacturing & Service Operations Management",
+      "Marketing Science",
+      "Information Systems Research",
+      "INFORMS Journal on Computing",
+      "Decision Analysis"
+    ],
+    "topConferences": [
+      "INFORMS Annual Meeting",
+      "MSOM Conference",
+      "Revenue Management and Pricing Conference",
+      "CIST"
+    ],
+    "methodologyEmphasis": [
+      "Mathematical Optimization",
+      "Stochastic Modeling",
+      "Simulation",
+      "Machine Learning Applications",
+      "Econometric Analysis",
+      "Game Theory"
+    ]
+  },
+
+  "notes": [
+    "Abstract maximum 250 words",
+    "Do not include title or author information in abstract body",
+    "All text must be in English",
+    "Technical sessions are 75 minutes long",
+    "Fully in-person meeting - all speakers must be present in Atlanta",
+    "Each attendee may only present one invited, contributed, panel, or poster",
+    "All speakers must register and pay by August 11, 2025",
+    "Unregistered speakers will have presentations removed from program",
+    "Abstracts published exactly as entered if accepted"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

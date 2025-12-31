@@ -1,0 +1,117 @@
+{
+  "id": "icis",
+  "name": "International Conference on Information Systems",
+  "acronym": "ICIS",
+  "year": 2025,
+  "tier": 1,
+  "domain": "information-systems",
+  "website": "https://icis2025.aisconferences.org/",
+  "description": "ICIS is the premier global conference for Information Systems research, hosted annually by the Association for Information Systems (AIS). The conference features rigorous peer review and publishes completed research papers.",
+
+  "paperLimits": {
+    "minPages": 14,
+    "maxPages": 16,
+    "referencesCountTowardLimit": true,
+    "minReferences": 25,
+    "maxReferences": 60
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Literature Review",
+      "Theoretical Framework",
+      "Methodology",
+      "Results",
+      "Discussion",
+      "Conclusion",
+      "References"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 300,
+    "keywordsRequired": true,
+    "keywordsCount": { "min": 3, "max": 5 },
+    "appendicesAllowed": false,
+    "supplementaryAllowed": true
+  },
+
+  "template": {
+    "formatStyle": "icis",
+    "fontFamily": "Georgia",
+    "fontSize": 10,
+    "citationStyle": "apa7",
+    "lineSpacing": 1.0,
+    "marginInches": 1.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 3.5,
+    "maxRevisionRounds": 5,
+    "dimensions": [
+      "novelty",
+      "significance",
+      "methodologicalRigor",
+      "clarity",
+      "relevance"
+    ],
+    "includeTrustworthiness": true
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt",
+    "infographic": "infographic.txt",
+    "dataTable": "datatable.txt"
+  },
+
+  "calibration": {
+    "description": "Quality standards and structural patterns from 11 ICIS 2024 exemplar papers are embedded in the builder prompt.",
+    "exemplarCount": 11,
+    "topJournals": [
+      "MIS Quarterly",
+      "Information Systems Research",
+      "Journal of Management Information Systems",
+      "Journal of the Association for Information Systems",
+      "European Journal of Information Systems",
+      "Journal of Strategic Information Systems",
+      "Information & Management",
+      "Journal of Information Technology",
+      "Management Science",
+      "Organization Science"
+    ],
+    "topConferences": [
+      "ICIS",
+      "ECIS",
+      "AMCIS",
+      "PACIS",
+      "HICSS"
+    ],
+    "methodologyEmphasis": [
+      "Simulation & Computational Modeling",
+      "Analytical & Theoretical Modeling",
+      "Laboratory & Field Experiments",
+      "Survey Research",
+      "Design Science Research"
+    ]
+  },
+
+  "notes": [
+    "Papers exceeding 16 pages will be desk rejected",
+    "Anonymous submission required - remove all author identifying information",
+    "Use APA 7th edition citation format",
+    "References should be 60% from 2020-2025 for recency"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-01-01"
+}

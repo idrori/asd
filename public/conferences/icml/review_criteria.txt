@@ -1,0 +1,99 @@
+# ICML Review Criteria
+# Based on Official ICML Reviewer Instructions
+
+## Overall Recommendation Scale (5-point)
+
+| Score | Label | Description |
+|-------|-------|-------------|
+| 5 | Strong Accept | Excellent paper that should definitely be accepted |
+| 4 | Accept | Good paper that should be accepted |
+| 3 | Weak Accept | Borderline paper, leaning toward acceptance |
+| 2 | Weak Reject | Borderline paper, leaning toward rejection |
+| 1 | Reject | Paper should not be accepted |
+
+## Core Evaluation Dimensions
+
+### 1. Summary
+• Provide a brief overview of findings, results, and contributions
+• This section should be descriptive, not critical
+• Summarize what the paper claims to accomplish
+
+### 2. Claims and Evidence
+• Are the claims made in the submission supported by clear and convincing evidence?
+• For theoretical claims: Verify correctness of proofs
+• For empirical claims: Validate soundness of experimental designs
+• Do the methods fit the problem being addressed?
+• Are there unstated assumptions that should be explicit?
+
+### 3. Prior Work and Literature
+• Is the paper well-connected to the broader scientific literature?
+• Are there missing essential citations?
+• Does the paper properly position itself relative to related work?
+• Self-assess your familiarity with the field when evaluating this dimension
+
+### 4. Originality
+• Does the paper present novel ideas, methods, or applications?
+• Is there sufficient differentiation from prior work?
+• Does it provide new insights even if methods are not entirely new?
+
+### 5. Significance
+• What is the potential impact of this work?
+• Will it influence future research or applications?
+• Does it address an important problem in machine learning?
+
+### 6. Clarity
+• Is the paper well-written and organized?
+• Are the ideas clearly communicated?
+• Is there sufficient detail for reproducibility?
+
+## Questions for Authors
+• Reserve questions for issues that would meaningfully alter your evaluation
+• Focus on critical limitations or clarifications needed
+• Questions should help address gaps in understanding
+
+## Ethical Considerations
+• Flag papers requiring ethics review
+• Consider potential negative societal impacts
+• Assess whether limitations are appropriately discussed
+
+## Position Paper Track (Additional Criteria)
+
+For position papers, rate each on a 4-point scale (4=excellent, 1=poor):
+
+| Dimension | Description |
+|-----------|-------------|
+| Support | How well the paper supports its position with arguments and evidence |
+| Significance | Importance of the position regarding scope and potential impact |
+| Discussion Potential | Capacity to inspire constructive, useful discussion in the community |
+| Argument Clarity | Quality of presentation and writing |
+| Related Work | Adequacy of literature discussion and citations |
+
+## Review Best Practices
+
+• "Review the papers of others as you would wish your own to be reviewed"
+• Be professional and constructive
+• Provide specific, actionable feedback
+• Substantiate all criticisms with evidence
+• Distinguish between major issues and minor suggestions
+• When claiming lack of novelty, provide appropriate references
+• Focus on technical aspects, not just grammar or organization
+
+## Common Issues to Evaluate
+
+• Theoretical soundness and proof correctness
+• Experimental methodology and statistical validity
+• Reproducibility (code, data, hyperparameters)
+• Comparison with appropriate baselines
+• Ablation studies and sensitivity analysis
+• Computational complexity and scalability
+• Generalization beyond specific benchmarks
+
+## Confidence Scale (5-point)
+
+| Score | Description |
+|-------|-------------|
+| 5 | Absolutely certain; very familiar with related work |
+| 4 | Confident but not absolutely certain |
+| 3 | Fairly confident; some aspects may be unfamiliar |
+| 2 | Willing to defend assessment but likely have gaps |
+| 1 | Educated guess; outside primary expertise |

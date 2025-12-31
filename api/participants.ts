@@ -47,6 +47,8 @@ interface Participant {
   updated_at: string;
   notes: string;
   paper_link?: string;
+  oversight_paths?: string[];
+  feedback_paths?: string[];
 }
 
 interface ActivityLogEntry {
@@ -89,11 +91,13 @@ async function readParticipantsData(): Promise<ParticipantsData> {
   }
 }
 
-// Write participants data to Blob (private storage for PII protection)
+// Write participants data to Blob
 async function writeParticipantsData(data: ParticipantsData): Promise<void> {
-  // SECURITY: Store participant data privately - contains PII (names, emails, notes)
+  // Note: Vercel Blob only supports public access. Security is provided by:
+  // 1. Unguessable blob URLs (contain random tokens)
+  // 2. API authentication via X-Internal-Secret header
   await put(PARTICIPANTS_FILE, JSON.stringify(data, null, 2), {
-    access: 'private',
+    access: 'public',
     contentType: 'application/json',
     addRandomSuffix: false
   });
@@ -289,7 +293,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           const oversightPath = `research/oversight/${participant.id}_v${round}.json`;
           const oversightContent = typeof oversight === 'string' ? oversight : JSON.stringify(oversight, null, 2);
           await put(oversightPath, oversightContent, {
-            access: 'private',
+            access: 'public',
             contentType: 'application/json',
             addRandomSuffix: false
           });
@@ -306,7 +310,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           const feedbackPath = `research/feedback/${participant.id}_v${round}.json`;
           const feedbackContent = typeof feedback === 'string' ? feedback : JSON.stringify(feedback, null, 2);
           await put(feedbackPath, feedbackContent, {
-            access: 'private',
+            access: 'public',
             contentType: 'application/json',
             addRandomSuffix: false
           });

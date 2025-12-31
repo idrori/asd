@@ -1,0 +1,166 @@
+# AAAI Review Criteria
+# Based on Official AAAI-26 Reviewer Instructions
+
+## Review Process Overview
+
+AAAI-26 employs a **two-phase review system** with AI-assisted components:
+
+- **Phase 1**: Two human reviews supplemented by one AI-generated review (informational only, no ratings)
+- **Phase 2**: Additional human reviewers; AI-generated summary of discussions
+
+Human reviewers provide ratings and recommendations; AI reviews provide supplementary analysis only.
+
+## Core Evaluation Dimensions
+
+### 1. Problem and Contribution Clarity
+
+**Key Questions:**
+• What is the problem that the paper aims to address?
+• What is the key novel technical contribution?
+• Are limitations in existing work clearly articulated?
+• Is the contribution significant to the AI community?
+
+**Evaluate:**
+• Clear problem statement
+• Well-defined research objectives
+• Explicit statement of contributions
+• Appropriate scope
+
+### 2. Technical Soundness
+
+**Key Questions:**
+• Is the technical approach sound and clearly described?
+• Are there unstated assumptions or missing details?
+• Is there sufficient detail for work reproduction?
+
+**Evaluate:**
+• Correctness of methodology
+• Validity of theoretical claims
+• Soundness of algorithmic design
+• Completeness of technical description
+
+### 3. Evaluation Quality
+
+**Key Questions:**
+• Are appropriate baselines and state-of-the-art comparisons included?
+• Do empirical results really support the claims?
+• Are benchmarks/datasets appropriate?
+• Is error analysis provided?
+
+**Evaluate:**
+• Experimental design
+• Baseline selection (fair and comprehensive)
+• Statistical validity
+• Ablation studies
+• Analysis of results
+
+### 4. Presentation and Context
+
+**Key Questions:**
+• Is the narrative arc clear?
+• Is the paper properly placed within related work?
+• Are limitations in scope and generalizability described?
+
+**Evaluate:**
+• Writing quality and clarity
+• Organization and flow
+• Related work coverage
+• Honest discussion of limitations
+
+## Writing Standards for Reviews
+
+### Do:
+• Use "the paper" or "the work" instead of "I" or "you"
+• Frame feedback as respectful face-to-face communication
+• Distinguish essential revisions from optional suggestions
+• Focus on work quality, not individuals
+• Provide specific, actionable feedback
+
+### Don't:
+• Use first-person pronouns in reviews
+• Make personal attacks or dismissive comments
+• Conflate personal preferences with technical issues
+• Provide vague criticisms without evidence
+
+## Review Components
+
+### Summary
+• Briefly describe what the paper does
+• Be objective and descriptive
+• Capture the main contributions
+
+### Strengths
+• List specific strong points
+• Provide evidence for each strength
+• Consider novelty, significance, and technical quality
+
+### Weaknesses
+• List specific weak points
+• Provide evidence and suggestions for each
+• Distinguish major issues from minor ones
+
+### Questions for Authors
+• Pose clarifying questions
+• Focus on issues that affect your evaluation
+• Be specific about what answers would change your assessment
+
+### Recommendation
+• Provide overall assessment
+• Justify with reference to specific strengths/weaknesses
+• Consider the paper's fit for AAAI's broad AI scope
+
+## AAAI-Specific Considerations
+
+### Broad AI Scope
+AAAI covers all areas of AI, including:
+• Machine Learning
+• Natural Language Processing
+• Computer Vision
+• Knowledge Representation and Reasoning
+• Planning and Search
+• Robotics
+• Multi-agent Systems
+• Game Theory and AI
+• AI Ethics and Safety
+
+### Track-Specific Criteria
+
+**Main Technical Track:**
+• Standard review for core AI research
+• Emphasis on technical novelty and rigor
+
+**AI for Social Impact Track:**
+• Special evaluation emphasizing real-world problem significance
+• Consider practical applicability and societal benefit
+
+**AI Alignment Track:**
+• Focus on safety, interpretability, and responsible AI
+• Evaluate contribution to AI safety research
+
+## Common Technical Issues to Evaluate
+
+• Algorithm correctness and complexity
+• Experimental methodology
+• Reproducibility (via reproducibility checklist)
+• Baseline fairness and completeness
+• Statistical significance
+• Scalability considerations
+• Generalization claims
+• Ethical implications
+• Computational requirements
+
+## Reproducibility Checklist
+
+Papers must include a reproducibility checklist. Evaluate:
+• Completeness of checklist responses
+• Alignment between checklist and paper content
+• Feasibility of reproduction based on provided details
+
+## Best Practices
+
+• Review papers as you would want yours reviewed
+• Be constructive and professional
+• Provide substantive feedback that helps authors improve
+• Engage thoughtfully with the author response
+• Update assessments based on new information
+• Maintain confidentiality

@@ -1,13 +1,23 @@
 /**
- * ICIS Copilot Constants
+ * Academic Paper Copilot Constants
  *
- * UI display information and configuration constants
+ * UI display information and configuration constants.
+ * Supports multiple conferences through the conference configuration system.
  */
 
 import { Stage, BuilderStep, ResearchType } from './types';
+import type { ConferenceId } from './types/conference';
 
-// Base path for ICIS files
+// Base path for ICIS files (legacy, for backward compatibility)
 export const ICIS_BASE_PATH = '/icis';
+
+// Default conference
+export const DEFAULT_CONFERENCE: ConferenceId = 'icis';
+
+// Get base path for a conference
+export function getConferenceBasePath(conferenceId: ConferenceId): string {
+  return `/${conferenceId}`;
+}
 
 // Stage display information
 export const STAGE_INFO: Record<Stage, { label: string; description: string; icon: string }> = {
