@@ -1,0 +1,97 @@
+{
+  "id": "icassp",
+  "name": "IEEE International Conference on Acoustics, Speech, and Signal Processing",
+  "acronym": "ICASSP",
+  "venueType": "conference",
+  "category": "engineering-computer-science",
+  "subcategory": "signal-processing",
+  "year": 2025,
+  "h5Index": 137,
+  "website": "https://2025.ieeeicassp.org/",
+  "description": "ICASSP is the world's largest and most comprehensive conference on signal processing and its applications.",
+
+  "officialLinks": {
+    "callForPapers": "https://2025.ieeeicassp.org/call-for-papers/",
+    "submissionInstructions": "https://2025.ieeeicassp.org/author-kit-instructions/",
+    "editorialProcedures": "https://2025.ieeeicassp.org/editorial-procedures/",
+    "submissionPortal": "https://cmt3.research.microsoft.com/ICASSP2025"
+  },
+
+  "paperLimits": {
+    "minPages": 4,
+    "maxPages": 5,
+    "referencesCountTowardLimit": true,
+    "minReferences": 10,
+    "maxReferences": 25
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Method",
+      "Experiments",
+      "Results",
+      "Conclusion",
+      "References"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "ieee-conference",
+    "fontFamily": "Times",
+    "fontSize": 9,
+    "citationStyle": "ieee",
+    "lineSpacing": 1.0,
+    "paperSize": "letter",
+    "twoColumn": true,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 3.5,
+    "maxRevisionRounds": 0,
+    "dimensions": [
+      "novelty",
+      "technicalQuality",
+      "clarity",
+      "significance",
+      "reproducibility"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "ICASSP is the flagship conference of IEEE Signal Processing Society covering speech, audio, image, and signal processing.",
+    "topJournals": ["IEEE TSP", "IEEE TASLP", "IEEE TIP"],
+    "topConferences": ["ICASSP", "Interspeech", "ICME", "EUSIPCO"],
+    "methodologyEmphasis": ["Signal Processing", "Deep Learning", "Audio/Speech", "Algorithm Development"]
+  },
+
+  "notes": [
+    "World's largest signal processing conference",
+    "IEEE conference format required",
+    "NOT blind review - include author names",
+    "Max 9 papers per author",
+    "Plagiarism check via iThenticate",
+    "In-person presentation required (no virtual)",
+    "One registration covers up to 4 papers",
+    "Special track for IEEE OJSP submissions"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

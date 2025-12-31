@@ -1,0 +1,109 @@
+{
+  "id": "ieee-access",
+  "name": "IEEE Access",
+  "acronym": "IEEE Access",
+  "venueType": "journal",
+  "category": "engineering-computer-science",
+  "subcategory": "electrical-electronic-engineering",
+  "year": 2025,
+  "h5Index": 288,
+  "website": "https://ieeeaccess.ieee.org/",
+  "description": "IEEE Access is a multidisciplinary open access journal covering all IEEE fields of interest with rapid publication.",
+
+  "publisher": "IEEE",
+  "openAccess": true,
+  "impactFactor": 3.9,
+  "publicationFrequency": "continuous",
+  "averageReviewTime": "4-6 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://ieeeaccess.ieee.org/guide-for-authors/submission-guidelines/",
+    "authorGuidelines": "https://ieeeaccess.ieee.org/guide-for-authors/",
+    "preparingArticle": "https://ieeeaccess.ieee.org/guide-for-authors/preparing-your-article/",
+    "submissionPortal": "https://ieee.atyponrex.com/journal/ieee-access"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 30,
+    "referencesCountTowardLimit": false,
+    "minReferences": 20,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Related Work",
+      "Methodology",
+      "Results",
+      "Discussion",
+      "Conclusion",
+      "References",
+      "Author Biographies"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true,
+    "keywordsCount": { "min": 3, "max": 10 },
+    "biographiesRequired": true
+  },
+
+  "template": {
+    "formatStyle": "ieee-access",
+    "fontFamily": "Times",
+    "fontSize": 9,
+    "citationStyle": "ieee",
+    "lineSpacing": 1.0,
+    "paperSize": "letter",
+    "twoColumn": true,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 3.5,
+    "maxRevisionRounds": 2,
+    "acceptanceRate": 27,
+    "dimensions": [
+      "novelty",
+      "technicalQuality",
+      "clarity",
+      "reproducibility",
+      "significance"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "IEEE Access is a rapid, open access journal covering all IEEE technical areas with 800+ experienced Associate Editors.",
+    "topJournals": ["IEEE Access", "IEEE TPAMI", "IEEE TIP", "IEEE TNNLS"],
+    "methodologyEmphasis": ["Reproducibility", "Practical Applications", "Technical Rigor"]
+  },
+
+  "notes": [
+    "Open access - article processing charge required",
+    "4-6 week submission to publication",
+    "27% acceptance rate",
+    "Double column IEEE format required",
+    "ORCID required for submitting author",
+    "Author biographies required for ALL authors",
+    "Grammar check before submission (Paperpal Preflight)",
+    "AI use must be disclosed",
+    "Max 35% similarity for expanded conference papers",
+    "File size max 40MB"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

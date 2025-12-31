@@ -1,0 +1,109 @@
+{
+  "id": "nature-comm",
+  "name": "Nature Communications",
+  "acronym": "Nat. Commun.",
+  "venueType": "journal",
+  "category": "life-sciences-earth-sciences",
+  "subcategory": "multidisciplinary",
+  "year": 2025,
+  "h5Index": 399,
+  "website": "https://www.nature.com/ncomms",
+  "description": "Nature Communications is an open access journal publishing high-quality research from all areas of the natural sciences.",
+
+  "publisher": "Springer Nature",
+  "openAccess": true,
+  "impactFactor": 16.6,
+  "publicationFrequency": "continuous",
+  "averageReviewTime": "4-6 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.nature.com/ncomms/submit/guide-to-authors",
+    "authorGuidelines": "https://www.nature.com/ncomms/submit/how-to-submit",
+    "formattingGuide": "https://www.nature.com/documents/ncomms-formatting-instructions.pdf",
+    "submissionPortal": "https://mts-ncomms.nature.com/"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 15,
+    "maxWords": 5000,
+    "referencesCountTowardLimit": false,
+    "maxReferences": 70,
+    "maxDisplayItems": 10
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Results",
+      "Discussion",
+      "Methods",
+      "Data Availability",
+      "Code Availability",
+      "References",
+      "Acknowledgements",
+      "Author Contributions",
+      "Competing Interests",
+      "Supplementary Information"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 150,
+    "keywordsRequired": false
+  },
+
+  "template": {
+    "formatStyle": "nature",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "nature",
+    "lineSpacing": 2.0,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "doubleAnonymizedAvailable": true,
+    "dimensions": [
+      "novelty",
+      "significance",
+      "technicalQuality",
+      "clarity",
+      "reproducibility"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "Nature Communications publishes high-quality research that may not have the broad impact of Nature but represents important advances.",
+    "topJournals": ["Nature Communications", "Nature", "Science", "PNAS", "eLife"],
+    "methodologyEmphasis": ["Reproducibility", "Data Sharing", "Code Availability", "Open Science"]
+  },
+
+  "notes": [
+    "Open access journal - article processing charge required",
+    "No submission or page charges",
+    "Flexible format for initial submissions",
+    "Max 5000 words main text, 10 display items",
+    "Double-anonymized peer review available",
+    "Preprints supported",
+    "Code must be made available for computational work",
+    "Cover letter should explain importance and fit"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

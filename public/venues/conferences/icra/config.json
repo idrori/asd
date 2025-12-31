@@ -1,0 +1,97 @@
+{
+  "id": "icra",
+  "name": "IEEE International Conference on Robotics and Automation",
+  "acronym": "ICRA",
+  "venueType": "conference",
+  "category": "engineering-computer-science",
+  "subcategory": "automation-control-systems",
+  "year": 2025,
+  "h5Index": 115,
+  "website": "https://2025.ieee-icra.org/",
+  "description": "ICRA is the flagship conference of IEEE Robotics and Automation Society, the world's premier forum for robotics research.",
+
+  "officialLinks": {
+    "callForPapers": "https://www.ieee-ras.org/conferences-workshops/fully-sponsored/icra",
+    "submissionInstructions": "https://2025.ieee-icra.org/",
+    "submissionPortal": "https://ras.papercept.net/"
+  },
+
+  "paperLimits": {
+    "minPages": 6,
+    "maxPages": 8,
+    "referencesCountTowardLimit": false,
+    "minReferences": 15,
+    "maxReferences": 40
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Related Work",
+      "Method",
+      "Experiments",
+      "Results",
+      "Conclusion",
+      "References"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": true,
+    "videoSubmissionAllowed": true
+  },
+
+  "template": {
+    "formatStyle": "ieee-ras",
+    "fontFamily": "Times",
+    "fontSize": 10,
+    "citationStyle": "ieee",
+    "lineSpacing": 1.0,
+    "paperSize": "letter",
+    "twoColumn": true,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 0,
+    "dimensions": [
+      "novelty",
+      "technicalQuality",
+      "clarity",
+      "significance",
+      "experimentalValidation"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "ICRA is the flagship robotics conference bringing together researchers and industry leaders in robotics and automation.",
+    "topJournals": ["IEEE TRO", "IJRR", "Autonomous Robots", "IEEE RAM"],
+    "topConferences": ["ICRA", "IROS", "RSS", "CoRL"],
+    "methodologyEmphasis": ["Robot Systems", "Motion Planning", "Control", "Manipulation", "Perception"]
+  },
+
+  "notes": [
+    "Flagship conference of IEEE RAS",
+    "IEEE RAS format required",
+    "Double-blind review",
+    "Video submission encouraged",
+    "PaperPlaza submission system",
+    "Held annually in different locations",
+    "ICRA 2025 in Atlanta, USA"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}
