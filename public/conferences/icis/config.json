@@ -8,6 +8,12 @@
   "website": "https://icis2025.aisconferences.org/",
   "description": "ICIS is the premier global conference for Information Systems research, hosted annually by the Association for Information Systems (AIS). The conference features rigorous peer review and publishes completed research papers.",
 
+  "officialLinks": {
+    "callForPapers": "https://icis2025.aisconferences.org/submissions/call-for-papers",
+    "submissionInstructions": "https://icis2025.aisconferences.org/submissions/types-of-submissions/",
+    "reviewerGuidelines": "https://icis2025.aisconferences.org/wp-content/uploads/2025/04/ICIS-2025-Reviewer-Guide-Final.docx.pdf"
+  },
+
   "paperLimits": {
     "minPages": 14,
     "maxPages": 16,

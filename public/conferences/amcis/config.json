@@ -8,6 +8,12 @@
   "website": "https://amcis2025.aisconferences.org/",
   "description": "AMCIS is the largest gathering of IS academics in the Americas. It features a more applied focus than ICIS and welcomes both completed research and research-in-progress papers.",
 
+  "officialLinks": {
+    "callForPapers": "https://amcis2025.aisconferences.org/submissions/call-for-papers/",
+    "submissionInstructions": "https://amcis2025.aisconferences.org/submissions/types-of-submissions/",
+    "submissionFAQ": "https://amcis2025.aisconferences.org/submissions/submission-frequently-asked-questions/"
+  },
+
   "paperLimits": {
     "minPages": 8,
     "maxPages": 10,

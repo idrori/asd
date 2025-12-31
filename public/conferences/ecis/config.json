@@ -8,6 +8,11 @@
   "website": "https://ecis2025.eu/",
   "description": "ECIS is the leading European conference for Information Systems research, sponsored by AIS. It provides a premier forum for IS researchers to present completed research and research-in-progress.",
 
+  "officialLinks": {
+    "callForPapers": "https://ecis2025.eu/submissions/call-for-papers/",
+    "submissionInstructions": "https://ecis2025.eu/submissions/submission-frequently-asked-questions/"
+  },
+
   "paperLimits": {
     "minPages": 12,
     "maxPages": 15,

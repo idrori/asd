@@ -5,8 +5,12 @@
   "year": 2025,
   "tier": 1,
   "domain": "information-systems",
-  "website": "https://pacis2025.org/",
+  "website": "https://pacis2025.aisconferences.org/",
   "description": "PACIS is the premier Information Systems conference in the Asia-Pacific region, sponsored by AIS. It provides a platform for IS researchers to present completed research and research-in-progress.",
+
+  "officialLinks": {
+    "callForPapers": "https://pacis2025.aisconferences.org/submissions/papersdates/"
+  },
 
   "paperLimits": {
     "minPages": 12,
