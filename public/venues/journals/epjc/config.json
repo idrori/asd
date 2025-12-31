@@ -1,0 +1,90 @@
+{
+  "id": "epjc",
+  "name": "The European Physical Journal C",
+  "acronym": "EPJC",
+  "venueType": "journal",
+  "category": "physics-astronomy",
+  "subcategory": "particle-physics",
+  "year": 2025,
+  "h5Index": 95,
+  "website": "https://link.springer.com/journal/10052",
+  "description": "The European Physical Journal C covers theoretical, experimental and phenomenological particle physics, field theory, astrophysics, and cosmology.",
+
+  "publisher": "Springer / EDP Sciences / SIF",
+  "openAccess": true,
+  "impactFactor": 4.8,
+  "publicationFrequency": "monthly",
+  "averageReviewTime": "12 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://link.springer.com/journal/10052/submission-guidelines",
+    "authorGuidelines": "https://link.springer.com/journal/10052/submission-guidelines",
+    "submissionPortal": "https://mc.manuscriptcentral.com/epjc",
+    "editorialContact": "epjc@sif.it"
+  },
+
+  "paperLimits": {
+    "minPages": 6,
+    "maxPages": 30,
+    "referencesCountTowardLimit": false,
+    "minReferences": 20,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Theory", "Methods", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "springer",
+    "fontFamily": "Times",
+    "fontSize": 10,
+    "citationStyle": "numbered",
+    "lineSpacing": 1.0,
+    "paperSize": "a4",
+    "twoColumn": true,
+    "anonymousSubmission": false,
+    "latexRecommended": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "single-blind",
+    "dimensions": ["physicsSignificance", "novelty", "technicalQuality", "clarity", "fieldContribution"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "EPJC is a leading particle physics journal covering theory and experiment.",
+    "topJournals": ["European Physical Journal C", "Physical Review D", "Journal of High Energy Physics", "Physics Letters B"],
+    "methodologyEmphasis": ["Particle Physics", "Field Theory", "Cosmology", "Astrophysics"]
+  },
+
+  "notes": [
+    "Open access via SCOAP3",
+    "CC BY 4.0 license",
+    "Impact factor 4.8",
+    "LaTeX submission recommended",
+    "Double column layout preferred",
+    "12 weeks average to publication",
+    "Financial interests disclosure required",
+    "Co-published by EDP Sciences, SIF, and Springer"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

@@ -1,0 +1,85 @@
+{
+  "id": "cej",
+  "name": "Chemical Engineering Journal",
+  "acronym": "CEJ",
+  "venueType": "journal",
+  "category": "engineering-computer-science",
+  "subcategory": "environmental-geological-engineering",
+  "year": 2025,
+  "h5Index": 245,
+  "website": "https://www.sciencedirect.com/journal/chemical-engineering-journal",
+  "description": "Chemical Engineering Journal covers work at the interface of chemical engineering with other disciplines, addressing industrial and societal problems.",
+
+  "publisher": "Elsevier",
+  "openAccess": false,
+  "publicationFrequency": "continuous",
+  "averageReviewTime": "10 days to first decision, 39 days to review decision",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.sciencedirect.com/journal/chemical-engineering-journal/publish/guide-for-authors",
+    "authorGuidelines": "https://www.sciencedirect.com/journal/chemical-engineering-journal/publish/guide-for-authors",
+    "submissionPortal": "https://www.editorialmanager.com/cej/default2.aspx"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 20,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Experimental/Theoretical", "Results and Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "elsevier",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "elsevier-numbered",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 3.5,
+    "maxRevisionRounds": 2,
+    "dimensions": ["novelty", "engineeringSignificance", "experimentalRigor", "clarity", "industrialRelevance"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "CEJ covers chemical engineering at the interface with green energy, sustainability, and industrial applications.",
+    "topJournals": ["Chemical Engineering Journal", "AIChE Journal", "Chemical Engineering Science"],
+    "methodologyEmphasis": ["Reaction Engineering", "Process Design", "Scale-up", "Green Chemistry"]
+  },
+
+  "notes": [
+    "No publication fee for subscribers",
+    "Fast review: 10 days to first decision",
+    "AI tools allowed with human oversight",
+    "Focus on reaction engineering required",
+    "Scope includes green energy, CO2 capture, hydrogen",
+    "Editorial Manager submission",
+    "Language editing services available"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

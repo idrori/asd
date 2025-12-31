@@ -1,0 +1,103 @@
+{
+  "id": "vldb",
+  "name": "International Conference on Very Large Data Bases",
+  "acronym": "VLDB",
+  "venueType": "conference",
+  "category": "engineering-computer-science",
+  "subcategory": "databases-information-systems",
+  "year": 2025,
+  "h5Index": 72,
+  "website": "https://vldb.org/2025/",
+  "description": "VLDB is the premier international conference on very large databases, covering database engines, distributed systems, data mining, and more.",
+
+  "officialLinks": {
+    "callForPapers": "https://vldb.org/2025/",
+    "submissionInstructions": "https://vldb.org/2025/?submission-guidelines=",
+    "industrialTrack": "https://vldb.org/2025/?call-for-industrial-track=",
+    "demonstrations": "https://vldb.org/2025/?call-for-demonstrations=",
+    "submissionPortal": "https://cmt3.research.microsoft.com/"
+  },
+
+  "paperLimits": {
+    "minPages": 10,
+    "maxPages": 12,
+    "referencesCountTowardLimit": false,
+    "minReferences": 25,
+    "maxReferences": 60,
+    "industrialMaxPages": 12,
+    "demoMaxPages": 4
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Related Work",
+      "Problem Definition",
+      "Approach",
+      "Experiments",
+      "Conclusion",
+      "References"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "vldb",
+    "fontFamily": "Times",
+    "fontSize": 10,
+    "citationStyle": "vldb",
+    "lineSpacing": 1.0,
+    "paperSize": "letter",
+    "twoColumn": true,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 1,
+    "reviewType": "double-blind",
+    "dimensions": [
+      "novelty",
+      "technicalDepth",
+      "significance",
+      "clarity",
+      "reproducibility"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "VLDB is the premier database conference, published in PVLDB (Proceedings of the VLDB Endowment).",
+    "topJournals": ["VLDB Journal", "ACM TODS", "IEEE TKDE"],
+    "topConferences": ["VLDB", "SIGMOD", "ICDE", "PODS"],
+    "methodologyEmphasis": ["Systems Building", "Algorithms", "Scalability", "Performance Evaluation"]
+  },
+
+  "notes": [
+    "Premier database conference",
+    "Published in PVLDB",
+    "Rolling submission deadlines",
+    "Double-blind review for research track",
+    "Industrial track requires non-anonymous submission",
+    "Demo track: 4 pages + 5 min video",
+    "CMT submission system",
+    "Authors must declare conflicts",
+    "VLDB 2025 in London, UK"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

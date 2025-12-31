@@ -1,0 +1,87 @@
+{
+  "id": "isj",
+  "name": "Information Systems Journal",
+  "acronym": "ISJ",
+  "venueType": "journal",
+  "category": "business-economics-management",
+  "subcategory": "information-systems",
+  "year": 2025,
+  "h5Index": 75,
+  "website": "https://onlinelibrary.wiley.com/journal/13652575",
+  "description": "ISJ promotes the study of information systems through articles on research, practice, experience, and debates, integrating technological and social/contextual issues.",
+
+  "publisher": "Wiley",
+  "openAccess": false,
+  "impactFactor": 6.4,
+  "publicationFrequency": "bimonthly",
+  "averageReviewTime": "12-20 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://onlinelibrary.wiley.com/page/journal/13652575/homepage/forauthors.html",
+    "authorGuidelines": "https://onlinelibrary.wiley.com/page/journal/13652575/homepage/forauthors.html",
+    "editorsWebsite": "https://www.isj-editors.org/"
+  },
+
+  "paperLimits": {
+    "minPages": 20,
+    "maxPages": 40,
+    "referencesCountTowardLimit": false,
+    "minReferences": 50,
+    "maxReferences": 120
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Theoretical Background", "Research Context", "Methodology", "Findings", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "wiley",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "author-year",
+    "lineSpacing": 2.0,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "dimensions": ["isContribution", "methodologicalRigor", "theoreticalEmphasis", "clarity", "contextualRelevance"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "ISJ is known for publishing high-quality qualitative and quantitative IS research.",
+    "topJournals": ["ISJ", "MIS Quarterly", "Information Systems Research", "European Journal of Information Systems"],
+    "methodologyEmphasis": ["Qualitative Research", "Quantitative Research", "Interpretive Studies", "Case Studies"]
+  },
+
+  "notes": [
+    "Leading IS journal for qualitative research",
+    "Impact factor 6.4",
+    "Must have IS context and empirical basis",
+    "Quantitative papers need contextual emphasis",
+    "Submit via Manuscript Central",
+    "MS Word preferred (anonymized)",
+    "Author-year citation style"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

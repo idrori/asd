@@ -1,0 +1,102 @@
+{
+  "id": "sci-adv",
+  "name": "Science Advances",
+  "acronym": "Sci. Adv.",
+  "venueType": "journal",
+  "category": "life-sciences-earth-sciences",
+  "subcategory": "multidisciplinary",
+  "year": 2025,
+  "h5Index": 240,
+  "website": "https://www.science.org/journal/sciadv",
+  "description": "Science Advances is AAAS's open access multidisciplinary journal, publishing impactful research papers and reviews in any area of science.",
+
+  "publisher": "American Association for the Advancement of Science (AAAS)",
+  "openAccess": true,
+  "impactFactor": 11.7,
+  "publicationFrequency": "weekly",
+  "averageReviewTime": "6-10 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.science.org/content/page/science-advances-information-authors",
+    "authorGuidelines": "https://www.science.org/content/page/instructions-preparing-initial-manuscript",
+    "submissionPortal": "https://cts.sciencemag.org/"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 20,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Results",
+      "Discussion",
+      "Materials and Methods",
+      "Supplementary Materials",
+      "References"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": false,
+    "titleMaxCharacters": 96
+  },
+
+  "template": {
+    "formatStyle": "aaas",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "numbered",
+    "lineSpacing": 2.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "dimensions": [
+      "novelty",
+      "significance",
+      "technicalQuality",
+      "clarity",
+      "reproducibility"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "Science Advances is AAAS's premier open access journal covering all scientific disciplines.",
+    "topJournals": ["Science", "Nature", "Science Advances", "Nature Communications", "PNAS"],
+    "methodologyEmphasis": ["Interdisciplinary Research", "Novel Discoveries", "Broad Impact", "Reproducibility"]
+  },
+
+  "notes": [
+    "AAAS open access journal",
+    "Article processing charges apply",
+    "No presubmission inquiries accepted",
+    "Must suggest 5 potential reviewers",
+    "Single file submission preferred (Word .docx)",
+    "Title max 96 characters",
+    "License to Publish Agreement required",
+    "Impact factor 11.7"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

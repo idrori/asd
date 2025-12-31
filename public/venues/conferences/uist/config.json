@@ -1,0 +1,103 @@
+{
+  "id": "uist",
+  "name": "ACM Symposium on User Interface Software and Technology",
+  "acronym": "UIST",
+  "venueType": "conference",
+  "category": "engineering-computer-science",
+  "subcategory": "human-computer-interaction",
+  "year": 2025,
+  "h5Index": 53,
+  "website": "https://uist.acm.org/2026/",
+  "description": "UIST is the premier forum for innovations in human-computer interfaces, bringing together researchers from diverse areas including graphical interfaces, VR/AR, new input devices, and AI.",
+
+  "officialLinks": {
+    "callForPapers": "https://uist.acm.org/2026/",
+    "proceedings": "https://dl.acm.org/doi/proceedings/10.1145/3746059",
+    "sigchiEvents": "https://sigchi.org/events/uist-2025/"
+  },
+
+  "paperLimits": {
+    "minPages": 10,
+    "maxPages": 14,
+    "referencesCountTowardLimit": false,
+    "minReferences": 25,
+    "maxReferences": 60
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Related Work",
+      "System Design",
+      "Implementation",
+      "User Study",
+      "Results",
+      "Discussion",
+      "Limitations",
+      "Conclusion",
+      "References"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true,
+    "videoSubmissionEncouraged": true
+  },
+
+  "template": {
+    "formatStyle": "acm-sigchi",
+    "fontFamily": "Libertine",
+    "fontSize": 10,
+    "citationStyle": "acm",
+    "lineSpacing": 1.0,
+    "paperSize": "letter",
+    "twoColumn": true,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 1,
+    "reviewType": "double-blind",
+    "acceptanceRate": 20.3,
+    "dimensions": [
+      "novelty",
+      "technicalQuality",
+      "significance",
+      "clarity",
+      "userStudyRigor"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "UIST is the premier forum for user interface innovations, co-sponsored by SIGCHI and SIGGRAPH.",
+    "topJournals": ["ACM TOCHI", "IJHCS", "CHI"],
+    "topConferences": ["UIST", "CHI", "SIGGRAPH", "IUI"],
+    "methodologyEmphasis": ["Systems Building", "Novel Interfaces", "User Studies", "Interaction Techniques"]
+  },
+
+  "notes": [
+    "Premier UI software and technology conference",
+    "Co-sponsored by SIGCHI and SIGGRAPH",
+    "~20% acceptance rate (5-year average)",
+    "Double-blind review process",
+    "Video submission encouraged",
+    "Topics: input devices, VR/AR, fabrication, AI/ML for HCI",
+    "Published in ACM Digital Library",
+    "UIST 2025 in Busan, South Korea"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

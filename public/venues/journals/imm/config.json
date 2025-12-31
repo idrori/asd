@@ -1,0 +1,86 @@
+{
+  "id": "imm",
+  "name": "Industrial Marketing Management",
+  "acronym": "IMM",
+  "venueType": "journal",
+  "category": "business-economics-management",
+  "subcategory": "marketing",
+  "year": 2025,
+  "h5Index": 105,
+  "website": "https://www.sciencedirect.com/journal/industrial-marketing-management",
+  "description": "IMM focuses on how organizations work with customers, suppliers, and partners to manage relationships and market processes in B2B contexts.",
+
+  "publisher": "Elsevier",
+  "openAccess": false,
+  "publicationFrequency": "8 issues/year",
+  "averageReviewTime": "12-20 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.elsevier.com/journals/industrial-marketing-management/0019-8501/guide-for-authors",
+    "authorGuidelines": "https://www.elsevier.com/journals/industrial-marketing-management/0019-8501/guide-for-authors"
+  },
+
+  "paperLimits": {
+    "minPages": 15,
+    "maxPages": 35,
+    "referencesCountTowardLimit": false,
+    "minReferences": 40,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Theoretical Background", "Methodology", "Results", "Discussion", "Managerial Implications", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "elsevier",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "elsevier-harvard",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "minReviewers": 2,
+    "dimensions": ["b2bContribution", "methodologicalRigor", "novelty", "clarity", "managerialImplications"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "IMM is the leading B2B marketing journal.",
+    "topJournals": ["Industrial Marketing Management", "Journal of Business & Industrial Marketing", "Journal of Business Research", "Journal of Marketing"],
+    "methodologyEmphasis": ["B2B Marketing", "Relationship Marketing", "Supply Chain", "Strategic Marketing"]
+  },
+
+  "notes": [
+    "Leading B2B marketing journal",
+    "No publication fee",
+    "Double-blind review with 2+ reviewers",
+    "Preprints can be referenced",
+    "Open access option available",
+    "CSL reference formatting supported",
+    "Mendeley integration"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

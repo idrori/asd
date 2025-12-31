@@ -1,0 +1,88 @@
+{
+  "id": "ee",
+  "name": "Ecological Economics",
+  "acronym": "EE",
+  "venueType": "journal",
+  "category": "social-sciences",
+  "subcategory": "environmental-economics",
+  "year": 2025,
+  "h5Index": 105,
+  "website": "https://www.sciencedirect.com/journal/ecological-economics",
+  "description": "Ecological Economics publishes research on the relationship between ecological and economic systems, addressing sustainability and environmental policy.",
+
+  "publisher": "Elsevier",
+  "openAccess": false,
+  "impactFactor": 6.3,
+  "publicationFrequency": "monthly",
+  "averageReviewTime": "8-16 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.sciencedirect.com/journal/ecological-economics/publish/guide-for-authors",
+    "authorGuidelines": "https://www.sciencedirect.com/journal/ecological-economics/publish/guide-for-authors",
+    "submissionPortal": "https://www.editorialmanager.com/ecolec/default1.aspx"
+  },
+
+  "paperLimits": {
+    "minPages": 12,
+    "maxPages": 30,
+    "referencesCountTowardLimit": false,
+    "minReferences": 40,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Literature Review", "Methodology", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true,
+    "graphicalAbstractEncouraged": true
+  },
+
+  "template": {
+    "formatStyle": "elsevier",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "elsevier-harvard",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "dimensions": ["ecologicalEconomicsContribution", "methodologicalRigor", "novelty", "clarity", "policyRelevance"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "Ecological Economics is the journal of the International Society for Ecological Economics.",
+    "topJournals": ["Ecological Economics", "Environmental and Resource Economics", "Journal of Environmental Economics and Management", "Resource and Energy Economics"],
+    "methodologyEmphasis": ["Environmental Valuation", "Sustainability Assessment", "Policy Analysis", "Systems Modeling"]
+  },
+
+  "notes": [
+    "Journal of International Society for Ecological Economics",
+    "Impact factor 6.3",
+    "Q1 in Ecology, Economics, Environmental Sciences",
+    "Graphical abstract encouraged",
+    "Research data deposition required",
+    "Article types: Analysis, Survey, Commentary, Book Review",
+    "Dutch/European institutions may get 100% APC discount"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

@@ -1,0 +1,90 @@
+{
+  "id": "nature-med",
+  "name": "Nature Medicine",
+  "acronym": "Nat. Med.",
+  "venueType": "journal",
+  "category": "health-medical-sciences",
+  "subcategory": "health-medical-sciences-general",
+  "year": 2025,
+  "h5Index": 279,
+  "website": "https://www.nature.com/nm/",
+  "description": "Nature Medicine is a premier biomedical journal publishing cutting-edge research and reviews in all areas of medicine.",
+
+  "publisher": "Springer Nature",
+  "openAccess": false,
+  "impactFactor": 82.9,
+  "publicationFrequency": "monthly",
+  "averageReviewTime": "8-16 weeks",
+  "apcGoldOA": 12690,
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.nature.com/nm/submission-guidelines",
+    "authorGuidelines": "https://www.nature.com/nm/submission-guidelines/preparing-your-submission",
+    "editorialProcess": "https://www.nature.com/nm/submission-guidelines/editorial-process",
+    "formattingGuide": "https://www.nature.com/nm/submission-guidelines/initial-formatting"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 20,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 80,
+    "extendedDataFigures": 10
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Results", "Discussion", "Methods", "Data Availability", "References", "Extended Data"],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": false
+  },
+
+  "template": {
+    "formatStyle": "nature",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "nature",
+    "lineSpacing": 2.0,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "dimensions": ["novelty", "clinicalSignificance", "methodologicalRigor", "clarity", "broadImpact"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "Nature Medicine publishes cutting-edge biomedical research with clinical relevance.",
+    "topJournals": ["Nature Medicine", "NEJM", "Lancet", "Nature"],
+    "methodologyEmphasis": ["Clinical Studies", "Translational Research", "Disease Mechanisms", "Therapeutic Development"]
+  },
+
+  "notes": [
+    "Premier biomedical research journal",
+    "Free format initial submission",
+    "Cover letter explaining importance required",
+    "LLMs cannot be authors",
+    "Gold OA APC: $12,690",
+    "Max 10 Extended Data figures",
+    "DOIs required for research objects",
+    "Impact factor 82.9"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

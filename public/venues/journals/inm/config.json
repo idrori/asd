@@ -1,0 +1,83 @@
+{
+  "id": "inm",
+  "name": "Information & Management",
+  "acronym": "I&M",
+  "venueType": "journal",
+  "category": "business-economics-management",
+  "subcategory": "information-systems",
+  "year": 2025,
+  "h5Index": 95,
+  "website": "https://www.sciencedirect.com/journal/information-and-management",
+  "description": "Information & Management publishes scholarly articles emphasizing novelty and practical significance in information systems research.",
+
+  "publisher": "Elsevier",
+  "openAccess": false,
+  "publicationFrequency": "8 issues/year",
+  "averageReviewTime": "12-20 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.sciencedirect.com/journal/information-and-management/publish/guide-for-authors",
+    "authorGuidelines": "https://www.sciencedirect.com/journal/information-and-management/publish/guide-for-authors"
+  },
+
+  "paperLimits": {
+    "minPages": 15,
+    "maxPages": 35,
+    "referencesCountTowardLimit": false,
+    "minReferences": 40,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Theoretical Background", "Research Model", "Methodology", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "elsevier",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "elsevier-harvard",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "dimensions": ["isContribution", "methodologicalRigor", "novelty", "clarity", "practicalSignificance"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "I&M is a premier IS journal emphasizing novelty and practical significance.",
+    "topJournals": ["Information & Management", "MIS Quarterly", "Information Systems Research", "Journal of MIS"],
+    "methodologyEmphasis": ["IS Research", "Technology Adoption", "Digital Transformation", "IT Management"]
+  },
+
+  "notes": [
+    "Premier information systems journal",
+    "No publication fee",
+    "Emphasis on novelty and practical significance",
+    "Double-blind peer review",
+    "Accepted paper tracking available"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

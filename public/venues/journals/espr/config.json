@@ -1,0 +1,87 @@
+{
+  "id": "espr",
+  "name": "Environmental Science and Pollution Research",
+  "acronym": "ESPR",
+  "venueType": "journal",
+  "category": "life-sciences",
+  "subcategory": "environmental-science",
+  "year": 2025,
+  "h5Index": 105,
+  "website": "https://link.springer.com/journal/11356",
+  "description": "ESPR serves the international community in all areas of Environmental Science with emphasis on chemical compounds and their impacts on ecosystems and human health.",
+
+  "publisher": "Springer",
+  "openAccess": false,
+  "publicationFrequency": "continuous",
+  "averageReviewTime": "8-16 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://link.springer.com/journal/11356/submission-guidelines",
+    "authorGuidelines": "https://link.springer.com/journal/11356/submission-guidelines",
+    "submissionPortal": "https://www.editorialmanager.com/espr/"
+  },
+
+  "paperLimits": {
+    "minPages": 10,
+    "maxPages": 25,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Materials and Methods", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "springer",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "author-year",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "dimensions": ["environmentalRelevance", "methodologicalRigor", "novelty", "clarity", "pollutionImpact"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "ESPR covers environmental science with emphasis on chemical pollutants.",
+    "topJournals": ["ESPR", "Environmental Pollution", "Science of the Total Environment", "Chemosphere"],
+    "methodologyEmphasis": ["Environmental Monitoring", "Pollution Assessment", "Ecotoxicology", "Remediation"]
+  },
+
+  "notes": [
+    "Environmental science and pollution journal",
+    "Online-only publication",
+    "All author names required (no et al.)",
+    "References must be in English",
+    "Wikipedia not accepted as reference",
+    "No diesel/engine papers (only emissions)",
+    "No tourism, pharmacology, or mechanical engineering",
+    "Authorship cannot change during review"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

@@ -1,0 +1,82 @@
+{
+  "id": "aa",
+  "name": "Astronomy & Astrophysics",
+  "acronym": "A&A",
+  "venueType": "journal",
+  "category": "physics-astronomy",
+  "subcategory": "astronomy-astrophysics",
+  "year": 2025,
+  "h5Index": 120,
+  "website": "https://www.aanda.org/",
+  "description": "Astronomy & Astrophysics publishes new results of astronomical and astrophysical research covering all areas of astronomy.",
+
+  "publisher": "EDP Sciences",
+  "openAccess": false,
+  "publicationFrequency": "monthly",
+  "averageReviewTime": "6-12 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.aanda.org/for-authors",
+    "authorGuidelines": "https://www.aanda.org/doc_journal/instructions/aadoc.pdf"
+  },
+
+  "paperLimits": {
+    "minPages": 4,
+    "maxPages": 20,
+    "referencesCountTowardLimit": false,
+    "minReferences": 20,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Observations", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "aa",
+    "fontFamily": "Times",
+    "fontSize": 10,
+    "citationStyle": "author-year",
+    "lineSpacing": 1.0,
+    "paperSize": "a4",
+    "twoColumn": true,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "dimensions": ["scientificSignificance", "novelty", "technicalQuality", "clarity", "presentationQuality"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "A&A is the premier European journal for astronomy and astrophysics.",
+    "topJournals": ["Astronomy & Astrophysics", "The Astrophysical Journal", "Monthly Notices of the RAS", "The Astronomical Journal"],
+    "methodologyEmphasis": ["Observational Astronomy", "Theoretical Astrophysics", "Instrumentation", "Data Analysis"]
+  },
+
+  "notes": [
+    "Premier European astronomy journal",
+    "New paper length policy from April 2025",
+    "LaTeX manuscript required using A&A class",
+    "English language required",
+    "Preprints allowed on astro-ph"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

@@ -1,0 +1,89 @@
+{
+  "id": "aer",
+  "name": "American Economic Review",
+  "acronym": "AER",
+  "venueType": "journal",
+  "category": "business-economics-management",
+  "subcategory": "economics",
+  "year": 2025,
+  "h5Index": 170,
+  "website": "https://www.aeaweb.org/journals/aer",
+  "description": "The American Economic Review is a general-interest economics journal established in 1911, among the oldest and most respected scholarly journals in economics.",
+
+  "publisher": "American Economic Association",
+  "openAccess": false,
+  "publicationFrequency": "monthly (12 issues)",
+  "averageReviewTime": "3-6 months",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.aeaweb.org/journals/aer/submissions",
+    "authorGuidelines": "https://www.aeaweb.org/journals/aer/accepted-article-guidelines",
+    "editorialPolicy": "https://www.aeaweb.org/journals/aer/editorial-policy"
+  },
+
+  "paperLimits": {
+    "minPages": 20,
+    "maxPages": 45,
+    "referencesCountTowardLimit": true,
+    "minReferences": 30,
+    "maxReferences": 80,
+    "averageLength": "35-36 typeset pages"
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Literature Review", "Model/Theory", "Data", "Results", "Conclusion", "References", "Appendix"],
+    "abstractRequired": true,
+    "abstractMaxWords": 100,
+    "keywordsRequired": false,
+    "dataCodeAvailabilityRequired": true
+  },
+
+  "template": {
+    "formatStyle": "aea",
+    "fontFamily": "Times",
+    "fontSize": 11,
+    "citationStyle": "chicago",
+    "lineSpacing": 1.5,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": false,
+    "margins": "1 inch"
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "dimensions": ["novelty", "economicSignificance", "methodologicalRigor", "clarity", "policyRelevance"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "AER is the flagship economics journal of the American Economic Association.",
+    "topJournals": ["AER", "Quarterly Journal of Economics", "Econometrica", "Journal of Political Economy"],
+    "methodologyEmphasis": ["Economic Theory", "Empirical Economics", "Policy Analysis", "Econometrics"]
+  },
+
+  "notes": [
+    "Premier economics journal since 1911",
+    "Abstract max 100 words",
+    "Data and Code Availability Policy required",
+    "RCTs must be registered in AEA registry",
+    "Rejected papers cannot be resubmitted",
+    "Submission fee varies by membership/country",
+    "Random coauthor ordering option (ⓡ symbol)",
+    "iThenticate plagiarism screening"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

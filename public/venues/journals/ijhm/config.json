@@ -1,0 +1,86 @@
+{
+  "id": "ijhm",
+  "name": "International Journal of Hospitality Management",
+  "acronym": "IJHM",
+  "venueType": "journal",
+  "category": "business-economics-management",
+  "subcategory": "hospitality-management",
+  "year": 2025,
+  "h5Index": 110,
+  "website": "https://www.sciencedirect.com/journal/international-journal-of-hospitality-management",
+  "description": "International Journal of Hospitality Management covers all areas of hospitality management including human resources, finance, marketing, operations, and strategic management.",
+
+  "publisher": "Elsevier",
+  "openAccess": false,
+  "publicationFrequency": "10 issues/year",
+  "averageReviewTime": "16 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.sciencedirect.com/journal/international-journal-of-hospitality-management/publish/guide-for-authors",
+    "authorGuidelines": "https://www.sciencedirect.com/journal/international-journal-of-hospitality-management/publish/guide-for-authors"
+  },
+
+  "paperLimits": {
+    "minPages": 15,
+    "maxPages": 35,
+    "referencesCountTowardLimit": false,
+    "minReferences": 40,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Literature Review", "Methodology", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "elsevier",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "apa",
+    "lineSpacing": 2.0,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "dimensions": ["hospitalityContribution", "methodologicalRigor", "novelty", "clarity", "practicalImplications"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "IJHM is a leading hospitality management research journal.",
+    "topJournals": ["IJHM", "Tourism Management", "Cornell Hospitality Quarterly", "Journal of Hospitality & Tourism Research"],
+    "methodologyEmphasis": ["Quantitative Research", "Qualitative Research", "Mixed Methods", "Case Studies"]
+  },
+
+  "notes": [
+    "Leading hospitality management journal",
+    "No publication fee",
+    "28 days to first decision",
+    "111 days to decision after review",
+    "280 days to acceptance",
+    "9 days to online publication",
+    "Editor: Dr. Abraham Pizam",
+    "UCF Rosen College based"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

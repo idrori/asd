@@ -1,0 +1,86 @@
+{
+  "id": "circulation",
+  "name": "Circulation",
+  "acronym": "Circulation",
+  "venueType": "journal",
+  "category": "health-medical-sciences",
+  "subcategory": "cardiology",
+  "year": 2025,
+  "h5Index": 185,
+  "website": "https://www.ahajournals.org/journal/circ",
+  "description": "Circulation is the flagship journal of the American Heart Association, publishing leading cardiovascular research.",
+
+  "publisher": "American Heart Association",
+  "openAccess": false,
+  "impactFactor": 37.8,
+  "publicationFrequency": "weekly",
+  "averageReviewTime": "4-8 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.ahajournals.org/circ/author-instructions",
+    "authorGuidelines": "https://www.ahajournals.org/circ/author-instructions",
+    "submissionPortal": "https://circ-submit.aha-journals.org/cgi-bin/main.plex"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 20,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Methods", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "aha",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "ama",
+    "lineSpacing": 2.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "dimensions": ["novelty", "clinicalSignificance", "methodologicalRigor", "clarity", "cardiovascularImpact"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "Circulation is the AHA flagship journal for cardiovascular research.",
+    "topJournals": ["Circulation", "JACC", "European Heart Journal", "Circulation Research"],
+    "methodologyEmphasis": ["Clinical Trials", "Cardiovascular Outcomes", "Translational Research", "Epidemiology"]
+  },
+
+  "notes": [
+    "AHA flagship cardiovascular journal",
+    "NO pre-submission inquiries for ORAs",
+    "Independent statistical review for favorable submissions",
+    "PDF, EPS, TIFF for final figures",
+    "Appeals must be in writing",
+    "Frame of Reference pre-submission queries welcome",
+    "Impact factor 37.8"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

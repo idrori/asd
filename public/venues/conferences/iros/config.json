@@ -1,0 +1,104 @@
+{
+  "id": "iros",
+  "name": "IEEE/RSJ International Conference on Intelligent Robots and Systems",
+  "acronym": "IROS",
+  "venueType": "conference",
+  "category": "engineering-computer-science",
+  "subcategory": "automation-control-systems",
+  "year": 2025,
+  "h5Index": 85,
+  "website": "https://www.iros25.org/",
+  "description": "IROS is a premier international conference on intelligent robots and systems, bringing together researchers and practitioners from robotics, AI, and automation.",
+
+  "officialLinks": {
+    "callForPapers": "https://www.iros25.org/callforpapers",
+    "submissionInstructions": "https://www.iros25.org/CallForPapersv2",
+    "finalSubmission": "https://www.iros25.org/FinalSubmissions",
+    "submissionPortal": "https://ras.papercept.net/"
+  },
+
+  "paperLimits": {
+    "minPages": 6,
+    "maxPages": 8,
+    "referencesCountTowardLimit": true,
+    "minReferences": 15,
+    "maxReferences": 40,
+    "extraPagesAllowed": 2,
+    "extraPageCharge": true
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Related Work",
+      "Method",
+      "Experiments",
+      "Results",
+      "Conclusion",
+      "References"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": true,
+    "videoSubmissionAllowed": true,
+    "videoMaxDuration": 180,
+    "videoMaxSize": "10MB"
+  },
+
+  "template": {
+    "formatStyle": "ieee-ras",
+    "fontFamily": "Times",
+    "fontSize": 10,
+    "citationStyle": "ieee",
+    "lineSpacing": 1.0,
+    "paperSize": "letter",
+    "twoColumn": true,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 0,
+    "reviewType": "single-blind",
+    "dimensions": [
+      "novelty",
+      "technicalQuality",
+      "clarity",
+      "significance",
+      "experimentalValidation"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "IROS is a premier robotics conference jointly organized by IEEE and RSJ, covering intelligent robots and systems.",
+    "topJournals": ["IEEE TRO", "IJRR", "Autonomous Robots", "IEEE RAM"],
+    "topConferences": ["ICRA", "IROS", "RSS", "CoRL"],
+    "methodologyEmphasis": ["Intelligent Systems", "Robot Learning", "Perception", "Human-Robot Interaction"]
+  },
+
+  "notes": [
+    "Jointly organized by IEEE RAS and RSJ",
+    "Single-blind review (author names visible)",
+    "PaperPlaza submission system",
+    "Video submission encouraged (up to 180 sec)",
+    "Video must be submitted with initial paper",
+    "Oral + poster presentation style",
+    "AI tool use must be disclosed in acknowledgments",
+    "IROS 2025 in Hangzhou, China"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

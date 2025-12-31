@@ -1,0 +1,87 @@
+{
+  "id": "digital-journalism",
+  "name": "Digital Journalism",
+  "acronym": "DJ",
+  "venueType": "journal",
+  "category": "social-sciences",
+  "subcategory": "communication-media",
+  "year": 2025,
+  "h5Index": 65,
+  "website": "https://www.tandfonline.com/journals/rdij20",
+  "description": "Digital Journalism is the premier outlet for advancing international research into digital journalism studies, providing a critical forum for cutting-edge scholarship.",
+
+  "publisher": "Taylor & Francis",
+  "openAccess": false,
+  "publicationFrequency": "10 issues/year",
+  "averageReviewTime": "8-16 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.tandfonline.com/journals/rdij20",
+    "authorGuidelines": "https://www.tandfonline.com/journals/rdij20/about-this-journal"
+  },
+
+  "paperLimits": {
+    "minPages": 15,
+    "maxPages": 35,
+    "maxWords": 9000,
+    "referencesCountTowardLimit": false,
+    "minReferences": 40,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Literature Review", "Methodology", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true,
+    "articleTypes": ["original", "conceptual", "review", "advancing-methods"]
+  },
+
+  "template": {
+    "formatStyle": "taylor-francis",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "apa",
+    "lineSpacing": 2.0,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "dimensions": ["digitalJournalismRelevance", "methodologicalRigor", "novelty", "clarity", "interdisciplinaryContribution"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "Digital Journalism is the leading journal for digital journalism studies.",
+    "topJournals": ["Digital Journalism", "Journalism", "Journalism Studies", "New Media & Society"],
+    "methodologyEmphasis": ["Digital News", "Media Studies", "Journalism Practice", "Platform Studies"]
+  },
+
+  "notes": [
+    "Premier digital journalism studies journal",
+    "Launched 2013",
+    "CiteScore 13.2",
+    "Q1 SJR ranking",
+    "Article types: original (7k-9k), conceptual (4k), review (8k-12k), methods (4k)",
+    "2025 editorial agenda with 5 key dimensions",
+    "Guest-edited special issues"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

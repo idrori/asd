@@ -1,0 +1,86 @@
+{
+  "id": "appl-catal-b",
+  "name": "Applied Catalysis B: Environment and Energy",
+  "acronym": "Appl. Catal. B",
+  "venueType": "journal",
+  "category": "chemical-material-sciences",
+  "subcategory": "catalysis",
+  "year": 2025,
+  "h5Index": 190,
+  "website": "https://www.sciencedirect.com/journal/applied-catalysis-b-environment-and-energy",
+  "description": "Applied Catalysis B publishes high-impact contributions in thermo-, electro-, and photocatalysis for clean energy and sustainable environmental solutions.",
+
+  "publisher": "Elsevier",
+  "openAccess": false,
+  "impactFactor": 22.03,
+  "publicationFrequency": "continuous",
+  "averageReviewTime": "4-8 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.sciencedirect.com/journal/applied-catalysis-b-environment-and-energy/publish/guide-for-authors",
+    "authorGuidelines": "https://www.sciencedirect.com/journal/applied-catalysis-b-environment-and-energy/publish/guide-for-authors"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 20,
+    "referencesCountTowardLimit": false,
+    "minReferences": 40,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Experimental", "Results and Discussion", "Conclusion", "References", "Supporting Information"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "elsevier",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "elsevier-numbered",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "single-blind",
+    "dimensions": ["novelty", "catalyticSignificance", "environmentalImpact", "clarity", "mechanisticInsight"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "Applied Catalysis B is a premier journal for environmental and energy catalysis.",
+    "topJournals": ["Appl. Catal. B", "ACS Catalysis", "Journal of Catalysis", "Nature Catalysis"],
+    "methodologyEmphasis": ["Catalyst Synthesis", "Reaction Mechanisms", "Environmental Applications", "Energy Conversion"]
+  },
+
+  "notes": [
+    "Premier environmental catalysis journal",
+    "Impact factor 22.03",
+    "Perspective articles by invitation only",
+    "Covers thermo-, electro-, photocatalysis",
+    "2-day proofing turnaround required",
+    "Single-blind peer review",
+    "Q1 in Catalysis, Environmental Science"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

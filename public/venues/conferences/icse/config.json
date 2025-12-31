@@ -1,0 +1,102 @@
+{
+  "id": "icse",
+  "name": "IEEE/ACM International Conference on Software Engineering",
+  "acronym": "ICSE",
+  "venueType": "conference",
+  "category": "engineering-computer-science",
+  "subcategory": "software-systems",
+  "year": 2025,
+  "h5Index": 74,
+  "website": "https://conf.researchr.org/home/icse-2025",
+  "description": "ICSE is the premier software engineering conference, bringing together researchers, practitioners, and educators to share advances in software engineering.",
+
+  "officialLinks": {
+    "callForPapers": "https://conf.researchr.org/track/icse-2025/icse-2025-research-track",
+    "submissionInstructions": "https://conf.researchr.org/track/icse-2025/icse-2025-research-track",
+    "journalFirstPapers": "https://conf.researchr.org/track/icse-2025/icse-2025-journal-first-papers",
+    "submissionPortal": "https://icse2025.hotcrp.com/"
+  },
+
+  "paperLimits": {
+    "minPages": 10,
+    "maxPages": 12,
+    "referencesCountTowardLimit": false,
+    "minReferences": 20,
+    "maxReferences": 60
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Background",
+      "Approach",
+      "Evaluation",
+      "Related Work",
+      "Threats to Validity",
+      "Conclusion",
+      "References"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "ieee-conference",
+    "fontFamily": "Times",
+    "fontSize": 10,
+    "citationStyle": "ieee",
+    "lineSpacing": 1.0,
+    "paperSize": "letter",
+    "twoColumn": true,
+    "anonymousSubmission": true,
+    "latexClass": "IEEEtran"
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 0,
+    "reviewType": "double-blind",
+    "dimensions": [
+      "novelty",
+      "technicalQuality",
+      "significance",
+      "clarity",
+      "evaluation"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "ICSE is the flagship conference in software engineering, celebrating 50 years in 2025.",
+    "topJournals": ["IEEE TSE", "ACM TOSEM", "EMSE", "JSS"],
+    "topConferences": ["ICSE", "FSE", "ASE", "ISSTA"],
+    "methodologyEmphasis": ["Empirical Studies", "Tool Development", "Human Studies", "Formal Methods"]
+  },
+
+  "notes": [
+    "Premier software engineering conference",
+    "Jointly sponsored by IEEE and ACM",
+    "Double-blind review process",
+    "IEEE conference proceedings format",
+    "50th anniversary in 2025",
+    "Published in ACM DL and IEEE DL",
+    "AI use must be disclosed",
+    "No compsoc LaTeX options allowed",
+    "ICSE 2025 in Ottawa, Canada"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

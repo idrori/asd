@@ -1,0 +1,88 @@
+{
+  "id": "acs-catal",
+  "name": "ACS Catalysis",
+  "acronym": "ACS Catal.",
+  "venueType": "journal",
+  "category": "chemical-material-sciences",
+  "subcategory": "catalysis",
+  "year": 2025,
+  "h5Index": 185,
+  "website": "https://pubs.acs.org/journal/accacs",
+  "description": "ACS Catalysis publishes original research on heterogeneous catalysis, homogeneous catalysis, and biocatalysis.",
+
+  "publisher": "American Chemical Society",
+  "openAccess": false,
+  "impactFactor": 13.7,
+  "publicationFrequency": "biweekly",
+  "averageReviewTime": "4-8 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://pubs.acs.org/page/accacs/submission/authors.html",
+    "authorGuidelines": "https://researcher-resources.acs.org/publish/author_guidelines?coden=accacs",
+    "submissionPortal": "https://publish.acs.org/"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 15,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Results and Discussion", "Conclusion", "Experimental Section", "References", "Supporting Information"],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": true,
+    "tocGraphicRequired": true
+  },
+
+  "template": {
+    "formatStyle": "acs",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "acs",
+    "lineSpacing": 2.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "single-blind",
+    "dimensions": ["novelty", "catalyticAdvance", "mechanisticInsight", "clarity", "experimentalRigor"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "ACS Catalysis is a leading journal for catalysis research.",
+    "topJournals": ["ACS Catalysis", "Nature Catalysis", "Journal of Catalysis", "Applied Catalysis B"],
+    "methodologyEmphasis": ["Heterogeneous Catalysis", "Homogeneous Catalysis", "Biocatalysis", "Mechanism Studies"]
+  },
+
+  "notes": [
+    "Leading ACS catalysis journal",
+    "Cover letter must explain why appropriate for journal",
+    "Suggest 4 reviewers from different countries",
+    "TOC graphic required",
+    "CIF files for crystal structures",
+    "Cover art submissions encouraged",
+    "Impact factor 13.7"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

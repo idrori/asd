@@ -1,0 +1,86 @@
+{
+  "id": "csf",
+  "name": "Chaos, Solitons & Fractals",
+  "acronym": "CSF",
+  "venueType": "journal",
+  "category": "physics-astronomy",
+  "subcategory": "mathematical-physics",
+  "year": 2025,
+  "h5Index": 110,
+  "website": "https://www.sciencedirect.com/journal/chaos-solitons-and-fractals",
+  "description": "Chaos, Solitons & Fractals is the leading journal in interdisciplinary Nonlinear Science, publishing research on chaos theory, fractals, and complex systems.",
+
+  "publisher": "Elsevier",
+  "openAccess": false,
+  "impactFactor": 5.87,
+  "publicationFrequency": "monthly",
+  "averageReviewTime": "8-16 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.sciencedirect.com/journal/chaos-solitons-and-fractals/publish/guide-for-authors",
+    "authorGuidelines": "https://www.sciencedirect.com/journal/chaos-solitons-and-fractals/publish/guide-for-authors"
+  },
+
+  "paperLimits": {
+    "minPages": 10,
+    "maxPages": 30,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Mathematical Formulation", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "elsevier",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "elsevier-numbered",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "single-blind",
+    "dimensions": ["mathematicalNovelty", "physicalInsight", "interdisciplinaryImpact", "clarity", "technicalQuality"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "CSF is the leading journal for nonlinear science and chaos theory.",
+    "topJournals": ["Chaos, Solitons & Fractals", "Nonlinear Dynamics", "Physical Review E", "Communications in Nonlinear Science"],
+    "methodologyEmphasis": ["Chaos Theory", "Fractals", "Complex Systems", "Nonlinear Dynamics"]
+  },
+
+  "notes": [
+    "Leading interdisciplinary nonlinear science journal",
+    "Impact factor 5.87",
+    "h-index 175",
+    "Single-blind review with 2+ reviewers",
+    "Mathematical papers need physical insight",
+    "Excellent English required",
+    "Published 1293 articles in 2024"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

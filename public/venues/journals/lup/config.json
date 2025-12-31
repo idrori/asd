@@ -1,0 +1,23 @@
+{
+  "id": "lup",
+  "name": "Land Use Policy",
+  "acronym": "LUP",
+  "venueType": "journal",
+  "category": "social-sciences",
+  "subcategory": "environmental-policy",
+  "year": 2025,
+  "h5Index": 95,
+  "website": "https://www.sciencedirect.com/journal/land-use-policy",
+  "description": "Land Use Policy publishes research on the social, economic, political, legal, physical, and planning aspects of urban and rural land use.",
+  "publisher": "Elsevier",
+  "impactFactor": 6.6,
+  "publicationFrequency": "monthly",
+  "officialLinks": {"submissionInstructions": "https://www.sciencedirect.com/journal/land-use-policy/publish/guide-for-authors"},
+  "paperLimits": {"minPages": 12, "maxPages": 30, "minReferences": 40, "maxReferences": 100},
+  "paperStructure": {"sections": ["Abstract", "Introduction", "Literature Review", "Methodology", "Results", "Discussion", "Policy Implications", "Conclusion", "References"], "abstractRequired": true},
+  "template": {"formatStyle": "elsevier", "citationStyle": "author-year", "anonymousSubmission": true},
+  "review": {"reviewType": "double-blind"},
+  "prompts": {"builder": "builder.txt", "reviewer": "reviewer.txt", "supervisor": "supervisor.txt", "reviser": "reviser.txt", "finalize": "finalize.txt", "setup": "setup.txt", "template": "template.txt"},
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

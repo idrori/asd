@@ -1,0 +1,86 @@
+{
+  "id": "ijerph",
+  "name": "International Journal of Environmental Research and Public Health",
+  "acronym": "IJERPH",
+  "venueType": "journal",
+  "category": "health-medical-sciences",
+  "subcategory": "public-health",
+  "year": 2025,
+  "h5Index": 258,
+  "website": "https://www.mdpi.com/journal/ijerph",
+  "description": "IJERPH is an open access journal covering global health, environmental health, healthcare sciences, behavioral health, and disease prevention.",
+
+  "publisher": "MDPI",
+  "openAccess": true,
+  "impactFactor": 4.6,
+  "publicationFrequency": "monthly",
+  "averageReviewTime": "4-6 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.mdpi.com/journal/ijerph/instructions",
+    "authorGuidelines": "https://www.mdpi.com/journal/ijerph/instructions",
+    "journalPage": "https://www.mdpi.com/journal/ijerph/about"
+  },
+
+  "paperLimits": {
+    "minPages": 6,
+    "maxPages": 30,
+    "referencesCountTowardLimit": false,
+    "minReferences": 20,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Keywords", "Introduction", "Materials and Methods", "Results", "Discussion", "Conclusions", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "mdpi",
+    "fontFamily": "Palatino",
+    "fontSize": 10,
+    "citationStyle": "mdpi",
+    "lineSpacing": 1.0,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 3.5,
+    "maxRevisionRounds": 2,
+    "dimensions": ["novelty", "methodologicalRigor", "publicHealthRelevance", "clarity", "reproducibility"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "IJERPH covers environmental and public health research with global scope.",
+    "topJournals": ["IJERPH", "Environmental Health Perspectives", "BMC Public Health"],
+    "methodologyEmphasis": ["Epidemiology", "Environmental Health", "Public Health Policy", "Global Health"]
+  },
+
+  "notes": [
+    "Transdisciplinary open access journal",
+    "Established 2004",
+    "CC BY license",
+    "Indexed in Scopus, PubMed, MEDLINE",
+    "No length restrictions",
+    "MDPI template available",
+    "Author biography encouraged"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

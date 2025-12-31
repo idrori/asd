@@ -1,0 +1,86 @@
+{
+  "id": "cmame",
+  "name": "Computer Methods in Applied Mechanics and Engineering",
+  "acronym": "CMAME",
+  "venueType": "journal",
+  "category": "engineering-computer-science",
+  "subcategory": "computational-mechanics",
+  "year": 2025,
+  "h5Index": 130,
+  "website": "https://www.sciencedirect.com/journal/computer-methods-in-applied-mechanics-and-engineering",
+  "description": "CMAME publishes original papers at the forefront of modern research describing significant developments of computational methods in solving problems of applied mechanics and engineering.",
+
+  "publisher": "Elsevier",
+  "openAccess": false,
+  "impactFactor": 8.14,
+  "publicationFrequency": "biweekly",
+  "averageReviewTime": "8-16 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.sciencedirect.com/journal/computer-methods-in-applied-mechanics-and-engineering/publish/guide-for-authors",
+    "authorGuidelines": "https://www.sciencedirect.com/journal/computer-methods-in-applied-mechanics-and-engineering/publish/guide-for-authors"
+  },
+
+  "paperLimits": {
+    "minPages": 15,
+    "maxPages": 40,
+    "referencesCountTowardLimit": false,
+    "minReferences": 40,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Mathematical Formulation", "Numerical Methods", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "elsevier",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "elsevier-numbered",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "single-blind",
+    "dimensions": ["methodologicalNovelty", "mathematicalRigor", "computationalEfficiency", "clarity", "engineeringRelevance"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "CMAME is a premier journal for computational mechanics and engineering methods.",
+    "topJournals": ["CMAME", "Journal of Computational Physics", "International Journal for Numerical Methods in Engineering", "Computational Mechanics"],
+    "methodologyEmphasis": ["Finite Element Methods", "Numerical Analysis", "Applied Mathematics", "Mathematical Optimization"]
+  },
+
+  "notes": [
+    "Premier computational mechanics journal",
+    "Impact factor 8.14",
+    "h-index 246",
+    "Single-blind review",
+    "No review/survey papers",
+    "Abbreviation: Comput. Methods Appl. Mech. Eng.",
+    "Publishing since 1972"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

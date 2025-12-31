@@ -1,0 +1,23 @@
+{
+  "id": "journalism-studies",
+  "name": "Journalism Studies",
+  "acronym": "JS",
+  "venueType": "journal",
+  "category": "social-sciences",
+  "subcategory": "communication-media",
+  "year": 2025,
+  "h5Index": 60,
+  "website": "https://www.tandfonline.com/journals/rjos20",
+  "description": "Journalism Studies provides an international forum for the critical study of journalism.",
+  "publisher": "Taylor & Francis",
+  "openAccess": false,
+  "publicationFrequency": "16 issues/year",
+  "officialLinks": {"submissionInstructions": "https://www.tandfonline.com/journals/rjos20"},
+  "paperLimits": {"minPages": 15, "maxPages": 35, "minReferences": 40, "maxReferences": 80},
+  "paperStructure": {"sections": ["Abstract", "Introduction", "Literature Review", "Methodology", "Findings", "Discussion", "Conclusion", "References"], "abstractRequired": true},
+  "template": {"formatStyle": "taylor-francis", "citationStyle": "apa", "anonymousSubmission": true},
+  "review": {"reviewType": "double-blind"},
+  "prompts": {"builder": "builder.txt", "reviewer": "reviewer.txt", "supervisor": "supervisor.txt", "reviser": "reviser.txt", "finalize": "finalize.txt", "setup": "setup.txt", "template": "template.txt"},
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

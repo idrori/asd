@@ -1,0 +1,91 @@
+{
+  "id": "jfe",
+  "name": "Journal of Financial Economics",
+  "acronym": "JFE",
+  "venueType": "journal",
+  "category": "business-economics-management",
+  "subcategory": "finance",
+  "year": 2025,
+  "h5Index": 145,
+  "website": "https://www.jfinec.com/",
+  "description": "JFE provides a specialized forum for publishing research in all areas of financial economics including corporate finance, investments, money and banking, and financial markets.",
+
+  "publisher": "Elsevier",
+  "openAccess": false,
+  "publicationFrequency": "monthly",
+  "averageReviewTime": "16 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.jfinec.com/submissions",
+    "authorGuidelines": "https://www.sciencedirect.com/journal/journal-of-financial-economics/publish/guide-for-authors",
+    "acceptedPaperInstructions": "https://www.jfinec.com/accepted-paper-instructions"
+  },
+
+  "paperLimits": {
+    "minPages": 20,
+    "maxPages": 50,
+    "referencesCountTowardLimit": false,
+    "minReferences": 40,
+    "maxReferences": 100,
+    "abstractMaxWords": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Literature Review", "Data", "Methodology", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 100,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "elsevier",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "author-year",
+    "lineSpacing": 2.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": true,
+    "margins": "1 inch"
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "maxDaysToDecision": 120,
+    "dimensions": ["financeContribution", "methodologicalRigor", "novelty", "clarity", "dataQuality"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "JFE is a premier finance journal.",
+    "topJournals": ["JFE", "Journal of Finance", "Review of Financial Studies", "Journal of Monetary Economics"],
+    "methodologyEmphasis": ["Empirical Finance", "Corporate Finance", "Asset Pricing", "Financial Markets"]
+  },
+
+  "notes": [
+    "Premier finance journal",
+    "No page charges",
+    "120-day decision guarantee (refund if exceeded)",
+    "No reject-and-resubmit decisions",
+    "Resubmissions of rejected papers will be desk rejected",
+    "2-year ban for resubmitting rejected papers",
+    "Online appendix at end of main file",
+    "High-res figures avoided for initial submission",
+    "Data/code upload to Mendeley encouraged"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

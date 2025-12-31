@@ -1,0 +1,85 @@
+{
+  "id": "jbe",
+  "name": "Journal of Business Ethics",
+  "acronym": "JBE",
+  "venueType": "journal",
+  "category": "business-economics-management",
+  "subcategory": "business-ethics",
+  "year": 2025,
+  "h5Index": 115,
+  "website": "https://link.springer.com/journal/10551",
+  "description": "JBE provides a public forum for discussion and debate about ethical issues related to business with emphasis on business ethics.",
+
+  "publisher": "Springer",
+  "openAccess": false,
+  "publicationFrequency": "28 issues/year",
+  "averageReviewTime": "12-20 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://link.springer.com/journal/10551/submission-guidelines",
+    "authorGuidelines": "https://link.springer.com/journal/10551/submission-guidelines"
+  },
+
+  "paperLimits": {
+    "minPages": 15,
+    "maxPages": 35,
+    "referencesCountTowardLimit": false,
+    "minReferences": 40,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Literature Review", "Theoretical Framework", "Methodology", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "springer",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "author-year",
+    "lineSpacing": 2.0,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "dimensions": ["ethicalContribution", "methodologicalRigor", "novelty", "clarity", "practicalImplications"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "JBE is a premier journal for business ethics research.",
+    "topJournals": ["Journal of Business Ethics", "Business Ethics Quarterly", "Business & Society", "Journal of Business Research"],
+    "methodologyEmphasis": ["Normative Ethics", "Empirical Research", "Stakeholder Theory", "Corporate Responsibility"]
+  },
+
+  "notes": [
+    "Premier business ethics journal",
+    "30+ sections",
+    "Double-blind review",
+    "Acknowledgments in title page only",
+    "Remove preprints with similar titles if possible",
+    "No brief discussion notes",
+    "4 special issues per year"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

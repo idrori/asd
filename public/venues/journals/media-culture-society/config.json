@@ -1,0 +1,22 @@
+{
+  "id": "media-culture-society",
+  "name": "Media, Culture & Society",
+  "acronym": "MCS",
+  "venueType": "journal",
+  "category": "social-sciences",
+  "subcategory": "communication-media",
+  "year": 2025,
+  "h5Index": 55,
+  "website": "https://journals.sagepub.com/home/mcs",
+  "description": "Media, Culture & Society provides a forum for critical analysis of the role of media and communications in contemporary societies.",
+  "publisher": "SAGE Publications",
+  "publicationFrequency": "8 issues/year",
+  "officialLinks": {"submissionInstructions": "https://journals.sagepub.com/author-instructions/mcs"},
+  "paperLimits": {"minPages": 15, "maxPages": 30, "minReferences": 40, "maxReferences": 80},
+  "paperStructure": {"sections": ["Abstract", "Introduction", "Literature Review", "Methodology", "Analysis", "Discussion", "Conclusion", "References"], "abstractRequired": true},
+  "template": {"formatStyle": "sage", "citationStyle": "author-year", "anonymousSubmission": true},
+  "review": {"reviewType": "double-blind"},
+  "prompts": {"builder": "builder.txt", "reviewer": "reviewer.txt", "supervisor": "supervisor.txt", "reviser": "reviser.txt", "finalize": "finalize.txt", "setup": "setup.txt", "template": "template.txt"},
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

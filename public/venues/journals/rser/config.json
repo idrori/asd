@@ -1,0 +1,87 @@
+{
+  "id": "rser",
+  "name": "Renewable and Sustainable Energy Reviews",
+  "acronym": "RSER",
+  "venueType": "journal",
+  "category": "engineering-computer-science",
+  "subcategory": "sustainable-energy",
+  "year": 2025,
+  "h5Index": 240,
+  "website": "https://www.sciencedirect.com/journal/renewable-and-sustainable-energy-reviews",
+  "description": "RSER shares problems, solutions, novel ideas and technologies to support the transition to a low carbon future through renewable and sustainable energy research.",
+
+  "publisher": "Elsevier",
+  "openAccess": false,
+  "impactFactor": 16.3,
+  "publicationFrequency": "monthly",
+  "averageReviewTime": "65 days to first decision, 256 days to acceptance",
+  "apcOpenAccess": 4210,
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.sciencedirect.com/journal/renewable-and-sustainable-energy-reviews/publish/guide-for-authors",
+    "authorGuidelines": "https://www.sciencedirect.com/journal/renewable-and-sustainable-energy-reviews/publish/guide-for-authors",
+    "submissionPortal": "https://www.editorialmanager.com/rser/default.aspx"
+  },
+
+  "paperLimits": {
+    "minPages": 15,
+    "maxPages": 40,
+    "referencesCountTowardLimit": false,
+    "minReferences": 80,
+    "maxReferences": 200
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Literature Review", "Methodology", "Analysis", "Discussion", "Conclusions", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 300,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "elsevier",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "elsevier-numbered",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "dimensions": ["comprehensiveness", "novelty", "energyRelevance", "clarity", "criticalAnalysis"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "RSER publishes reviews and research on renewable energy supporting the low carbon transition.",
+    "topJournals": ["RSER", "Energy", "Applied Energy", "Renewable Energy"],
+    "methodologyEmphasis": ["Energy Systems Analysis", "Technology Assessment", "Policy Analysis", "Life Cycle Assessment"]
+  },
+
+  "notes": [
+    "Leading renewable energy reviews journal",
+    "Impact factor 16.3",
+    "Review papers with significant review element",
+    "Covers biomass, solar, wind, hydro, geothermal",
+    "OA APC: $4,210",
+    "9 days acceptance to publication",
+    "Editorial Manager submission"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

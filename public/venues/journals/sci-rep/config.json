@@ -1,0 +1,105 @@
+{
+  "id": "sci-rep",
+  "name": "Scientific Reports",
+  "acronym": "Sci. Rep.",
+  "venueType": "journal",
+  "category": "life-sciences-earth-sciences",
+  "subcategory": "multidisciplinary",
+  "year": 2025,
+  "h5Index": 234,
+  "website": "https://www.nature.com/srep/",
+  "description": "Scientific Reports is an open access Nature Portfolio journal publishing research from the natural sciences, psychology, medicine, and engineering.",
+
+  "publisher": "Springer Nature",
+  "openAccess": true,
+  "impactFactor": 3.9,
+  "publicationFrequency": "continuous",
+  "averageReviewTime": "102 days median",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.nature.com/srep/author-instructions/submission-guidelines",
+    "authorGuidelines": "https://www.nature.com/srep/author-instructions",
+    "beforeYouSubmit": "https://www.nature.com/srep/author-instructions/before-you-submit",
+    "editorialPolicies": "https://www.nature.com/srep/journal-policies/editorial-policies",
+    "submissionPortal": "https://www.nature.com/srep/author-instructions/ready-to-submit"
+  },
+
+  "paperLimits": {
+    "minPages": 6,
+    "maxPages": 25,
+    "referencesCountTowardLimit": false,
+    "minReferences": 20,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Results",
+      "Discussion",
+      "Methods",
+      "Data Availability",
+      "References"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": true,
+    "keywordsCount": { "min": 1, "max": 6 },
+    "dataAvailabilityRequired": true
+  },
+
+  "template": {
+    "formatStyle": "nature",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "nature",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 3.5,
+    "maxRevisionRounds": 2,
+    "dimensions": [
+      "technicalValidity",
+      "clarity",
+      "reproducibility",
+      "dataAvailability",
+      "ethicalCompliance"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "Scientific Reports is a high-volume, open access journal from Nature Portfolio focused on technical validity rather than perceived impact.",
+    "topJournals": ["Nature", "Nature Communications", "Scientific Reports", "PLOS ONE"],
+    "methodologyEmphasis": ["Technical Validity", "Reproducibility", "Data Sharing", "Ethical Compliance"]
+  },
+
+  "notes": [
+    "3rd most-cited journal in the world",
+    "Open access - APC required",
+    "Does not support graphical abstracts",
+    "Data Availability Statement required",
+    "Competing interests statement required for all authors",
+    "LLM use must be documented in Methods",
+    "High-res images (300 DPI) only for accepted papers",
+    "Impact factor 3.9"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

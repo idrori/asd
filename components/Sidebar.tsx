@@ -243,26 +243,6 @@ const Sidebar: React.FC<SidebarProps> = ({
           </button>
         </div>
 
-        {/* Voice Interview Button */}
-        {onNewInterview && (
-          <button
-            onClick={onNewInterview}
-            className="w-full px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded transition-colors"
-          >
-            Voice Interview
-          </button>
-        )}
-
-        {/* Paper to Interview Button */}
-        {onPaperToInterview && (
-          <button
-            onClick={onPaperToInterview}
-            className="w-full px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded transition-colors"
-          >
-            Paper to Interview
-          </button>
-        )}
-
         {/* New Project Button */}
         {onNewCase && (
           <button

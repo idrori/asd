@@ -1,0 +1,86 @@
+{
+  "id": "nano-energy",
+  "name": "Nano Energy",
+  "acronym": "Nano Energy",
+  "venueType": "journal",
+  "category": "engineering-computer-science",
+  "subcategory": "sustainable-energy",
+  "year": 2025,
+  "h5Index": 175,
+  "website": "https://www.sciencedirect.com/journal/nano-energy",
+  "description": "Nano Energy covers nanomaterials and nanodevices for energy harvesting, conversion, storage, utilization and policy.",
+
+  "publisher": "Elsevier",
+  "openAccess": false,
+  "apc": 5470,
+  "impactFactor": 17.6,
+  "publicationFrequency": "monthly",
+  "averageReviewTime": "6-10 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.elsevier.com/journals/nano-energy/2211-2855/guide-for-authors",
+    "authorGuidelines": "https://www.elsevier.com/journals/nano-energy/2211-2855/guide-for-authors"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 20,
+    "referencesCountTowardLimit": false,
+    "minReferences": 40,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Experimental", "Results and Discussion", "Conclusion", "References", "Supporting Information"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "elsevier",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "elsevier-numbered",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "dimensions": ["novelty", "nanoEnergySignificance", "technicalQuality", "clarity", "devicePerformance"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "Nano Energy covers nanotechnology for energy applications.",
+    "topJournals": ["Nano Energy", "Advanced Energy Materials", "Energy & Environmental Science", "Joule"],
+    "methodologyEmphasis": ["Nanomaterials", "Device Fabrication", "Energy Conversion", "Storage Systems"]
+  },
+
+  "notes": [
+    "Premier nano-energy journal",
+    "APC: USD 5,470",
+    "Double-blind peer review",
+    "AI tools allowed (not for reviewers)",
+    "Competing interests disclosure required",
+    "Impact factor 17.6"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

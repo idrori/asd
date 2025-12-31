@@ -161,6 +161,10 @@ Is this the correct data file for your analysis?`;
             dataFileName={getDataFileName()}
             dataFileContent={getDataFileContent()}
             participantEmail={getParticipantEmail() || undefined}
+            onNewInterview={() => {
+              const baseUrl = import.meta.env.BASE_URL || '/';
+              window.open(`${baseUrl}interview.html?mode=${paperMode}`, '_blank', 'noopener,noreferrer');
+            }}
           />
         )}
       </div>

@@ -1,0 +1,88 @@
+{
+  "id": "plos-one",
+  "name": "PLOS ONE",
+  "acronym": "PLOS ONE",
+  "venueType": "journal",
+  "category": "health-medical-sciences",
+  "subcategory": "health-medical-sciences-general",
+  "year": 2025,
+  "h5Index": 244,
+  "website": "https://journals.plos.org/plosone/",
+  "description": "PLOS ONE is an inclusive journal community working together to advance science for the benefit of society, publishing peer-reviewed research across all disciplines.",
+
+  "publisher": "PLOS",
+  "openAccess": true,
+  "publicationFrequency": "continuous",
+  "averageReviewTime": "24 weeks submission to publication",
+
+  "officialLinks": {
+    "submissionInstructions": "https://journals.plos.org/plosone/s/submission-guidelines",
+    "authorGuidelines": "https://journals.plos.org/plosone/s/criteria-for-publication",
+    "submissionPortal": "https://www.editorialmanager.com/pone/default.aspx"
+  },
+
+  "paperLimits": {
+    "minPages": 6,
+    "maxPages": 30,
+    "referencesCountTowardLimit": false,
+    "minReferences": 20,
+    "maxReferences": 100,
+    "titleMaxChars": 250,
+    "shortTitleMaxChars": 50
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Materials and Methods", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 300,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "plos",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "plos-numbered",
+    "lineSpacing": 2.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 3.5,
+    "maxRevisionRounds": 2,
+    "dimensions": ["scientificValidity", "methodologicalRigor", "ethicalStandards", "clarity", "dataAvailability"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "PLOS ONE publishes scientifically rigorous research regardless of perceived impact.",
+    "topJournals": ["PLOS ONE", "Scientific Reports", "PeerJ"],
+    "methodologyEmphasis": ["Scientific Rigor", "Reproducibility", "Open Data", "Ethical Research"]
+  },
+
+  "notes": [
+    "Multidisciplinary open access journal",
+    "CC BY license",
+    "Preprint posting encouraged",
+    "Title max 250 characters",
+    "Short title max 50 characters",
+    "Numbered citation style",
+    "Funding info in submission system only",
+    "Do not cite unpublished work"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

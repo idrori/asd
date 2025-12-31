@@ -1,0 +1,86 @@
+{
+  "id": "chemosphere",
+  "name": "Chemosphere",
+  "acronym": "Chemosphere",
+  "venueType": "journal",
+  "category": "life-sciences-earth-sciences",
+  "subcategory": "environmental-sciences",
+  "year": 2025,
+  "h5Index": 200,
+  "website": "https://www.sciencedirect.com/journal/chemosphere",
+  "description": "Chemosphere covers environmental chemistry research since 1972, publishing investigations related to all aspects of environmental science and engineering.",
+
+  "publisher": "Elsevier",
+  "openAccess": false,
+  "impactFactor": 8.8,
+  "publicationFrequency": "biweekly",
+  "averageReviewTime": "3.9 months",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.sciencedirect.com/journal/chemosphere/publish/guide-for-authors",
+    "authorGuidelines": "https://www.sciencedirect.com/journal/chemosphere/publish/guide-for-authors"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 20,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": ["Title Page", "Anonymized Manuscript", "Abstract", "Introduction", "Materials and Methods", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true,
+    "titlePageSeparate": true
+  },
+
+  "template": {
+    "formatStyle": "elsevier",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "elsevier-numbered",
+    "lineSpacing": 2.0,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 3.5,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "dimensions": ["novelty", "environmentalRelevance", "methodologicalRigor", "clarity", "dataQuality"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "Chemosphere covers environmental chemistry research.",
+    "topJournals": ["Chemosphere", "Environmental Science & Technology", "STOTEN", "Environmental Pollution"],
+    "methodologyEmphasis": ["Environmental Chemistry", "Pollutant Analysis", "Toxicology", "Remediation"]
+  },
+
+  "notes": [
+    "Environmental chemistry journal since 1972",
+    "Double-blind review process",
+    "Title page and manuscript submitted separately",
+    "AI tools allowed with disclosure",
+    "Free preprint posting on SSRN",
+    "Single-column Word, LaTeX two-column allowed"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

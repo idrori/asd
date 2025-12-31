@@ -1,0 +1,89 @@
+{
+  "id": "chem-rev",
+  "name": "Chemical Reviews",
+  "acronym": "Chem. Rev.",
+  "venueType": "journal",
+  "category": "chemical-material-sciences",
+  "subcategory": "chemical-material-sciences-general",
+  "year": 2025,
+  "h5Index": 283,
+  "website": "https://pubs.acs.org/journal/chreay",
+  "description": "Chemical Reviews publishes comprehensive review articles covering all areas of chemistry, providing critical evaluation of existing literature.",
+
+  "publisher": "American Chemical Society",
+  "openAccess": false,
+  "impactFactor": 62.1,
+  "publicationFrequency": "biweekly",
+  "averageReviewTime": "12-24 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://researcher-resources.acs.org/publish/author_guidelines?coden=chreay",
+    "authorGuidelines": "https://pubs.acs.org/page/chreay/submission/authors.html",
+    "submissionPortal": "https://publish.acs.org/"
+  },
+
+  "paperLimits": {
+    "minPages": 30,
+    "maxPages": 100,
+    "referencesCountTowardLimit": false,
+    "minReferences": 100,
+    "maxReferences": 500
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Topic Sections", "Conclusions and Outlook", "Author Information", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": true,
+    "tocGraphicRequired": true
+  },
+
+  "template": {
+    "formatStyle": "acs",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "acs",
+    "lineSpacing": 2.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "single-blind",
+    "dimensions": ["comprehensiveness", "criticalAnalysis", "significance", "clarity", "currentness"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "Chemical Reviews is the highest-impact chemistry review journal from ACS.",
+    "topJournals": ["Chemical Reviews", "Chem. Soc. Rev.", "Nature Reviews Chemistry", "Annual Review of Physical Chemistry"],
+    "methodologyEmphasis": ["Comprehensive Coverage", "Critical Evaluation", "Historical Context", "Future Perspectives"]
+  },
+
+  "notes": [
+    "Premier chemistry review journal",
+    "Requires proposal submission first",
+    "Use ACS proposal template",
+    "TOC graphic required",
+    "Preprints allowed",
+    "AI tools must be disclosed",
+    "iThenticate plagiarism screening",
+    "Impact factor 62.1"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

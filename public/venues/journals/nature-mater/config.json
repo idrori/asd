@@ -1,0 +1,88 @@
+{
+  "id": "nature-mater",
+  "name": "Nature Materials",
+  "acronym": "Nat. Mater.",
+  "venueType": "journal",
+  "category": "engineering-computer-science",
+  "subcategory": "materials-engineering",
+  "year": 2025,
+  "h5Index": 200,
+  "website": "https://www.nature.com/nmat/",
+  "description": "Nature Materials publishes high-quality research across all areas of materials science and engineering.",
+
+  "publisher": "Springer Nature",
+  "openAccess": false,
+  "impactFactor": 41.2,
+  "publicationFrequency": "monthly",
+  "averageReviewTime": "8-16 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.nature.com/nmat/submission-guidelines",
+    "authorGuidelines": "https://www.nature.com/nmat/submission-guidelines/preparing-your-submission",
+    "editorialProcess": "https://www.nature.com/nmat/submission-guidelines/editorial-process"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 20,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 80,
+    "extendedDataFigures": 10
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Results", "Discussion", "Methods", "Data Availability", "References", "Extended Data"],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": false
+  },
+
+  "template": {
+    "formatStyle": "nature",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "nature",
+    "lineSpacing": 2.0,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "dimensions": ["novelty", "materialsSignificance", "technicalRigor", "clarity", "broadImpact"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "Nature Materials is a premier materials science journal from Nature Portfolio.",
+    "topJournals": ["Nature Materials", "Advanced Materials", "Nature Nanotechnology", "ACS Nano"],
+    "methodologyEmphasis": ["Novel Materials", "Structure-Property Relations", "Applications", "Characterization"]
+  },
+
+  "notes": [
+    "Premier Nature Portfolio materials journal",
+    "Cover letter explaining importance required",
+    "Word or TeX/LaTeX (no PDFs)",
+    "LLMs cannot be authors",
+    "Papers edited for non-specialist accessibility",
+    "Protocols can be deposited at protocols.io",
+    "No authorship changes after acceptance",
+    "Impact factor 41.2"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

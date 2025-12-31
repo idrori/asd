@@ -1,0 +1,90 @@
+{
+  "id": "jbr",
+  "name": "Journal of Business Research",
+  "acronym": "JBR",
+  "venueType": "journal",
+  "category": "business-economics-management",
+  "subcategory": "marketing",
+  "year": 2025,
+  "h5Index": 239,
+  "website": "https://www.sciencedirect.com/journal/journal-of-business-research",
+  "description": "JBR publishes rigorous, relevant, and potentially impactful research examining business decision contexts, processes and activities.",
+
+  "publisher": "Elsevier",
+  "openAccess": false,
+  "apc": 4420,
+  "publicationFrequency": "monthly",
+  "averageReviewTime": "25 days for review",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.elsevier.com/journals/journal-of-business-research/01482963/guide-for-authors",
+    "authorGuidelines": "https://www.sciencedirect.com/journal/journal-of-business-research/publish/guide-for-authors"
+  },
+
+  "paperLimits": {
+    "minPages": 15,
+    "maxPages": 45,
+    "referencesCountTowardLimit": false,
+    "minReferences": 40,
+    "maxReferences": 100,
+    "finalWordLimit": 8000
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Keywords", "Introduction", "Literature Review", "Methodology", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 150,
+    "keywordsRequired": true,
+    "keywordsCount": {"min": 4, "max": 6}
+  },
+
+  "template": {
+    "formatStyle": "elsevier-business",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "apa",
+    "lineSpacing": 2.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": true,
+    "margins": "1 inch"
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 3.5,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "dimensions": ["rigor", "relevance", "impact", "clarity", "contribution"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "JBR examines business decision contexts across accounting, finance, management, and marketing.",
+    "topJournals": ["JBR", "Journal of Marketing", "Journal of Consumer Research", "Strategic Management Journal"],
+    "methodologyEmphasis": ["Quantitative Analysis", "Survey Research", "Experimental Design", "Mixed Methods"]
+  },
+
+  "notes": [
+    "Double-blind review process",
+    "Max 45 pages double-spaced",
+    "Final papers typically <8000 words",
+    "Abstract max 150 words",
+    "4-6 keywords required",
+    "Tables/refs on separate pages",
+    "Inclusive language required",
+    "APC: USD 4,420"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

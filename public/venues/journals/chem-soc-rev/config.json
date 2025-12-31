@@ -1,0 +1,87 @@
+{
+  "id": "chem-soc-rev",
+  "name": "Chemical Society Reviews",
+  "acronym": "Chem. Soc. Rev.",
+  "venueType": "journal",
+  "category": "chemical-material-sciences",
+  "subcategory": "chemical-material-sciences-general",
+  "year": 2025,
+  "h5Index": 260,
+  "website": "https://pubs.rsc.org/en/journals/journal/CS",
+  "description": "Chem Soc Rev is the Royal Society of Chemistry's leading reviews journal, publishing high-impact, authoritative review articles covering the chemical sciences.",
+
+  "publisher": "Royal Society of Chemistry",
+  "openAccess": false,
+  "impactFactor": 39.3,
+  "publicationFrequency": "biweekly",
+  "averageReviewTime": "47 days to first decision",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.rsc.org/publishing/publish-with-us/publish-a-journal-article/chem-soc-rev",
+    "authorGuidelines": "https://www.rsc.org/publishing/journals/chem-soc-rev",
+    "journalPage": "https://www.rsc.org/journals-books-databases/about-journals/chem-soc-rev/"
+  },
+
+  "paperLimits": {
+    "minPages": 20,
+    "maxPages": 60,
+    "referencesCountTowardLimit": false,
+    "minReferences": 100,
+    "maxReferences": 400
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Topic Sections", "Conclusions and Outlook", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "rsc",
+    "fontFamily": "Times",
+    "fontSize": 10,
+    "citationStyle": "rsc",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "dimensions": ["comprehensiveness", "criticalAnalysis", "internationalImpact", "clarity", "currentness"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "Chem Soc Rev is the RSC's flagship reviews journal with very high impact.",
+    "topJournals": ["Chem. Soc. Rev.", "Chemical Reviews", "Nature Reviews Chemistry", "Chem"],
+    "methodologyEmphasis": ["Critical Evaluation", "Comprehensive Coverage", "International Collaboration", "Multidisciplinary"]
+  },
+
+  "notes": [
+    "RSC's leading reviews journal",
+    "Most reviews solicited by editorial board",
+    "ScholarOne Manuscripts submission",
+    "Word, PDF or LaTeX accepted",
+    "Contact editorial office for unsolicited reviews",
+    "Language editing service available",
+    "CASSI abbreviations for references",
+    "Impact factor 39.3"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

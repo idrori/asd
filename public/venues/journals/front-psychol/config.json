@@ -1,0 +1,91 @@
+{
+  "id": "front-psychol",
+  "name": "Frontiers in Psychology",
+  "acronym": "Front. Psychol.",
+  "venueType": "journal",
+  "category": "social-sciences",
+  "subcategory": "psychology",
+  "year": 2025,
+  "h5Index": 130,
+  "website": "https://www.frontiersin.org/journals/psychology",
+  "description": "Frontiers in Psychology is a leading open-access journal publishing rigorously peer-reviewed research across the psychological sciences.",
+
+  "publisher": "Frontiers Media",
+  "openAccess": true,
+  "publicationFrequency": "continuous",
+  "averageReviewTime": "14 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.frontiersin.org/journals/psychology/for-authors/author-guidelines",
+    "authorGuidelines": "https://www.frontiersin.org/journals/psychology/for-authors/author-guidelines",
+    "submissionChecklist": "https://www.frontiersin.org/journals/psychology/for-authors/submission-checklist"
+  },
+
+  "paperLimits": {
+    "minPages": 10,
+    "maxPages": 30,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Materials and Methods", "Results", "Discussion", "Conclusion", "Author Contributions", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 350,
+    "keywordsRequired": true,
+    "minKeywords": 5,
+    "maxKeywords": 8
+  },
+
+  "template": {
+    "formatStyle": "frontiers",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "harvard",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "single-blind",
+    "dimensions": ["psychologicalContribution", "methodologicalRigor", "novelty", "clarity", "replicability"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "Frontiers in Psychology is a leading open-access psychology journal.",
+    "topJournals": ["Frontiers in Psychology", "Psychological Science", "Journal of Personality and Social Psychology", "Psychological Bulletin"],
+    "methodologyEmphasis": ["Experimental Psychology", "Clinical Psychology", "Cognitive Psychology", "Social Psychology"]
+  },
+
+  "notes": [
+    "Leading open-access psychology journal",
+    "CC BY license",
+    "77 days average decision time",
+    "14 weeks to publication",
+    "5-8 keywords required",
+    "200-word contribution statement required",
+    "Single-blind review",
+    "Supplementary materials get DOI via FigShare",
+    "Word or LaTeX templates required",
+    "Inclusive language policy"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

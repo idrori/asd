@@ -1,0 +1,87 @@
+{
+  "id": "amr",
+  "name": "Academy of Management Review",
+  "acronym": "AMR",
+  "venueType": "journal",
+  "category": "business-economics-management",
+  "subcategory": "management",
+  "year": 2025,
+  "h5Index": 115,
+  "website": "https://journals.aom.org/journal/amr",
+  "description": "AMR publishes theoretical insights that advance understanding of management and organizations through testable knowledge-based claims.",
+
+  "publisher": "Academy of Management",
+  "openAccess": false,
+  "publicationFrequency": "quarterly",
+  "averageReviewTime": "3-6 months",
+
+  "officialLinks": {
+    "submissionInstructions": "https://aom.org/research/publishing-with-aom/author-resources/submitting-to-review",
+    "authorGuidelines": "https://aom.org/research/publishing-with-aom/author-resources"
+  },
+
+  "paperLimits": {
+    "minPages": 20,
+    "maxPages": 30,
+    "referencesCountTowardLimit": false,
+    "minReferences": 40,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Theoretical Background", "Theory Development", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": true,
+    "formalPropositionsNotRequired": true
+  },
+
+  "template": {
+    "formatStyle": "aom",
+    "fontFamily": "Times New Roman",
+    "fontSize": 12,
+    "citationStyle": "aom",
+    "lineSpacing": 2.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "dimensions": ["theoreticalContribution", "novelty", "testability", "clarity", "integrationWithLiterature"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "AMR is the premier theory development journal in management.",
+    "topJournals": ["AMR", "Organization Science", "Journal of Management", "Strategic Management Journal"],
+    "methodologyEmphasis": ["Theory Development", "Conceptual Analysis", "Literature Integration", "Testable Propositions"]
+  },
+
+  "notes": [
+    "Premier management theory journal",
+    "25-30 double-spaced pages recommended",
+    "Contribution-to-length ratio assessed",
+    "Papers can only be submitted once",
+    "Working papers should be taken down during review",
+    "AI use must be disclosed",
+    "Review Essays and Dialogues accepted",
+    "Formal propositions not required"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

@@ -1,0 +1,104 @@
+{
+  "id": "sigmod",
+  "name": "ACM SIGMOD International Conference on Management of Data",
+  "acronym": "SIGMOD",
+  "venueType": "conference",
+  "category": "engineering-computer-science",
+  "subcategory": "databases-information-systems",
+  "year": 2025,
+  "h5Index": 65,
+  "website": "https://2025.sigmod.org/",
+  "description": "ACM SIGMOD is a leading international forum for data management research, exploring cutting edge ideas and results.",
+
+  "officialLinks": {
+    "callForPapers": "https://2025.sigmod.org/calls_papers_sigmod_research.shtml",
+    "submissionInstructions": "https://2025.sigmod.org/calls_papers_sigmod_research.shtml",
+    "podsTrack": "https://2025.sigmod.org/calls_papers_pods_research.shtml",
+    "industrialTrack": "https://2025.sigmod.org/calls_industrial_track_papers.shtml"
+  },
+
+  "paperLimits": {
+    "minPages": 10,
+    "maxPages": 14,
+    "referencesCountTowardLimit": false,
+    "minReferences": 25,
+    "maxReferences": 60,
+    "podsMaxPages": 15,
+    "industrialMaxPages": 12
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Related Work",
+      "Problem Statement",
+      "Methodology",
+      "Experiments",
+      "Discussion",
+      "Conclusion",
+      "References"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": true,
+    "orcidRequired": true
+  },
+
+  "template": {
+    "formatStyle": "acm-sigmod",
+    "fontFamily": "Libertine",
+    "fontSize": 9,
+    "citationStyle": "acm",
+    "lineSpacing": 1.0,
+    "paperSize": "letter",
+    "twoColumn": true,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 1,
+    "reviewType": "double-blind",
+    "dimensions": [
+      "novelty",
+      "technicalDepth",
+      "significance",
+      "clarity",
+      "experimentalEvaluation"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "ACM SIGMOD is the flagship database conference with quarterly rolling deadlines.",
+    "topJournals": ["ACM TODS", "VLDB Journal", "IEEE TKDE"],
+    "topConferences": ["SIGMOD", "VLDB", "ICDE", "PODS"],
+    "methodologyEmphasis": ["Database Systems", "Query Processing", "Data Analytics", "Machine Learning for Data"]
+  },
+
+  "notes": [
+    "Flagship ACM database conference",
+    "Quarterly rolling deadlines (Jan, Apr, Jul, Oct)",
+    "1-year wait rule for rejected papers",
+    "ORCIDs required for all authors",
+    "Double-blind review process",
+    "No duplicate submissions policy",
+    "AI use must be disclosed",
+    "Industrial track requires non-academic author",
+    "SIGMOD 2025 in Berlin, Germany"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

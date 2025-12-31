@@ -1,0 +1,85 @@
+{
+  "id": "eit",
+  "name": "Education and Information Technologies",
+  "acronym": "EAIT",
+  "venueType": "journal",
+  "category": "social-sciences",
+  "subcategory": "educational-technology",
+  "year": 2025,
+  "h5Index": 80,
+  "website": "https://link.springer.com/journal/10639",
+  "description": "Education and Information Technologies is the official journal of the IFIP Technical Committee on Education, covering relationships between ICT and education.",
+
+  "publisher": "Springer",
+  "openAccess": false,
+  "publicationFrequency": "monthly",
+  "averageReviewTime": "8-16 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://link.springer.com/journal/10639/submission-guidelines",
+    "authorGuidelines": "https://link.springer.com/journal/10639/submission-guidelines"
+  },
+
+  "paperLimits": {
+    "minPages": 15,
+    "maxPages": 35,
+    "referencesCountTowardLimit": false,
+    "minReferences": 40,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Literature Review", "Methodology", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "springer",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "author-year",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "dimensions": ["edTechContribution", "methodologicalRigor", "novelty", "clarity", "practicalImplications"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "EAIT is the official IFIP TC3 journal on education and technology.",
+    "topJournals": ["Education and Information Technologies", "Computers & Education", "British Journal of Educational Technology", "Educational Technology Research and Development"],
+    "methodologyEmphasis": ["ICT in Education", "Learning Technologies", "Digital Learning", "Educational Innovation"]
+  },
+
+  "notes": [
+    "Official IFIP Technical Committee on Education journal",
+    "ICT and education focus",
+    "Data availability statement required",
+    "PDF format for submission",
+    "Spreadsheets as .csv or .xlsx",
+    "Open Choice available (CC BY)",
+    "Not currently accepting special issue proposals"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

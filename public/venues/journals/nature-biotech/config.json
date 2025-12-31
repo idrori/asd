@@ -1,0 +1,88 @@
+{
+  "id": "nature-biotech",
+  "name": "Nature Biotechnology",
+  "acronym": "Nat. Biotechnol.",
+  "venueType": "journal",
+  "category": "health-medical-sciences",
+  "subcategory": "biotechnology",
+  "year": 2025,
+  "h5Index": 210,
+  "website": "https://www.nature.com/nbt/",
+  "description": "Nature Biotechnology publishes research and commentary on the science and business of biotechnology.",
+
+  "publisher": "Springer Nature",
+  "openAccess": false,
+  "impactFactor": 46.9,
+  "publicationFrequency": "monthly",
+  "averageReviewTime": "8-16 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.nature.com/nbt/submission-guidelines",
+    "authorGuidelines": "https://www.nature.com/nbt/submission-guidelines/preparing-your-submission",
+    "editorialProcess": "https://www.nature.com/nbt/submission-guidelines/editorial-process"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 20,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 80,
+    "extendedDataFigures": 10
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Results", "Discussion", "Methods", "Data Availability", "References", "Extended Data"],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": false
+  },
+
+  "template": {
+    "formatStyle": "nature",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "nature",
+    "lineSpacing": 2.0,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "dimensions": ["novelty", "biotechSignificance", "technicalRigor", "clarity", "broadImpact"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "Nature Biotechnology covers cutting-edge biotechnology research and commercialization.",
+    "topJournals": ["Nature Biotechnology", "Nature Methods", "Cell", "Nature"],
+    "methodologyEmphasis": ["Technology Development", "Therapeutic Applications", "Platform Technologies", "Translation"]
+  },
+
+  "notes": [
+    "Premier biotechnology journal",
+    "Cover letter required explaining importance",
+    "Word or TeX/LaTeX format (no PDFs)",
+    "LLMs cannot be authors",
+    "Max 10 Extended Data figures",
+    "Preprints supported",
+    "No overlapping submissions",
+    "Impact factor 46.9"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

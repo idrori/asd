@@ -1,0 +1,23 @@
+{
+  "id": "jrcs",
+  "name": "Journal of the Royal Statistical Society: Series C",
+  "acronym": "JRSS-C",
+  "venueType": "journal",
+  "category": "physics-astronomy",
+  "subcategory": "statistics",
+  "year": 2025,
+  "h5Index": 45,
+  "website": "https://academic.oup.com/jrsssc",
+  "description": "JRSS Series C publishes papers on the application of statistical methods.",
+  "publisher": "Oxford University Press / RSS",
+  "openAccess": false,
+  "publicationFrequency": "5 issues/year",
+  "officialLinks": {"submissionInstructions": "https://academic.oup.com/jrsssc/pages/general_instructions"},
+  "paperLimits": {"minPages": 15, "maxPages": 30, "minReferences": 25, "maxReferences": 60},
+  "paperStructure": {"sections": ["Abstract", "Introduction", "Methods", "Application", "Results", "Discussion", "References"], "abstractRequired": true},
+  "template": {"formatStyle": "oup", "citationStyle": "author-year", "anonymousSubmission": true},
+  "review": {"reviewType": "double-blind"},
+  "prompts": {"builder": "builder.txt", "reviewer": "reviewer.txt", "supervisor": "supervisor.txt", "reviser": "reviser.txt", "finalize": "finalize.txt", "setup": "setup.txt", "template": "template.txt"},
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

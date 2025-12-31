@@ -1,0 +1,89 @@
+{
+  "id": "jhep",
+  "name": "Journal of High Energy Physics",
+  "acronym": "JHEP",
+  "venueType": "journal",
+  "category": "physics-astronomy",
+  "subcategory": "high-energy-physics",
+  "year": 2025,
+  "h5Index": 145,
+  "website": "https://link.springer.com/journal/13130",
+  "description": "JHEP is a peer-reviewed online-only journal covering theoretical and experimental high energy physics, including collider physics, quantum field theory, and string theory.",
+
+  "publisher": "Springer / SISSA",
+  "openAccess": true,
+  "impactFactor": 5.5,
+  "publicationFrequency": "continuous",
+  "averageReviewTime": "8-16 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://jhep.sissa.it/jhep/help/helpLoader.jsp?pgType=author",
+    "authorGuidelines": "https://jhep.sissa.it/jhep/help/helpLoader.jsp?pgType=author"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 40,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Theory", "Methods", "Results", "Discussion", "Conclusion", "Appendices", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "jhep",
+    "fontFamily": "Times",
+    "fontSize": 11,
+    "citationStyle": "numbered",
+    "lineSpacing": 1.0,
+    "paperSize": "a4",
+    "twoColumn": true,
+    "anonymousSubmission": false,
+    "latexRecommended": true,
+    "latexPackage": "jheppub"
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "single-blind",
+    "dimensions": ["hepContribution", "technicalQuality", "novelty", "clarity", "mathematicalRigor"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "JHEP is a leading journal for high energy physics.",
+    "topJournals": ["JHEP", "Physical Review D", "Physical Review Letters", "Nuclear Physics B"],
+    "methodologyEmphasis": ["Collider Physics", "Quantum Field Theory", "String Theory", "Gauge Theories"]
+  },
+
+  "notes": [
+    "Leading high energy physics journal",
+    "Open access via SCOAP3 since 2014",
+    "Impact factor 5.5",
+    "Online-only publication",
+    "Owned by SISSA, published by Springer",
+    "LaTeX with jheppub package recommended",
+    "Author retains copyright",
+    "Free registration required"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

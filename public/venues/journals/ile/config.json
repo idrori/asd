@@ -1,0 +1,87 @@
+{
+  "id": "ile",
+  "name": "Interactive Learning Environments",
+  "acronym": "ILE",
+  "venueType": "journal",
+  "category": "social-sciences",
+  "subcategory": "educational-technology",
+  "year": 2025,
+  "h5Index": 80,
+  "website": "https://www.tandfonline.com/journals/nile20",
+  "description": "ILE covers educational settings designed to support teaching and learning through interaction using technology, across formal, non-formal, and informal contexts.",
+
+  "publisher": "Taylor & Francis",
+  "openAccess": false,
+  "impactFactor": 10.44,
+  "publicationFrequency": "10 issues/year",
+  "averageReviewTime": "8-16 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.tandfonline.com/journals/nile20",
+    "authorGuidelines": "https://www.tandfonline.com/journals/nile20"
+  },
+
+  "paperLimits": {
+    "minPages": 15,
+    "maxPages": 35,
+    "referencesCountTowardLimit": false,
+    "minReferences": 40,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Literature Review", "Methodology", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "taylor-francis",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "apa",
+    "lineSpacing": 2.0,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "minReviewers": 2,
+    "dimensions": ["interactiveLearningContribution", "methodologicalRigor", "novelty", "clarity", "practicalImplications"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "ILE covers technology-enhanced interactive learning across all educational contexts.",
+    "topJournals": ["ILE", "Computers & Education", "British Journal of Educational Technology", "Educational Technology Research and Development"],
+    "methodologyEmphasis": ["Educational Technology", "Learning Design", "Collaborative Learning", "AI in Education"]
+  },
+
+  "notes": [
+    "Interactive learning environments journal",
+    "Impact factor 10.44",
+    "h-index 80",
+    "Focus on technology impact on learning (not just technology)",
+    "AI and Education special section",
+    "Formal, non-formal, and informal learning",
+    "Metaverse and LLM research welcome"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

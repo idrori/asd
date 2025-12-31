@@ -1,0 +1,91 @@
+{
+  "id": "jmca",
+  "name": "Journal of Materials Chemistry A",
+  "acronym": "JMCA",
+  "venueType": "journal",
+  "category": "engineering-computer-science",
+  "subcategory": "materials-science",
+  "year": 2025,
+  "h5Index": 185,
+  "website": "https://www.rsc.org/publishing/journals/journal-of-materials-chemistry-a",
+  "description": "JMCA publishes high-quality materials chemistry research with applications in energy and sustainability.",
+
+  "publisher": "Royal Society of Chemistry",
+  "openAccess": false,
+  "apc": 2500,
+  "impactFactor": 11.9,
+  "publicationFrequency": "weekly",
+  "averageReviewTime": "6-12 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.rsc.org/publishing/publish-with-us/publish-a-journal-article/journal-of-materials-chemistry-a",
+    "authorGuidelines": "https://www.rsc.org/publishing/publish-with-us/publish-a-journal-article/journal-of-materials-chemistry-a",
+    "submissionPortal": "https://mc.manuscriptcentral.com/jmchema"
+  },
+
+  "paperLimits": {
+    "minPages": 6,
+    "maxPages": 20,
+    "communicationPages": 3,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Experimental", "Results and Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true,
+    "articleTypes": ["full-paper", "communication", "review", "highlight", "perspective"]
+  },
+
+  "template": {
+    "formatStyle": "rsc",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "rsc",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": true,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "dimensions": ["materialsContribution", "energyRelevance", "novelty", "technicalQuality", "clarity"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "JMCA is RSC's flagship materials chemistry journal for energy/sustainability.",
+    "topJournals": ["JMCA", "Advanced Materials", "Energy & Environmental Science", "ACS Energy Letters"],
+    "methodologyEmphasis": ["Energy Materials", "Solar Cells", "Batteries", "Catalysis"]
+  },
+
+  "notes": [
+    "RSC flagship materials journal",
+    "Impact factor 11.9",
+    "APC: GBP 2,500",
+    "Communications: 3 printed pages",
+    "Solar cell data must be machine-readable",
+    "Full error analysis required",
+    "Reviews typically invited",
+    "ScholarOne submission system"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

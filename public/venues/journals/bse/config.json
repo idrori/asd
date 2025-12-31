@@ -1,0 +1,87 @@
+{
+  "id": "bse",
+  "name": "Behavioral Sciences & the Law",
+  "acronym": "BSL",
+  "venueType": "journal",
+  "category": "social-sciences",
+  "subcategory": "law-psychology",
+  "year": 2025,
+  "h5Index": 45,
+  "website": "https://onlinelibrary.wiley.com/journal/10990798",
+  "description": "Behavioral Sciences & the Law provides comprehensive information on topics at the interface of the law and behavioral sciences, balancing theoretical, mental health, legal, and research writings.",
+
+  "publisher": "Wiley",
+  "openAccess": false,
+  "impactFactor": 1.3,
+  "publicationFrequency": "bimonthly",
+  "averageReviewTime": "7 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://onlinelibrary.wiley.com/page/journal/10990798/homepage/forauthors.html",
+    "authorGuidelines": "https://onlinelibrary.wiley.com/page/journal/10990798/homepage/forauthors.html"
+  },
+
+  "paperLimits": {
+    "minPages": 20,
+    "maxPages": 30,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Literature Review", "Methods", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "apa",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "apa",
+    "lineSpacing": 2.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "acceptanceRate": 32,
+    "dimensions": ["legalRelevance", "behavioralScience", "methodologicalRigor", "clarity", "practicalImplications"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "BSL bridges behavioral sciences and law with peer-reviewed research.",
+    "topJournals": ["Behavioral Sciences & the Law", "Law and Human Behavior", "Psychology, Public Policy, and Law", "Criminal Justice and Behavior"],
+    "methodologyEmphasis": ["Empirical Research", "Legal Analysis", "Psychological Assessment", "Forensic Psychology"]
+  },
+
+  "notes": [
+    "Interface of law and behavioral sciences",
+    "Impact factor 1.3",
+    "32% acceptance rate",
+    "49 days to first decision",
+    "APA or Bluebook citation style",
+    "Double-blind peer review",
+    "Conflict of interest statement required"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

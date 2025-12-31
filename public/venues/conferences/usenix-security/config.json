@@ -1,0 +1,104 @@
+{
+  "id": "usenix-security",
+  "name": "USENIX Security Symposium",
+  "acronym": "USENIX Security",
+  "venueType": "conference",
+  "category": "engineering-computer-science",
+  "subcategory": "computer-security-cryptography",
+  "year": 2025,
+  "h5Index": 95,
+  "website": "https://www.usenix.org/conference/usenixsecurity25",
+  "description": "USENIX Security brings together researchers, practitioners, system administrators, and others to share and explore the latest advances in the security and privacy of computer systems and networks.",
+
+  "officialLinks": {
+    "callForPapers": "https://www.usenix.org/conference/usenixsecurity25/call-for-papers",
+    "submissionInstructions": "https://www.usenix.org/conference/usenixsecurity25/submission-policies-and-instructions",
+    "artifactEvaluation": "https://www.usenix.org/conference/usenixsecurity25/call-for-artifacts"
+  },
+
+  "paperLimits": {
+    "minPages": 10,
+    "maxPages": 13,
+    "referencesCountTowardLimit": false,
+    "minReferences": 25,
+    "maxReferences": 60,
+    "finalMaxPages": 20,
+    "ethicsPageRequired": true
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Background",
+      "Threat Model",
+      "Design",
+      "Implementation",
+      "Evaluation",
+      "Ethics Considerations",
+      "Related Work",
+      "Conclusion",
+      "References"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true,
+    "ethicsDiscussionRequired": true
+  },
+
+  "template": {
+    "formatStyle": "usenix",
+    "fontFamily": "Times",
+    "fontSize": 10,
+    "citationStyle": "usenix",
+    "lineSpacing": 1.0,
+    "paperSize": "letter",
+    "twoColumn": true,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 1,
+    "reviewType": "double-blind",
+    "dimensions": [
+      "novelty",
+      "technicalQuality",
+      "significance",
+      "clarity",
+      "ethicalConsiderations"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "USENIX Security is a top-tier security conference with strong emphasis on practical systems security.",
+    "topJournals": ["IEEE TDSC", "ACM TOPS", "Journal of Cryptology"],
+    "topConferences": ["USENIX Security", "S&P", "CCS", "NDSS"],
+    "methodologyEmphasis": ["Systems Security", "Network Security", "Privacy", "Usable Security"]
+  },
+
+  "notes": [
+    "Top-tier security symposium",
+    "Two submission cycles per year",
+    "Ethics discussion required in all papers",
+    "Open science policy - artifacts must be shared",
+    "Artifact evaluation mandatory for accepted papers",
+    "Mixed presentation format (talks + posters)",
+    "Double-blind review process",
+    "USENIX Security 2025 in Seattle, WA"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

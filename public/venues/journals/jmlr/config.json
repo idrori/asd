@@ -1,0 +1,87 @@
+{
+  "id": "jmlr",
+  "name": "Journal of Machine Learning Research",
+  "acronym": "JMLR",
+  "venueType": "journal",
+  "category": "engineering-computer-science",
+  "subcategory": "machine-learning",
+  "year": 2025,
+  "h5Index": 150,
+  "website": "https://jmlr.org/",
+  "description": "JMLR is a premier open access journal for machine learning research, publishing high-quality papers on all aspects of machine learning.",
+
+  "publisher": "JMLR, Inc.",
+  "openAccess": true,
+  "publicationFrequency": "continuous",
+  "averageReviewTime": "3-6 months",
+
+  "officialLinks": {
+    "submissionInstructions": "https://jmlr.org/author-info.html",
+    "authorGuidelines": "https://jmlr.org/author-info.html"
+  },
+
+  "paperLimits": {
+    "minPages": 15,
+    "maxPages": 50,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 100,
+    "noExplicitLimit": true
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Related Work", "Method", "Experiments", "Discussion", "Conclusion", "References", "Appendix"],
+    "abstractRequired": true,
+    "abstractMaxWords": 300,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "jmlr",
+    "fontFamily": "Computer Modern",
+    "fontSize": 11,
+    "citationStyle": "natbib",
+    "lineSpacing": 1.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": false,
+    "latexOnly": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "dimensions": ["novelty", "technicalQuality", "significance", "clarity", "reproducibility"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "JMLR is the premier open access machine learning journal.",
+    "topJournals": ["JMLR", "Machine Learning", "IEEE TPAMI", "TMLR"],
+    "methodologyEmphasis": ["Algorithmic Innovation", "Theoretical Analysis", "Empirical Evaluation", "Reproducibility"]
+  },
+
+  "notes": [
+    "Premier open access ML journal",
+    "LaTeX with JMLR style file required",
+    "PDF submission only",
+    "Papers >50 pages may be desk rejected",
+    "Author list final at submission",
+    "Conference extensions must cite prior work",
+    "Preprints (arXiv) allowed",
+    "Source code submission encouraged"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

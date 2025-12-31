@@ -1,0 +1,87 @@
+{
+  "id": "molecules",
+  "name": "Molecules",
+  "acronym": "Molecules",
+  "venueType": "journal",
+  "category": "chemical-material-sciences",
+  "subcategory": "chemistry-general",
+  "year": 2025,
+  "h5Index": 130,
+  "website": "https://www.mdpi.com/journal/molecules",
+  "description": "Molecules is a leading international, peer-reviewed, open access journal of chemistry published by MDPI.",
+
+  "publisher": "MDPI",
+  "openAccess": true,
+  "publicationFrequency": "semimonthly",
+  "averageReviewTime": "4-6 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.mdpi.com/journal/molecules/instructions",
+    "authorGuidelines": "https://www.mdpi.com/journal/molecules/instructions",
+    "journalPage": "https://www.mdpi.com/journal/molecules/about"
+  },
+
+  "paperLimits": {
+    "minPages": 6,
+    "maxPages": 30,
+    "referencesCountTowardLimit": false,
+    "minReferences": 20,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Keywords", "Introduction", "Results", "Discussion", "Materials and Methods", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "mdpi",
+    "fontFamily": "Palatino",
+    "fontSize": 10,
+    "citationStyle": "mdpi",
+    "lineSpacing": 1.0,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 3.5,
+    "maxRevisionRounds": 2,
+    "reviewType": "single-blind",
+    "dimensions": ["novelty", "chemicalSignificance", "methodologicalRigor", "clarity", "reproducibility"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "Molecules is an open access chemistry journal from MDPI.",
+    "topJournals": ["Molecules", "IJMS", "Biomolecules", "Catalysts"],
+    "methodologyEmphasis": ["Organic Chemistry", "Medicinal Chemistry", "Natural Products", "Synthesis"]
+  },
+
+  "notes": [
+    "30th volume in 2025",
+    "Open access (CC BY)",
+    "COPE member",
+    "Single-blind peer review",
+    "Word/LaTeX templates available",
+    "Research articles, reviews, short communications",
+    "CONSORT checklist for clinical trials",
+    "APC in CHF, EUR, USD, GBP, JPY, CAD"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

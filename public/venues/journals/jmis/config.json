@@ -1,0 +1,85 @@
+{
+  "id": "jmis",
+  "name": "Journal of Management Information Systems",
+  "acronym": "JMIS",
+  "venueType": "journal",
+  "category": "business-economics-management",
+  "subcategory": "information-systems",
+  "year": 2025,
+  "h5Index": 75,
+  "website": "https://www.jmis-web.org/",
+  "description": "JMIS is a top-tier scholarly journal advancing the understanding and practice of information systems through impactful research.",
+
+  "publisher": "Taylor & Francis",
+  "openAccess": false,
+  "publicationFrequency": "quarterly",
+  "averageReviewTime": "12-20 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.jmis-web.org/",
+    "authorGuidelines": "https://www.tandfonline.com/journals/mmis20"
+  },
+
+  "paperLimits": {
+    "minPages": 20,
+    "maxPages": 45,
+    "referencesCountTowardLimit": false,
+    "minReferences": 50,
+    "maxReferences": 120
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Theoretical Background", "Research Model", "Methodology", "Results", "Discussion", "Implications", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "taylor-francis",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "apa",
+    "lineSpacing": 2.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "dimensions": ["misContribution", "methodologicalRigor", "novelty", "clarity", "practicalImplications"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "JMIS is a top-tier peer-reviewed IS journal since 1984.",
+    "topJournals": ["JMIS", "MIS Quarterly", "Information Systems Research", "Journal of AIS"],
+    "methodologyEmphasis": ["IS Research", "IT Management", "Design Science", "Behavioral Research"]
+  },
+
+  "notes": [
+    "Top-tier IS journal since 1984",
+    "Editor: Vladimir Zwass",
+    "Double-blind review",
+    "Hybrid open access option",
+    "Zero Embargo Green OA policy",
+    "Full research submissions",
+    "Paradigmatic designs welcome"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

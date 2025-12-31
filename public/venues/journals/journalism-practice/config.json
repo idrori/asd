@@ -1,0 +1,23 @@
+{
+  "id": "journalism-practice",
+  "name": "Journalism Practice",
+  "acronym": "JP",
+  "venueType": "journal",
+  "category": "social-sciences",
+  "subcategory": "communication-media",
+  "year": 2025,
+  "h5Index": 50,
+  "website": "https://www.tandfonline.com/journals/rjop20",
+  "description": "Journalism Practice covers research on the practice of journalism and the professional development of journalists.",
+  "publisher": "Taylor & Francis",
+  "openAccess": false,
+  "publicationFrequency": "10 issues/year",
+  "officialLinks": {"submissionInstructions": "https://www.tandfonline.com/journals/rjop20"},
+  "paperLimits": {"minPages": 15, "maxPages": 30, "minReferences": 30, "maxReferences": 70},
+  "paperStructure": {"sections": ["Abstract", "Introduction", "Literature Review", "Methodology", "Findings", "Discussion", "Conclusion", "References"], "abstractRequired": true},
+  "template": {"formatStyle": "taylor-francis", "citationStyle": "apa", "anonymousSubmission": true},
+  "review": {"reviewType": "double-blind"},
+  "prompts": {"builder": "builder.txt", "reviewer": "reviewer.txt", "supervisor": "supervisor.txt", "reviser": "reviser.txt", "finalize": "finalize.txt", "setup": "setup.txt", "template": "template.txt"},
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}
