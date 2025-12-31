@@ -1,0 +1,86 @@
+{
+  "id": "jama-network-open",
+  "name": "JAMA Network Open",
+  "acronym": "JAMA Netw. Open",
+  "venueType": "journal",
+  "category": "health-medical-sciences",
+  "subcategory": "general-medicine",
+  "year": 2025,
+  "h5Index": 170,
+  "website": "https://jamanetwork.com/journals/jamanetworkopen",
+  "description": "JAMA Network Open is an international, peer-reviewed, open access journal publishing research on clinical care, innovation in health care, health policy, and global health.",
+
+  "publisher": "American Medical Association",
+  "openAccess": true,
+  "publicationFrequency": "continuous",
+  "averageReviewTime": "6-12 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://jamanetwork.com/journals/jamanetworkopen/pages/instructions-for-authors",
+    "authorGuidelines": "https://jamanetwork.com/journals/jamanetworkopen/pages/for-authors"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 25,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Methods", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 350,
+    "keywordsRequired": true,
+    "articleTypes": ["original-investigation", "research-letter", "consensus-statement", "special-communication"]
+  },
+
+  "template": {
+    "formatStyle": "ama",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "ama",
+    "lineSpacing": 2.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "dimensions": ["clinicalSignificance", "methodologicalRigor", "novelty", "clarity", "healthPolicyImpact"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "JAMA Network Open is the open-access general medical journal from JAMA Network.",
+    "topJournals": ["JAMA Network Open", "JAMA", "NEJM", "The Lancet"],
+    "methodologyEmphasis": ["Clinical Research", "Health Services Research", "Epidemiology", "Health Policy"]
+  },
+
+  "notes": [
+    "Open access JAMA Network journal",
+    "All health disciplines and countries",
+    "AMA reference style (superscript numerals)",
+    "List up to 6 authors, then et al.",
+    "AI/LLM use must be disclosed in Acknowledgments or Methods",
+    "Authors responsible for AI-generated content integrity",
+    "Abbreviate journal names per PubMed"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

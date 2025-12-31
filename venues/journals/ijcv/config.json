@@ -1,0 +1,86 @@
+{
+  "id": "ijcv",
+  "name": "International Journal of Computer Vision",
+  "acronym": "IJCV",
+  "venueType": "journal",
+  "category": "engineering-computer-science",
+  "subcategory": "computer-vision-pattern-recognition",
+  "year": 2025,
+  "h5Index": 140,
+  "website": "https://link.springer.com/journal/11263",
+  "description": "IJCV covers the science and engineering of computer vision, publishing major technical advances and survey articles.",
+
+  "publisher": "Springer",
+  "openAccess": false,
+  "impactFactor": 19.5,
+  "publicationFrequency": "monthly",
+  "averageReviewTime": "8-16 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://link.springer.com/journal/11263/submission-guidelines",
+    "authorGuidelines": "https://link.springer.com/journal/11263/submission-guidelines"
+  },
+
+  "paperLimits": {
+    "minPages": 15,
+    "maxPages": 40,
+    "referencesCountTowardLimit": false,
+    "minReferences": 40,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Related Work", "Method", "Experiments", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "springer",
+    "fontFamily": "Times",
+    "fontSize": 10,
+    "citationStyle": "springer-basic",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "dimensions": ["novelty", "technicalDepth", "significance", "clarity", "experimentalValidation"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "IJCV is a premier journal for computer vision research.",
+    "topJournals": ["IJCV", "IEEE TPAMI", "IEEE TIP", "CVIU"],
+    "methodologyEmphasis": ["Algorithm Development", "Theoretical Analysis", "Benchmark Evaluation", "Real-world Applications"]
+  },
+
+  "notes": [
+    "Premier computer vision journal",
+    "No submission or publication fee",
+    "Open Access option available",
+    "Color images free online",
+    "Word or LaTeX accepted",
+    "COPE member for publication ethics",
+    "AI-assisted editing allowed with human oversight",
+    "Impact factor 19.5"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

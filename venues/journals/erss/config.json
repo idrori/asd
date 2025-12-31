@@ -1,0 +1,89 @@
+{
+  "id": "erss",
+  "name": "Energy Research & Social Science",
+  "acronym": "ERSS",
+  "venueType": "journal",
+  "category": "social-sciences",
+  "subcategory": "energy-social-science",
+  "year": 2025,
+  "h5Index": 95,
+  "website": "https://www.sciencedirect.com/journal/energy-research-and-social-science",
+  "description": "Energy Research & Social Science publishes research examining the relationship between energy systems, markets, business and society.",
+
+  "publisher": "Elsevier",
+  "openAccess": false,
+  "apc": 3300,
+  "impactFactor": 8.54,
+  "publicationFrequency": "monthly",
+  "averageReviewTime": "8-16 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.sciencedirect.com/journal/energy-research-and-social-science/publish/guide-for-authors",
+    "authorGuidelines": "https://www.sciencedirect.com/journal/energy-research-and-social-science/publish/guide-for-authors"
+  },
+
+  "paperLimits": {
+    "minPages": 15,
+    "maxPages": 30,
+    "maxWords": 10000,
+    "referencesCountTowardLimit": true,
+    "minReferences": 40,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Literature Review", "Methodology", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true,
+    "articleTypes": ["original-research", "perspectives"]
+  },
+
+  "template": {
+    "formatStyle": "elsevier",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "elsevier-harvard",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "dimensions": ["energySocialRelevance", "methodologicalRigor", "novelty", "clarity", "policyImplications"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "ERSS covers social science perspectives on energy systems and transitions.",
+    "topJournals": ["Energy Research & Social Science", "Energy Policy", "Nature Energy", "Applied Energy"],
+    "methodologyEmphasis": ["Social Science Methods", "Policy Analysis", "Qualitative Research", "Mixed Methods"]
+  },
+
+  "notes": [
+    "Energy-society intersection journal",
+    "APC: USD 3,300",
+    "Impact factor 8.54",
+    "h-index 129",
+    "Double-blind review",
+    "Original articles: 6k-10k words",
+    "Perspectives: 2k-5k words"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

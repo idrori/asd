@@ -1,0 +1,89 @@
+{
+  "id": "prl",
+  "name": "Physical Review Letters",
+  "acronym": "PRL",
+  "venueType": "journal",
+  "category": "physics-mathematics",
+  "subcategory": "physics-general",
+  "year": 2025,
+  "h5Index": 175,
+  "website": "https://journals.aps.org/prl/",
+  "description": "Physical Review Letters is the world's premier physics letter journal, publishing seminal, high-impact research across all areas of physics since 1958.",
+
+  "publisher": "American Physical Society",
+  "openAccess": false,
+  "impactFactor": 8.6,
+  "publicationFrequency": "weekly",
+  "averageReviewTime": "4-8 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://journals.aps.org/prl/authors",
+    "authorGuidelines": "https://journals.aps.org/prl/authors",
+    "editorialPolicies": "https://journals.aps.org/prl/authors/editorial-policies-practices"
+  },
+
+  "paperLimits": {
+    "minPages": 4,
+    "maxPages": 5,
+    "referencesCountTowardLimit": false,
+    "minReferences": 20,
+    "maxReferences": 50,
+    "endMatterPages": 2
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Theory/Methods", "Results", "Conclusion", "References", "End Matter"],
+    "abstractRequired": true,
+    "abstractMaxWords": 150,
+    "keywordsRequired": false
+  },
+
+  "template": {
+    "formatStyle": "aps-revtex",
+    "fontFamily": "Computer Modern",
+    "fontSize": 10,
+    "citationStyle": "aps",
+    "lineSpacing": 1.0,
+    "paperSize": "letter",
+    "twoColumn": true,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "single-blind",
+    "dimensions": ["impact", "innovation", "interest", "clarity", "accessibility"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "PRL is the APS flagship journal for high-impact physics Letters.",
+    "topJournals": ["PRL", "Nature Physics", "Physical Review X", "Science"],
+    "methodologyEmphasis": ["Fundamental Physics", "Experimental Validation", "Theoretical Innovation", "Broad Interest"]
+  },
+
+  "notes": [
+    "World's premier physics letter journal since 1958",
+    "Brief, high-impact reports",
+    "End Matter allowed (2 pages max)",
+    "~30% of Letters use End Matter",
+    "Accessible to general physics readers",
+    "Avoid acronyms and jargon",
+    "LaTeX (REVTeX) preferred",
+    "Impact factor 8.6"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

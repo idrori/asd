@@ -1,0 +1,101 @@
+{
+  "id": "adv-mater",
+  "name": "Advanced Materials",
+  "acronym": "Adv. Mater.",
+  "venueType": "journal",
+  "category": "physical-sciences",
+  "subcategory": "materials-science",
+  "year": 2025,
+  "h5Index": 330,
+  "website": "https://onlinelibrary.wiley.com/journal/15214095",
+  "description": "Advanced Materials is a leading interdisciplinary journal covering materials science from fundamentals to applications, including metals, ceramics, polymers, semiconductors, and composites.",
+
+  "publisher": "Wiley-VCH",
+  "openAccess": false,
+  "impactFactor": 27.4,
+  "publicationFrequency": "weekly",
+  "averageReviewTime": "4-8 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://advanced.onlinelibrary.wiley.com/hub/journal/15214095/author-guidelines",
+    "authorGuidelines": "https://advanced.onlinelibrary.wiley.com/hub/journal/15214095/author-guidelines",
+    "submissionPortal": "https://www.editorialmanager.com/advmat/"
+  },
+
+  "paperLimits": {
+    "minPages": 6,
+    "maxPages": 12,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Results and Discussion",
+      "Experimental Section",
+      "Conclusion",
+      "Supporting Information",
+      "References"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "wiley",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "numbered",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "dimensions": [
+      "novelty",
+      "significance",
+      "technicalQuality",
+      "clarity",
+      "reproducibility"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "Advanced Materials is a leading materials science journal emphasizing interdisciplinary research with broad impact.",
+    "topJournals": ["Advanced Materials", "Nature Materials", "ACS Nano", "Nano Letters", "Advanced Functional Materials"],
+    "methodologyEmphasis": ["Materials Synthesis", "Characterization", "Applications", "Novel Properties"]
+  },
+
+  "notes": [
+    "Leading materials science journal",
+    "Free format submission available",
+    "Editorial Manager submission system",
+    "Preprints accepted",
+    "Part of Wiley Transfer Program",
+    "Senior author should have permanent position",
+    "Supports supplementary materials",
+    "Impact factor 27.4"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

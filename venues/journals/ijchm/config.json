@@ -1,0 +1,88 @@
+{
+  "id": "ijchm",
+  "name": "International Journal of Contemporary Hospitality Management",
+  "acronym": "IJCHM",
+  "venueType": "journal",
+  "category": "business-economics-management",
+  "subcategory": "hospitality-management",
+  "year": 2025,
+  "h5Index": 95,
+  "website": "https://www.emeraldgrouppublishing.com/journal/ijchm",
+  "description": "IJCHM communicates the latest developments and thinking on the management of hospitality and tourism businesses worldwide.",
+
+  "publisher": "Emerald Publishing",
+  "openAccess": false,
+  "impactFactor": 13.49,
+  "publicationFrequency": "monthly",
+  "averageReviewTime": "8-16 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.emeraldgrouppublishing.com/journal/ijchm",
+    "authorGuidelines": "https://www.emeraldgrouppublishing.com/journal/ijchm"
+  },
+
+  "paperLimits": {
+    "minPages": 20,
+    "maxPages": 40,
+    "referencesCountTowardLimit": false,
+    "minReferences": 50,
+    "maxReferences": 120,
+    "crpMaxWords": 7000,
+    "crpMaxReferences": 30
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Literature Review", "Methodology", "Results", "Discussion", "Implications", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "emerald",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "apa",
+    "lineSpacing": 2.0,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "dimensions": ["hospitalityContribution", "methodologicalRigor", "novelty", "clarity", "practicalImplications"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "IJCHM is a leading hospitality management research journal.",
+    "topJournals": ["IJCHM", "International Journal of Hospitality Management", "Tourism Management", "Cornell Hospitality Quarterly"],
+    "methodologyEmphasis": ["Strategic Management", "Operations", "Marketing", "HR Management"]
+  },
+
+  "notes": [
+    "Leading hospitality management journal",
+    "Impact factor 13.49",
+    "h-index 139",
+    "Publishing since 1989",
+    "Double-blind peer review",
+    "Critical Reflection Papers: 7k words, 30 refs, 3 tables/figures max",
+    "Open access option available"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

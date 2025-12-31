@@ -1,0 +1,127 @@
+{
+  "id": "iccv",
+  "name": "IEEE/CVF International Conference on Computer Vision",
+  "acronym": "ICCV",
+  "venueType": "conference",
+  "category": "engineering-computer-science",
+  "subcategory": "computer-vision-pattern-recognition",
+  "year": 2025,
+  "h5Index": 256,
+  "website": "https://iccv.thecvf.com/",
+  "description": "ICCV is a biennial top-tier conference on computer vision. It covers all aspects of vision including 3D reconstruction, object recognition, scene understanding, and deep learning for vision.",
+
+  "officialLinks": {
+    "callForPapers": "https://iccv.thecvf.com/Conferences/2025/CallForPapers",
+    "submissionInstructions": "https://iccv.thecvf.com/Conferences/2025/AuthorGuidelines",
+    "reviewerGuidelines": "https://iccv.thecvf.com/Conferences/2025/ReviewerGuidelines",
+    "submissionChecklist": "https://iccv.thecvf.com/Conferences/2025/SubmissionCheckList"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 8,
+    "cameraReadyMaxPages": 8,
+    "referencesCountTowardLimit": false,
+    "minReferences": 25,
+    "maxReferences": 60
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Related Work",
+      "Method",
+      "Experiments",
+      "Results",
+      "Conclusion",
+      "References",
+      "Supplementary Material"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": false,
+    "keywordsCount": { "min": 0, "max": 0 },
+    "appendicesAllowed": true,
+    "supplementaryAllowed": true
+  },
+
+  "template": {
+    "formatStyle": "iccv",
+    "fontFamily": "Times",
+    "fontSize": 10,
+    "citationStyle": "ieee",
+    "lineSpacing": 1.0,
+    "marginInches": 1.0,
+    "paperSize": "letter",
+    "twoColumn": true,
+    "anonymousSubmission": true,
+    "styleFile": "ICCV 2025 Author Kit"
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 1,
+    "dimensions": [
+      "novelty",
+      "significance",
+      "technicalQuality",
+      "clarity",
+      "reproducibility"
+    ],
+    "includeTrustworthiness": false
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt",
+    "infographic": "infographic.txt",
+    "dataTable": "datatable.txt"
+  },
+
+  "calibration": {
+    "description": "ICCV is a biennial top venue for computer vision. Papers must demonstrate significant technical contribution with strong experimental validation.",
+    "exemplarCount": 0,
+    "topJournals": [
+      "IEEE Transactions on Pattern Analysis and Machine Intelligence",
+      "International Journal of Computer Vision",
+      "IEEE Transactions on Image Processing"
+    ],
+    "topConferences": [
+      "CVPR",
+      "ICCV",
+      "ECCV",
+      "NeurIPS",
+      "ICML"
+    ],
+    "methodologyEmphasis": [
+      "Deep Learning Architectures",
+      "Benchmark Evaluation",
+      "Ablation Studies",
+      "Qualitative Results"
+    ]
+  },
+
+  "notes": [
+    "Main paper limited to 8 pages including figures and tables",
+    "Unlimited pages for references only",
+    "ICCV 2025 Author Kit required for formatting",
+    "Submission via OpenReview",
+    "Double-blind review - strict anonymization required",
+    "OpenReview profile required for all authors",
+    "Rebuttal limited to one page PDF",
+    "Supplementary material allowed but cannot contain external links",
+    "Color-blind accessibility considerations required",
+    "Biennial conference (odd years)",
+    "Highly competitive (acceptance rate ~25%)"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

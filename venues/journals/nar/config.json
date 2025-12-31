@@ -1,0 +1,85 @@
+{
+  "id": "nar",
+  "name": "Nucleic Acids Research",
+  "acronym": "NAR",
+  "venueType": "journal",
+  "category": "health-medical-sciences",
+  "subcategory": "molecular-biology",
+  "year": 2025,
+  "h5Index": 223,
+  "website": "https://academic.oup.com/nar",
+  "description": "NAR provides rapid publication of papers on physical, chemical, biochemical and biological aspects of nucleic acids and proteins involved in nucleic acid metabolism.",
+
+  "publisher": "Oxford University Press",
+  "openAccess": true,
+  "publicationFrequency": "24 issues per year (online only from 2025)",
+  "averageReviewTime": "4-8 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://academic.oup.com/nar/pages/author-guidelines",
+    "authorGuidelines": "https://academic.oup.com/nar/pages/general_instructions",
+    "methodsGuidelines": "https://academic.oup.com/nar/pages/methods-guidelines"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 20,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Materials and Methods", "Results", "Discussion", "Data Availability", "References", "Supplementary Data"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "oup",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "numbered",
+    "lineSpacing": 2.0,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "dimensions": ["novelty", "significance", "experimentalRigor", "clarity", "dataAccessibility"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "NAR is a leading journal for nucleic acids and molecular biology research.",
+    "topJournals": ["NAR", "Molecular Cell", "Cell", "Nature Structural & Molecular Biology"],
+    "methodologyEmphasis": ["Nucleic Acid Chemistry", "Structural Biology", "Computational Methods", "Database Development"]
+  },
+
+  "notes": [
+    "Online only from 2025",
+    "Fully open access",
+    "Special issues: Databases (Jan), Web Servers (July)",
+    "Databases/webservers must be freely available for 5+ years",
+    "METHODS papers for methodological developments",
+    "COPE ethics standards",
+    "Synthetic oligomer sequences required"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

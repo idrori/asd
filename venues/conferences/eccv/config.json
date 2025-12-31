@@ -1,0 +1,126 @@
+{
+  "id": "eccv",
+  "name": "European Conference on Computer Vision",
+  "acronym": "ECCV",
+  "venueType": "conference",
+  "category": "engineering-computer-science",
+  "subcategory": "computer-vision-pattern-recognition",
+  "year": 2024,
+  "h5Index": 262,
+  "website": "https://eccv.ecva.net/",
+  "description": "ECCV is a biennial top-tier conference on computer vision. It covers image and video understanding, 3D vision, deep learning, and visual recognition.",
+
+  "officialLinks": {
+    "callForPapers": "https://eccv.ecva.net/Conferences/2024/CallForPapers",
+    "submissionInstructions": "https://eccv.ecva.net/Conferences/2024/AuthorGuide",
+    "reviewerGuidelines": "https://eccv.ecva.net/Conferences/2024/SubmissionPolicies",
+    "authorGuidelines": "https://eccv.ecva.net/Conferences/2024/AuthorPractices"
+  },
+
+  "paperLimits": {
+    "minPages": 14,
+    "maxPages": 14,
+    "cameraReadyMaxPages": 14,
+    "referencesCountTowardLimit": false,
+    "minReferences": 25,
+    "maxReferences": 60
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Related Work",
+      "Method",
+      "Experiments",
+      "Results",
+      "Conclusion",
+      "References",
+      "Supplementary Material"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 150,
+    "keywordsRequired": false,
+    "keywordsCount": { "min": 0, "max": 0 },
+    "appendicesAllowed": true,
+    "supplementaryAllowed": true
+  },
+
+  "template": {
+    "formatStyle": "lncs",
+    "fontFamily": "Times",
+    "fontSize": 10,
+    "citationStyle": "springer",
+    "lineSpacing": 1.0,
+    "marginInches": 1.0,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": true,
+    "styleFile": "ECCV 2024 Author Kit (LNCS Springer format)"
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 1,
+    "dimensions": [
+      "novelty",
+      "significance",
+      "technicalQuality",
+      "clarity",
+      "reproducibility"
+    ],
+    "includeTrustworthiness": false
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt",
+    "infographic": "infographic.txt",
+    "dataTable": "datatable.txt"
+  },
+
+  "calibration": {
+    "description": "ECCV is a biennial top venue for computer vision. Papers use the LNCS Springer format and emphasize novel algorithmic contributions with thorough evaluation.",
+    "exemplarCount": 0,
+    "topJournals": [
+      "IEEE Transactions on Pattern Analysis and Machine Intelligence",
+      "International Journal of Computer Vision",
+      "IEEE Transactions on Image Processing"
+    ],
+    "topConferences": [
+      "CVPR",
+      "ICCV",
+      "ECCV",
+      "NeurIPS",
+      "ICML"
+    ],
+    "methodologyEmphasis": [
+      "Deep Learning Architectures",
+      "Benchmark Evaluation",
+      "Ablation Studies",
+      "Qualitative Results"
+    ]
+  },
+
+  "notes": [
+    "Main paper limited to 14 pages in LNCS Springer format",
+    "Unlimited pages for references only",
+    "ECCV 2024 Author Kit required (LNCS style)",
+    "Submission via CMT system",
+    "Double-blind review - strict anonymization required",
+    "Rebuttal limited to one page (CVPR two-column format)",
+    "Supplementary material and code encouraged",
+    "Maximum file size 50MB for main paper",
+    "Biennial conference (held every 2 years)",
+    "Highly competitive (acceptance rate ~25%)"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

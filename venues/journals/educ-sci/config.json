@@ -1,0 +1,88 @@
+{
+  "id": "educ-sci",
+  "name": "Education Sciences",
+  "acronym": "Educ. Sci.",
+  "venueType": "journal",
+  "category": "social-sciences",
+  "subcategory": "education",
+  "year": 2025,
+  "h5Index": 55,
+  "website": "https://www.mdpi.com/journal/education",
+  "description": "Education Sciences is an open access journal publishing timely high-quality research findings across a broad range of educational topics.",
+
+  "publisher": "MDPI",
+  "openAccess": true,
+  "apc": 1800,
+  "publicationFrequency": "monthly",
+  "averageReviewTime": "4-8 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.mdpi.com/journal/education/instructions",
+    "authorGuidelines": "https://www.mdpi.com/journal/education/instructions",
+    "aimsAndScope": "https://www.mdpi.com/journal/education/about"
+  },
+
+  "paperLimits": {
+    "minPages": 10,
+    "maxPages": 25,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Materials and Methods", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "mdpi",
+    "fontFamily": "Palatino Linotype",
+    "fontSize": 10,
+    "citationStyle": "mdpi",
+    "lineSpacing": 1.0,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "dimensions": ["educationalContribution", "methodologicalRigor", "novelty", "clarity", "policyRelevance"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "Education Sciences is an open access MDPI journal for education research.",
+    "topJournals": ["Education Sciences", "Educational Research Review", "Computers & Education", "Studies in Higher Education"],
+    "methodologyEmphasis": ["Quantitative Research", "Qualitative Research", "Mixed Methods", "Systematic Reviews"]
+  },
+
+  "notes": [
+    "Open access MDPI journal",
+    "APC: CHF 1,800",
+    "Q1 in Education and Educational Research",
+    "Double-blind peer review",
+    "CC BY license",
+    "iThenticate plagiarism check",
+    "CONSORT checklist required for clinical trials",
+    "Word or LaTeX templates available"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

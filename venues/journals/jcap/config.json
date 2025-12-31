@@ -1,0 +1,87 @@
+{
+  "id": "jcap",
+  "name": "Journal of Cosmology and Astroparticle Physics",
+  "acronym": "JCAP",
+  "venueType": "journal",
+  "category": "physics-astronomy",
+  "subcategory": "cosmology-astrophysics",
+  "year": 2025,
+  "h5Index": 85,
+  "website": "https://jcap.sissa.it/jcap/",
+  "description": "JCAP covers theoretical, observational, and experimental areas of cosmology and astroparticle physics, including M-theory, brane cosmology, and galaxy formation.",
+
+  "publisher": "IOP Publishing / SISSA",
+  "openAccess": true,
+  "publicationFrequency": "monthly",
+  "averageReviewTime": "8-16 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://jcap.sissa.it/jcap/help/helpLoader.jsp?pgType=author",
+    "authorGuidelines": "https://jcap.sissa.it/jcap/help/helpLoader.jsp?pgType=author"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 30,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Theory", "Methods", "Results", "Discussion", "Conclusion", "Appendices", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "jcap",
+    "fontFamily": "Times",
+    "fontSize": 11,
+    "citationStyle": "numbered",
+    "lineSpacing": 1.0,
+    "paperSize": "a4",
+    "twoColumn": true,
+    "anonymousSubmission": false,
+    "latexRequired": true,
+    "latexPackage": "jcappub"
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "single-blind",
+    "dimensions": ["cosmologyContribution", "technicalQuality", "novelty", "clarity", "observationalRelevance"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "JCAP is a leading journal for cosmology and astroparticle physics.",
+    "topJournals": ["JCAP", "Physical Review D", "Astronomy & Astrophysics", "Monthly Notices of the RAS"],
+    "methodologyEmphasis": ["Theoretical Cosmology", "Observational Cosmology", "Astroparticle Physics", "Dark Matter/Energy"]
+  },
+
+  "notes": [
+    "Open access via SCOAP3",
+    "CC BY license required",
+    "LaTeX required (jcappub package)",
+    "Overleaf template available",
+    "SISSA handles peer review",
+    "Springer handles publication",
+    "Avoid non-numbered sections"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

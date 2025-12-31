@@ -1,0 +1,1634 @@
+{
+  "schemaVersion": "2.0",
+  "defaultVenue": "icis",
+  "lastUpdated": "2025-12-31",
+  "venues": {
+    "icis": {
+      "type": "conference",
+      "category": "business-economics-management",
+      "subcategory": "databases-information-systems",
+      "name": "International Conference on Information Systems",
+      "acronym": "ICIS",
+      "verified": true,
+      "h5Index": 47
+    },
+    "ecis": {
+      "type": "conference",
+      "category": "business-economics-management",
+      "subcategory": "databases-information-systems",
+      "name": "European Conference on Information Systems",
+      "acronym": "ECIS",
+      "verified": true,
+      "h5Index": 35
+    },
+    "pacis": {
+      "type": "conference",
+      "category": "business-economics-management",
+      "subcategory": "databases-information-systems",
+      "name": "Pacific Asia Conference on Information Systems",
+      "acronym": "PACIS",
+      "verified": true,
+      "h5Index": 28
+    },
+    "amcis": {
+      "type": "conference",
+      "category": "business-economics-management",
+      "subcategory": "databases-information-systems",
+      "name": "Americas Conference on Information Systems",
+      "acronym": "AMCIS",
+      "verified": true,
+      "h5Index": 32
+    },
+    "hicss": {
+      "type": "conference",
+      "category": "business-economics-management",
+      "subcategory": "databases-information-systems",
+      "name": "Hawaii International Conference on System Sciences",
+      "acronym": "HICSS",
+      "verified": true,
+      "h5Index": 45
+    },
+    "misq": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "databases-information-systems",
+      "name": "MIS Quarterly",
+      "acronym": "MISQ",
+      "verified": true,
+      "h5Index": 89
+    },
+    "isr": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "databases-information-systems",
+      "name": "Information Systems Research",
+      "acronym": "ISR",
+      "verified": true,
+      "h5Index": 72
+    },
+    "jais": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "databases-information-systems",
+      "name": "Journal of the Association for Information Systems",
+      "acronym": "JAIS",
+      "verified": true,
+      "h5Index": 48
+    },
+    "jmis": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "databases-information-systems",
+      "name": "Journal of Management Information Systems",
+      "acronym": "JMIS",
+      "verified": false,
+      "h5Index": 56
+    },
+    "ejis": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "databases-information-systems",
+      "name": "European Journal of Information Systems",
+      "acronym": "EJIS",
+      "verified": false,
+      "h5Index": 52
+    },
+    "isj": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "databases-information-systems",
+      "name": "Information Systems Journal",
+      "acronym": "ISJ",
+      "verified": false,
+      "h5Index": 49
+    },
+    "inm": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "databases-information-systems",
+      "name": "Information & Management",
+      "acronym": "I&M",
+      "verified": false,
+      "h5Index": 75
+    },
+    "jbr": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "marketing",
+      "name": "Journal of Business Research",
+      "acronym": "JBR",
+      "verified": false,
+      "h5Index": 239
+    },
+    "tfsc": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "business-economics-management-general",
+      "name": "Technological Forecasting and Social Change",
+      "acronym": "TFSC",
+      "verified": false,
+      "h5Index": 209
+    },
+    "jrcs": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "marketing",
+      "name": "Journal of Retailing and Consumer Services",
+      "acronym": "JRCS",
+      "verified": false,
+      "h5Index": 168
+    },
+    "bse": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "strategic-management",
+      "name": "Business Strategy and the Environment",
+      "acronym": "BSE",
+      "verified": false,
+      "h5Index": 159
+    },
+    "ee": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "economics",
+      "name": "Energy Economics",
+      "acronym": "EE",
+      "verified": false,
+      "h5Index": 159
+    },
+    "frl": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "finance",
+      "name": "Finance Research Letters",
+      "acronym": "FRL",
+      "verified": false,
+      "h5Index": 152
+    },
+    "aer": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "economics",
+      "name": "American Economic Review",
+      "acronym": "AER",
+      "verified": false,
+      "h5Index": 146
+    },
+    "ijhm": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "tourism-hospitality",
+      "name": "International Journal of Hospitality Management",
+      "acronym": "IJHM",
+      "verified": false,
+      "h5Index": 138
+    },
+    "ms": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "operations-research",
+      "name": "Management Science",
+      "acronym": "MS",
+      "verified": false,
+      "h5Index": 138
+    },
+    "ijpe": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "operations-research",
+      "name": "International Journal of Production Economics",
+      "acronym": "IJPE",
+      "verified": false,
+      "h5Index": 137
+    },
+    "jfe": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "finance",
+      "name": "Journal of Financial Economics",
+      "acronym": "JFE",
+      "verified": false,
+      "h5Index": 132
+    },
+    "jbe": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "business-economics-management-general",
+      "name": "Journal of Business Ethics",
+      "acronym": "JBE",
+      "verified": false,
+      "h5Index": 127
+    },
+    "rfs": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "finance",
+      "name": "The Review of Financial Studies",
+      "acronym": "RFS",
+      "verified": false,
+      "h5Index": 122
+    },
+    "imm": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "marketing",
+      "name": "Industrial Marketing Management",
+      "acronym": "IMM",
+      "verified": false,
+      "h5Index": 120
+    },
+    "jpe": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "economics",
+      "name": "Journal of Political Economy",
+      "acronym": "JPE",
+      "verified": false,
+      "h5Index": 117
+    },
+    "wd": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "development-economics",
+      "name": "World Development",
+      "acronym": "WD",
+      "verified": false,
+      "h5Index": 117
+    },
+    "tm": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "tourism-hospitality",
+      "name": "Tourism Management",
+      "acronym": "TM",
+      "verified": false,
+      "h5Index": 116
+    },
+    "csrem": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "strategic-management",
+      "name": "Corporate Social Responsibility and Environmental Management",
+      "acronym": "CSREM",
+      "verified": false,
+      "h5Index": 116
+    },
+    "qje": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "economics",
+      "name": "The Quarterly Journal of Economics",
+      "acronym": "QJE",
+      "verified": false,
+      "h5Index": 112
+    },
+    "ijchm": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "tourism-hospitality",
+      "name": "International Journal of Contemporary Hospitality Management",
+      "acronym": "IJCHM",
+      "verified": false,
+      "h5Index": 112
+    },
+    "aom": {
+      "type": "conference",
+      "category": "business-economics-management",
+      "subcategory": "strategic-management",
+      "name": "Academy of Management Annual Meeting",
+      "acronym": "AOM",
+      "verified": false,
+      "h5Index": 85
+    },
+    "amr": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "strategic-management",
+      "name": "Academy of Management Review",
+      "acronym": "AMR",
+      "verified": false,
+      "h5Index": 82
+    },
+    "amj": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "strategic-management",
+      "name": "Academy of Management Journal",
+      "acronym": "AMJ",
+      "verified": false,
+      "h5Index": 95
+    },
+    "informs": {
+      "type": "conference",
+      "category": "business-economics-management",
+      "subcategory": "operations-research",
+      "name": "INFORMS Annual Meeting",
+      "acronym": "INFORMS",
+      "verified": false,
+      "h5Index": 42
+    },
+    "or": {
+      "type": "journal",
+      "category": "business-economics-management",
+      "subcategory": "operations-research",
+      "name": "Operations Research",
+      "acronym": "OR",
+      "verified": false,
+      "h5Index": 62
+    },
+    "dsi": {
+      "type": "conference",
+      "category": "business-economics-management",
+      "subcategory": "game-theory-decision-science",
+      "name": "Decision Sciences Institute Annual Meeting",
+      "acronym": "DSI",
+      "verified": false,
+      "h5Index": 25
+    },
+
+    "cvpr": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "computer-vision-pattern-recognition",
+      "name": "IEEE/CVF Conference on Computer Vision and Pattern Recognition",
+      "acronym": "CVPR",
+      "verified": false,
+      "h5Index": 450
+    },
+    "neurips": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "artificial-intelligence",
+      "name": "Conference on Neural Information Processing Systems",
+      "acronym": "NeurIPS",
+      "verified": true,
+      "h5Index": 371
+    },
+    "iclr": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "artificial-intelligence",
+      "name": "International Conference on Learning Representations",
+      "acronym": "ICLR",
+      "verified": true,
+      "h5Index": 362
+    },
+    "adv-mater": {
+      "type": "journal",
+      "category": "engineering-computer-science",
+      "subcategory": "materials-engineering",
+      "name": "Advanced Materials",
+      "acronym": "Adv. Mater.",
+      "verified": false,
+      "h5Index": 330
+    },
+    "jcp": {
+      "type": "journal",
+      "category": "engineering-computer-science",
+      "subcategory": "environmental-geological-engineering",
+      "name": "Journal of Cleaner Production",
+      "acronym": "JCP",
+      "verified": false,
+      "h5Index": 298
+    },
+    "ieee-access": {
+      "type": "journal",
+      "category": "engineering-computer-science",
+      "subcategory": "engineering-computer-science-general",
+      "name": "IEEE Access",
+      "acronym": "IEEE Access",
+      "verified": false,
+      "h5Index": 288
+    },
+    "icml": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "artificial-intelligence",
+      "name": "International Conference on Machine Learning",
+      "acronym": "ICML",
+      "verified": true,
+      "h5Index": 272
+    },
+    "adv-func-mater": {
+      "type": "journal",
+      "category": "engineering-computer-science",
+      "subcategory": "materials-engineering",
+      "name": "Advanced Functional Materials",
+      "acronym": "Adv. Funct. Mater.",
+      "verified": false,
+      "h5Index": 263
+    },
+    "eccv": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "computer-vision-pattern-recognition",
+      "name": "European Conference on Computer Vision",
+      "acronym": "ECCV",
+      "verified": false,
+      "h5Index": 262
+    },
+    "iccv": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "computer-vision-pattern-recognition",
+      "name": "IEEE/CVF International Conference on Computer Vision",
+      "acronym": "ICCV",
+      "verified": false,
+      "h5Index": 256
+    },
+    "cej": {
+      "type": "journal",
+      "category": "engineering-computer-science",
+      "subcategory": "environmental-geological-engineering",
+      "name": "Chemical Engineering Journal",
+      "acronym": "CEJ",
+      "verified": false,
+      "h5Index": 245
+    },
+    "rser": {
+      "type": "journal",
+      "category": "engineering-computer-science",
+      "subcategory": "sustainable-energy",
+      "name": "Renewable and Sustainable Energy Reviews",
+      "acronym": "RSER",
+      "verified": false,
+      "h5Index": 240
+    },
+    "adv-energy-mater": {
+      "type": "journal",
+      "category": "engineering-computer-science",
+      "subcategory": "sustainable-energy",
+      "name": "Advanced Energy Materials",
+      "acronym": "Adv. Energy Mater.",
+      "verified": false,
+      "h5Index": 237
+    },
+    "acl": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "computational-linguistics",
+      "name": "Meeting of the Association for Computational Linguistics",
+      "acronym": "ACL",
+      "verified": false,
+      "h5Index": 236
+    },
+    "aaai": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "artificial-intelligence",
+      "name": "AAAI Conference on Artificial Intelligence",
+      "acronym": "AAAI",
+      "verified": true,
+      "h5Index": 232
+    },
+    "acs-nano": {
+      "type": "journal",
+      "category": "engineering-computer-science",
+      "subcategory": "nanotechnology",
+      "name": "ACS Nano",
+      "acronym": "ACS Nano",
+      "verified": false,
+      "h5Index": 231
+    },
+    "jhm": {
+      "type": "journal",
+      "category": "engineering-computer-science",
+      "subcategory": "environmental-geological-engineering",
+      "name": "Journal of Hazardous Materials",
+      "acronym": "JHM",
+      "verified": false,
+      "h5Index": 228
+    },
+    "ees": {
+      "type": "journal",
+      "category": "engineering-computer-science",
+      "subcategory": "sustainable-energy",
+      "name": "Energy & Environmental Science",
+      "acronym": "EES",
+      "verified": false,
+      "h5Index": 219
+    },
+    "emnlp": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "computational-linguistics",
+      "name": "Conference on Empirical Methods in Natural Language Processing",
+      "acronym": "EMNLP",
+      "verified": false,
+      "h5Index": 218
+    },
+    "tpami": {
+      "type": "journal",
+      "category": "engineering-computer-science",
+      "subcategory": "computer-vision-pattern-recognition",
+      "name": "IEEE Transactions on Pattern Analysis and Machine Intelligence",
+      "acronym": "TPAMI",
+      "verified": false,
+      "h5Index": 217
+    },
+    "chi": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "human-computer-interaction",
+      "name": "ACM CHI Conference on Human Factors in Computing Systems",
+      "acronym": "CHI",
+      "verified": false,
+      "h5Index": 125
+    },
+    "jmlr": {
+      "type": "journal",
+      "category": "engineering-computer-science",
+      "subcategory": "artificial-intelligence",
+      "name": "Journal of Machine Learning Research",
+      "acronym": "JMLR",
+      "verified": false,
+      "h5Index": 112
+    },
+    "kdd": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "data-mining-analysis",
+      "name": "ACM SIGKDD Conference on Knowledge Discovery and Data Mining",
+      "acronym": "KDD",
+      "verified": false,
+      "h5Index": 115
+    },
+    "icra": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "robotics",
+      "name": "IEEE International Conference on Robotics and Automation",
+      "acronym": "ICRA",
+      "verified": false,
+      "h5Index": 115
+    },
+    "www": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "data-mining-analysis",
+      "name": "The Web Conference",
+      "acronym": "WWW",
+      "verified": false,
+      "h5Index": 98
+    },
+    "ijcv": {
+      "type": "journal",
+      "category": "engineering-computer-science",
+      "subcategory": "computer-vision-pattern-recognition",
+      "name": "International Journal of Computer Vision",
+      "acronym": "IJCV",
+      "verified": false,
+      "h5Index": 98
+    },
+    "naacl": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "computational-linguistics",
+      "name": "North American Chapter of the ACL",
+      "acronym": "NAACL",
+      "verified": false,
+      "h5Index": 97
+    },
+    "sp": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "computer-security-cryptography",
+      "name": "IEEE Symposium on Security and Privacy",
+      "acronym": "S&P",
+      "verified": false,
+      "h5Index": 98
+    },
+    "usenix-security": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "computer-security-cryptography",
+      "name": "USENIX Security Symposium",
+      "acronym": "USENIX Security",
+      "verified": false,
+      "h5Index": 95
+    },
+    "iros": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "robotics",
+      "name": "IEEE/RSJ International Conference on Intelligent Robots and Systems",
+      "acronym": "IROS",
+      "verified": false,
+      "h5Index": 85
+    },
+    "ccs": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "computer-security-cryptography",
+      "name": "ACM Conference on Computer and Communications Security",
+      "acronym": "CCS",
+      "verified": false,
+      "h5Index": 85
+    },
+    "tacl": {
+      "type": "journal",
+      "category": "engineering-computer-science",
+      "subcategory": "computational-linguistics",
+      "name": "Transactions of the Association for Computational Linguistics",
+      "acronym": "TACL",
+      "verified": false,
+      "h5Index": 78
+    },
+    "icse": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "software-systems",
+      "name": "International Conference on Software Engineering",
+      "acronym": "ICSE",
+      "verified": false,
+      "h5Index": 74
+    },
+    "cscw": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "human-computer-interaction",
+      "name": "ACM Conference on Computer-Supported Cooperative Work",
+      "acronym": "CSCW",
+      "verified": false,
+      "h5Index": 72
+    },
+    "vldb": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "databases-information-systems",
+      "name": "International Conference on Very Large Data Bases",
+      "acronym": "VLDB",
+      "verified": false,
+      "h5Index": 72
+    },
+    "sigmod": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "databases-information-systems",
+      "name": "ACM SIGMOD Conference",
+      "acronym": "SIGMOD",
+      "verified": false,
+      "h5Index": 65
+    },
+    "siggraph": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "computer-graphics",
+      "name": "ACM SIGGRAPH Conference",
+      "acronym": "SIGGRAPH",
+      "verified": false,
+      "h5Index": 62
+    },
+    "uist": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "human-computer-interaction",
+      "name": "ACM Symposium on User Interface Software and Technology",
+      "acronym": "UIST",
+      "verified": false,
+      "h5Index": 58
+    },
+    "tochi": {
+      "type": "journal",
+      "category": "engineering-computer-science",
+      "subcategory": "human-computer-interaction",
+      "name": "ACM Transactions on Computer-Human Interaction",
+      "acronym": "TOCHI",
+      "verified": false,
+      "h5Index": 52
+    },
+    "fse": {
+      "type": "conference",
+      "category": "engineering-computer-science",
+      "subcategory": "software-systems",
+      "name": "ACM SIGSOFT Symposium on Foundations of Software Engineering",
+      "acronym": "FSE",
+      "verified": false,
+      "h5Index": 52
+    },
+
+    "nejm": {
+      "type": "journal",
+      "category": "health-medical-sciences",
+      "subcategory": "health-medical-sciences-general",
+      "name": "The New England Journal of Medicine",
+      "acronym": "NEJM",
+      "verified": false,
+      "h5Index": 441
+    },
+    "lancet": {
+      "type": "journal",
+      "category": "health-medical-sciences",
+      "subcategory": "health-medical-sciences-general",
+      "name": "The Lancet",
+      "acronym": "Lancet",
+      "verified": false,
+      "h5Index": 375
+    },
+    "cell": {
+      "type": "journal",
+      "category": "health-medical-sciences",
+      "subcategory": "molecular-biology",
+      "name": "Cell",
+      "acronym": "Cell",
+      "verified": false,
+      "h5Index": 317
+    },
+    "jama": {
+      "type": "journal",
+      "category": "health-medical-sciences",
+      "subcategory": "health-medical-sciences-general",
+      "name": "JAMA",
+      "acronym": "JAMA",
+      "verified": false,
+      "h5Index": 301
+    },
+    "nature-med": {
+      "type": "journal",
+      "category": "health-medical-sciences",
+      "subcategory": "health-medical-sciences-general",
+      "name": "Nature Medicine",
+      "acronym": "Nat. Med.",
+      "verified": false,
+      "h5Index": 279
+    },
+    "ijms": {
+      "type": "journal",
+      "category": "health-medical-sciences",
+      "subcategory": "molecular-biology",
+      "name": "International Journal of Molecular Sciences",
+      "acronym": "IJMS",
+      "verified": false,
+      "h5Index": 277
+    },
+    "pnas": {
+      "type": "journal",
+      "category": "health-medical-sciences",
+      "subcategory": "health-medical-sciences-general",
+      "name": "Proceedings of the National Academy of Sciences",
+      "acronym": "PNAS",
+      "verified": false,
+      "h5Index": 268
+    },
+    "ijerph": {
+      "type": "journal",
+      "category": "health-medical-sciences",
+      "subcategory": "public-health",
+      "name": "International Journal of Environmental Research and Public Health",
+      "acronym": "IJERPH",
+      "verified": false,
+      "h5Index": 258
+    },
+    "plos-one": {
+      "type": "journal",
+      "category": "health-medical-sciences",
+      "subcategory": "health-medical-sciences-general",
+      "name": "PLOS ONE",
+      "acronym": "PLOS ONE",
+      "verified": false,
+      "h5Index": 244
+    },
+    "bmj": {
+      "type": "journal",
+      "category": "health-medical-sciences",
+      "subcategory": "health-medical-sciences-general",
+      "name": "BMJ",
+      "acronym": "BMJ",
+      "verified": false,
+      "h5Index": 224
+    },
+    "front-immunol": {
+      "type": "journal",
+      "category": "health-medical-sciences",
+      "subcategory": "immunology",
+      "name": "Frontiers in Immunology",
+      "acronym": "Front. Immunol.",
+      "verified": false,
+      "h5Index": 224
+    },
+    "jco": {
+      "type": "journal",
+      "category": "health-medical-sciences",
+      "subcategory": "oncology",
+      "name": "Journal of Clinical Oncology",
+      "acronym": "JCO",
+      "verified": false,
+      "h5Index": 220
+    },
+    "sttt": {
+      "type": "journal",
+      "category": "health-medical-sciences",
+      "subcategory": "health-medical-sciences-general",
+      "name": "Signal Transduction and Targeted Therapy",
+      "acronym": "STTT",
+      "verified": false,
+      "h5Index": 218
+    },
+    "nutrients": {
+      "type": "journal",
+      "category": "health-medical-sciences",
+      "subcategory": "nutrition-science",
+      "name": "Nutrients",
+      "acronym": "Nutrients",
+      "verified": false,
+      "h5Index": 213
+    },
+    "circulation": {
+      "type": "journal",
+      "category": "health-medical-sciences",
+      "subcategory": "cardiology",
+      "name": "Circulation",
+      "acronym": "Circulation",
+      "verified": false,
+      "h5Index": 212
+    },
+    "front-psychol": {
+      "type": "journal",
+      "category": "health-medical-sciences",
+      "subcategory": "psychology",
+      "name": "Frontiers in Psychology",
+      "acronym": "Front. Psychol.",
+      "verified": false,
+      "h5Index": 205
+    },
+    "mmwr": {
+      "type": "journal",
+      "category": "health-medical-sciences",
+      "subcategory": "public-health",
+      "name": "Morbidity and Mortality Weekly Report",
+      "acronym": "MMWR",
+      "verified": false,
+      "h5Index": 204
+    },
+    "lancet-oncol": {
+      "type": "journal",
+      "category": "health-medical-sciences",
+      "subcategory": "oncology",
+      "name": "The Lancet Oncology",
+      "acronym": "Lancet Oncol.",
+      "verified": false,
+      "h5Index": 203
+    },
+    "jama-network-open": {
+      "type": "journal",
+      "category": "health-medical-sciences",
+      "subcategory": "health-medical-sciences-general",
+      "name": "JAMA Network Open",
+      "acronym": "JAMA Netw. Open",
+      "verified": false,
+      "h5Index": 189
+    },
+    "lancet-infect-dis": {
+      "type": "journal",
+      "category": "health-medical-sciences",
+      "subcategory": "communicable-diseases",
+      "name": "The Lancet Infectious Diseases",
+      "acronym": "Lancet Infect. Dis.",
+      "verified": false,
+      "h5Index": 186
+    },
+
+    "nature": {
+      "type": "journal",
+      "category": "life-sciences-earth-sciences",
+      "subcategory": "life-sciences-earth-sciences-general",
+      "name": "Nature",
+      "acronym": "Nature",
+      "verified": false,
+      "h5Index": 490
+    },
+    "science": {
+      "type": "journal",
+      "category": "life-sciences-earth-sciences",
+      "subcategory": "life-sciences-earth-sciences-general",
+      "name": "Science",
+      "acronym": "Science",
+      "verified": false,
+      "h5Index": 415
+    },
+    "nature-comm": {
+      "type": "journal",
+      "category": "life-sciences-earth-sciences",
+      "subcategory": "life-sciences-earth-sciences-general",
+      "name": "Nature Communications",
+      "acronym": "Nat. Commun.",
+      "verified": false,
+      "h5Index": 399
+    },
+    "stoten": {
+      "type": "journal",
+      "category": "life-sciences-earth-sciences",
+      "subcategory": "environmental-sciences",
+      "name": "Science of The Total Environment",
+      "acronym": "STOTEN",
+      "verified": false,
+      "h5Index": 312
+    },
+    "sustainability": {
+      "type": "journal",
+      "category": "life-sciences-earth-sciences",
+      "subcategory": "sustainable-development",
+      "name": "Sustainability",
+      "acronym": "Sustainability",
+      "verified": false,
+      "h5Index": 250
+    },
+    "sci-adv": {
+      "type": "journal",
+      "category": "life-sciences-earth-sciences",
+      "subcategory": "life-sciences-earth-sciences-general",
+      "name": "Science Advances",
+      "acronym": "Sci. Adv.",
+      "verified": false,
+      "h5Index": 240
+    },
+    "sci-rep": {
+      "type": "journal",
+      "category": "life-sciences-earth-sciences",
+      "subcategory": "life-sciences-earth-sciences-general",
+      "name": "Scientific Reports",
+      "acronym": "Sci. Rep.",
+      "verified": false,
+      "h5Index": 234
+    },
+    "nar": {
+      "type": "journal",
+      "category": "life-sciences-earth-sciences",
+      "subcategory": "molecular-biology",
+      "name": "Nucleic Acids Research",
+      "acronym": "NAR",
+      "verified": false,
+      "h5Index": 223
+    },
+    "chemosphere": {
+      "type": "journal",
+      "category": "life-sciences-earth-sciences",
+      "subcategory": "environmental-sciences",
+      "name": "Chemosphere",
+      "acronym": "Chemosphere",
+      "verified": false,
+      "h5Index": 205
+    },
+    "est": {
+      "type": "journal",
+      "category": "life-sciences-earth-sciences",
+      "subcategory": "environmental-sciences",
+      "name": "Environmental Science & Technology",
+      "acronym": "ES&T",
+      "verified": false,
+      "h5Index": 197
+    },
+    "espr": {
+      "type": "journal",
+      "category": "life-sciences-earth-sciences",
+      "subcategory": "environmental-sciences",
+      "name": "Environmental Science and Pollution Research",
+      "acronym": "ESPR",
+      "verified": false,
+      "h5Index": 190
+    },
+    "nature-biotech": {
+      "type": "journal",
+      "category": "life-sciences-earth-sciences",
+      "subcategory": "biotechnology",
+      "name": "Nature Biotechnology",
+      "acronym": "Nat. Biotechnol.",
+      "verified": false,
+      "h5Index": 189
+    },
+    "jem": {
+      "type": "journal",
+      "category": "life-sciences-earth-sciences",
+      "subcategory": "environmental-sciences",
+      "name": "Journal of Environmental Management",
+      "acronym": "JEM",
+      "verified": false,
+      "h5Index": 184
+    },
+    "renew-energy": {
+      "type": "journal",
+      "category": "life-sciences-earth-sciences",
+      "subcategory": "sustainable-energy",
+      "name": "Renewable Energy",
+      "acronym": "Renew. Energy",
+      "verified": false,
+      "h5Index": 178
+    },
+    "tfst": {
+      "type": "journal",
+      "category": "life-sciences-earth-sciences",
+      "subcategory": "food-science-technology",
+      "name": "Trends in Food Science & Technology",
+      "acronym": "TFST",
+      "verified": false,
+      "h5Index": 177
+    },
+
+    "angew-chem": {
+      "type": "journal",
+      "category": "chemical-material-sciences",
+      "subcategory": "chemical-material-sciences-general",
+      "name": "Angewandte Chemie International Edition",
+      "acronym": "Angew. Chem.",
+      "verified": false,
+      "h5Index": 289
+    },
+    "chem-rev": {
+      "type": "journal",
+      "category": "chemical-material-sciences",
+      "subcategory": "chemical-material-sciences-general",
+      "name": "Chemical Reviews",
+      "acronym": "Chem. Rev.",
+      "verified": false,
+      "h5Index": 283
+    },
+    "chem-soc-rev": {
+      "type": "journal",
+      "category": "chemical-material-sciences",
+      "subcategory": "chemical-material-sciences-general",
+      "name": "Chemical Society Reviews",
+      "acronym": "Chem. Soc. Rev.",
+      "verified": false,
+      "h5Index": 260
+    },
+    "jacs": {
+      "type": "journal",
+      "category": "chemical-material-sciences",
+      "subcategory": "chemical-material-sciences-general",
+      "name": "Journal of the American Chemical Society",
+      "acronym": "JACS",
+      "verified": false,
+      "h5Index": 237
+    },
+    "appl-catal-b": {
+      "type": "journal",
+      "category": "chemical-material-sciences",
+      "subcategory": "chemical-kinetics-catalysis",
+      "name": "Applied Catalysis B: Environmental",
+      "acronym": "Appl. Catal. B",
+      "verified": false,
+      "h5Index": 213
+    },
+    "molecules": {
+      "type": "journal",
+      "category": "chemical-material-sciences",
+      "subcategory": "organic-chemistry",
+      "name": "Molecules",
+      "acronym": "Molecules",
+      "verified": false,
+      "h5Index": 203
+    },
+    "nature-mater": {
+      "type": "journal",
+      "category": "chemical-material-sciences",
+      "subcategory": "materials-engineering",
+      "name": "Nature Materials",
+      "acronym": "Nat. Mater.",
+      "verified": false,
+      "h5Index": 190
+    },
+    "adv-sci": {
+      "type": "journal",
+      "category": "chemical-material-sciences",
+      "subcategory": "materials-engineering",
+      "name": "Advanced Science",
+      "acronym": "Adv. Sci.",
+      "verified": false,
+      "h5Index": 190
+    },
+    "nano-energy": {
+      "type": "journal",
+      "category": "chemical-material-sciences",
+      "subcategory": "nanotechnology",
+      "name": "Nano Energy",
+      "acronym": "Nano Energy",
+      "verified": false,
+      "h5Index": 185
+    },
+    "nature-energy": {
+      "type": "journal",
+      "category": "chemical-material-sciences",
+      "subcategory": "electrochemistry",
+      "name": "Nature Energy",
+      "acronym": "Nat. Energy",
+      "verified": false,
+      "h5Index": 180
+    },
+    "acs-catal": {
+      "type": "journal",
+      "category": "chemical-material-sciences",
+      "subcategory": "chemical-kinetics-catalysis",
+      "name": "ACS Catalysis",
+      "acronym": "ACS Catal.",
+      "verified": false,
+      "h5Index": 179
+    },
+    "jmca": {
+      "type": "journal",
+      "category": "chemical-material-sciences",
+      "subcategory": "materials-engineering",
+      "name": "Journal of Materials Chemistry A",
+      "acronym": "J. Mater. Chem. A",
+      "verified": false,
+      "h5Index": 178
+    },
+    "ijbm": {
+      "type": "journal",
+      "category": "chemical-material-sciences",
+      "subcategory": "polymers-plastics",
+      "name": "International Journal of Biological Macromolecules",
+      "acronym": "IJBM",
+      "verified": false,
+      "h5Index": 174
+    },
+
+    "system": {
+      "type": "journal",
+      "category": "humanities-literature-arts",
+      "subcategory": "foreign-language-learning",
+      "name": "System",
+      "acronym": "System",
+      "verified": false,
+      "h5Index": 79
+    },
+    "digital-journalism": {
+      "type": "journal",
+      "category": "humanities-literature-arts",
+      "subcategory": "communication",
+      "name": "Digital Journalism",
+      "acronym": "Digit. Journal.",
+      "verified": false,
+      "h5Index": 69
+    },
+    "media-culture-society": {
+      "type": "journal",
+      "category": "humanities-literature-arts",
+      "subcategory": "communication",
+      "name": "Media, Culture & Society",
+      "acronym": "Media Cult. Soc.",
+      "verified": false,
+      "h5Index": 59
+    },
+    "synthese": {
+      "type": "journal",
+      "category": "humanities-literature-arts",
+      "subcategory": "philosophy",
+      "name": "Synthese",
+      "acronym": "Synthese",
+      "verified": false,
+      "h5Index": 59
+    },
+    "journalism": {
+      "type": "journal",
+      "category": "humanities-literature-arts",
+      "subcategory": "communication",
+      "name": "Journalism",
+      "acronym": "Journalism",
+      "verified": false,
+      "h5Index": 58
+    },
+    "ijc": {
+      "type": "journal",
+      "category": "humanities-literature-arts",
+      "subcategory": "communication",
+      "name": "International Journal of Communication",
+      "acronym": "IJoC",
+      "verified": false,
+      "h5Index": 55
+    },
+    "journalism-studies": {
+      "type": "journal",
+      "category": "humanities-literature-arts",
+      "subcategory": "communication",
+      "name": "Journalism Studies",
+      "acronym": "Journal. Stud.",
+      "verified": false,
+      "h5Index": 52
+    },
+    "journalism-practice": {
+      "type": "journal",
+      "category": "humanities-literature-arts",
+      "subcategory": "communication",
+      "name": "Journalism Practice",
+      "acronym": "Journal. Pract.",
+      "verified": false,
+      "h5Index": 52
+    },
+    "jmmd": {
+      "type": "journal",
+      "category": "humanities-literature-arts",
+      "subcategory": "language-linguistics",
+      "name": "Journal of Multilingual and Multicultural Development",
+      "acronym": "JMMD",
+      "verified": false,
+      "h5Index": 52
+    },
+    "ijpp": {
+      "type": "journal",
+      "category": "humanities-literature-arts",
+      "subcategory": "communication",
+      "name": "The International Journal of Press/Politics",
+      "acronym": "IJPP",
+      "verified": false,
+      "h5Index": 51
+    },
+    "political-communication": {
+      "type": "journal",
+      "category": "humanities-literature-arts",
+      "subcategory": "communication",
+      "name": "Political Communication",
+      "acronym": "Polit. Commun.",
+      "verified": false,
+      "h5Index": 51
+    },
+    "religions": {
+      "type": "journal",
+      "category": "humanities-literature-arts",
+      "subcategory": "religion",
+      "name": "Religions",
+      "acronym": "Religions",
+      "verified": false,
+      "h5Index": 50
+    },
+    "ssla": {
+      "type": "journal",
+      "category": "humanities-literature-arts",
+      "subcategory": "foreign-language-learning",
+      "name": "Studies in Second Language Acquisition",
+      "acronym": "SSLA",
+      "verified": false,
+      "h5Index": 49
+    },
+    "relc-journal": {
+      "type": "journal",
+      "category": "humanities-literature-arts",
+      "subcategory": "foreign-language-learning",
+      "name": "RELC Journal",
+      "acronym": "RELC J.",
+      "verified": false,
+      "h5Index": 49
+    },
+    "language-teaching": {
+      "type": "journal",
+      "category": "humanities-literature-arts",
+      "subcategory": "foreign-language-learning",
+      "name": "Language Teaching",
+      "acronym": "Lang. Teach.",
+      "verified": false,
+      "h5Index": 47
+    },
+    "tesol-quarterly": {
+      "type": "journal",
+      "category": "humanities-literature-arts",
+      "subcategory": "foreign-language-learning",
+      "name": "TESOL Quarterly",
+      "acronym": "TESOL Q.",
+      "verified": false,
+      "h5Index": 47
+    },
+
+    "prl": {
+      "type": "journal",
+      "category": "physics-mathematics",
+      "subcategory": "physics-mathematics-general",
+      "name": "Physical Review Letters",
+      "acronym": "PRL",
+      "verified": false,
+      "h5Index": 201
+    },
+    "apj": {
+      "type": "journal",
+      "category": "physics-mathematics",
+      "subcategory": "astronomy-astrophysics",
+      "name": "The Astrophysical Journal",
+      "acronym": "ApJ",
+      "verified": false,
+      "h5Index": 169
+    },
+    "prd": {
+      "type": "journal",
+      "category": "physics-mathematics",
+      "subcategory": "high-energy-nuclear-physics",
+      "name": "Physical Review D",
+      "acronym": "PRD",
+      "verified": false,
+      "h5Index": 168
+    },
+    "tgrs": {
+      "type": "journal",
+      "category": "physics-mathematics",
+      "subcategory": "geophysics",
+      "name": "IEEE Transactions on Geoscience and Remote Sensing",
+      "acronym": "TGRS",
+      "verified": false,
+      "h5Index": 156
+    },
+    "mnras": {
+      "type": "journal",
+      "category": "physics-mathematics",
+      "subcategory": "astronomy-astrophysics",
+      "name": "Monthly Notices of the Royal Astronomical Society",
+      "acronym": "MNRAS",
+      "verified": false,
+      "h5Index": 151
+    },
+    "aa": {
+      "type": "journal",
+      "category": "physics-mathematics",
+      "subcategory": "astronomy-astrophysics",
+      "name": "Astronomy & Astrophysics",
+      "acronym": "A&A",
+      "verified": false,
+      "h5Index": 149
+    },
+    "nature-phys": {
+      "type": "journal",
+      "category": "physics-mathematics",
+      "subcategory": "physics-mathematics-general",
+      "name": "Nature Physics",
+      "acronym": "Nat. Phys.",
+      "verified": false,
+      "h5Index": 149
+    },
+    "jhep": {
+      "type": "journal",
+      "category": "physics-mathematics",
+      "subcategory": "high-energy-nuclear-physics",
+      "name": "Journal of High Energy Physics",
+      "acronym": "JHEP",
+      "verified": false,
+      "h5Index": 149
+    },
+    "nature-photon": {
+      "type": "journal",
+      "category": "physics-mathematics",
+      "subcategory": "optics-photonics",
+      "name": "Nature Photonics",
+      "acronym": "Nat. Photon.",
+      "verified": false,
+      "h5Index": 147
+    },
+    "icassp": {
+      "type": "conference",
+      "category": "physics-mathematics",
+      "subcategory": "acoustics-sound",
+      "name": "IEEE International Conference on Acoustics, Speech and Signal Processing",
+      "acronym": "ICASSP",
+      "verified": false,
+      "h5Index": 137
+    },
+    "lsa": {
+      "type": "journal",
+      "category": "physics-mathematics",
+      "subcategory": "optics-photonics",
+      "name": "Light: Science & Applications",
+      "acronym": "LSA",
+      "verified": false,
+      "h5Index": 136
+    },
+    "prb": {
+      "type": "journal",
+      "category": "physics-mathematics",
+      "subcategory": "condensed-matter-physics-semiconductors",
+      "name": "Physical Review B",
+      "acronym": "PRB",
+      "verified": false,
+      "h5Index": 133
+    },
+    "csf": {
+      "type": "journal",
+      "category": "physics-mathematics",
+      "subcategory": "nonlinear-science",
+      "name": "Chaos, Solitons & Fractals",
+      "acronym": "CSF",
+      "verified": false,
+      "h5Index": 129
+    },
+    "jml": {
+      "type": "journal",
+      "category": "physics-mathematics",
+      "subcategory": "spectroscopy-molecular-physics",
+      "name": "Journal of Molecular Liquids",
+      "acronym": "JML",
+      "verified": false,
+      "h5Index": 128
+    },
+    "prx": {
+      "type": "journal",
+      "category": "physics-mathematics",
+      "subcategory": "physics-mathematics-general",
+      "name": "Physical Review X",
+      "acronym": "PRX",
+      "verified": false,
+      "h5Index": 127
+    },
+    "grl": {
+      "type": "journal",
+      "category": "physics-mathematics",
+      "subcategory": "geophysics",
+      "name": "Geophysical Research Letters",
+      "acronym": "GRL",
+      "verified": false,
+      "h5Index": 117
+    },
+    "epjc": {
+      "type": "journal",
+      "category": "physics-mathematics",
+      "subcategory": "high-energy-nuclear-physics",
+      "name": "The European Physical Journal C",
+      "acronym": "EPJC",
+      "verified": false,
+      "h5Index": 116
+    },
+    "jcap": {
+      "type": "journal",
+      "category": "physics-mathematics",
+      "subcategory": "astronomy-astrophysics",
+      "name": "Journal of Cosmology and Astroparticle Physics",
+      "acronym": "JCAP",
+      "verified": false,
+      "h5Index": 115
+    },
+    "aom-photon": {
+      "type": "journal",
+      "category": "physics-mathematics",
+      "subcategory": "optics-photonics",
+      "name": "Advanced Optical Materials",
+      "acronym": "AOM",
+      "verified": false,
+      "h5Index": 113
+    },
+    "cmame": {
+      "type": "journal",
+      "category": "physics-mathematics",
+      "subcategory": "computational-mathematics",
+      "name": "Computer Methods in Applied Mechanics and Engineering",
+      "acronym": "CMAME",
+      "verified": false,
+      "h5Index": 110
+    },
+
+    "computers-education": {
+      "type": "journal",
+      "category": "social-sciences",
+      "subcategory": "educational-technology",
+      "name": "Computers & Education",
+      "acronym": "C&E",
+      "verified": false,
+      "h5Index": 152
+    },
+    "eit": {
+      "type": "journal",
+      "category": "social-sciences",
+      "subcategory": "educational-technology",
+      "name": "Education and Information Technologies",
+      "acronym": "EIT",
+      "verified": false,
+      "h5Index": 143
+    },
+    "technology-society": {
+      "type": "journal",
+      "category": "social-sciences",
+      "subcategory": "social-sciences-general",
+      "name": "Technology in Society",
+      "acronym": "Tech. Soc.",
+      "verified": false,
+      "h5Index": 139
+    },
+    "resources-policy": {
+      "type": "journal",
+      "category": "social-sciences",
+      "subcategory": "public-policy-administration",
+      "name": "Resources Policy",
+      "acronym": "Resour. Policy",
+      "verified": false,
+      "h5Index": 133
+    },
+    "nature-human-behaviour": {
+      "type": "journal",
+      "category": "social-sciences",
+      "subcategory": "cognitive-science",
+      "name": "Nature Human Behaviour",
+      "acronym": "Nat. Hum. Behav.",
+      "verified": false,
+      "h5Index": 132
+    },
+    "lup": {
+      "type": "journal",
+      "category": "social-sciences",
+      "subcategory": "urban-studies-planning",
+      "name": "Land Use Policy",
+      "acronym": "LUP",
+      "verified": false,
+      "h5Index": 120
+    },
+    "erss": {
+      "type": "journal",
+      "category": "social-sciences",
+      "subcategory": "public-policy-administration",
+      "name": "Energy Research & Social Science",
+      "acronym": "ERSS",
+      "verified": false,
+      "h5Index": 117
+    },
+    "educ-sci": {
+      "type": "journal",
+      "category": "social-sciences",
+      "subcategory": "education",
+      "name": "Education Sciences",
+      "acronym": "Educ. Sci.",
+      "verified": false,
+      "h5Index": 116
+    },
+    "eds": {
+      "type": "journal",
+      "category": "social-sciences",
+      "subcategory": "sustainable-development",
+      "name": "Environment, Development and Sustainability",
+      "acronym": "EDS",
+      "verified": false,
+      "h5Index": 111
+    },
+    "cit": {
+      "type": "journal",
+      "category": "social-sciences",
+      "subcategory": "social-sciences-general",
+      "name": "Current Issues in Tourism",
+      "acronym": "CIT",
+      "verified": false,
+      "h5Index": 111
+    },
+    "ssm": {
+      "type": "journal",
+      "category": "social-sciences",
+      "subcategory": "sociology",
+      "name": "Social Science & Medicine",
+      "acronym": "SSM",
+      "verified": false,
+      "h5Index": 108
+    },
+    "cities": {
+      "type": "journal",
+      "category": "social-sciences",
+      "subcategory": "urban-studies-planning",
+      "name": "Cities",
+      "acronym": "Cities",
+      "verified": false,
+      "h5Index": 103
+    },
+    "sd": {
+      "type": "journal",
+      "category": "social-sciences",
+      "subcategory": "sustainable-development",
+      "name": "Sustainable Development",
+      "acronym": "SD",
+      "verified": false,
+      "h5Index": 102
+    },
+    "sage-open": {
+      "type": "journal",
+      "category": "social-sciences",
+      "subcategory": "social-sciences-general",
+      "name": "SAGE Open",
+      "acronym": "SAGE Open",
+      "verified": false,
+      "h5Index": 102
+    },
+    "atr": {
+      "type": "journal",
+      "category": "social-sciences",
+      "subcategory": "social-sciences-general",
+      "name": "Annals of Tourism Research",
+      "acronym": "ATR",
+      "verified": false,
+      "h5Index": 100
+    },
+    "ile": {
+      "type": "journal",
+      "category": "social-sciences",
+      "subcategory": "educational-technology",
+      "name": "Interactive Learning Environments",
+      "acronym": "ILE",
+      "verified": false,
+      "h5Index": 100
+    },
+    "research-policy": {
+      "type": "journal",
+      "category": "social-sciences",
+      "subcategory": "public-policy-administration",
+      "name": "Research Policy",
+      "acronym": "Res. Policy",
+      "verified": false,
+      "h5Index": 98
+    },
+    "psychological-science": {
+      "type": "journal",
+      "category": "social-sciences",
+      "subcategory": "cognitive-science",
+      "name": "Psychological Science",
+      "acronym": "Psych. Sci.",
+      "verified": false,
+      "h5Index": 85
+    }
+  }
+}

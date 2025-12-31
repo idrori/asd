@@ -1,0 +1,86 @@
+{
+  "id": "computers-education",
+  "name": "Computers & Education",
+  "acronym": "Comput. Educ.",
+  "venueType": "journal",
+  "category": "social-sciences",
+  "subcategory": "education",
+  "year": 2025,
+  "h5Index": 135,
+  "website": "https://www.sciencedirect.com/journal/computers-and-education",
+  "description": "Computers & Education publishes high-quality research on how digital technology can enhance education.",
+
+  "publisher": "Elsevier",
+  "openAccess": false,
+  "apc": 4930,
+  "publicationFrequency": "continuous",
+  "averageReviewTime": "8-12 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.sciencedirect.com/journal/computers-and-education/publish/guide-for-authors",
+    "authorGuidelines": "https://www.elsevier.com/journals/computers-and-education/03601315/guide-for-authors",
+    "submissionPortal": "https://www.editorialmanager.com/compedu/default.aspx"
+  },
+
+  "paperLimits": {
+    "minPages": 10,
+    "maxPages": 25,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Keywords", "Introduction", "Literature Review", "Methodology", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "elsevier",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "apa",
+    "lineSpacing": 2.0,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 3.5,
+    "maxRevisionRounds": 2,
+    "dimensions": ["novelty", "educationalSignificance", "methodologicalRigor", "clarity", "practicalImplications"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "Computers & Education is a leading journal for educational technology research.",
+    "topJournals": ["Computers & Education", "British Journal of Educational Technology", "Educational Technology Research and Development"],
+    "methodologyEmphasis": ["Empirical Research", "Learning Analytics", "Technology Integration", "Educational Design"]
+  },
+
+  "notes": [
+    "Leading educational technology journal",
+    "AI tools allowed but not for reviewers/editors",
+    "APC: USD 4,930",
+    "Companion journals: C&E Open, C&E: AI",
+    "Editorial Manager submission",
+    "Definitive author list at submission",
+    "Papers not meeting guidelines returned without review"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

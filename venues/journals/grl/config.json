@@ -1,0 +1,95 @@
+{
+  "id": "grl",
+  "name": "Geophysical Research Letters",
+  "acronym": "GRL",
+  "venueType": "journal",
+  "category": "physics-astronomy",
+  "subcategory": "geophysics",
+  "year": 2025,
+  "h5Index": 165,
+  "website": "https://agupubs.onlinelibrary.wiley.com/journal/19448007",
+  "description": "Geophysical Research Letters publishes high-impact, innovative, and timely communications-length articles on major advances spanning all geoscience disciplines.",
+
+  "publisher": "American Geophysical Union / Wiley",
+  "openAccess": true,
+  "publicationFrequency": "semi-monthly",
+  "averageReviewTime": "15 working days",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.agu.org/publications/authors/journals/submission-checklists",
+    "authorGuidelines": "https://www.agu.org/publications/authors/journals/text-graphics-requirements",
+    "submissionPortal": "https://grl-submit.agu.org/"
+  },
+
+  "paperLimits": {
+    "minPages": 4,
+    "maxPages": 8,
+    "maxPublicationUnits": 12,
+    "referencesCountTowardLimit": false,
+    "minReferences": 20,
+    "maxReferences": 50
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Plain Language Summary", "Introduction", "Methods", "Results", "Discussion", "Conclusion", "Open Research", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 150,
+    "plainLanguageSummaryRequired": true,
+    "plainLanguageSummaryMaxWords": 200,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "agu",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "agu",
+    "lineSpacing": 2.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": false,
+    "latexRecommended": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "single-blind",
+    "minReviewers": 2,
+    "maxReviewers": 3,
+    "dimensions": ["geophysicalSignificance", "novelty", "broadImpact", "clarity", "timeliness"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "GRL is AGU's high-impact letters journal for geosciences.",
+    "topJournals": ["Geophysical Research Letters", "Nature Geoscience", "Journal of Geophysical Research", "Earth and Planetary Science Letters"],
+    "methodologyEmphasis": ["Earth Science", "Atmospheric Science", "Oceanography", "Space Physics"]
+  },
+
+  "notes": [
+    "Premier AGU letters journal",
+    "Gold open access",
+    "Max 12 publication units (words/500 + figures + tables)",
+    "Abstract max 150 words",
+    "Plain Language Summary required (max 200 words)",
+    "15 working days to production",
+    "2-3 reviewers per manuscript",
+    "ORCID required for corresponding author",
+    "Suggest minimum 3 reviewers",
+    "LaTeX/Word/Overleaf/Curvenote supported"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

@@ -1,0 +1,100 @@
+{
+  "id": "cscw",
+  "name": "ACM Conference on Computer-Supported Cooperative Work and Social Computing",
+  "acronym": "CSCW",
+  "venueType": "conference",
+  "category": "engineering-computer-science",
+  "subcategory": "human-computer-interaction",
+  "year": 2025,
+  "h5Index": 72,
+  "website": "https://cscw.acm.org/2025/",
+  "description": "CSCW is the premier venue for human-centered research on technologies that support social, cooperative, and collaborative practices in groups, organizations, and communities.",
+
+  "officialLinks": {
+    "callForPapers": "https://cscw.acm.org/2025/index.php/submit-papers/",
+    "submissionInstructions": "https://cscw.acm.org/2025/index.php/submit-papers/",
+    "doctoralConsortium": "https://cscw.acm.org/2025/index.php/call-for-doctoral-consortium/"
+  },
+
+  "paperLimits": {
+    "minPages": 10,
+    "maxPages": 25,
+    "referencesCountTowardLimit": false,
+    "minReferences": 25,
+    "maxReferences": 70
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Related Work",
+      "Methods",
+      "Findings",
+      "Discussion",
+      "Limitations",
+      "Conclusion",
+      "References"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true,
+    "scopeStatementRequired": true
+  },
+
+  "template": {
+    "formatStyle": "acm-sigchi",
+    "fontFamily": "Libertine",
+    "fontSize": 10,
+    "citationStyle": "acm",
+    "lineSpacing": 1.0,
+    "paperSize": "letter",
+    "twoColumn": true,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 1,
+    "reviewType": "double-blind",
+    "dimensions": [
+      "novelty",
+      "significance",
+      "methodologicalRigor",
+      "clarity",
+      "CSCWRelevance"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "CSCW is the premier venue for research on collaborative and social computing technologies.",
+    "topJournals": ["CSCW Journal", "HCI Journal", "CHI"],
+    "topConferences": ["CSCW", "CHI", "GROUP", "ECSCW"],
+    "methodologyEmphasis": ["Qualitative Studies", "Design Research", "Ethnography", "Field Studies"]
+  },
+
+  "notes": [
+    "Premier venue for CSCW research",
+    "Double-blind review process",
+    "Scope statement required (anonymized)",
+    "Must focus on social aspects of technology",
+    "Papers out of scope will be desk rejected",
+    "Moving to rolling deadlines in 2026",
+    "Published in PACM HCI",
+    "CSCW 2025 in Bergen, Norway"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

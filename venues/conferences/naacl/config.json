@@ -1,0 +1,105 @@
+{
+  "id": "naacl",
+  "name": "North American Chapter of the Association for Computational Linguistics",
+  "acronym": "NAACL",
+  "venueType": "conference",
+  "category": "engineering-computer-science",
+  "subcategory": "computational-linguistics",
+  "year": 2025,
+  "h5Index": 97,
+  "website": "https://2025.naacl.org/",
+  "description": "NAACL is a premier conference for computational linguistics and NLP research in the Americas, part of the ACL family of conferences.",
+
+  "officialLinks": {
+    "callForPapers": "https://2025.naacl.org/calls/papers/",
+    "submissionInstructions": "https://acl-org.github.io/ACLPUB/formatting.html",
+    "reviewerGuidelines": "https://aclrollingreview.org/reviewers",
+    "rollingReview": "https://aclrollingreview.org/cfp"
+  },
+
+  "paperLimits": {
+    "minPages": 4,
+    "maxPages": 8,
+    "shortPaperMaxPages": 4,
+    "longPaperMaxPages": 8,
+    "cameraReadyExtraPage": 1,
+    "referencesCountTowardLimit": false,
+    "minReferences": 20,
+    "maxReferences": 50
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Related Work",
+      "Method",
+      "Experiments",
+      "Results",
+      "Limitations",
+      "Ethics Statement",
+      "Conclusion",
+      "References",
+      "Appendix"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "limitationsRequired": true,
+    "ethicsStatementOptional": true
+  },
+
+  "template": {
+    "formatStyle": "acl",
+    "fontFamily": "Times",
+    "fontSize": 11,
+    "citationStyle": "acl",
+    "lineSpacing": 1.0,
+    "paperSize": "letter",
+    "twoColumn": true,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 3.5,
+    "maxRevisionRounds": 1,
+    "rollingReview": true,
+    "dimensions": [
+      "soundness",
+      "significance",
+      "novelty",
+      "verifiability",
+      "clarity"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "NAACL is a top NLP venue using ACL Rolling Review. Strong emphasis on empirical methods and reproducibility.",
+    "topJournals": ["TACL", "Computational Linguistics", "JMLR"],
+    "topConferences": ["NAACL", "ACL", "EMNLP", "EACL", "COLING"],
+    "methodologyEmphasis": ["NLP Methods", "Empirical Evaluation", "Reproducibility", "Error Analysis"]
+  },
+
+  "notes": [
+    "Uses ACL Rolling Review (ARR) system",
+    "Long papers: 8 pages, Short papers: 4 pages",
+    "Camera-ready allows 1 additional page",
+    "Limitations section mandatory (desk rejection without)",
+    "All authors must register as reviewers",
+    "ACL formatting required",
+    "In-person and virtual presentation options"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

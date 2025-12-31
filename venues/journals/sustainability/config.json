@@ -1,0 +1,88 @@
+{
+  "id": "sustainability",
+  "name": "Sustainability",
+  "acronym": "Sustainability",
+  "venueType": "journal",
+  "category": "life-sciences-earth-sciences",
+  "subcategory": "sustainable-development",
+  "year": 2025,
+  "h5Index": 250,
+  "website": "https://www.mdpi.com/journal/sustainability",
+  "description": "Sustainability is an international, cross-disciplinary, scholarly, open access journal covering environmental, cultural, economic and social sustainability.",
+
+  "publisher": "MDPI",
+  "openAccess": true,
+  "apc": 2400,
+  "publicationFrequency": "continuous",
+  "averageReviewTime": "19.3 days to first decision",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.mdpi.com/journal/sustainability/instructions",
+    "authorGuidelines": "https://www.mdpi.com/journal/sustainability/instructions",
+    "journalPage": "https://www.mdpi.com/journal/sustainability/about"
+  },
+
+  "paperLimits": {
+    "minPages": 6,
+    "maxPages": 30,
+    "referencesCountTowardLimit": false,
+    "minReferences": 20,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Keywords", "Introduction", "Materials and Methods", "Results", "Discussion", "Conclusions", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "mdpi-free",
+    "fontFamily": "Palatino",
+    "fontSize": 10,
+    "citationStyle": "flexible",
+    "lineSpacing": 1.0,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 3.5,
+    "maxRevisionRounds": 2,
+    "reviewType": "single-blind",
+    "dimensions": ["novelty", "sustainabilityImpact", "methodologicalRigor", "clarity", "practicalRelevance"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "Sustainability covers all aspects of sustainable development across disciplines.",
+    "topJournals": ["Sustainability", "Journal of Cleaner Production", "Sustainable Development"],
+    "methodologyEmphasis": ["Sustainability Assessment", "Policy Analysis", "Environmental Studies", "Social Sustainability"]
+  },
+
+  "notes": [
+    "Cross-disciplinary sustainability journal",
+    "Free format submission accepted",
+    "APC: 2400 CHF",
+    "Q2 in Environmental Studies",
+    "Q1 CiteScore in Geography/Planning",
+    "Single-blind peer review",
+    "COPE member",
+    "iThenticate plagiarism check"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

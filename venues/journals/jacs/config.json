@@ -1,0 +1,89 @@
+{
+  "id": "jacs",
+  "name": "Journal of the American Chemical Society",
+  "acronym": "JACS",
+  "venueType": "journal",
+  "category": "chemical-material-sciences",
+  "subcategory": "chemical-material-sciences-general",
+  "year": 2025,
+  "h5Index": 237,
+  "website": "https://pubs.acs.org/journal/jacsat",
+  "description": "JACS is devoted to the publication of fundamental research papers in all fields of chemistry, emphasizing high scientific quality, originality, and broad interest.",
+
+  "publisher": "American Chemical Society",
+  "openAccess": false,
+  "impactFactor": 14.4,
+  "publicationFrequency": "weekly",
+  "averageReviewTime": "4-8 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://researcher-resources.acs.org/publish/author_guidelines?coden=jacsat",
+    "authorGuidelines": "https://pubs.acs.org/page/jacsat/submission/authors.html",
+    "submissionPortal": "https://publish.acs.org/"
+  },
+
+  "paperLimits": {
+    "minPages": 6,
+    "maxPages": 15,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Results and Discussion", "Conclusion", "Experimental Section", "References", "Supporting Information"],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": false,
+    "tocGraphicRequired": true
+  },
+
+  "template": {
+    "formatStyle": "acs",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "acs",
+    "lineSpacing": 2.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "single-blind",
+    "dimensions": ["novelty", "significance", "chemicalInnovation", "clarity", "broadInterest"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "JACS is the flagship journal of ACS publishing fundamental chemistry research.",
+    "topJournals": ["JACS", "Angew. Chem.", "Nature Chemistry", "Chemical Science"],
+    "methodologyEmphasis": ["Pure Chemistry", "Novel Synthesis", "Mechanism Studies", "Fundamental Discovery"]
+  },
+
+  "notes": [
+    "ACS flagship chemistry journal",
+    "No 'First' or 'Novel' in titles",
+    "No acronyms in titles",
+    "TOC graphic required",
+    "CIF files for crystal structures required",
+    "Preprints allowed (ChemRxiv, arXiv)",
+    "iThenticate plagiarism screening",
+    "Cover art submissions encouraged"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

@@ -1,0 +1,166 @@
+{
+  "id": "chi",
+  "name": "ACM CHI Conference on Human Factors in Computing Systems",
+  "acronym": "CHI",
+  "venueType": "conference",
+  "category": "engineering-computer-science",
+  "subcategory": "human-computer-interaction",
+  "year": 2025,
+  "h5Index": 125,
+  "website": "https://chi2025.acm.org/",
+  "description": "CHI is the premier international conference on Human-Computer Interaction. It covers user experience, interaction design, accessibility, social computing, and human-AI interaction.",
+
+  "officialLinks": {
+    "callForPapers": "https://chi2025.acm.org/for-authors/papers/",
+    "submissionInstructions": "https://chi2025.acm.org/guide-to-a-successful-submission/",
+    "reviewerGuidelines": "https://chi2025.acm.org/for-authors/",
+    "publicationFormats": "https://chi2025.acm.org/chi-publication-formats/",
+    "authorInstructions": "https://chi2025.acm.org/for-authors/publication-ready-author-instructions/"
+  },
+
+  "paperLimits": {
+    "minWords": 5000,
+    "maxWords": 12000,
+    "shortPaperMaxWords": 5000,
+    "referencesCountTowardLimit": false,
+    "captionsCountTowardLimit": false,
+    "appendicesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Related Work",
+      "System Design / Study Design",
+      "Method",
+      "Results",
+      "Discussion",
+      "Limitations",
+      "Conclusion",
+      "Acknowledgments",
+      "References"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 150,
+    "keywordsRequired": true,
+    "keywordsCount": { "min": 3, "max": 5 },
+    "appendicesAllowed": true,
+    "supplementaryAllowed": true,
+    "accessibilityRequired": true
+  },
+
+  "template": {
+    "formatStyle": "acm-chi",
+    "fontFamily": "Linux Libertine",
+    "fontSize": 9,
+    "citationStyle": "acm",
+    "lineSpacing": 1.0,
+    "marginInches": 0.75,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "submissionFormat": "single-column",
+    "finalFormat": "two-column",
+    "anonymousSubmission": true,
+    "templateUrl": "https://chi2026.acm.org/chi-publication-formats/"
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 3.5,
+    "maxRevisionRounds": 1,
+    "reviseAndResubmit": true,
+    "recommendationScale": [
+      "Accept with minor revisions (A)",
+      "Accept or Revise and Resubmit (ARR)",
+      "Revise and Resubmit (RR)",
+      "Revise and Resubmit or Reject (RRX)",
+      "Reject (X)"
+    ],
+    "expertiseScale": {
+      "min": 1,
+      "max": 4,
+      "labels": {
+        "4": "Expert",
+        "3": "Knowledgeable",
+        "2": "Passing Knowledge",
+        "1": "No Knowledge"
+      }
+    },
+    "dimensions": [
+      "significance",
+      "originality",
+      "researchQuality",
+      "presentationClarity",
+      "priorWork"
+    ],
+    "includeTrustworthiness": false
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt",
+    "infographic": "infographic.txt",
+    "dataTable": "datatable.txt"
+  },
+
+  "calibration": {
+    "description": "CHI values user studies, design contributions, and systems contributions. The primary evaluation criterion is: Does this submission provide a strong contribution to the field of HCI?",
+    "exemplarCount": 0,
+    "topJournals": [
+      "ACM Transactions on Computer-Human Interaction (TOCHI)",
+      "Human-Computer Interaction",
+      "International Journal of Human-Computer Studies",
+      "Proceedings of the ACM on Human-Computer Interaction",
+      "Behaviour & Information Technology"
+    ],
+    "topConferences": [
+      "CHI",
+      "UIST",
+      "CSCW",
+      "UbiComp",
+      "IUI",
+      "DIS"
+    ],
+    "methodologyEmphasis": [
+      "User Studies",
+      "Controlled Experiments",
+      "Qualitative Studies",
+      "Design Research",
+      "System Building",
+      "Survey Studies",
+      "Interview Studies"
+    ],
+    "contributionTypes": [
+      "Empirical",
+      "Artifact",
+      "Methodological",
+      "Theoretical",
+      "Dataset",
+      "Survey"
+    ]
+  },
+
+  "notes": [
+    "Word limit: 5,000-12,000 words (excluding references, captions, appendices)",
+    "Short papers: 5,000 words or less",
+    "Papers exceeding 12,000 words face desk rejection without strong justification",
+    "Single-column format for submission, two-column for publication",
+    "Revise and Resubmit process (replaces traditional rebuttal)",
+    "Complete anonymization required - violations result in desk rejection",
+    "Accessibility guidelines must be followed (SIGCHI Guide)",
+    "Subcommittee selection required (up to 2 preferences)",
+    "CCS concepts (ACM Computing Classification System) required",
+    "No hybrid/remote attendance - in-person required"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

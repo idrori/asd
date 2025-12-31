@@ -1,0 +1,90 @@
+{
+  "id": "jco",
+  "name": "Journal of Clinical Oncology",
+  "acronym": "JCO",
+  "venueType": "journal",
+  "category": "health-medical-sciences",
+  "subcategory": "oncology",
+  "year": 2025,
+  "h5Index": 250,
+  "website": "https://ascopubs.org/journal/jco",
+  "description": "JCO is the foremost peer-reviewed journal focusing on clinical cancer research and the authoritative source for diagnosis and treatment of patients with cancer.",
+
+  "publisher": "American Society of Clinical Oncology",
+  "openAccess": false,
+  "publicationFrequency": "36 issues/year",
+  "averageReviewTime": "4-8 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://ascopubs.org/authors/manuscript-format",
+    "authorGuidelines": "https://ascopubs.org/authors",
+    "submitManuscript": "https://ascopubs.org/authors/submit-manuscript"
+  },
+
+  "paperLimits": {
+    "minPages": 10,
+    "maxPages": 25,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 150
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Methods", "Results", "Discussion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 300,
+    "keywordsRequired": true,
+    "consortDiagramRequired": true
+  },
+
+  "template": {
+    "formatStyle": "asco",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "numbered",
+    "lineSpacing": 2.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "rapidReviewAvailable": true,
+    "dimensions": ["clinicalSignificance", "methodologicalRigor", "novelty", "clarity", "patientImpact"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "JCO is the primary forum for ASCO and clinical oncology research.",
+    "topJournals": ["JCO", "Lancet Oncology", "Journal of the National Cancer Institute", "Annals of Oncology"],
+    "methodologyEmphasis": ["Clinical Trials", "Translational Research", "Treatment Studies", "Survival Analysis"]
+  },
+
+  "notes": [
+    "Primary ASCO journal",
+    "Published 3 times/month",
+    "$80 submission fee",
+    "EZSubmit format-free policy",
+    "Word limit is enforced",
+    "CONSORT diagram required for RCTs",
+    "Protocol required for trials",
+    "Kaplan-Meier plots need risk tables",
+    "Rapid Review pathway available"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

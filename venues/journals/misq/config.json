@@ -1,0 +1,125 @@
+{
+  "id": "misq",
+  "name": "MIS Quarterly",
+  "acronym": "MISQ",
+  "venueType": "journal",
+  "category": "business-economics-management",
+  "subcategory": "databases-information-systems",
+  "year": 2025,
+  "h5Index": 89,
+  "website": "https://misq.umn.edu/",
+  "description": "MIS Quarterly is the premier journal for Information Systems research. It publishes impactful research on the management of information technology and its implications for organizations and society.",
+
+  "publisher": "Management Information Systems Research Center, University of Minnesota",
+  "openAccess": false,
+  "impactFactor": 7.0,
+  "publicationFrequency": "quarterly",
+  "averageReviewTime": "4-6 months",
+
+  "officialLinks": {
+    "callForPapers": "https://misq.umn.edu/skin/frontend/default/misq/pdf/CurrentCalls/MISQ_Master_CfP.pdf",
+    "submissionInstructions": "https://misq.umn.edu/submission-instructions",
+    "authorGuidelines": "https://misq.umn.edu/skin/frontend/default/misq/pdf/Instructions/AuthorGuidelines.pdf",
+    "reviewerGuidelines": "https://misq.umn.edu/skin/frontend/default/misq/pdf/Instructions/ReviewerGuidelines.pdf",
+    "submissionPortal": "https://mc.manuscriptcentral.com/misq"
+  },
+
+  "paperLimits": {
+    "minPages": 30,
+    "maxPages": 50,
+    "referencesCountTowardLimit": false,
+    "minReferences": 40,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Literature Review",
+      "Theory Development",
+      "Research Method",
+      "Results",
+      "Discussion",
+      "Conclusion",
+      "References"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": true,
+    "keywordsCount": { "min": 3, "max": 6 },
+    "appendicesAllowed": true,
+    "supplementaryAllowed": true
+  },
+
+  "template": {
+    "formatStyle": "icis",
+    "fontFamily": "Times New Roman",
+    "fontSize": 12,
+    "citationStyle": "apa7",
+    "lineSpacing": 2.0,
+    "marginInches": 1.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 3,
+    "dimensions": [
+      "novelty",
+      "significance",
+      "methodologicalRigor",
+      "clarity",
+      "theoreticalContribution"
+    ],
+    "includeTrustworthiness": true
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "MISQ is the top-ranked IS journal. Papers must make significant theoretical contributions.",
+    "exemplarCount": 0,
+    "topJournals": [
+      "MIS Quarterly",
+      "Information Systems Research",
+      "Journal of Management Information Systems",
+      "Journal of the Association for Information Systems",
+      "Management Science",
+      "Organization Science"
+    ],
+    "topConferences": [
+      "ICIS",
+      "ECIS",
+      "AMCIS",
+      "PACIS"
+    ],
+    "methodologyEmphasis": [
+      "Quantitative Empirical",
+      "Qualitative Empirical",
+      "Design Science",
+      "Analytical/Theoretical"
+    ]
+  },
+
+  "notes": [
+    "Double-blind peer review",
+    "Theoretical contribution is paramount",
+    "Papers typically 10,000-15,000 words",
+    "APA 7th edition citations required"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

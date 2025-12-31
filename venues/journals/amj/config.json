@@ -1,0 +1,87 @@
+{
+  "id": "amj",
+  "name": "Academy of Management Journal",
+  "acronym": "AMJ",
+  "venueType": "journal",
+  "category": "business-economics-management",
+  "subcategory": "management",
+  "year": 2025,
+  "h5Index": 125,
+  "website": "https://journals.aom.org/journal/amj",
+  "description": "AMJ publishes empirical research that tests, extends, or builds management theory and contributes to management practice.",
+
+  "publisher": "Academy of Management",
+  "openAccess": false,
+  "publicationFrequency": "bimonthly",
+  "averageReviewTime": "3-6 months",
+
+  "officialLinks": {
+    "submissionInstructions": "https://aom.org/research/publishing-with-aom/author-resources/submitting-to-amj",
+    "authorGuidelines": "https://aom.org/research/publishing-with-aom/author-resources"
+  },
+
+  "paperLimits": {
+    "minPages": 25,
+    "maxPages": 40,
+    "referencesCountTowardLimit": true,
+    "minReferences": 40,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Theory and Hypotheses", "Methods", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "aom",
+    "fontFamily": "Times New Roman",
+    "fontSize": 12,
+    "citationStyle": "aom",
+    "lineSpacing": 2.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": true,
+    "margins": "1 inch"
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "dimensions": ["theoreticalContribution", "empiricalRigor", "novelty", "clarity", "practicalImplications"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "AMJ is a premier empirical management research journal.",
+    "topJournals": ["AMJ", "Strategic Management Journal", "Administrative Science Quarterly", "Organization Science"],
+    "methodologyEmphasis": ["Empirical Research", "Quantitative Methods", "Qualitative Methods", "Mixed Methods"]
+  },
+
+  "notes": [
+    "Premier empirical management journal",
+    "All empirical methods welcome",
+    "Max 40 double-spaced pages",
+    "Contribution-to-length ratio assessed",
+    "Blind review process",
+    "No submission fees",
+    "iThenticate plagiarism detection",
+    "Research Methods articles welcome"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

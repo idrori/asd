@@ -1,0 +1,87 @@
+{
+  "id": "cities",
+  "name": "Cities",
+  "acronym": "Cities",
+  "venueType": "journal",
+  "category": "social-sciences",
+  "subcategory": "urban-studies",
+  "year": 2025,
+  "h5Index": 105,
+  "website": "https://www.sciencedirect.com/journal/cities",
+  "description": "Cities focuses on analysis and assessment of current and historical urban development and management, providing solutions for more effective urban policy implementations.",
+
+  "publisher": "Elsevier",
+  "openAccess": false,
+  "apc": 3750,
+  "impactFactor": 7.82,
+  "publicationFrequency": "bimonthly",
+  "averageReviewTime": "8-16 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.sciencedirect.com/journal/cities/publish/guide-for-authors",
+    "authorGuidelines": "https://www.sciencedirect.com/journal/cities/publish/guide-for-authors"
+  },
+
+  "paperLimits": {
+    "minPages": 12,
+    "maxPages": 30,
+    "referencesCountTowardLimit": false,
+    "minReferences": 40,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Literature Review", "Methodology", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "elsevier",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "elsevier-harvard",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "dimensions": ["urbanPolicyRelevance", "methodologicalRigor", "novelty", "clarity", "practicalImplications"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "Cities is a leading journal for urban studies and planning research.",
+    "topJournals": ["Cities", "Urban Studies", "Environment and Planning B", "Journal of Urban Economics"],
+    "methodologyEmphasis": ["Urban Policy Analysis", "Case Studies", "Comparative Studies", "Mixed Methods"]
+  },
+
+  "notes": [
+    "Leading urban studies journal",
+    "APC: USD 3,750",
+    "Impact factor 7.82",
+    "Q1 in Urban Studies, Development, Sociology",
+    "Free preprint posting on SSRN",
+    "AI use must be declared",
+    "Flexible reference formatting at submission"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

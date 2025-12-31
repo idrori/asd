@@ -1,0 +1,87 @@
+{
+  "id": "ijc",
+  "name": "International Journal of Cancer",
+  "acronym": "IJC",
+  "venueType": "journal",
+  "category": "health-medical-sciences",
+  "subcategory": "oncology",
+  "year": 2025,
+  "h5Index": 110,
+  "website": "https://onlinelibrary.wiley.com/journal/10970215",
+  "description": "International Journal of Cancer publishes original papers and review articles covering the full spectrum of clinical and experimental cancer research.",
+
+  "publisher": "Wiley / UICC",
+  "openAccess": false,
+  "publicationFrequency": "semi-monthly",
+  "averageReviewTime": "6-12 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://onlinelibrary.wiley.com/page/journal/10970215/homepage/forauthors.html",
+    "authorGuidelines": "https://onlinelibrary.wiley.com/page/journal/10970215/homepage/forauthors.html"
+  },
+
+  "paperLimits": {
+    "minPages": 10,
+    "maxPages": 25,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Materials and Methods", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true,
+    "graphicalAbstractEncouraged": true
+  },
+
+  "template": {
+    "formatStyle": "wiley",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "vancouver",
+    "lineSpacing": 2.0,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "dimensions": ["cancerRelevance", "mechanisticInsight", "technicalQuality", "clarity", "clinicalImplications"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "IJC is the official journal of the Union for International Cancer Control (UICC).",
+    "topJournals": ["International Journal of Cancer", "Cancer Research", "Clinical Cancer Research", "Cancer Cell"],
+    "methodologyEmphasis": ["Experimental Oncology", "Clinical Research", "Cancer Mechanisms", "Diagnostics"]
+  },
+
+  "notes": [
+    "Official UICC journal since 1966",
+    "COPE member",
+    "ICMJE endorser",
+    "Cell line authentication required",
+    "Mycoplasma testing required",
+    "Image integrity checking procedure",
+    "Pre-submission inquiries encouraged",
+    "Tobacco industry funding not accepted"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

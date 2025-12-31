@@ -1,0 +1,124 @@
+{
+  "id": "ecis",
+  "name": "European Conference on Information Systems",
+  "acronym": "ECIS",
+  "venueType": "conference",
+  "category": "business-economics-management",
+  "subcategory": "databases-information-systems",
+  "year": 2025,
+  "h5Index": 35,
+  "website": "https://ecis2025.eu/",
+  "description": "ECIS is the leading European conference for Information Systems research, sponsored by AIS. It provides a premier forum for IS researchers to present completed research and research-in-progress.",
+
+  "officialLinks": {
+    "callForPapers": "https://ecis2025.eu/submissions/call-for-papers/",
+    "submissionInstructions": "https://ecis2025.eu/submissions/submission-frequently-asked-questions/"
+  },
+
+  "paperLimits": {
+    "minPages": 12,
+    "maxPages": 15,
+    "referencesCountTowardLimit": true,
+    "minReferences": 20,
+    "maxReferences": 50
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Related Work",
+      "Theoretical Background",
+      "Research Method",
+      "Findings",
+      "Discussion",
+      "Conclusion",
+      "References"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true,
+    "keywordsCount": { "min": 3, "max": 5 },
+    "appendicesAllowed": false,
+    "supplementaryAllowed": true
+  },
+
+  "template": {
+    "formatStyle": "ecis",
+    "fontFamily": "Times New Roman",
+    "fontSize": 10,
+    "citationStyle": "apa7",
+    "lineSpacing": 1.0,
+    "marginInches": 1.0,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 3.5,
+    "maxRevisionRounds": 4,
+    "dimensions": [
+      "novelty",
+      "significance",
+      "methodologicalRigor",
+      "clarity",
+      "relevance"
+    ],
+    "includeTrustworthiness": true
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt",
+    "infographic": "infographic.txt",
+    "dataTable": "datatable.txt"
+  },
+
+  "calibration": {
+    "description": "Quality standards aligned with top IS research venues. ECIS accepts both completed research and research-in-progress papers.",
+    "exemplarCount": 0,
+    "topJournals": [
+      "MIS Quarterly",
+      "Information Systems Research",
+      "European Journal of Information Systems",
+      "Information Systems Journal",
+      "Journal of the Association for Information Systems",
+      "Journal of Information Technology",
+      "Journal of Strategic Information Systems",
+      "Information & Management"
+    ],
+    "topConferences": [
+      "ICIS",
+      "ECIS",
+      "PACIS",
+      "AMCIS",
+      "HICSS"
+    ],
+    "methodologyEmphasis": [
+      "Design Science Research",
+      "Interpretive Studies",
+      "Survey Research",
+      "Case Studies",
+      "Action Research",
+      "Mixed Methods"
+    ]
+  },
+
+  "notes": [
+    "Papers exceeding 15 pages will be desk rejected",
+    "Anonymous submission required",
+    "Use APA 7th edition citation format",
+    "A4 paper size is required",
+    "ECIS has stronger emphasis on European research contexts"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-01-01"
+}

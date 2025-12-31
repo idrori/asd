@@ -1,0 +1,23 @@
+{
+  "id": "journalism",
+  "name": "Journalism",
+  "acronym": "Journalism",
+  "venueType": "journal",
+  "category": "social-sciences",
+  "subcategory": "communication-media",
+  "year": 2025,
+  "h5Index": 55,
+  "website": "https://journals.sagepub.com/home/jou",
+  "description": "Journalism publishes peer-reviewed research on journalism as a subject of academic enquiry.",
+  "publisher": "SAGE Publications",
+  "openAccess": false,
+  "publicationFrequency": "12 issues/year",
+  "officialLinks": {"submissionInstructions": "https://journals.sagepub.com/author-instructions/jou"},
+  "paperLimits": {"minPages": 15, "maxPages": 35, "minReferences": 40, "maxReferences": 80},
+  "paperStructure": {"sections": ["Abstract", "Introduction", "Literature Review", "Methodology", "Findings", "Discussion", "Conclusion", "References"], "abstractRequired": true},
+  "template": {"formatStyle": "sage", "citationStyle": "apa", "anonymousSubmission": true},
+  "review": {"reviewType": "double-blind"},
+  "prompts": {"builder": "builder.txt", "reviewer": "reviewer.txt", "supervisor": "supervisor.txt", "reviser": "reviser.txt", "finalize": "finalize.txt", "setup": "setup.txt", "template": "template.txt"},
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

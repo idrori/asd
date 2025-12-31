@@ -1,0 +1,85 @@
+{
+  "id": "aom-photon",
+  "name": "ACS Photonics",
+  "acronym": "ACS Photonics",
+  "venueType": "journal",
+  "category": "physics-astronomy",
+  "subcategory": "optics-photonics",
+  "year": 2025,
+  "h5Index": 95,
+  "website": "https://pubs.acs.org/journal/apchd5",
+  "description": "ACS Photonics publishes original research on photonics, including nanophotonics, plasmonics, metamaterials, and optical devices.",
+
+  "publisher": "American Chemical Society",
+  "openAccess": false,
+  "publicationFrequency": "monthly",
+  "averageReviewTime": "4-8 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://pubs.acs.org/page/apchd5/submission/authors.html",
+    "authorGuidelines": "https://researcher-resources.acs.org/publish/author_guidelines?coden=apchd5",
+    "authorChecklist": "https://pubs.acs.org/page/apchd5/submission/author-checklist"
+  },
+
+  "paperLimits": {
+    "minPages": 6,
+    "maxPages": 15,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Results and Discussion", "Conclusion", "Methods", "References", "Supporting Information"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": false,
+    "tocGraphicRequired": true
+  },
+
+  "template": {
+    "formatStyle": "acs",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "acs",
+    "lineSpacing": 2.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "dimensions": ["novelty", "technicalQuality", "impact", "clarity", "photonicsSignificance"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "ACS Photonics is a leading journal for photonics research.",
+    "topJournals": ["ACS Photonics", "Nature Photonics", "Light: Science & Applications", "Optica"],
+    "methodologyEmphasis": ["Nanophotonics", "Plasmonics", "Metamaterials", "Optical Devices"]
+  },
+
+  "notes": [
+    "ACS premier photonics journal",
+    "6 reviewer suggestions required at submission",
+    "TOC graphic required",
+    "Preprints allowed (arXiv)",
+    "Cover art submissions encouraged",
+    "CIF files required for crystallographic data"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

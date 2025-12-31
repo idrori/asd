@@ -1,0 +1,92 @@
+{
+  "id": "jem",
+  "name": "Journal of Experimental Medicine",
+  "acronym": "JEM",
+  "venueType": "journal",
+  "category": "health-medical-sciences",
+  "subcategory": "experimental-medicine",
+  "year": 2025,
+  "h5Index": 130,
+  "website": "https://rupress.org/jem",
+  "description": "JEM publishes novel findings in immunology, cancer biology, vascular biology, microbial pathogenesis, neurobiology, and stem cell biology with scientific and medical significance.",
+
+  "publisher": "Rockefeller University Press",
+  "openAccess": false,
+  "apc": 2500,
+  "publicationFrequency": "monthly",
+  "averageReviewTime": "6-10 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://rupress.org/jem/pages/submission-guidelines",
+    "authorGuidelines": "https://rupress.org/jem/pages/ifora",
+    "editorialPolicies": "https://rupress.org/jem/pages/editorial-policies"
+  },
+
+  "paperLimits": {
+    "minPages": 10,
+    "maxPages": 25,
+    "referencesCountTowardLimit": false,
+    "minReferences": 40,
+    "maxReferences": 100,
+    "titleMaxChars": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Results", "Discussion", "Materials and Methods", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true,
+    "summaryStatementRequired": true,
+    "summaryStatementMaxWords": 40
+  },
+
+  "template": {
+    "formatStyle": "jem",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "numbered",
+    "lineSpacing": 2.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "dimensions": ["medicalSignificance", "novelty", "technicalQuality", "clarity", "reproducibility"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "JEM is a leading biomedical research journal from Rockefeller University Press.",
+    "topJournals": ["JEM", "Journal of Clinical Investigation", "Nature Medicine", "Cell"],
+    "methodologyEmphasis": ["Immunology", "Cancer Biology", "Microbiology", "Stem Cell Biology"]
+  },
+
+  "notes": [
+    "Leading biomedical research journal",
+    "Flat fee $2,000 ($2,500 after Nov 15, 2025)",
+    "Open access option: $6,000",
+    "SciScore reproducibility check",
+    "Cell line authentication required",
+    "Mycoplasma testing required",
+    "EQUATOR reporting guidelines encouraged",
+    "ARRIVE guidelines for animal research",
+    "Preprints allowed with DOI disclosure"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

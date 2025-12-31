@@ -1,0 +1,90 @@
+{
+  "id": "est",
+  "name": "Environmental Science & Technology",
+  "acronym": "ES&T",
+  "venueType": "journal",
+  "category": "life-sciences-earth-sciences",
+  "subcategory": "environmental-sciences",
+  "year": 2025,
+  "h5Index": 195,
+  "website": "https://pubs.acs.org/journal/esthag",
+  "description": "ES&T is a transformational environmental science journal publishing rigorous research for scientists, policy makers, and the environmental community for over 50 years.",
+
+  "publisher": "American Chemical Society",
+  "openAccess": false,
+  "impactFactor": 11.4,
+  "publicationFrequency": "biweekly",
+  "averageReviewTime": "6-10 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://pubs.acs.org/page/esthag/submission/authors.html",
+    "authorGuidelines": "https://researcher-resources.acs.org/publish/author_guidelines?coden=esthag",
+    "submissionPortal": "https://publish.acs.org/"
+  },
+
+  "paperLimits": {
+    "minPages": 6,
+    "maxPages": 12,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 70,
+    "wordLimit": 7000
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Materials and Methods", "Results and Discussion", "References", "Supporting Information"],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": true,
+    "tocGraphicRequired": true,
+    "noConclusionSection": true
+  },
+
+  "template": {
+    "formatStyle": "acs",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "acs",
+    "lineSpacing": 2.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "single-blind",
+    "dimensions": ["novelty", "environmentalImpact", "methodologicalRigor", "clarity", "policyRelevance"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "ES&T is the flagship ACS environmental science journal.",
+    "topJournals": ["ES&T", "Nature Sustainability", "STOTEN", "Water Research"],
+    "methodologyEmphasis": ["Environmental Chemistry", "Policy Analysis", "Risk Assessment", "Sustainability"]
+  },
+
+  "notes": [
+    "ACS flagship environmental journal 50+ years",
+    "7000 word limit for research articles",
+    "NO conclusion/summary section allowed",
+    "TOC graphic required",
+    "US Letter paper size",
+    "AI use must follow ACS guidelines",
+    "Impact factor 11.4"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

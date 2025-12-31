@@ -1,0 +1,166 @@
+{
+  "id": "neurips",
+  "name": "Conference on Neural Information Processing Systems",
+  "acronym": "NeurIPS",
+  "venueType": "conference",
+  "category": "engineering-computer-science",
+  "subcategory": "artificial-intelligence",
+  "year": 2025,
+  "h5Index": 278,
+  "website": "https://neurips.cc/",
+  "description": "NeurIPS is a top-tier machine learning and computational neuroscience conference. It covers deep learning, reinforcement learning, optimization, and neural computation.",
+
+  "officialLinks": {
+    "callForPapers": "https://neurips.cc/Conferences/2025/CallForPapers",
+    "reviewerGuidelines": "https://neurips.cc/Conferences/2025/ReviewerGuidelines",
+    "styleFiles": "https://neurips.cc/Conferences/2025/PaperInformation/StyleFiles"
+  },
+
+  "paperLimits": {
+    "minPages": 9,
+    "maxPages": 9,
+    "cameraReadyMaxPages": 10,
+    "referencesCountTowardLimit": false,
+    "minReferences": 20,
+    "maxReferences": 50
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Related Work",
+      "Problem Formulation",
+      "Method",
+      "Experiments",
+      "Results",
+      "Conclusion",
+      "Paper Checklist",
+      "References",
+      "Appendix"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": false,
+    "keywordsCount": { "min": 0, "max": 0 },
+    "appendicesAllowed": true,
+    "supplementaryAllowed": true,
+    "paperChecklistRequired": true
+  },
+
+  "template": {
+    "formatStyle": "neurips",
+    "fontFamily": "Times",
+    "fontSize": 10,
+    "citationStyle": "ieee",
+    "lineSpacing": 1.0,
+    "marginInches": 1.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": true,
+    "styleFile": "NeurIPS 2025 LaTeX style file"
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 1,
+    "ratingScale": {
+      "min": 1,
+      "max": 6,
+      "labels": {
+        "6": "Strong Accept - Technically flawless, groundbreaking impact",
+        "5": "Accept - Technically solid, high impact",
+        "4": "Borderline Accept - Acceptance reasons outweigh rejection",
+        "3": "Borderline Reject - Rejection reasons outweigh acceptance",
+        "2": "Reject - Technical flaws, weak evaluation",
+        "1": "Strong Reject - Well-known results or ethical concerns"
+      }
+    },
+    "confidenceScale": {
+      "min": 1,
+      "max": 5,
+      "labels": {
+        "5": "Absolutely certain",
+        "4": "Confident but not certain",
+        "3": "Fairly confident",
+        "2": "Willing to defend but gaps likely",
+        "1": "Educated guess"
+      }
+    },
+    "dimensionScale": {
+      "min": 1,
+      "max": 4,
+      "labels": {
+        "4": "Excellent",
+        "3": "Good",
+        "2": "Fair",
+        "1": "Poor"
+      }
+    },
+    "dimensions": [
+      "quality",
+      "clarity",
+      "significance",
+      "originality"
+    ],
+    "includeTrustworthiness": false
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt",
+    "infographic": "infographic.txt",
+    "dataTable": "datatable.txt"
+  },
+
+  "calibration": {
+    "description": "NeurIPS values novel algorithms, theoretical contributions, and strong empirical results. Paper checklist addressing reproducibility, transparency, ethics, and societal impact is mandatory.",
+    "exemplarCount": 0,
+    "topJournals": [
+      "Journal of Machine Learning Research",
+      "IEEE Transactions on Pattern Analysis and Machine Intelligence",
+      "Neural Computation",
+      "Machine Learning",
+      "Nature Machine Intelligence"
+    ],
+    "topConferences": [
+      "NeurIPS",
+      "ICML",
+      "ICLR",
+      "AAAI",
+      "CVPR",
+      "ACL"
+    ],
+    "methodologyEmphasis": [
+      "Algorithm Development",
+      "Theoretical Analysis",
+      "Empirical Evaluation",
+      "Benchmark Comparisons",
+      "Ablation Studies"
+    ]
+  },
+
+  "notes": [
+    "Main paper limited to 9 pages of content (including figures and tables)",
+    "Camera-ready version allows 10 pages",
+    "References, checklist, and technical appendices do not count toward page limit",
+    "NeurIPS 2025 LaTeX style file required",
+    "Use 'preprint' option if posting non-anonymously online",
+    "Paper checklist mandatory - addresses reproducibility, transparency, ethics, societal impact",
+    "50MB max file size for main paper submission",
+    "100MB max for supplementary material",
+    "Double-blind review - anonymized submissions required",
+    "Self-citations must use third person (e.g., 'Smith et al.' not 'our previous work')",
+    "Abstract submission deadline precedes paper deadline - no substantive changes allowed after",
+    "Highly competitive (acceptance rate ~20%)"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

@@ -1,0 +1,86 @@
+{
+  "id": "jhm",
+  "name": "Journal of Hazardous Materials",
+  "acronym": "JHM",
+  "venueType": "journal",
+  "category": "engineering-computer-science",
+  "subcategory": "environmental-geological-engineering",
+  "year": 2025,
+  "h5Index": 228,
+  "website": "https://www.sciencedirect.com/journal/journal-of-hazardous-materials",
+  "description": "JHM publishes research improving understanding of hazards and risks certain materials pose to people and the environment.",
+
+  "publisher": "Elsevier",
+  "openAccess": false,
+  "impactFactor": 11.3,
+  "publicationFrequency": "continuous",
+  "averageReviewTime": "2.4 weeks to first decision",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.sciencedirect.com/journal/journal-of-hazardous-materials/publish/guide-for-authors",
+    "authorGuidelines": "https://www.sciencedirect.com/journal/journal-of-hazardous-materials/publish/guide-for-authors"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 20,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Environmental Implication", "Introduction", "Materials and Methods", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true,
+    "environmentalImplicationRequired": true,
+    "environmentalImplicationMaxWords": 100
+  },
+
+  "template": {
+    "formatStyle": "elsevier",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "elsevier-numbered",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 3.5,
+    "maxRevisionRounds": 2,
+    "dimensions": ["novelty", "hazardRelevance", "environmentalConditions", "methodologicalRigor", "clarity"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "JHM focuses on hazardous materials with environmental relevance.",
+    "topJournals": ["JHM", "Environmental Science & Technology", "Chemosphere", "Environmental Pollution"],
+    "methodologyEmphasis": ["Environmental Conditions", "Contaminant Studies", "Risk Assessment", "Remediation"]
+  },
+
+  "notes": [
+    "Environmental implications statement required (100 words)",
+    "Must address: why material is hazardous, environmental relevance",
+    "Excludes: workplace safety, standard wastewater treatment, GHG mitigation",
+    "Fast review: 2.4 weeks to first decision",
+    "AI tools allowed with human oversight",
+    "Impact factor 11.3"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

@@ -1,0 +1,89 @@
+{
+  "id": "ees",
+  "name": "Energy & Environmental Science",
+  "acronym": "EES",
+  "venueType": "journal",
+  "category": "engineering-computer-science",
+  "subcategory": "sustainable-energy",
+  "year": 2025,
+  "h5Index": 220,
+  "website": "https://pubs.rsc.org/en/journals/journal/ee",
+  "description": "Energy & Environmental Science publishes agenda-setting research tackling key challenges in energy and environmental science.",
+
+  "publisher": "Royal Society of Chemistry",
+  "openAccess": false,
+  "impactFactor": 32.4,
+  "publicationFrequency": "monthly",
+  "averageReviewTime": "41 days to first decision",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.rsc.org/publishing/publish-with-us/publish-a-journal-article/energy-and-environmental-science",
+    "authorGuidelines": "https://www.rsc.org/publishing/journals/energy-and-environmental-science"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 20,
+    "referencesCountTowardLimit": false,
+    "minReferences": 40,
+    "maxReferences": 100,
+    "communicationMaxPages": 4
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Results and Discussion", "Conclusion", "Experimental", "References", "ESI"],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": true,
+    "dataAvailabilityRequired": true,
+    "conflictsOfInterestRequired": true
+  },
+
+  "template": {
+    "formatStyle": "rsc",
+    "fontFamily": "Times",
+    "fontSize": 10,
+    "citationStyle": "rsc",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "dimensions": ["novelty", "energySignificance", "environmentalImpact", "clarity", "experimentalRigor"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "EES covers interdisciplinary energy and environmental science research.",
+    "topJournals": ["EES", "Joule", "Nature Energy", "Advanced Energy Materials"],
+    "methodologyEmphasis": ["Energy Conversion", "Storage", "Sustainability", "Environmental Impact"]
+  },
+
+  "notes": [
+    "Top-tier energy/environmental journal",
+    "Communications max 4 pages",
+    "Opinion and Analysis articles welcome",
+    "10+ co-authors require contribution statement",
+    "Data availability statement required",
+    "Conflicts of interest statement required",
+    "Animal/human welfare statement if applicable",
+    "Impact factor 32.4"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

@@ -1,0 +1,120 @@
+{
+  "id": "isr",
+  "name": "Information Systems Research",
+  "acronym": "ISR",
+  "venueType": "journal",
+  "category": "business-economics-management",
+  "subcategory": "databases-information-systems",
+  "year": 2025,
+  "h5Index": 72,
+  "website": "https://pubsonline.informs.org/journal/isre",
+  "description": "Information Systems Research is a leading journal published by INFORMS. It covers the design, management, and implications of information systems in organizations.",
+
+  "publisher": "INFORMS",
+  "openAccess": false,
+  "impactFactor": 5.5,
+  "publicationFrequency": "quarterly",
+  "averageReviewTime": "4-6 months",
+
+  "officialLinks": {
+    "submissionInstructions": "https://pubsonline.informs.org/page/isre/submission-guidelines",
+    "authorGuidelines": "https://pubsonline.informs.org/page/isre/author-guidelines",
+    "submissionPortal": "https://mc.manuscriptcentral.com/isre"
+  },
+
+  "paperLimits": {
+    "minPages": 25,
+    "maxPages": 45,
+    "referencesCountTowardLimit": false,
+    "minReferences": 35,
+    "maxReferences": 90
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Literature Review",
+      "Theory",
+      "Research Method",
+      "Results",
+      "Discussion",
+      "Conclusion",
+      "References"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": true,
+    "keywordsCount": { "min": 3, "max": 6 },
+    "appendicesAllowed": true,
+    "supplementaryAllowed": true
+  },
+
+  "template": {
+    "formatStyle": "informs",
+    "fontFamily": "Times New Roman",
+    "fontSize": 12,
+    "citationStyle": "apa7",
+    "lineSpacing": 2.0,
+    "marginInches": 1.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 3,
+    "dimensions": [
+      "novelty",
+      "significance",
+      "methodologicalRigor",
+      "clarity",
+      "theoreticalContribution"
+    ],
+    "includeTrustworthiness": true
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "ISR is a top-tier IS journal with strong emphasis on methodological rigor.",
+    "exemplarCount": 0,
+    "topJournals": [
+      "Information Systems Research",
+      "MIS Quarterly",
+      "Management Science",
+      "Journal of the Association for Information Systems",
+      "Organization Science"
+    ],
+    "topConferences": [
+      "ICIS",
+      "ECIS",
+      "AMCIS"
+    ],
+    "methodologyEmphasis": [
+      "Econometric Analysis",
+      "Experiments",
+      "Field Studies",
+      "Analytical Modeling"
+    ]
+  },
+
+  "notes": [
+    "Double-blind peer review",
+    "Strong quantitative methods expected",
+    "INFORMS journal format"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

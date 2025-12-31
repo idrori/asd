@@ -1,0 +1,99 @@
+{
+  "id": "jama",
+  "name": "JAMA",
+  "acronym": "JAMA",
+  "venueType": "journal",
+  "category": "health-medical-sciences",
+  "subcategory": "medicine-general-internal",
+  "year": 2025,
+  "h5Index": 301,
+  "website": "https://jamanetwork.com/journals/jama",
+  "description": "JAMA (Journal of the American Medical Association) is a leading peer-reviewed medical journal publishing original research, reviews, and clinical updates since 1883.",
+
+  "publisher": "American Medical Association",
+  "openAccess": false,
+  "impactFactor": 120.7,
+  "publicationFrequency": "weekly",
+  "averageReviewTime": "4-6 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://jamanetwork.com/journals/jama/pages/instructions-for-authors",
+    "authorGuidelines": "https://jamanetwork.com/journals/jama/pages/for-authors",
+    "submissionPortal": "https://manuscripts.jama.com/"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 12,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 50
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Methods",
+      "Results",
+      "Discussion",
+      "Conclusions",
+      "References"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 350,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "jama",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "ama",
+    "lineSpacing": 2.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "dimensions": [
+      "clinicalSignificance",
+      "novelty",
+      "methodologicalRigor",
+      "clarity",
+      "ethicalConsiderations"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "JAMA publishes original research and reviews of major clinical importance across all medical specialties.",
+    "topJournals": ["JAMA", "NEJM", "Lancet", "BMJ", "Annals of Internal Medicine"],
+    "methodologyEmphasis": ["Clinical Research", "Evidence-Based Medicine", "Health Policy", "Medical Education"]
+  },
+
+  "notes": [
+    "Published continuously since 1883",
+    "IMRAD structure preferred",
+    "Manuscripts may be referred to other JAMA Network journals",
+    "11 specialty journals in JAMA Network",
+    "Author reprints available",
+    "CME credits available for authors"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

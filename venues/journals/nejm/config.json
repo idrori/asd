@@ -1,0 +1,102 @@
+{
+  "id": "nejm",
+  "name": "The New England Journal of Medicine",
+  "acronym": "NEJM",
+  "venueType": "journal",
+  "category": "health-medical-sciences",
+  "subcategory": "medicine-general-internal",
+  "year": 2025,
+  "h5Index": 441,
+  "website": "https://www.nejm.org/",
+  "description": "NEJM is the world's leading medical journal, publishing the most important research at the intersection of biomedical science and clinical practice since 1812.",
+
+  "publisher": "Massachusetts Medical Society",
+  "openAccess": false,
+  "impactFactor": 158.5,
+  "publicationFrequency": "weekly",
+  "averageReviewTime": "2-4 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.nejm.org/author-center/new-manuscripts",
+    "authorGuidelines": "https://www.nejm.org/about-nejm/editorial-policies",
+    "statisticalGuidelines": "https://www.nejm.org/author-center/new-manuscripts",
+    "submissionPortal": "https://www.editorialmanager.com/nejm/"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 12,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 50
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Methods",
+      "Results",
+      "Discussion",
+      "References",
+      "Supplementary Appendix"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "nejm",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "vancouver",
+    "lineSpacing": 2.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "rapidReviewAvailable": true,
+    "dimensions": [
+      "clinicalSignificance",
+      "novelty",
+      "methodologicalRigor",
+      "clarity",
+      "ethicalConsiderations"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "NEJM is the oldest continuously published medical journal. Papers must demonstrate significant clinical impact.",
+    "topJournals": ["NEJM", "Lancet", "JAMA", "BMJ", "Annals of Internal Medicine"],
+    "methodologyEmphasis": ["Clinical Trials", "Evidence-Based Medicine", "Statistical Rigor", "Patient Outcomes"]
+  },
+
+  "notes": [
+    "Highest impact factor in medicine (158.5)",
+    "Rapid Review available (decision in 2 weeks)",
+    "Statistical analysis plan required for trials",
+    "Preprints accepted",
+    "AI use must be disclosed",
+    "ICMJE authorship criteria required",
+    "Only one corresponding author allowed"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

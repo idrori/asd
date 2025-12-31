@@ -1,0 +1,89 @@
+{
+  "id": "acs-nano",
+  "name": "ACS Nano",
+  "acronym": "ACS Nano",
+  "venueType": "journal",
+  "category": "chemical-material-sciences",
+  "subcategory": "nanotechnology",
+  "year": 2025,
+  "h5Index": 231,
+  "website": "https://pubs.acs.org/journal/ancac3",
+  "description": "ACS Nano is an international forum for nanoscience and nanotechnology research at the interfaces of chemistry, physics, materials science, biology, and engineering.",
+
+  "publisher": "American Chemical Society",
+  "openAccess": false,
+  "impactFactor": 17.1,
+  "publicationFrequency": "weekly",
+  "averageReviewTime": "4-8 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://pubs.acs.org/page/ancac3/submission/authors.html",
+    "authorGuidelines": "https://researcher-resources.acs.org/publish/author_guidelines?coden=ancac3",
+    "submissionPortal": "https://publish.acs.org/"
+  },
+
+  "paperLimits": {
+    "minPages": 6,
+    "maxPages": 15,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Results and Discussion", "Conclusion", "Methods", "References", "Supporting Information"],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": true,
+    "tocGraphicRequired": true
+  },
+
+  "template": {
+    "formatStyle": "acs",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "acs",
+    "lineSpacing": 2.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "single-blind",
+    "dimensions": ["novelty", "nanoSignificance", "interdisciplinaryImpact", "clarity", "experimentalRigor"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "ACS Nano publishes interdisciplinary nanoscience and nanotechnology research.",
+    "topJournals": ["ACS Nano", "Nano Letters", "Nature Nanotechnology", "Advanced Materials"],
+    "methodologyEmphasis": ["Nanomaterials Synthesis", "Characterization", "Device Applications", "Biological Interfaces"]
+  },
+
+  "notes": [
+    "Premier nanoscience journal",
+    "TOC graphic required",
+    "Preprints allowed",
+    "US Letter paper size required",
+    "References max 20 authors then et al.",
+    "iThenticate plagiarism screening",
+    "Cover art submissions encouraged",
+    "Impact factor 17.1"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

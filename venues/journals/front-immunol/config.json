@@ -1,0 +1,91 @@
+{
+  "id": "front-immunol",
+  "name": "Frontiers in Immunology",
+  "acronym": "Front. Immunol.",
+  "venueType": "journal",
+  "category": "health-medical-sciences",
+  "subcategory": "immunology",
+  "year": 2025,
+  "h5Index": 224,
+  "website": "https://www.frontiersin.org/journals/immunology",
+  "description": "Frontiers in Immunology is a leading open access journal covering all aspects of the immune system in health and disease.",
+
+  "publisher": "Frontiers Media",
+  "openAccess": true,
+  "publicationFrequency": "continuous",
+  "averageReviewTime": "77 days to decision, 14 weeks to publication",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.frontiersin.org/journals/immunology/for-authors/author-guidelines",
+    "authorGuidelines": "https://www.frontiersin.org/guidelines/author-guidelines"
+  },
+
+  "paperLimits": {
+    "minPages": 6,
+    "maxPages": 25,
+    "referencesCountTowardLimit": false,
+    "minReferences": 20,
+    "maxReferences": 100,
+    "briefReportMaxWords": 4000,
+    "briefReportMaxFigures": 4
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Keywords", "Introduction", "Materials and Methods", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 350,
+    "keywordsRequired": true,
+    "keywordsCount": {"min": 5, "max": 8},
+    "contributionStatementRequired": true,
+    "contributionStatementMaxWords": 200
+  },
+
+  "template": {
+    "formatStyle": "frontiers",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "harvard-or-vancouver",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 3.5,
+    "maxRevisionRounds": 2,
+    "reviewType": "single-blind",
+    "dimensions": ["novelty", "immunologicalSignificance", "methodologicalRigor", "clarity", "ethicalCompliance"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "Frontiers in Immunology covers all aspects of immune system research.",
+    "topJournals": ["Frontiers in Immunology", "Journal of Immunology", "Immunity", "Nature Immunology"],
+    "methodologyEmphasis": ["Immunological Methods", "Clinical Immunology", "Cancer Immunotherapy", "Infectious Disease"]
+  },
+
+  "notes": [
+    "Open access since 2010",
+    "5-8 keywords required",
+    "Contribution statement required (200 words)",
+    "Word/LaTeX templates available",
+    "Single-blind peer review",
+    "Inclusive language required",
+    "Ethics approval details required",
+    "First six authors then et al. in references"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

@@ -1,0 +1,87 @@
+{
+  "id": "cit",
+  "name": "Computers in Industry",
+  "acronym": "CII",
+  "venueType": "journal",
+  "category": "engineering-computer-science",
+  "subcategory": "industrial-engineering",
+  "year": 2025,
+  "h5Index": 85,
+  "website": "https://www.sciencedirect.com/journal/computers-in-industry",
+  "description": "Computers in Industry publishes original research on industrial applications of computing technologies including AI, IoT, digital twins, and Industry 4.0.",
+
+  "publisher": "Elsevier",
+  "openAccess": false,
+  "impactFactor": 12.45,
+  "publicationFrequency": "monthly",
+  "averageReviewTime": "8-12 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.sciencedirect.com/journal/computers-in-industry/publish/guide-for-authors",
+    "authorGuidelines": "https://www.sciencedirect.com/journal/computers-in-industry/publish/guide-for-authors"
+  },
+
+  "paperLimits": {
+    "minPages": 10,
+    "maxPages": 25,
+    "referencesCountTowardLimit": false,
+    "minReferences": 40,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Related Work", "Methodology", "Implementation", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true,
+    "graphicalAbstractRequired": true
+  },
+
+  "template": {
+    "formatStyle": "elsevier",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "elsevier-numbered",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "dimensions": ["novelty", "industrialRelevance", "technicalQuality", "clarity", "reproducibility"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "CII covers computing technologies for industrial applications.",
+    "topJournals": ["Computers in Industry", "Journal of Manufacturing Systems", "International Journal of Production Research", "Computers & Industrial Engineering"],
+    "methodologyEmphasis": ["Industry 4.0", "Digital Twins", "AI/ML Applications", "IoT Systems"]
+  },
+
+  "notes": [
+    "High impact industrial computing journal",
+    "Impact factor 12.45",
+    "h-index 139",
+    "Double-blind review",
+    "Graphical abstract required",
+    "Research data deposition required",
+    "Single or double column format"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

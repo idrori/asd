@@ -1,0 +1,87 @@
+{
+  "id": "jcp",
+  "name": "Journal of Cleaner Production",
+  "acronym": "JCP",
+  "venueType": "journal",
+  "category": "engineering-computer-science",
+  "subcategory": "environmental-geological-engineering",
+  "year": 2025,
+  "h5Index": 298,
+  "website": "https://www.sciencedirect.com/journal/journal-of-cleaner-production",
+  "description": "Journal of Cleaner Production is a transdisciplinary journal covering research on cleaner production, environmental, and sustainability.",
+
+  "publisher": "Elsevier",
+  "openAccess": false,
+  "impactFactor": 11.1,
+  "publicationFrequency": "continuous",
+  "averageReviewTime": "8-12 weeks",
+  "apc": 4620,
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.elsevier.com/journals/journal-of-cleaner-production/09596526/guide-for-authors",
+    "authorGuidelines": "https://www.elsevier.com/journals/journal-of-cleaner-production/09596526/guide-for-authors",
+    "journalFamily": "https://www.elsevier.com/subject/environmental-science/journal-of-cleaner-production-family"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 25,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Literature Review", "Methodology", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "elsevier",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "elsevier-harvard",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 3.5,
+    "maxRevisionRounds": 2,
+    "dimensions": ["novelty", "significance", "methodologicalRigor", "clarity", "practicalImpact"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "JCP focuses on cleaner production, sustainability, and environmental management research.",
+    "topJournals": ["JCP", "Resources Policy", "Sustainable Production and Consumption", "Business Strategy and the Environment"],
+    "methodologyEmphasis": ["Life Cycle Assessment", "Sustainability Analysis", "Case Studies", "Policy Research"]
+  },
+
+  "notes": [
+    "Transdisciplinary sustainability journal",
+    "APC: USD 4,620",
+    "AI use must be disclosed",
+    "Maps must show only study area",
+    "Part of Cleaner journal family",
+    "Harvard citation style",
+    "Impact factor 11.1"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

@@ -1,0 +1,144 @@
+{
+  "id": "acl",
+  "name": "Annual Meeting of the Association for Computational Linguistics",
+  "acronym": "ACL",
+  "venueType": "conference",
+  "category": "engineering-computer-science",
+  "subcategory": "computational-linguistics",
+  "year": 2025,
+  "h5Index": 236,
+  "website": "https://2025.aclweb.org/",
+  "description": "ACL is the premier international conference for computational linguistics and natural language processing. It covers all aspects of NLP including parsing, machine translation, dialogue systems, and language modeling.",
+
+  "officialLinks": {
+    "callForPapers": "https://2025.aclweb.org/calls/main_conference_papers/",
+    "submissionInstructions": "https://acl-org.github.io/ACLPUB/formatting.html",
+    "reviewerGuidelines": "https://aclrollingreview.org/authors",
+    "styleFiles": "https://github.com/acl-org/acl-style-files",
+    "rollingReview": "https://aclrollingreview.org/cfp"
+  },
+
+  "paperLimits": {
+    "minPages": 4,
+    "maxPages": 8,
+    "shortPaperMaxPages": 4,
+    "longPaperMaxPages": 8,
+    "cameraReadyExtraPage": 1,
+    "referencesCountTowardLimit": false,
+    "minReferences": 20,
+    "maxReferences": 60
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Related Work",
+      "Method",
+      "Experiments",
+      "Results",
+      "Analysis",
+      "Limitations",
+      "Ethics Statement",
+      "Conclusion",
+      "Acknowledgments",
+      "References",
+      "Appendix"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": false,
+    "keywordsCount": { "min": 0, "max": 0 },
+    "appendicesAllowed": true,
+    "supplementaryAllowed": true,
+    "limitationsRequired": true,
+    "ethicsStatementOptional": true
+  },
+
+  "template": {
+    "formatStyle": "acl",
+    "fontFamily": "Times",
+    "fontSize": 11,
+    "citationStyle": "acl",
+    "lineSpacing": 1.0,
+    "marginInches": 1.0,
+    "paperSize": "letter",
+    "twoColumn": true,
+    "anonymousSubmission": true,
+    "styleFile": "https://github.com/acl-org/acl-style-files"
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 3.5,
+    "maxRevisionRounds": 1,
+    "rollingReview": true,
+    "dimensions": [
+      "soundness",
+      "significance",
+      "novelty",
+      "verifiability",
+      "clarity",
+      "limitations"
+    ],
+    "includeTrustworthiness": false
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt",
+    "infographic": "infographic.txt",
+    "dataTable": "datatable.txt"
+  },
+
+  "calibration": {
+    "description": "ACL is the top NLP venue. Papers must demonstrate novel NLP methods with strong empirical results. Limitations section is mandatory.",
+    "exemplarCount": 0,
+    "topJournals": [
+      "Transactions of the Association for Computational Linguistics",
+      "Computational Linguistics",
+      "Journal of Machine Learning Research",
+      "Artificial Intelligence"
+    ],
+    "topConferences": [
+      "ACL",
+      "EMNLP",
+      "NAACL",
+      "EACL",
+      "COLING",
+      "NeurIPS",
+      "ICML"
+    ],
+    "methodologyEmphasis": [
+      "Neural NLP",
+      "Large Language Models",
+      "Benchmark Evaluation",
+      "Ablation Studies",
+      "Human Evaluation",
+      "Error Analysis"
+    ]
+  },
+
+  "notes": [
+    "Long papers: 8 pages, Short papers: 4 pages (excluding limitations, ethics, references)",
+    "Camera-ready version allows 1 additional page",
+    "ACL Rolling Review (ARR) system - submit to ARR then commit to ACL",
+    "Limitations section mandatory - papers without it are desk rejected",
+    "Ethics statement optional but encouraged",
+    "Double-blind review - strict anonymization required",
+    "All authors must register as reviewers (48h after submission deadline)",
+    "OpenReview profile required with complete information",
+    "DOIs required in references when possible",
+    "Appendices must be two-column format",
+    "Grayscale readability strongly encouraged",
+    "Highly competitive (acceptance rate ~20%)"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

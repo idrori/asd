@@ -1,0 +1,106 @@
+{
+  "id": "tpami",
+  "name": "IEEE Transactions on Pattern Analysis and Machine Intelligence",
+  "acronym": "TPAMI",
+  "venueType": "journal",
+  "category": "engineering-computer-science",
+  "subcategory": "computer-vision-pattern-recognition",
+  "year": 2025,
+  "h5Index": 217,
+  "website": "https://www.computer.org/csdl/journal/tp",
+  "description": "TPAMI is the premier journal for pattern analysis, computer vision, and machine intelligence research.",
+
+  "publisher": "IEEE Computer Society",
+  "openAccess": false,
+  "impactFactor": 23.6,
+  "publicationFrequency": "monthly",
+  "averageReviewTime": "3-6 months",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.computer.org/web/tpami/author",
+    "authorGuidelines": "https://ieeexplore.ieee.org/document/9471035",
+    "callForPapers": "https://www.computer.org/digital-library/journals/tp/cfp-ieee-pattern-analysis-machine-intelligence",
+    "submissionPortal": "https://mc.manuscriptcentral.com/tpami-cs"
+  },
+
+  "paperLimits": {
+    "minPages": 12,
+    "maxPages": 16,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Related Work",
+      "Method",
+      "Experiments",
+      "Results",
+      "Discussion",
+      "Conclusion",
+      "References",
+      "Supplementary Material"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "ieee-tpami",
+    "fontFamily": "Times",
+    "fontSize": 10,
+    "citationStyle": "ieee",
+    "lineSpacing": 1.0,
+    "paperSize": "letter",
+    "twoColumn": true,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "dimensions": [
+      "novelty",
+      "significance",
+      "technicalQuality",
+      "clarity",
+      "experimentalValidation"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "TPAMI is the top journal for pattern analysis and machine intelligence with the highest impact in the field.",
+    "topJournals": ["TPAMI", "IJCV", "IEEE TIP", "Pattern Recognition"],
+    "topConferences": ["CVPR", "ICCV", "ECCV", "NeurIPS", "ICML"],
+    "methodologyEmphasis": ["Algorithmic Innovation", "Theoretical Foundations", "Comprehensive Experiments", "Reproducibility"]
+  },
+
+  "notes": [
+    "Premier journal for pattern analysis and machine intelligence",
+    "Hybrid open access available",
+    "ScholarOne manuscript submission system",
+    "Double-blind review process",
+    "IEEEtran citation style",
+    "Data sharing via IEEE DataPort encouraged",
+    "Monthly publication",
+    "Impact factor 23.6"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

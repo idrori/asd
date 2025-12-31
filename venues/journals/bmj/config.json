@@ -1,0 +1,101 @@
+{
+  "id": "bmj",
+  "name": "BMJ (British Medical Journal)",
+  "acronym": "BMJ",
+  "venueType": "journal",
+  "category": "health-medical-sciences",
+  "subcategory": "medicine-general-internal",
+  "year": 2025,
+  "h5Index": 224,
+  "website": "https://www.bmj.com/",
+  "description": "The BMJ is one of the world's oldest and most influential general medical journals, committed to evidence-based medicine and global health.",
+
+  "publisher": "BMJ Publishing Group",
+  "openAccess": false,
+  "impactFactor": 105.7,
+  "publicationFrequency": "weekly",
+  "averageReviewTime": "4-8 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.bmj.com/about-bmj/resources-authors",
+    "authorGuidelines": "https://www.bmj.com/about-bmj/resources-authors/article-submission",
+    "submissionPortal": "https://submit.bmj.com/"
+  },
+
+  "paperLimits": {
+    "minPages": 6,
+    "maxPages": 12,
+    "referencesCountTowardLimit": false,
+    "minReferences": 25,
+    "maxReferences": 50
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Methods",
+      "Results",
+      "Discussion",
+      "Conclusion",
+      "References"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 300,
+    "keywordsRequired": true,
+    "structuredAbstract": true
+  },
+
+  "template": {
+    "formatStyle": "bmj",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "vancouver",
+    "lineSpacing": 2.0,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "dimensions": [
+      "clinicalSignificance",
+      "novelty",
+      "methodologicalRigor",
+      "clarity",
+      "ethicalConsiderations"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "BMJ prioritizes research that improves decision making in medical practice, policy, and education with international impact.",
+    "topJournals": ["BMJ", "NEJM", "Lancet", "JAMA", "Annals of Internal Medicine"],
+    "methodologyEmphasis": ["Evidence-Based Medicine", "Clinical Trials", "Health Policy", "Global Health"]
+  },
+
+  "notes": [
+    "One of world's oldest medical journals",
+    "BenchPress online submission system",
+    "Structured abstract required",
+    "Open access options available",
+    "CC BY licensing for eligible articles",
+    "Priority to internationally relevant research",
+    "Impact factor 105.7"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

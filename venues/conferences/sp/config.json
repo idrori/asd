@@ -1,0 +1,100 @@
+{
+  "id": "sp",
+  "name": "IEEE Symposium on Security and Privacy",
+  "acronym": "S&P",
+  "venueType": "conference",
+  "category": "engineering-computer-science",
+  "subcategory": "computer-security-cryptography",
+  "year": 2025,
+  "h5Index": 98,
+  "website": "https://sp2025.ieee-security.org/",
+  "description": "IEEE S&P (Oakland) is the premier forum for computer security research, presenting the latest developments since 1980.",
+
+  "officialLinks": {
+    "callForPapers": "https://sp2025.ieee-security.org/cfpapers.html",
+    "submissionInstructions": "https://sp2025.ieee-security.org/cfpapers.html",
+    "submissionPortal": "https://sp2025.hotcrp.com/"
+  },
+
+  "paperLimits": {
+    "minPages": 10,
+    "maxPages": 13,
+    "referencesCountTowardLimit": false,
+    "minReferences": 25,
+    "maxReferences": 60
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Background",
+      "Threat Model",
+      "Design",
+      "Implementation",
+      "Evaluation",
+      "Related Work",
+      "Conclusion",
+      "References"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "ieee-sp",
+    "fontFamily": "Times",
+    "fontSize": 10,
+    "citationStyle": "ieee",
+    "lineSpacing": 1.0,
+    "paperSize": "letter",
+    "twoColumn": true,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 1,
+    "reviewType": "double-blind",
+    "dimensions": [
+      "novelty",
+      "technicalQuality",
+      "significance",
+      "clarity",
+      "practicalImpact"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "IEEE S&P is the premier security conference, known as 'Oakland' in the community.",
+    "topJournals": ["IEEE TDSC", "ACM TOPS", "Journal of Cryptology"],
+    "topConferences": ["S&P", "USENIX Security", "CCS", "NDSS"],
+    "methodologyEmphasis": ["Systems Security", "Cryptography", "Privacy", "Empirical Security"]
+  },
+
+  "notes": [
+    "Premier security conference (since 1980)",
+    "Rolling monthly deadlines (1st of each month)",
+    "Double-blind review process",
+    "Accept/Revise/Reject decisions",
+    "1 year wait after rejection to resubmit",
+    "SoK papers welcome (prefix 'SoK:')",
+    "Ethics committee reviews flagged papers",
+    "Open access in IEEE Computer Society DL"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

@@ -1,0 +1,96 @@
+{
+  "id": "www",
+  "name": "The Web Conference",
+  "acronym": "WWW",
+  "venueType": "conference",
+  "category": "engineering-computer-science",
+  "subcategory": "world-wide-web",
+  "year": 2025,
+  "h5Index": 98,
+  "website": "https://www2025.thewebconf.org/",
+  "description": "The Web Conference (formerly WWW) is the premier venue for research on Web technologies, standards, and applications since 1994.",
+
+  "officialLinks": {
+    "callForPapers": "https://www2025.thewebconf.org/research-tracks",
+    "submissionInstructions": "https://www2025.thewebconf.org/short-papers",
+    "submissionPortal": "https://easychair.org/conferences/?conf=www25"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 12,
+    "shortPaperMaxPages": 4,
+    "referencesCountTowardLimit": false,
+    "minReferences": 25,
+    "maxReferences": 50
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Related Work",
+      "Method",
+      "Experiments",
+      "Results",
+      "Conclusion",
+      "References"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "acm",
+    "fontFamily": "Times",
+    "fontSize": 9,
+    "citationStyle": "acm",
+    "lineSpacing": 1.0,
+    "paperSize": "letter",
+    "twoColumn": true,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 1,
+    "dimensions": [
+      "novelty",
+      "significance",
+      "technicalQuality",
+      "clarity",
+      "reproducibility"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "WWW is the premier venue for Web research including Web mining, search, social networks, and Web science.",
+    "topJournals": ["ACM TWEB", "IEEE Internet Computing", "WWW Journal"],
+    "topConferences": ["WWW", "SIGIR", "WSDM", "KDD", "CIKM"],
+    "methodologyEmphasis": ["Web Mining", "Information Retrieval", "Social Computing", "Web Science"]
+  },
+
+  "notes": [
+    "Originated at CERN in 1994",
+    "ACM format required",
+    "Double-blind review for research track",
+    "Short papers are not anonymous",
+    "Each accepted paper requires separate registration",
+    "IRB approval may be required for human subjects research"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

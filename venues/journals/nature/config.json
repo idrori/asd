@@ -1,0 +1,105 @@
+{
+  "id": "nature",
+  "name": "Nature",
+  "acronym": "Nature",
+  "venueType": "journal",
+  "category": "life-sciences-earth-sciences",
+  "subcategory": "multidisciplinary",
+  "year": 2025,
+  "h5Index": 490,
+  "website": "https://www.nature.com/nature",
+  "description": "Nature is the world's leading multidisciplinary science journal, publishing peer-reviewed research across all scientific disciplines with the highest impact.",
+
+  "publisher": "Springer Nature",
+  "openAccess": false,
+  "impactFactor": 64.8,
+  "publicationFrequency": "weekly",
+  "averageReviewTime": "4-8 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.nature.com/nature/for-authors",
+    "authorGuidelines": "https://www.nature.com/nature/for-authors/initial-submission",
+    "formattingGuide": "https://www.nature.com/nature/for-authors/formatting-guide",
+    "submissionPortal": "https://mts-nature.nature.com/"
+  },
+
+  "paperLimits": {
+    "minPages": 6,
+    "maxPages": 10,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 50,
+    "titleMaxChars": 90
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Results",
+      "Discussion",
+      "Methods",
+      "References",
+      "Acknowledgements",
+      "Author Contributions",
+      "Competing Interests",
+      "Extended Data",
+      "Supplementary Information"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 150,
+    "keywordsRequired": false
+  },
+
+  "template": {
+    "formatStyle": "nature",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "nature",
+    "lineSpacing": 2.0,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "dimensions": [
+      "novelty",
+      "significance",
+      "technicalQuality",
+      "clarity",
+      "reproducibility"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "Nature publishes the finest peer-reviewed research across all fields of science and technology.",
+    "topJournals": ["Nature", "Science", "Cell", "PNAS", "Nature Communications"],
+    "methodologyEmphasis": ["Breakthrough Research", "High Impact", "Reproducibility", "Data Availability"]
+  },
+
+  "notes": [
+    "World's highest impact multidisciplinary journal",
+    "Preprints on bioRxiv/arXiv accepted",
+    "Data must be publicly available upon publication",
+    "Double-anonymized peer review available",
+    "Title max 75-90 characters",
+    "Figure legends max 300 words each"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

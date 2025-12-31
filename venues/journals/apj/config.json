@@ -1,0 +1,89 @@
+{
+  "id": "apj",
+  "name": "The Astrophysical Journal",
+  "acronym": "ApJ",
+  "venueType": "journal",
+  "category": "physics-astronomy",
+  "subcategory": "astronomy-astrophysics",
+  "year": 2025,
+  "h5Index": 155,
+  "website": "https://iopscience.iop.org/journal/0004-637X",
+  "description": "The Astrophysical Journal is a leading research journal devoted to recent developments, discoveries, and theories in astronomy and astrophysics.",
+
+  "publisher": "American Astronomical Society / IOP Publishing",
+  "openAccess": false,
+  "publicationFrequency": "semi-monthly",
+  "averageReviewTime": "4-8 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://journals.aas.org/submission/",
+    "authorGuidelines": "https://journals.aas.org/author-resources/",
+    "manuscriptPreparation": "https://journals.aas.org/manuscript-preparation/",
+    "submissionPortal": "https://aas.msubmit.net/"
+  },
+
+  "paperLimits": {
+    "minPages": 6,
+    "maxPages": 30,
+    "referencesCountTowardLimit": false,
+    "minReferences": 20,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Observations/Methods", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true,
+    "lineNumbersRequired": true
+  },
+
+  "template": {
+    "formatStyle": "aastex",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "aas",
+    "lineSpacing": 2.0,
+    "paperSize": "letter",
+    "twoColumn": false,
+    "anonymousSubmission": false,
+    "latexClass": "AASTeX v7.0.1"
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "single-blind",
+    "doubleAnonymousOption": true,
+    "dimensions": ["scientificSignificance", "novelty", "technicalQuality", "clarity", "astrophysicalImpact"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "ApJ is the flagship journal of the American Astronomical Society.",
+    "topJournals": ["The Astrophysical Journal", "Astronomy & Astrophysics", "Monthly Notices of the RAS", "Nature Astronomy"],
+    "methodologyEmphasis": ["Observational Astronomy", "Theoretical Astrophysics", "Computational Astrophysics", "High-Energy Astrophysics"]
+  },
+
+  "notes": [
+    "Flagship AAS journal",
+    "AASTeX v7.0.1 released January 2025",
+    "Line numbers required for submission",
+    "Overleaf integration available",
+    "Double anonymous review option",
+    "LLM use must be acknowledged and cited"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

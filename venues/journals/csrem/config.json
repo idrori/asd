@@ -1,0 +1,87 @@
+{
+  "id": "csrem",
+  "name": "Corporate Social Responsibility and Environmental Management",
+  "acronym": "CSREM",
+  "venueType": "journal",
+  "category": "business-economics-management",
+  "subcategory": "sustainability-management",
+  "year": 2025,
+  "h5Index": 85,
+  "website": "https://onlinelibrary.wiley.com/journal/15353966",
+  "description": "CSREM publishes theoretical and practical contributions about tools and practices associated with social and environmental responsibilities of businesses in sustainable development.",
+
+  "publisher": "Wiley",
+  "openAccess": false,
+  "apc": 3710,
+  "impactFactor": 9.8,
+  "publicationFrequency": "bimonthly",
+  "averageReviewTime": "8-16 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://onlinelibrary.wiley.com/page/journal/15353966/homepage/forauthors.html",
+    "authorGuidelines": "https://onlinelibrary.wiley.com/page/journal/15353966/homepage/forauthors.html"
+  },
+
+  "paperLimits": {
+    "minPages": 15,
+    "maxPages": 35,
+    "referencesCountTowardLimit": false,
+    "minReferences": 40,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Literature Review", "Methodology", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "wiley",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "apa",
+    "lineSpacing": 2.0,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "dimensions": ["csrContribution", "environmentalRelevance", "methodologicalRigor", "clarity", "practicalImplications"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "CSREM covers CSR and environmental management research.",
+    "topJournals": ["CSREM", "Journal of Business Ethics", "Business Strategy and the Environment", "Journal of Cleaner Production"],
+    "methodologyEmphasis": ["CSR Tools", "Environmental Management", "Sustainability Practices", "Case Studies"]
+  },
+
+  "notes": [
+    "Leading CSR and environmental management journal",
+    "Impact factor 9.8",
+    "h-index 129",
+    "APC: USD 3,710",
+    "Double-blind peer review",
+    "Case studies and cross-country surveys welcome",
+    "Interdisciplinary audience"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

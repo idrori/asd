@@ -1,0 +1,88 @@
+{
+  "id": "stoten",
+  "name": "Science of The Total Environment",
+  "acronym": "STOTEN",
+  "venueType": "journal",
+  "category": "life-sciences-earth-sciences",
+  "subcategory": "environmental-sciences",
+  "year": 2025,
+  "h5Index": 312,
+  "website": "https://www.sciencedirect.com/journal/science-of-the-total-environment",
+  "description": "Science of the Total Environment is an international multi-disciplinary journal for publication of novel, hypothesis-driven and high-impact research on the total environment.",
+
+  "publisher": "Elsevier",
+  "openAccess": false,
+  "impactFactor": 8.0,
+  "publicationFrequency": "weekly",
+  "averageReviewTime": "8-12 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.sciencedirect.com/journal/science-of-the-total-environment/publish/guide-for-authors",
+    "authorGuidelines": "https://www.sciencedirect.com/journal/science-of-the-total-environment/publish/guide-for-authors",
+    "submissionPortal": "https://www.editorialmanager.com/stoten/default.aspx"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 20,
+    "referencesCountTowardLimit": false,
+    "minReferences": 25,
+    "maxReferences": 50,
+    "reviewMaxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Materials and Methods", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "elsevier",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "elsevier-harvard",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 3.5,
+    "maxRevisionRounds": 2,
+    "reviewType": "single-blind",
+    "dimensions": ["novelty", "significance", "methodologicalRigor", "clarity", "environmentalRelevance"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "STOTEN publishes research interfacing atmosphere, lithosphere, hydrosphere, biosphere, and anthroposphere.",
+    "topJournals": ["STOTEN", "Environmental Science & Technology", "Chemosphere", "Journal of Environmental Management"],
+    "methodologyEmphasis": ["Field Studies", "Interconnected Environmental Systems", "Novel Hypotheses", "Multi-disciplinary Approach"]
+  },
+
+  "notes": [
+    "Multi-disciplinary environmental journal since 1972",
+    "Editorial Manager submission system",
+    "Single-blind peer review",
+    "Field studies preferred over lab experiments",
+    "References limited to 50 for research papers",
+    "References limited to 100 for reviews",
+    "Impact factor 8.0"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

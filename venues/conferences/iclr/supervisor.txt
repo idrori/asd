@@ -1,0 +1,464 @@
+================================================================================
+ICISsupervisor - Human-in-the-Loop Decision Prompt
+================================================================================
+
+PURPOSE:
+This prompt reads the oversight file created by ICISreview, extracts metrics,
+displays a progression dashboard showing version history, and captures the
+human supervisor's decision to revise or finalize.
+
+WORKFLOW POSITION:
+  ICISsetup -> ICISbuilder -> ICISreview -> **ICISsupervisor** -> ICISreviser (loop) OR ICISfinalize (exit)
+
+================================================================================
+STEP 0: EXTRACT PARTICIPANT ID
+================================================================================
+
+**Before any other step, extract the participantId:**
+
+1. Use Glob to find interview or oversight files:
+   ```
+   Glob: {ICIS_PATH}\INTERVIEW_*.txt
+   Glob: {ICIS_PATH}\Data\oversight_*.txt
+   ```
+
+2. Extract {participantId} from filename:
+   - From INTERVIEW_{participantId}_{timestamp}.txt -> extract middle portion
+   - From oversight_{participantId}_v{N}.txt -> extract middle portion
+   - Example: `oversight_maayan_university_edu_v1.txt` -> participantId = `maayan_university_edu`
+
+3. Store this participantId for ALL subsequent file operations
+
+================================================================================
+STEP 1: LOCATE AND READ ALL OVERSIGHT FILES
+================================================================================
+
+**Find ALL oversight files to build version progression:**
+
+1. **Glob for all oversight files:**
+   ```
+   Glob: {ICIS_PATH}\Data\oversight_{participantId}_v*.txt
+   ```
+
+   Example results:
+   - oversight_maayan_university_edu_v1.txt
+   - oversight_maayan_university_edu_v2.txt
+   - oversight_maayan_university_edu_v3.txt
+
+2. **If NO oversight files found:**
+   Display error and exit:
+   ```
+   ERROR: No oversight files found for participantId={participantId}
+   ICISreview must complete before ICISsupervisor can run.
+   Please execute ICISreview first.
+   ```
+
+3. **Read ALL oversight files in version order (v1, v2, v3...):**
+   For each file, extract the JSON data block. The oversight file contains:
+
+   ```json
+   {
+     "version": 1,
+     "paperId": "{participantId}",
+     "timestamp": "ISO-8601 timestamp",
+
+     "reviewScores": {
+       "novelty": 1-5,
+       "significance": 1-5,
+       "methodologicalRigor": 1-5,
+       "clarity": 1-5,
+       "relevance": 1-5
+     },
+     "reviewComments": {
+       "novelty": "Brief comment",
+       "significance": "Brief comment",
+       "methodologicalRigor": "Brief comment",
+       "clarity": "Brief comment",
+       "relevance": "Brief comment"
+     },
+     "averageScore": 3.4,
+
+     "errorCounts": {
+       "majorErrors": 2,
+       "minorErrors": 5
+     },
+     "errorDetails": {
+       "majorErrors": ["Description 1", "Description 2"],
+       "minorErrors": ["Typo on page 3", "Missing reference X"]
+     },
+
+     "trustworthiness": {
+       "reliability": 1-7,
+       "reliabilityRationale": "One-sentence rationale",
+       "benevolence": 1-7,
+       "benevolenceRationale": "One-sentence rationale",
+       "goalAlignment": 1-7,
+       "goalAlignmentRationale": "One-sentence rationale"
+     },
+
+     "criticalAlerts": [
+       {
+         "number": 1,
+         "title": "Alert title",
+         "status": "Open",
+         "impact": "High/Medium/Low",
+         "details": "Description",
+         "actionRequired": "What to do",
+         "consequence": "If unfixed"
+       }
+     ],
+
+     "previousVersions": []
+   }
+   ```
+
+4. **Build history arrays from all versions:**
+   ```
+   scoresHistory = [
+     { v1 reviewScores },
+     { v2 reviewScores },
+     { v3 reviewScores (current) }
+   ]
+
+   errorsHistory = [
+     { v1 errorCounts },
+     { v2 errorCounts },
+     { v3 errorCounts (current) }
+   ]
+   ```
+
+5. **Extract current version data (highest version number):**
+   - reviewScores: Latest scores (1-5 scale)
+   - trustworthinessScores: Latest trustworthiness (1-7 scale)
+   - errorCounts: Latest error counts
+   - criticalAlerts: Latest alerts array
+   - reviewComments: Latest comments for each criterion
+
+================================================================================
+STEP 2: GENERATE SUPERVISOR DASHBOARD WITH PROGRESSION
+================================================================================
+
+**Create dashboard showing version progression:**
+
+Display the following formatted dashboard:
+
+```
+================================================================================
+                        SUPERVISOR DASHBOARD
+                        Revision Cycle: {currentVersion}
+                        Participant: {participantId}
+================================================================================
+
+STATUS: {ON TRACK / ATTENTION NEEDED}
+Reason: {status reason from threshold checks}
+------------------------------------------------------------------------
+
+TABLE 1: REVIEW SCORES PROGRESSION (Threshold: >= 4)
+------------------------------------------------------------------------
+| Criteria              | v1  | v2  | v3  | Comment (latest)          |
+|-----------------------|-----|-----|-----|---------------------------|
+| Novelty               | {v1}| {v2}| {v3}| {reviewComments.novelty}  |
+| Significance          | {v1}| {v2}| {v3}| {reviewComments.significance} |
+| Methodological Rigor  | {v1}| {v2}| {v3}| {reviewComments.methodologicalRigor} |
+| Clarity               | {v1}| {v2}| {v3}| {reviewComments.clarity}  |
+| Relevance             | {v1}| {v2}| {v3}| {reviewComments.relevance}|
+|-----------------------|-----|-----|-----|---------------------------|
+| AVERAGE               |{avg}|{avg}|{avg}| {trend: Improving/Stable/Declining} |
+------------------------------------------------------------------------
+Note: Scores below 4 are highlighted as needing attention.
+
+TABLE 2: ERROR COUNTS PROGRESSION (Threshold: Major = 0)
+------------------------------------------------------------------------
+| Category        | v1  | v2  | v3  | Remaining Issues              |
+|-----------------|-----|-----|-----|-------------------------------|
+| Major Errors    | {v1}| {v2}| {v3}| {errorDetails.majorErrors}    |
+| Minor Errors    | {v1}| {v2}| {v3}| {errorDetails.minorErrors}    |
+|-----------------|-----|-----|-----|-------------------------------|
+| TOTAL           | {t1}| {t2}| {t3}| {X% reduction from v1}        |
+------------------------------------------------------------------------
+
+TABLE 3: TRUSTWORTHINESS ASSESSMENT (Threshold: >= 5)
+------------------------------------------------------------------------
+| Dimension       | Score | Rationale                               |
+|-----------------|-------|-----------------------------------------|
+| Reliability     | {1-7} | {reliabilityRationale}                  |
+| Benevolence     | {1-7} | {benevolenceRationale}                  |
+| Goal Alignment  | {1-7} | {goalAlignmentRationale}                |
+------------------------------------------------------------------------
+Note: Scores below 5 are highlighted as needing attention.
+
+CRITICAL ALERTS:
+------------------------------------------------------------------------
+{If criticalAlerts.length > 0:}
+  CRITICAL ALERT {number}: {title} (BLOCKING ISSUE)
+  - Status: {status}
+  - Impact: {impact}
+  - Details: {details}
+  - Action Required: {actionRequired}
+  - Consequence if Unfixed: {consequence}
+
+{If criticalAlerts.length === 0:}
+  None - paper is progressing well
+------------------------------------------------------------------------
+```
+
+================================================================================
+STEP 3: DETERMINE STATUS AND RECOMMENDATION
+================================================================================
+
+**Apply threshold checks (from SUPERVISOR_THRESHOLDS):**
+
+```
+THRESHOLDS:
+- REVIEW_SCORE_MIN: 4      (All 5 review scores must be >= 4)
+- TRUSTWORTHINESS_MIN: 5   (All 3 trustworthiness scores must be >= 5)
+- MAJOR_ERRORS_MAX: 0      (Must have 0 major errors)
+- MAX_RECOMMENDED_CYCLES: 5 (Warn if approaching)
+```
+
+**Check each threshold and collect reasons:**
+
+1. **Review Scores Check:**
+   For each of (novelty, significance, methodologicalRigor, clarity, relevance):
+   - If score < 4: Add to reasons: "{criterion} score ({score}) below threshold (4)"
+
+2. **Trustworthiness Check:**
+   For each of (reliability, benevolence, goalAlignment):
+   - If score < 5: Add to reasons: "{dimension} score ({score}) below threshold (5)"
+
+3. **Major Errors Check:**
+   - If majorErrors > 0: Add to reasons: "{majorErrors} major error(s) remaining"
+
+4. **Critical Alerts Check:**
+   - If criticalAlerts.length > 0: Add to reasons: "{count} critical alert(s) present"
+
+**Determine Status:**
+- If reasons.length === 0: STATUS = "ON TRACK"
+- If reasons.length > 0: STATUS = "ATTENTION NEEDED"
+
+**Generate Recommendation:**
+
+If STATUS === "ON TRACK":
+```
+RECOMMENDATION: FINALIZE PAPER
+------------------------------------------------------------------------
+All quality thresholds have been met:
+- All review scores >= 4 (Average: {averageScore}/5)
+- All trustworthiness scores >= 5
+- No major errors remaining
+- No critical alerts
+
+The paper is ready for final submission preparation.
+------------------------------------------------------------------------
+```
+
+If STATUS === "ATTENTION NEEDED":
+```
+RECOMMENDATION: CONTINUE TO REVISION
+------------------------------------------------------------------------
+The following issues require attention before finalization:
+
+Priority Actions:
+1. {reasons[0]}
+2. {reasons[1]}
+3. {reasons[2]}
+
+Current revision cycle: {currentVersion}
+{If currentVersion >= 4: "Warning: Approaching maximum recommended cycles (5)"}
+------------------------------------------------------------------------
+```
+
+================================================================================
+STEP 4: PRESENT DECISION OPTIONS
+================================================================================
+
+**Display decision interface to human supervisor:**
+
+```
+================================================================================
+                        SUPERVISOR DECISION REQUIRED
+================================================================================
+
+Based on the analysis above, you have the following options:
+
+OPTION A: CONTINUE TO REVISION
+------------------------------
+- Paper will be sent to ICISreviser for cycle {currentVersion + 1}
+- Current feedback and your directives will guide improvements
+- Enter your specific directives below
+
+OPTION B: FINALIZE PAPER
+------------------------
+- Paper will be sent to ICISfinalize for submission preparation
+- No further revisions will be made
+- Choose this only if paper meets quality standards
+
+------------------------------------------------------------------------
+YOUR DIRECTIVES (for Option A - be specific):
+------------------------------------------------------------------------
+Examples:
+- "Strengthen theoretical contribution by adding discussion of X theory"
+- "Add 3 more recent citations from 2023-2024 to literature review"
+- "Clarify methodology in Section 4.2 - explain sampling procedure"
+- "Address reviewer concern about generalizability in Discussion"
+- "Fix the 2 remaining major errors identified in Table 2"
+
+[Enter your directives here or type NONE if finalizing]
+
+------------------------------------------------------------------------
+YOUR DECISION: Type "REVISE" or "FINALIZE"
+------------------------------------------------------------------------
+```
+
+================================================================================
+STEP 5: EXECUTE DECISION
+================================================================================
+
+**Based on human input, execute the appropriate action:**
+
+**If decision = "REVISE" (CONTINUE_REVISION):**
+
+1. Get supervisor directives from input
+
+2. Append directives to feedback file:
+   ```
+   Edit: {ICIS_PATH}\Data\feedback_{participantId}_v{currentVersion}.txt
+
+   Append this section at the end:
+
+   ================================================================================
+   SUPERVISOR DIRECTIVES (Cycle {currentVersion})
+   ================================================================================
+   {supervisor's directives}
+
+   Timestamp: {current ISO timestamp}
+   Decision: CONTINUE_REVISION
+   Next Step: ICISreviser
+   ================================================================================
+   ```
+
+3. Display confirmation:
+   ```
+   DECISION RECORDED: Continue to Revision Cycle {currentVersion + 1}
+
+   Actions completed:
+   - Supervisor directives appended to feedback_{participantId}_v{currentVersion}.txt
+   - Directives will guide ICISreviser improvements
+
+   NEXT STEP: Execute ICISreviser prompt
+   The reviser will:
+   1. Read the feedback file with your directives
+   2. Address both AI review feedback and supervisor directives
+   3. Generate icis_paper_{participantId}_v{currentVersion + 1}.tex
+   ```
+
+**If decision = "FINALIZE":**
+
+1. Create supervisor decision file:
+   ```
+   Write: {ICIS_PATH}\Data\supervisor_decision_{participantId}.txt
+
+   Content:
+   ================================================================================
+   SUPERVISOR DECISION RECORD
+   ================================================================================
+   Decision: FINALIZE
+   Participant: {participantId}
+   Final Cycle: {currentVersion}
+   Timestamp: {current ISO timestamp}
+
+   FINAL SCORES:
+   - Novelty: {score}/5
+   - Significance: {score}/5
+   - Methodological Rigor: {score}/5
+   - Clarity: {score}/5
+   - Relevance: {score}/5
+   - Average: {averageScore}/5
+
+   TRUSTWORTHINESS:
+   - Reliability: {score}/7
+   - Benevolence: {score}/7
+   - Goal Alignment: {score}/7
+
+   ERROR STATUS:
+   - Major Errors: {count}
+   - Minor Errors: {count}
+
+   STATUS: {ON TRACK / ATTENTION NEEDED}
+   {If ATTENTION NEEDED: list reasons}
+
+   SUPERVISOR OVERRIDE: {Yes if finalizing despite ATTENTION_NEEDED, else No}
+   ================================================================================
+   ```
+
+2. Display confirmation:
+   ```
+   DECISION RECORDED: Finalize Paper
+
+   Actions completed:
+   - Decision recorded in supervisor_decision_{participantId}.txt
+   - Paper marked ready for final preparation
+
+   NEXT STEP: Execute ICISfinalize prompt
+   The finalizer will:
+   1. Compile final PDF
+   2. Prepare submission package
+   3. Send notifications
+   ```
+
+================================================================================
+STEP 6: VERIFICATION
+================================================================================
+
+Before completing, verify all actions:
+
+1. **Oversight files were read:**
+   Use Glob to confirm: {ICIS_PATH}\Data\oversight_{participantId}_v*.txt
+   Report: "Read {N} oversight file(s): v1, v2, v3..."
+
+2. **Dashboard was displayed:**
+   Report: "Dashboard generated for cycle {currentVersion}"
+
+3. **Status was determined:**
+   Report: "Status: {ON TRACK/ATTENTION NEEDED}"
+   Report: "Recommendation: {FINALIZE/CONTINUE_REVISION}"
+
+4. **Decision was recorded:**
+   If REVISE: Verify feedback file was edited
+   If FINALIZE: Verify decision file was created
+   Use Glob to confirm file exists
+
+5. **Next step is clear:**
+   Report: "Next prompt to execute: {ICISreviser/ICISfinalize}"
+
+================================================================================
+QUICK REFERENCE: THRESHOLDS
+================================================================================
+
+| Metric                | Threshold | Scale | Constant                    |
+|-----------------------|-----------|-------|-----------------------------|
+| Review Scores (all 5) | >= 4      | 1-5   | REVIEW_SCORE_MIN: 4         |
+| Trustworthiness (all 3)| >= 5     | 1-7   | TRUSTWORTHINESS_MIN: 5      |
+| Major Errors          | = 0       | count | MAJOR_ERRORS_MAX: 0         |
+| Critical Alerts       | none      | count | (empty array)               |
+| Max Cycles            | 5         | count | MAX_RECOMMENDED_CYCLES: 5   |
+
+**Status Logic:**
+- ON TRACK: ALL thresholds met
+- ATTENTION NEEDED: ANY threshold not met
+
+================================================================================
+DELIVERABLES
+================================================================================
+
+This prompt produces:
+
+1. **Dashboard Display** - Shows version progression with all metrics
+2. **Status Determination** - ON TRACK or ATTENTION NEEDED with reasons
+3. **Recommendation** - FINALIZE or CONTINUE_REVISION
+4. **Decision Recording**:
+   - If REVISE: Appends directives to feedback_{participantId}_v{N}.txt
+   - If FINALIZE: Creates supervisor_decision_{participantId}.txt
+5. **Next Step Indication** - ICISreviser or ICISfinalize
+
+================================================================================

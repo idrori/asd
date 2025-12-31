@@ -1,0 +1,106 @@
+{
+  "id": "pnas",
+  "name": "Proceedings of the National Academy of Sciences",
+  "acronym": "PNAS",
+  "venueType": "journal",
+  "category": "life-sciences-earth-sciences",
+  "subcategory": "multidisciplinary",
+  "year": 2025,
+  "h5Index": 268,
+  "website": "https://www.pnas.org/",
+  "description": "PNAS is one of the world's most-cited multidisciplinary scientific journals, publishing research spanning biological, physical, and social sciences since 1914.",
+
+  "publisher": "National Academy of Sciences",
+  "openAccess": false,
+  "impactFactor": 11.1,
+  "publicationFrequency": "weekly",
+  "averageReviewTime": "45 days",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.pnas.org/author-center",
+    "authorGuidelines": "https://www.pnas.org/author-center",
+    "submissionPortal": "https://www.pnascentral.org/"
+  },
+
+  "paperLimits": {
+    "minPages": 6,
+    "maxPages": 12,
+    "standardPages": 6,
+    "maxWords": 4000,
+    "referencesCountTowardLimit": false,
+    "maxReferences": 50,
+    "maxDisplayItems": 4
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Significance Statement",
+      "Abstract",
+      "Introduction",
+      "Results",
+      "Discussion",
+      "Materials and Methods",
+      "Acknowledgments",
+      "References",
+      "Supporting Information"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "significanceStatementRequired": true,
+    "significanceStatementMaxWords": 120
+  },
+
+  "template": {
+    "formatStyle": "pnas",
+    "fontFamily": "Times",
+    "fontSize": 10,
+    "citationStyle": "pnas",
+    "lineSpacing": 1.0,
+    "paperSize": "letter",
+    "twoColumn": true,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "averageDecisionDays": 14,
+    "dimensions": [
+      "novelty",
+      "significance",
+      "technicalQuality",
+      "clarity",
+      "broadInterest"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "PNAS publishes research of exceptional importance across all scientific disciplines with broad interest to the scientific community.",
+    "topJournals": ["PNAS", "Nature", "Science", "Nature Communications", "Cell"],
+    "methodologyEmphasis": ["Broad Impact", "Interdisciplinary", "Significance Statement", "Reproducibility"]
+  },
+
+  "notes": [
+    "Established 1914 - one of world's most cited journals",
+    "Standard length 6 pages (~4000 words), max 12 pages",
+    "Significance statement required (120 words)",
+    "Most decisions in 2 weeks, full review in 45 days",
+    "95% Direct Submissions, 5% Member Contributed",
+    "6-month embargo for delayed open access",
+    "3500+ articles published annually"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

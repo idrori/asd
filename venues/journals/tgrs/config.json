@@ -1,0 +1,84 @@
+{
+  "id": "tgrs",
+  "name": "IEEE Transactions on Geoscience and Remote Sensing",
+  "acronym": "TGRS",
+  "venueType": "journal",
+  "category": "engineering-computer-science",
+  "subcategory": "remote-sensing",
+  "year": 2025,
+  "h5Index": 180,
+  "website": "https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=36",
+  "description": "TGRS focuses on the theory, concepts, and techniques of science and engineering as applied to sensing the land, oceans, atmosphere, and space.",
+
+  "publisher": "IEEE",
+  "openAccess": false,
+  "impactFactor": 8.2,
+  "publicationFrequency": "monthly",
+  "averageReviewTime": "8-12 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://ieeexplore.ieee.org/document/8697170",
+    "authorGuidelines": "https://www.grss-ieee.org/publications/transactions-on-geoscience-remote-sensing/",
+    "submissionPortal": "https://mc.manuscriptcentral.com/tgrs"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 15,
+    "referencesCountTowardLimit": false,
+    "minReferences": 25,
+    "maxReferences": 60
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Related Work", "Methodology", "Experiments", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "ieee-transactions",
+    "fontFamily": "Times",
+    "fontSize": 10,
+    "citationStyle": "ieee",
+    "lineSpacing": 1.0,
+    "paperSize": "letter",
+    "twoColumn": true,
+    "anonymousSubmission": false
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "dimensions": ["novelty", "technicalQuality", "remoteSensingRelevance", "clarity", "experimentalValidation"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "TGRS is the flagship IEEE journal for geoscience and remote sensing.",
+    "topJournals": ["TGRS", "Remote Sensing of Environment", "ISPRS Journal", "IEEE JSTARS"],
+    "methodologyEmphasis": ["Remote Sensing", "Signal Processing", "Image Analysis", "Earth Observation"]
+  },
+
+  "notes": [
+    "IEEE GRSS flagship journal",
+    "ScholarOne Manuscripts submission",
+    "IEEE Author Portal for PDF submission",
+    "Two-column IEEE format",
+    "Impact factor 8.2"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

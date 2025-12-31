@@ -1,0 +1,88 @@
+{
+  "id": "frl",
+  "name": "Finance Research Letters",
+  "acronym": "FRL",
+  "venueType": "journal",
+  "category": "business-economics-management",
+  "subcategory": "finance",
+  "year": 2025,
+  "h5Index": 80,
+  "website": "https://www.sciencedirect.com/journal/finance-research-letters",
+  "description": "Finance Research Letters publishes concise communications of new, preliminary or experimental results in finance that have broad and immediate implications.",
+
+  "publisher": "Elsevier",
+  "openAccess": false,
+  "publicationFrequency": "monthly",
+  "averageReviewTime": "5 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.sciencedirect.com/journal/finance-research-letters/publish/guide-for-authors",
+    "authorGuidelines": "https://www.sciencedirect.com/journal/finance-research-letters/publish/guide-for-authors"
+  },
+
+  "paperLimits": {
+    "minPages": 4,
+    "maxPages": 8,
+    "maxWords": 2500,
+    "referencesCountTowardLimit": false,
+    "minReferences": 15,
+    "maxReferences": 40
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Data and Methodology", "Results", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 150,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "elsevier",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "elsevier-harvard",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 1,
+    "reviewType": "single-blind",
+    "dimensions": ["novelty", "financeRelevance", "methodologicalRigor", "clarity", "broadImplications"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "FRL is a letters journal for rapid finance research communications.",
+    "topJournals": ["Finance Research Letters", "Journal of Financial Economics", "Journal of Finance", "Review of Financial Studies"],
+    "methodologyEmphasis": ["Empirical Finance", "Replicability", "Cross-national Studies", "Methodological Innovation"]
+  },
+
+  "notes": [
+    "Concise finance letters journal",
+    "Max 2,500 words",
+    "No publication fee",
+    "Rapid turnaround: 7 days to first decision",
+    "32 days to decision after review",
+    "101 days to acceptance",
+    "2 days to online publication",
+    "Replicability studies welcome",
+    "Single country replications generally out of scope"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

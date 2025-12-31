@@ -1,0 +1,101 @@
+{
+  "id": "ccs",
+  "name": "ACM Conference on Computer and Communications Security",
+  "acronym": "CCS",
+  "venueType": "conference",
+  "category": "engineering-computer-science",
+  "subcategory": "computer-security-cryptography",
+  "year": 2025,
+  "h5Index": 85,
+  "website": "https://www.sigsac.org/ccs/CCS2025/",
+  "description": "ACM CCS is the flagship annual conference of ACM SIGSAC, covering all aspects of computer and communications security.",
+
+  "officialLinks": {
+    "callForPapers": "https://www.sigsac.org/ccs/CCS2025/call-for-papers/",
+    "submissionInstructions": "https://www.sigsac.org/ccs/CCS2025/call-for-papers/",
+    "submissionPortalA": "https://ccs2025a.hotcrp.com/",
+    "submissionPortalB": "https://ccs2025b.hotcrp.com/"
+  },
+
+  "paperLimits": {
+    "minPages": 10,
+    "maxPages": 12,
+    "referencesCountTowardLimit": false,
+    "minReferences": 25,
+    "maxReferences": 60
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Background",
+      "Threat Model",
+      "Design",
+      "Implementation",
+      "Evaluation",
+      "Related Work",
+      "Conclusion",
+      "References"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "acm-sigconf",
+    "fontFamily": "Libertine",
+    "fontSize": 9,
+    "citationStyle": "acm",
+    "lineSpacing": 1.0,
+    "paperSize": "letter",
+    "twoColumn": true,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 1,
+    "reviewType": "double-blind",
+    "dimensions": [
+      "novelty",
+      "technicalQuality",
+      "significance",
+      "clarity",
+      "practicalRelevance"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "ACM CCS is the flagship conference of ACM SIGSAC with a multi-track format.",
+    "topJournals": ["ACM TOPS", "IEEE TDSC", "Journal of Cryptology"],
+    "topConferences": ["CCS", "S&P", "USENIX Security", "NDSS"],
+    "methodologyEmphasis": ["Applied Cryptography", "Systems Security", "Network Security", "Privacy"]
+  },
+
+  "notes": [
+    "ACM SIGSAC flagship conference",
+    "Multi-track format with separate track chairs",
+    "Two review cycles (A and B)",
+    "ACM sigconf format required",
+    "Artifacts expected for implementation papers",
+    "Authors with 3+ papers may be required to review",
+    "LLM-generated reviews flagged for desk rejection",
+    "No withdrawal after reviews sent"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

@@ -1,0 +1,84 @@
+{
+  "id": "eds",
+  "name": "Educational Studies",
+  "acronym": "EDS",
+  "venueType": "journal",
+  "category": "social-sciences",
+  "subcategory": "education",
+  "year": 2025,
+  "h5Index": 45,
+  "website": "https://www.tandfonline.com/journals/ceds20",
+  "description": "Educational Studies provides a forum for original investigations and theoretical studies in education, covering applied and theoretical approaches.",
+
+  "publisher": "Taylor & Francis",
+  "openAccess": false,
+  "publicationFrequency": "bimonthly",
+  "averageReviewTime": "8-16 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.tandfonline.com/journals/ceds20",
+    "authorGuidelines": "https://www.tandfonline.com/journals/ceds20"
+  },
+
+  "paperLimits": {
+    "minPages": 15,
+    "maxPages": 35,
+    "referencesCountTowardLimit": false,
+    "minReferences": 30,
+    "maxReferences": 80
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Literature Review", "Methodology", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "taylor-francis",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "apa",
+    "lineSpacing": 2.0,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "dimensions": ["educationalRelevance", "methodologicalRigor", "novelty", "clarity", "practicalImplications"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "Educational Studies covers theoretical and applied education research.",
+    "topJournals": ["Educational Studies", "British Educational Research Journal", "Review of Educational Research", "Educational Researcher"],
+    "methodologyEmphasis": ["Empirical Research", "Theoretical Studies", "Mixed Methods", "Qualitative Research"]
+  },
+
+  "notes": [
+    "Leading education research journal",
+    "Social sciences perspective on education",
+    "International audience focus",
+    "Double-blind peer review",
+    "Methodologically sound papers preferred",
+    "Interdisciplinary contributions welcome"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

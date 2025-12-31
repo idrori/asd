@@ -1,0 +1,101 @@
+{
+  "id": "siggraph",
+  "name": "ACM SIGGRAPH Conference on Computer Graphics and Interactive Techniques",
+  "acronym": "SIGGRAPH",
+  "venueType": "conference",
+  "category": "engineering-computer-science",
+  "subcategory": "graphics",
+  "year": 2025,
+  "h5Index": 62,
+  "website": "https://s2025.siggraph.org/",
+  "description": "SIGGRAPH is the world's largest and most influential annual conference on computer graphics and interactive techniques.",
+
+  "officialLinks": {
+    "callForPapers": "https://s2025.siggraph.org/program/technical-papers/",
+    "submissionInstructions": "https://s2025.siggraph.org/submissions-faq/",
+    "technicalPapersFAQ": "https://s2025.siggraph.org/technical-papers-submissions-faq/",
+    "reviewerGuidelines": "https://s2025.siggraph.org/technical-papers-reviewer-instructions-ethics/"
+  },
+
+  "paperLimits": {
+    "minPages": 7,
+    "maxPages": 12,
+    "referencesCountTowardLimit": false,
+    "minReferences": 20,
+    "maxReferences": 60,
+    "optionalFigurePages": 2
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Related Work",
+      "Method",
+      "Results",
+      "Discussion",
+      "Conclusion",
+      "References"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true,
+    "supplementalVideoAllowed": true
+  },
+
+  "template": {
+    "formatStyle": "acm-tog",
+    "fontFamily": "Libertine",
+    "fontSize": 9,
+    "citationStyle": "acm",
+    "lineSpacing": 1.0,
+    "paperSize": "letter",
+    "twoColumn": true,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 1,
+    "reviewType": "double-blind",
+    "dimensions": [
+      "novelty",
+      "technicalQuality",
+      "significance",
+      "clarity",
+      "reproducibility"
+    ]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "SIGGRAPH is the premier conference for computer graphics, publishing in ACM Transactions on Graphics.",
+    "topJournals": ["ACM TOG", "IEEE TVCG", "CGF"],
+    "topConferences": ["SIGGRAPH", "SIGGRAPH Asia", "Eurographics", "I3D"],
+    "methodologyEmphasis": ["Rendering", "Animation", "Modeling", "Visualization", "VR/AR"]
+  },
+
+  "notes": [
+    "World's largest graphics conference",
+    "Two tracks: Journal (TOG) and Conference",
+    "Journal papers need 7+ pages minimum",
+    "Published in ACM TOG (Vol 44, Issue 4)",
+    "Conference papers in SIGGRAPH proceedings",
+    "No previously published work",
+    "Tech reports/theses don't preclude submission",
+    "Publication date: 27 July 2025"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

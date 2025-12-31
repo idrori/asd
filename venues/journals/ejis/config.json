@@ -1,0 +1,86 @@
+{
+  "id": "ejis",
+  "name": "European Journal of Information Systems",
+  "acronym": "EJIS",
+  "venueType": "journal",
+  "category": "business-economics-management",
+  "subcategory": "information-systems",
+  "year": 2025,
+  "h5Index": 75,
+  "website": "https://www.tandfonline.com/journals/tjis20",
+  "description": "EJIS covers the theory and practice of information systems including technology, development, implementation, strategy, management, and policy.",
+
+  "publisher": "Taylor & Francis",
+  "openAccess": false,
+  "impactFactor": 7.3,
+  "publicationFrequency": "bimonthly",
+  "averageReviewTime": "3-6 months",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.tandfonline.com/journals/tjis20",
+    "authorGuidelines": "https://www.tandfonline.com/journals/tjis20"
+  },
+
+  "paperLimits": {
+    "minPages": 15,
+    "maxPages": 35,
+    "referencesCountTowardLimit": false,
+    "minReferences": 40,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Literature Review", "Research Methodology", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "taylor-francis",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "author-date",
+    "lineSpacing": 2.0,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "dimensions": ["theoreticalContribution", "methodologicalRigor", "novelty", "clarity", "practicalRelevance"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "EJIS is a leading IS journal covering theory and practice.",
+    "topJournals": ["EJIS", "MIS Quarterly", "Information Systems Research", "JAIS"],
+    "methodologyEmphasis": ["Empirical Research", "Design Science", "Theory Development", "Mixed Methods"]
+  },
+
+  "notes": [
+    "Leading European IS journal since 1991",
+    "Official journal of Operational Research Society",
+    "Impact factor 7.3",
+    "Genres: Literature Review, Theory Development, Empirical, Issues and Opinions",
+    "Author-date citation format",
+    "Gold open access option available",
+    "References: oldest first in text lists"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

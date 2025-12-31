@@ -1,0 +1,86 @@
+{
+  "id": "ijpe",
+  "name": "International Journal of Production Economics",
+  "acronym": "IJPE",
+  "venueType": "journal",
+  "category": "business-economics-management",
+  "subcategory": "operations-management",
+  "year": 2025,
+  "h5Index": 130,
+  "website": "https://www.sciencedirect.com/journal/international-journal-of-production-economics",
+  "description": "IJPE publishes research on production economics, operations management, and industrial engineering with emphasis on economic and financial consequences.",
+
+  "publisher": "Elsevier",
+  "openAccess": false,
+  "impactFactor": 12.32,
+  "publicationFrequency": "monthly",
+  "averageReviewTime": "12-20 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://www.sciencedirect.com/journal/international-journal-of-production-economics/publish/guide-for-authors",
+    "authorGuidelines": "https://www.sciencedirect.com/journal/international-journal-of-production-economics/publish/guide-for-authors"
+  },
+
+  "paperLimits": {
+    "minPages": 15,
+    "maxPages": 35,
+    "referencesCountTowardLimit": false,
+    "minReferences": 40,
+    "maxReferences": 100
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Literature Review", "Methodology", "Results", "Discussion", "Conclusion", "References"],
+    "abstractRequired": true,
+    "abstractMaxWords": 250,
+    "keywordsRequired": true
+  },
+
+  "template": {
+    "formatStyle": "elsevier",
+    "fontFamily": "Times",
+    "fontSize": 12,
+    "citationStyle": "elsevier-harvard",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "double-blind",
+    "dimensions": ["productionEconomicsContribution", "methodologicalRigor", "novelty", "clarity", "economicImplications"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "IJPE is a premier journal for production economics and operations management.",
+    "topJournals": ["IJPE", "Journal of Operations Management", "Manufacturing & Service Operations Management", "Production and Operations Management"],
+    "methodologyEmphasis": ["Operations Research", "Supply Chain", "Manufacturing", "Economic Analysis"]
+  },
+
+  "notes": [
+    "Premier production economics journal",
+    "Impact factor 12.32",
+    "h-index 248",
+    "Must include economic/financial consequences",
+    "Survey papers have high hurdles",
+    "Must demonstrate novel scientific contribution",
+    "Abbreviation: Int. J. Prod. Econ."
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

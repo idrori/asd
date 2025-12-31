@@ -1,0 +1,88 @@
+{
+  "id": "angew-chem",
+  "name": "Angewandte Chemie International Edition",
+  "acronym": "Angew. Chem.",
+  "venueType": "journal",
+  "category": "chemical-material-sciences",
+  "subcategory": "chemical-material-sciences-general",
+  "year": 2025,
+  "h5Index": 289,
+  "website": "https://onlinelibrary.wiley.com/journal/15213773",
+  "description": "Angewandte Chemie is one of the prime chemistry journals in the world, publishing research articles, highlights, communications and reviews across all areas of chemistry.",
+
+  "publisher": "Wiley-VCH",
+  "openAccess": false,
+  "impactFactor": 16.6,
+  "publicationFrequency": "weekly",
+  "averageReviewTime": "4-8 weeks",
+
+  "officialLinks": {
+    "submissionInstructions": "https://onlinelibrary.wiley.com/page/journal/15213773/homepage/notice-to-authors",
+    "authorGuidelines": "https://onlinelibrary.wiley.com/page/journal/15213773/homepage/authors",
+    "submissionPortal": "https://www.editorialmanager.com/anie/"
+  },
+
+  "paperLimits": {
+    "minPages": 4,
+    "maxPages": 12,
+    "referencesCountTowardLimit": false,
+    "minReferences": 20,
+    "maxReferences": 60
+  },
+
+  "paperStructure": {
+    "sections": ["Abstract", "Introduction", "Results and Discussion", "Conclusion", "Experimental Section", "References", "Supporting Information"],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": true,
+    "keywordsCount": 5
+  },
+
+  "template": {
+    "formatStyle": "wiley-vch",
+    "fontFamily": "Times",
+    "fontSize": 10,
+    "citationStyle": "numbered",
+    "lineSpacing": 1.5,
+    "paperSize": "a4",
+    "twoColumn": false,
+    "anonymousSubmission": true
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 2,
+    "reviewType": "single-blind",
+    "dimensions": ["novelty", "significance", "chemicalInnovation", "clarity", "experimentalRigor"]
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt"
+  },
+
+  "calibration": {
+    "description": "Angewandte Chemie is a premier chemistry journal owned by the German Chemical Society (GDCh).",
+    "topJournals": ["Angew. Chem.", "JACS", "Nature Chemistry", "Chemical Reviews"],
+    "methodologyEmphasis": ["Chemical Synthesis", "Novel Reactions", "Mechanism Studies", "Materials Chemistry"]
+  },
+
+  "notes": [
+    "Premier chemistry journal",
+    "Owned by German Chemical Society (GDCh)",
+    "Research Exchange submission (since Nov 2025)",
+    "Single-blind peer review",
+    "Preprints accepted (ChemRxiv, bioRxiv, arXiv)",
+    "Reviews require prior editorial contact",
+    "Impact factor 16.6"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

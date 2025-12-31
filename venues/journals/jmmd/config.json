@@ -1,0 +1,23 @@
+{
+  "id": "jmmd",
+  "name": "Journal of Molecular Medicine",
+  "acronym": "J Mol Med",
+  "venueType": "journal",
+  "category": "health-medical-sciences",
+  "subcategory": "molecular-medicine",
+  "year": 2025,
+  "h5Index": 75,
+  "website": "https://link.springer.com/journal/109",
+  "description": "Journal of Molecular Medicine publishes research bridging basic and clinical science in molecular medicine.",
+  "publisher": "Springer",
+  "openAccess": false,
+  "publicationFrequency": "monthly",
+  "officialLinks": {"submissionInstructions": "https://link.springer.com/journal/109/submission-guidelines"},
+  "paperLimits": {"minPages": 10, "maxPages": 25, "minReferences": 30, "maxReferences": 80},
+  "paperStructure": {"sections": ["Abstract", "Introduction", "Materials and Methods", "Results", "Discussion", "References"], "abstractRequired": true},
+  "template": {"formatStyle": "springer", "citationStyle": "numbered", "anonymousSubmission": true},
+  "review": {"reviewType": "double-blind"},
+  "prompts": {"builder": "builder.txt", "reviewer": "reviewer.txt", "supervisor": "supervisor.txt", "reviser": "reviser.txt", "finalize": "finalize.txt", "setup": "setup.txt", "template": "template.txt"},
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}
