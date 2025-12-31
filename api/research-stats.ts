@@ -32,14 +32,11 @@ type GroupId = 1 | 2 | null;
 
 interface Participant {
   id: string;
-  name: string;
-  email: string;
+  email: string;  // Only PII stored - for contact purposes
   group_id: GroupId;
-  interviewer: string | null;
   status: ParticipantStatus;
   registered_at: string;
   updated_at: string;
-  notes: string;
 }
 
 interface ActivityLogEntry {
@@ -196,8 +193,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       unassigned: unassigned.length
     };
 
-    // Alerts
-    const alerts: { type: string; message: string; participants: string[] }[] = [];
+    // Alerts - use participant IDs only (no PII)
+    const alerts: { type: string; message: string; participantIds: string[] }[] = [];
 
     // Stuck participants
     const stuckParticipants = participants.filter(isStuck);
@@ -205,7 +202,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       alerts.push({
         type: 'stuck',
         message: `${stuckParticipants.length} stuck participant(s)`,
-        participants: stuckParticipants.map(p => p.name || p.email)
+        participantIds: stuckParticipants.map(p => p.id)
       });
     }
 
@@ -215,21 +212,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       alerts.push({
         type: 'pending_survey',
         message: `${pendingSurveys.length} pending survey(s)`,
-        participants: pendingSurveys.map(p => p.name || p.email)
+        participantIds: pendingSurveys.map(p => p.id)
       });
     }
 
-    // Recent activity (last 10 entries)
+    // Recent activity (last 10 entries) - use IDs only, no PII
     const recentActivity = activity_log
       .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
       .slice(0, 10)
-      .map(entry => {
-        const participant = participants.find(p => p.id === entry.participant_id);
-        return {
-          ...entry,
-          participant_name: participant?.name || participant?.email || 'Unknown'
-        };
-      });
+      .map(entry => ({
+        id: entry.id,
+        participant_id: entry.participant_id,
+        status_from: entry.status_from,
+        status_to: entry.status_to,
+        timestamp: entry.timestamp
+      }));
 
     return res.status(200).json({
       success: true,

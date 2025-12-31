@@ -38,14 +38,11 @@ type GroupId = 1 | 2 | null;
 
 interface Participant {
   id: string;
-  name: string;
-  email: string;
+  email: string;  // Only PII stored - for contact purposes
   group_id: GroupId;
-  interviewer: string | null;
   status: ParticipantStatus;
   registered_at: string;
   updated_at: string;
-  notes: string;
   paper_link?: string;
   oversight_paths?: string[];
   feedback_paths?: string[];
@@ -206,7 +203,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
       case 'POST': {
         // POST /api/participants - Create new participant
-        const { name, email, interviewer, notes, auto_assign_group } = req.body;
+        // Only email stored as PII for contact purposes
+        const { email, auto_assign_group } = req.body;
 
         if (!email) {
           return res.status(400).json({
@@ -230,14 +228,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const now = new Date().toISOString();
         const newParticipant: Participant = {
           id: generateId(),
-          name: name || '',
           email: email.toLowerCase(),
           group_id: auto_assign_group ? assignGroup(data.participants) : null,
-          interviewer: interviewer || null,
           status: 'registered',
           registered_at: now,
-          updated_at: now,
-          notes: notes || ''
+          updated_at: now
         };
 
         data.participants.push(newParticipant);
@@ -255,7 +250,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
       case 'PATCH': {
         // PATCH /api/participants - Update participant
-        const { email, name, status, group_id, interviewer, notes, paper_link, transcript, oversight, feedback, round } = req.body;
+        // Only non-PII fields can be updated (status, group_id, paper_link)
+        const { email, status, group_id, paper_link } = req.body;
 
         if (!email) {
           return res.status(400).json({
@@ -277,50 +273,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const participant = data.participants[idx];
         const oldStatus = participant.status;
 
-        // Update fields if provided
-        if (name !== undefined) participant.name = name;
+        // Update only non-PII fields
         if (status !== undefined) participant.status = status;
         if (group_id !== undefined) participant.group_id = group_id;
-        if (interviewer !== undefined) participant.interviewer = interviewer;
-        if (notes !== undefined) participant.notes = notes;
         if (paper_link !== undefined) participant.paper_link = paper_link;
         participant.updated_at = new Date().toISOString();
-
-        // Note: Transcripts are downloaded locally by participants, not stored in blob
-
-        // Save oversight file if provided (with round number)
-        if (oversight && round) {
-          const oversightPath = `research/oversight/${participant.id}_v${round}.json`;
-          const oversightContent = typeof oversight === 'string' ? oversight : JSON.stringify(oversight, null, 2);
-          await put(oversightPath, oversightContent, {
-            access: 'public',
-            contentType: 'application/json',
-            addRandomSuffix: false
-          });
-          // Track all oversight paths
-          if (!participant.oversight_paths) participant.oversight_paths = [];
-          if (!participant.oversight_paths.includes(oversightPath)) {
-            participant.oversight_paths.push(oversightPath);
-          }
-          console.log(`[Participants] Saved oversight v${round} for ${email}`);
-        }
-
-        // Save feedback file if provided (with round number)
-        if (feedback && round) {
-          const feedbackPath = `research/feedback/${participant.id}_v${round}.json`;
-          const feedbackContent = typeof feedback === 'string' ? feedback : JSON.stringify(feedback, null, 2);
-          await put(feedbackPath, feedbackContent, {
-            access: 'public',
-            contentType: 'application/json',
-            addRandomSuffix: false
-          });
-          // Track all feedback paths
-          if (!participant.feedback_paths) participant.feedback_paths = [];
-          if (!participant.feedback_paths.includes(feedbackPath)) {
-            participant.feedback_paths.push(feedbackPath);
-          }
-          console.log(`[Participants] Saved feedback v${round} for ${email}`);
-        }
 
         // Log status change
         if (status && status !== oldStatus) {

@@ -179,11 +179,10 @@ export async function getResearchStats(): Promise<ResearchStats> {
  * Called when a user starts a voice interview
  */
 export async function registerFromInterview(
-  email: string,
-  interviewer?: string
+  email: string
 ): Promise<Participant> {
   return createParticipant(
-    { email, interviewer },
+    { email },
     true // auto-assign to group
   );
 }
@@ -191,15 +190,14 @@ export async function registerFromInterview(
 /**
  * Complete interview for participant
  * Called when a voice interview ends
+ * Note: Transcript is downloaded locally, not stored on server
  */
 export async function completeInterview(
-  email: string,
-  transcript: string
+  email: string
 ): Promise<Participant> {
   return updateParticipant({
     email,
-    status: 'interview_completed',
-    transcript
+    status: 'interview_completed'
   });
 }
 

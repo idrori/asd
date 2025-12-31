@@ -28,15 +28,11 @@ export type GroupId = 1 | 2 | null; // 1 = With Oversight, 2 = Control, null = U
 
 export interface Participant {
   id: string;
-  name: string;
-  email: string;
+  email: string;  // Only PII stored - for contact purposes
   group_id: GroupId;
-  interviewer: string | null;
   status: ParticipantStatus;
   registered_at: string; // ISO timestamp
   updated_at: string; // ISO timestamp
-  notes: string;
-  // Optional fields for tracking
   paper_link?: string;
   oversight_paths?: string[];  // Paths to oversight_v1.json, oversight_v2.json, etc.
   feedback_paths?: string[];   // Paths to feedback_v1.json, feedback_v2.json, etc.
@@ -94,26 +90,20 @@ export interface GroupMetrics {
 export interface Alert {
   type: 'stuck' | 'pending_survey' | 'pending_review';
   message: string;
-  participants: string[]; // participant names
+  participantIds: string[]; // participant IDs (no PII)
 }
 
 // API Request/Response types
+// Only email stored as PII - for contact purposes
 export interface CreateParticipantRequest {
-  name?: string;
   email: string;
-  interviewer?: string;
-  notes?: string;
 }
 
 export interface UpdateParticipantRequest {
   email: string;
-  name?: string;
   status?: ParticipantStatus;
   group_id?: GroupId;
-  interviewer?: string;
-  notes?: string;
   paper_link?: string;
-  transcript?: string; // Will be saved to separate file
 }
 
 export interface ParticipantsResponse {
