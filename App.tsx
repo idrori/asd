@@ -23,6 +23,9 @@ const App: React.FC = () => {
   // Source type state
   const [sourceType, setSourceType] = useState<SourceType>('transcript-upload');
 
+  // Selected venue state
+  const [selectedVenueId, setSelectedVenueId] = useState<string>('icis');
+
   // Update gemini service when mode changes
   const handlePaperModeChange = useCallback((mode: PaperMode) => {
     setPaperModeState(mode);
@@ -145,6 +148,7 @@ Is this the correct data file for your analysis?`;
           paperMode={paperMode}
           onPaperModeChange={handlePaperModeChange}
           sourceType={sourceType}
+          selectedVenueId={selectedVenueId}
         />
       </div>
       <div className="flex-1 h-full">
@@ -174,6 +178,7 @@ Is this the correct data file for your analysis?`;
               window.open(`${baseUrl}paper-to-interview.html`, '_blank', 'noopener,noreferrer');
             }}
             onSourceTypeChange={setSourceType}
+            onVenueChange={setSelectedVenueId}
           />
         )}
       </div>

@@ -45,6 +45,7 @@ interface SidebarProps {
   paperMode?: PaperMode;
   onPaperModeChange?: (mode: PaperMode) => void;
   sourceType?: SourceType;
+  selectedVenueId?: string;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
@@ -62,7 +63,8 @@ const Sidebar: React.FC<SidebarProps> = ({
   onResearchAdmin,
   paperMode = 'draft',
   onPaperModeChange,
-  sourceType = 'transcript-upload'
+  sourceType = 'transcript-upload',
+  selectedVenueId = 'icis'
 }) => {
   const [menuOpen, setMenuOpen] = useState<Stage | null>(null);
   const [builderManualExpanded, setBuilderManualExpanded] = useState<boolean | null>(null);
@@ -445,7 +447,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         <div className="text-xs text-slate-500 space-y-1">
           <p className="flex justify-between">
             <span>Directory:</span>
-            <span className="text-slate-400">{ICIS_BASE_PATH}</span>
+            <span className="text-slate-400">/{selectedVenueId}</span>
           </p>
           <p className="flex justify-between">
             <span>Paper Version:</span>
