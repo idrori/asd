@@ -19,3 +19,15 @@ Information Technologies and Systems: workshop on exploring generative AI to tra
 
 ### Followup Paper
 ![Followup Paper](screenshots/followup-paper-screenshot.png)
+
+### Supervisor Dashboard
+![Supervisor Dashboard](screenshots/supervisor-dashboard-screenshot.png)
+
+### Errors Alerts
+![Errors Alerts](screenshots/errors-alerts-screenshot.png)
+
+### Recommendation Supervisor Decision
+![Recommendation Supervisor Decision](screenshots/recommendation-supervisor-decision-screenshot.png)
+
+### Completed
+![Completed](screenshots/completed-screenshot.png)
