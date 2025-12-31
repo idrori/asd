@@ -5,16 +5,17 @@
   "venueType": "conference",
   "category": "engineering-computer-science",
   "subcategory": "human-computer-interaction",
-  "year": 2026,
+  "year": 2025,
   "h5Index": 125,
-  "website": "https://chi2026.acm.org/",
+  "website": "https://chi2025.acm.org/",
   "description": "CHI is the premier international conference on Human-Computer Interaction. It covers user experience, interaction design, accessibility, social computing, and human-AI interaction.",
 
   "officialLinks": {
-    "callForPapers": "https://chi2026.acm.org/authors/papers/",
-    "submissionInstructions": "https://chi2026.acm.org/guide-to-a-successful-submission/",
-    "reviewerGuidelines": "https://chi2026.acm.org/guide-to-reviewing-papers/",
-    "publicationFormats": "https://chi2026.acm.org/chi-publication-formats/"
+    "callForPapers": "https://chi2025.acm.org/for-authors/papers/",
+    "submissionInstructions": "https://chi2025.acm.org/guide-to-a-successful-submission/",
+    "reviewerGuidelines": "https://chi2025.acm.org/for-authors/",
+    "publicationFormats": "https://chi2025.acm.org/chi-publication-formats/",
+    "authorInstructions": "https://chi2025.acm.org/for-authors/publication-ready-author-instructions/"
   },
 
   "paperLimits": {

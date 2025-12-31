@@ -13,8 +13,8 @@
   "officialLinks": {
     "callForPapers": "https://iclr.cc/Conferences/2026/CallForPapers",
     "submissionInstructions": "https://iclr.cc/Conferences/2026/AuthorGuide",
-    "reviewerGuidelines": "https://iclr.cc/Conferences/2025/ReviewerGuide",
-    "openReview": "https://openreview.net/group?id=ICLR.cc"
+    "reviewerGuidelines": "https://iclr.cc/Conferences/2026/ReviewerGuide",
+    "openReview": "https://openreview.net/group?id=ICLR.cc/2026/Conference"
   },
 
   "paperLimits": {

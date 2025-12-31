@@ -1,0 +1,153 @@
+{
+  "id": "cvpr",
+  "name": "IEEE/CVF Conference on Computer Vision and Pattern Recognition",
+  "acronym": "CVPR",
+  "venueType": "conference",
+  "category": "engineering-computer-science",
+  "subcategory": "computer-vision-pattern-recognition",
+  "year": 2025,
+  "h5Index": 450,
+  "website": "https://cvpr.thecvf.com/",
+  "description": "CVPR is the premier annual conference on computer vision and pattern recognition. It publishes cutting-edge research in image understanding, video analysis, 3D vision, and deep learning for visual computing.",
+
+  "officialLinks": {
+    "callForPapers": "https://cvpr.thecvf.com/Conferences/2025/CallForPapers",
+    "submissionInstructions": "https://cvpr.thecvf.com/Conferences/2025/AuthorGuidelines",
+    "reviewerGuidelines": "https://cvpr.thecvf.com/Conferences/2025/ReviewerGuidelines",
+    "authorGuidelines": "https://cvpr.thecvf.com/Conferences/2025/AuthorSuggestedPractices"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 8,
+    "cameraReadyMaxPages": 8,
+    "referencesCountTowardLimit": false,
+    "minReferences": 25,
+    "maxReferences": 60
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Related Work",
+      "Method",
+      "Experiments",
+      "Results",
+      "Conclusion",
+      "References",
+      "Supplementary Material"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": false,
+    "keywordsCount": { "min": 0, "max": 0 },
+    "appendicesAllowed": true,
+    "supplementaryAllowed": true
+  },
+
+  "template": {
+    "formatStyle": "cvpr",
+    "fontFamily": "Times",
+    "fontSize": 10,
+    "citationStyle": "ieee",
+    "lineSpacing": 1.0,
+    "marginInches": 1.0,
+    "paperSize": "letter",
+    "twoColumn": true,
+    "anonymousSubmission": true,
+    "styleFile": "CVPR 2025 Author Kit"
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 1,
+    "ratingScale": {
+      "min": 1,
+      "max": 5,
+      "labels": {
+        "5": "Strong Accept",
+        "4": "Accept",
+        "3": "Borderline",
+        "2": "Reject",
+        "1": "Strong Reject"
+      }
+    },
+    "confidenceScale": {
+      "min": 1,
+      "max": 5,
+      "labels": {
+        "5": "Absolutely certain",
+        "4": "Confident but not certain",
+        "3": "Fairly confident",
+        "2": "Willing to defend but gaps likely",
+        "1": "Educated guess"
+      }
+    },
+    "dimensions": [
+      "novelty",
+      "significance",
+      "technicalQuality",
+      "clarity",
+      "reproducibility"
+    ],
+    "includeTrustworthiness": false
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt",
+    "infographic": "infographic.txt",
+    "dataTable": "datatable.txt"
+  },
+
+  "calibration": {
+    "description": "CVPR is the top venue for computer vision research. Papers must demonstrate significant technical contribution with strong experimental validation on standard benchmarks.",
+    "exemplarCount": 0,
+    "topJournals": [
+      "IEEE Transactions on Pattern Analysis and Machine Intelligence",
+      "International Journal of Computer Vision",
+      "IEEE Transactions on Image Processing",
+      "Pattern Recognition"
+    ],
+    "topConferences": [
+      "CVPR",
+      "ICCV",
+      "ECCV",
+      "NeurIPS",
+      "ICML",
+      "SIGGRAPH"
+    ],
+    "methodologyEmphasis": [
+      "Deep Learning Architectures",
+      "Benchmark Evaluation",
+      "Ablation Studies",
+      "Qualitative Results",
+      "Real-time Performance"
+    ]
+  },
+
+  "notes": [
+    "Main paper limited to 8 pages including figures and tables",
+    "Unlimited pages for references only",
+    "CVPR 2025 Author Kit required for formatting",
+    "Maximum 25 papers per author",
+    "Double-blind review - strict anonymization required",
+    "OpenReview profile required for all authors",
+    "Rebuttal limited to one page PDF",
+    "Supplementary material allowed but cannot contain external links",
+    "Anonymous GitHub links allowed for code submission",
+    "LLMs NOT allowed for writing reviews",
+    "Dual submissions strictly prohibited",
+    "Highly competitive (acceptance rate ~25%)"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}

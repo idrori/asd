@@ -1,0 +1,132 @@
+{
+  "id": "kdd",
+  "name": "ACM SIGKDD Conference on Knowledge Discovery and Data Mining",
+  "acronym": "KDD",
+  "venueType": "conference",
+  "category": "engineering-computer-science",
+  "subcategory": "data-mining-analysis",
+  "year": 2025,
+  "h5Index": 115,
+  "website": "https://kdd2025.kdd.org/",
+  "description": "KDD is the premier conference on knowledge discovery and data mining. It covers all aspects of data science including machine learning, data mining, deep learning, and real-world applications.",
+
+  "officialLinks": {
+    "callForPapers": "https://kdd2025.kdd.org/research-track-call-for-papers/",
+    "submissionInstructions": "https://kdd.org/author-instructions",
+    "faq": "https://kdd2025.kdd.org/frequently-asked-questions/",
+    "openReview": "https://openreview.net/group?id=KDD.org/2025/Conference"
+  },
+
+  "paperLimits": {
+    "minPages": 8,
+    "maxPages": 8,
+    "cameraReadyMaxPages": 9,
+    "referencesCountTowardLimit": false,
+    "minReferences": 25,
+    "maxReferences": 50
+  },
+
+  "paperStructure": {
+    "sections": [
+      "Abstract",
+      "Introduction",
+      "Related Work",
+      "Problem Formulation",
+      "Method",
+      "Experiments",
+      "Results",
+      "Conclusion",
+      "References",
+      "Appendix"
+    ],
+    "abstractRequired": true,
+    "abstractMaxWords": 200,
+    "keywordsRequired": true,
+    "keywordsCount": { "min": 3, "max": 6 },
+    "appendicesAllowed": true,
+    "supplementaryAllowed": true
+  },
+
+  "template": {
+    "formatStyle": "acm",
+    "fontFamily": "Times",
+    "fontSize": 9,
+    "citationStyle": "acm",
+    "lineSpacing": 1.0,
+    "marginInches": 1.0,
+    "paperSize": "letter",
+    "twoColumn": true,
+    "anonymousSubmission": true,
+    "styleFile": "ACM Conference Proceeding templates"
+  },
+
+  "review": {
+    "criteriaFile": "review_criteria.txt",
+    "minScoreForApproval": 4.0,
+    "maxRevisionRounds": 1,
+    "dimensions": [
+      "novelty",
+      "significance",
+      "technicalQuality",
+      "clarity",
+      "reproducibility",
+      "applicability"
+    ],
+    "includeTrustworthiness": false
+  },
+
+  "prompts": {
+    "builder": "builder.txt",
+    "reviewer": "reviewer.txt",
+    "supervisor": "supervisor.txt",
+    "reviser": "reviser.txt",
+    "finalize": "finalize.txt",
+    "setup": "setup.txt",
+    "template": "template.txt",
+    "infographic": "infographic.txt",
+    "dataTable": "datatable.txt"
+  },
+
+  "calibration": {
+    "description": "KDD is the top venue for data mining and knowledge discovery. Papers must demonstrate both algorithmic novelty and practical applicability.",
+    "exemplarCount": 0,
+    "topJournals": [
+      "ACM Transactions on Knowledge Discovery from Data",
+      "IEEE Transactions on Knowledge and Data Engineering",
+      "Data Mining and Knowledge Discovery",
+      "Journal of Machine Learning Research"
+    ],
+    "topConferences": [
+      "KDD",
+      "WWW",
+      "WSDM",
+      "ICDM",
+      "SDM",
+      "NeurIPS",
+      "ICML"
+    ],
+    "methodologyEmphasis": [
+      "Algorithm Development",
+      "Scalability Analysis",
+      "Real-world Datasets",
+      "Industrial Applications",
+      "Reproducibility"
+    ]
+  },
+
+  "notes": [
+    "Main paper limited to 8 pages in ACM double-column format",
+    "Camera-ready version allows 9 pages",
+    "Submission via OpenReview",
+    "OpenReview profile required with complete information",
+    "Double-blind review - anonymized submissions required",
+    "At least one qualified reviewer per submission required",
+    "Reviews made public for accepted papers",
+    "Strong emphasis on reproducibility and ethics",
+    "Conference in Toronto, August 2025",
+    "Highly competitive (acceptance rate ~20%)"
+  ],
+
+  "verified": true,
+  "lastUpdated": "2025-12-31"
+}
