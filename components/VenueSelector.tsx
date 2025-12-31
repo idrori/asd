@@ -668,11 +668,6 @@ const VenueSelector: React.FC<VenueSelectorProps> = ({
         </div>
       )}
 
-      {/* Help Text */}
-      <p className="text-xs text-gray-500 mt-4">
-        <AlertCircle className="w-3 h-3 inline mr-1" />
-        Venues marked with a warning icon have not been fully verified. h5-index from Google Scholar.
-      </p>
     </div>
   );
 };
