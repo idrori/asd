@@ -155,10 +155,10 @@ export const FILE_PATHS = {
 
 // Review score thresholds
 export const REVIEW_THRESHOLDS = {
-  APPROVAL_MIN: 3.5,      // Minimum average score for approval
+  APPROVAL_MIN: 3.5,      // Minimum average score for approval (1-5 scale)
   TRUSTWORTHINESS_MIN: 5, // Minimum trustworthiness score (1-7 scale)
-  MAX_MAJOR_ERRORS: 2,    // Maximum major errors before rejection
-  MAX_ROUNDS: 5           // Maximum revision rounds
+  MAX_MAJOR_ERRORS: 2,    // Maximum major errors per cycle
+  MAX_CYCLES: 3           // Maximum cycles (1 build + 2 revisions)
 };
 
 // API configuration

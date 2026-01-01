@@ -58,7 +58,7 @@ This revision workflow has 9 steps (-1 to 8) to execute consecutively. Step -1 a
    □ Literature Review (or Related Work)
    □ Theoretical Framework (or Theory)
    □ Methodology (or Method)
-   □ **Results** (or Findings) - MUST have ≥2 figures, ≥1 table
+   □ **Results** (or Findings) - should have figures/tables that clarify findings (typically 2 figs + 1 table, but prioritize value over count)
    □ Discussion
    □ Conclusion
 
@@ -68,6 +68,23 @@ This revision workflow has 9 steps (-1 to 8) to execute consecutively. Step -1 a
    - Ensure the section is created with proper content (see STEP 8 Check 5 for requirements)
 
 **GOLDEN RULE:** Revisions ADD and IMPROVE—make the best effort not to subtract content (unless explicitly told)
+
+**REDUNDANCY AVOIDANCE RULE:** While adding content, avoid introducing redundancy. Do NOT repeat:
+- Claims or arguments already stated elsewhere
+- Ideas or concepts already explained
+- Facts or findings already presented
+- Explanations already given
+- Instructions already provided
+- Exact sequences of words (except proper names, labels, or technical terms)
+
+**Repetition is ALLOWED only when:**
+1. **Emphasis:** Deliberately reinforcing a critical point
+2. **Reminder:** Briefly recalling content from a previous section to orient the reader
+3. **Expansion:** Building upon and extending prior content with new depth or detail
+
+**Pattern for legitimate repetition:**
+- "As noted in Section X, [brief recap]. We now extend this by [new content]..."
+- "Building on the theoretical foundation established earlier, [expansion]..."
 
 **MATHEMATICAL FORMULATION RULE:** If the original paper (from ICISbuilder) did NOT include a mathematical formulation section (Step 3 was skipped), do NOT add one during revision UNLESS:
 - Critical feedback EXPLICITLY requests mathematical formulation, proofs, or novel algorithms
@@ -136,6 +153,144 @@ Execute before calling any revision complete:
   - If placeholder boxes: Fix paths using Glob, recompile
 
 If ANY checkbox unchecked, STOP and fix before proceeding.
+
+---
+
+## STEP 0.5: SYNTHETIC DATA GENERATION MODE (Conditional)
+
+**TRIGGER:** This step executes ONLY when supervisor clicks "Generate Synthetic Data" button.
+This is indicated by the action mode being 'generateSyntheticData'.
+
+**CONTEXT:** For Experiment/Survey research (2D/2E) where:
+- Data collection is planned but not yet available
+- Paper was initially written as PARTIAL (no Results section)
+- Supervisor decides synthetic data will strengthen the paper
+
+**Skip this step if:** Normal revision mode (action is 'revise')
+
+---
+
+### STEP 0.5-A: READ SYNTHETIC DATA GUIDELINES
+
+Read prompts/ICISsyntheticData.txt for detailed generation instructions.
+
+### STEP 0.5-B: EXTRACT RESEARCH MODEL FROM PAPER
+
+Extract from the current paper:
+
+1. **Research Questions and Hypotheses**
+   - Identify H1, H2, H3... with their predicted relationships
+   - Note direction (positive/negative) and expected effect sizes
+
+2. **Variables**
+   - Independent variables (IVs)
+   - Dependent variables (DVs)
+   - Mediating variables (if any)
+   - Moderating variables (if any)
+   - Control variables
+
+3. **Expected Relationships**
+   - Direction and strength from theoretical framework
+   - Example: "X positively affects Y (β ≈ 0.3-0.5)"
+
+4. **Unit of Analysis and Population**
+   - What entities the data represents
+   - Target population characteristics
+
+### STEP 0.5-C: INCORPORATE REVIEWER FEEDBACK
+
+Read the latest feedback file for guidance on synthetic data:
+- Reviewer concerns about empirical validation
+- Specific hypotheses that need demonstration
+- Control variables mentioned in feedback
+- Effect size expectations from literature
+
+### STEP 0.5-D: GENERATE SYNTHETIC DATA
+
+**Sample Size:**
+- Survey research: 150-300 respondents
+- Experimental research: 80-200 participants (40-100 per condition)
+
+**Data Characteristics:**
+- Likert scales (1-7): Slight negative skew typical (mean ~4.5-5.5)
+- Effect sizes matching literature:
+  - Small: r ≈ 0.10-0.15, β ≈ 0.10-0.20
+  - Medium: r ≈ 0.25-0.35, β ≈ 0.25-0.40
+  - Large: r ≈ 0.45-0.55, β ≈ 0.45-0.60
+- R² values: 0.25-0.45 for main DVs (typical for IS behavioral models)
+- Cronbach's α: 0.70-0.90 for scales
+
+**Hypothesized Relationships:**
+- Generate data where H1, H2, H3... hold at p < 0.05
+- Include realistic non-significant paths for non-hypothesized relationships
+- Add realistic measurement error and individual variation
+
+**Create Output Files:**
+- Data/synthetic_data_{participantId}.csv
+- Data/synthetic_data_codebook_{participantId}.txt
+- Data/synthetic_data_summary_{participantId}.txt
+
+### STEP 0.5-E: RUN STATISTICAL ANALYSIS
+
+1. **Compute Descriptive Statistics:**
+   - Means, standard deviations for all variables
+   - Correlation matrix
+
+2. **Test Hypotheses:**
+   - Run regression/ANOVA appropriate for research design
+   - Compute effect sizes, p-values, confidence intervals
+
+3. **Generate Results Figures:**
+   - Research model with path coefficients
+   - Key relationship visualizations
+   - Save to Results/ directory
+
+### STEP 0.5-F: ADD RESULTS SECTION TO PAPER
+
+**Paper Transformation: PARTIAL → FULL**
+
+1. **Insert Results Section:**
+   - Add after Methodology section
+   - Include descriptive statistics table
+   - Include hypothesis test results table
+   - Include figures that clarify findings
+
+2. **Update Discussion Section:**
+   - Interpret findings in light of hypotheses
+   - Connect to theoretical implications
+   - Note that data is synthetic
+
+3. **Add Transparency Statement:**
+   Insert in Methodology or Results section:
+   ```latex
+   \textit{Note: The empirical analysis presented in this paper uses synthetic data
+   generated to demonstrate the proposed research model and analysis approach.
+   The synthetic data was calibrated based on effect sizes and distributions
+   reported in prior literature. Actual data collection is planned/in progress.}
+   ```
+
+4. **Update Abstract:**
+   - Add brief mention of empirical findings
+   - Note synthetic data demonstration
+
+### STEP 0.5-G: VERIFICATION
+
+After synthetic data generation:
+□ Synthetic data CSV file created
+□ Codebook and summary files created
+□ Results section added to paper
+□ Discussion updated with findings interpretation
+□ Transparency statement included
+□ All figures/tables referenced in text
+□ Paper now has 7 sections (including Results)
+□ Page count: 14-16 pages (FULL paper)
+
+**DELIVERABLE:**
+- Synthetic dataset in Data/ directory
+- Updated paper with Results section (now FULL paper)
+- Transparency statement included
+
+**NEXT:** After completing Step 0.5, proceed to Step 7 (Paper Revision) to verify and finalize.
 
 ---
 
@@ -538,23 +693,27 @@ Required sections (ALL must be present):
 
 **5b. Validate Section Content Requirements:**
 
-| Section | Min Words | Min Figs | Min Tables | Required Elements |
-|---------|-----------|----------|------------|-------------------|
+| Section | Min Words | Typical Figs | Typical Tables | Required Elements |
+|---------|-----------|--------------|----------------|-------------------|
 | Introduction | 500 | - | - | Problem, gap, contributions |
 | Literature Review | 800 | - | - | 15+ citations, themes |
 | Theoretical Framework | 600 | - | - | Theory, hypotheses (H1, H2...) |
 | Methodology | 600 | - | - | Design, data, measures |
-| **Results** | **500** | **2** | **1** | **Statistical findings, figures** |
+| **Results** | **500** | **~2** | **~1** | **Statistical findings; visuals as needed for clarity** |
 | Discussion | 400 | - | - | Implications, limitations |
 | Conclusion | 200 | - | - | Summary, future research |
 
+**Note:** Figure/table counts are typical benchmarks, not rigid requirements. Include visuals only when they genuinely clarify findings or strengthen claims.
+
 **5c. Results Section Special Validation:**
 The Results section MUST contain:
-□ At least 2 figures (\\includegraphics commands)
-□ At least 1 table (\\begin{table} environment)
 □ Statistical results (effect sizes, p-values, confidence intervals)
-□ Reference to each figure ("As shown in Figure 1...")
 □ Interpretation connected to hypotheses
+□ Figures/tables that clarify key findings (typically ~2 figs + ~1 table, adjust based on value)
+□ Reference to each figure/table ("As shown in Figure 1...")
+□ No redundant visuals - each should add unique value
+
+**Flexibility:** Do not add figures/tables merely to meet a count if they don't improve understanding.
 
 Count figures in Results:
 ```
@@ -568,9 +727,10 @@ sed -n '/\\section{Results}/,/\\section{/p' icis_paper_{participantId}_v{N}.tex 
 □ Literature Review ≥800 words with ≥15 citations
 □ Theoretical Framework ≥600 words with hypotheses
 □ Methodology ≥600 words
-□ **Results ≥500 words with ≥2 figures and ≥1 table**
+□ **Results ≥500 words with appropriate figures/tables for clarity**
 □ Discussion ≥400 words
 □ Conclusion ≥200 words
+□ Each figure/table adds unique value (no redundant visuals)
 
 **If ANY section is missing or below threshold:** STOP and add content before finalizing.
 
@@ -872,6 +1032,17 @@ Apply to ALL steps:
 - Transitional phrases: "Building on this," "Moreover," "Consequently"
 - Signposting: "We now turn to," "Having established X"
 - Link sentences with pronouns, synonyms, connecting phrases
+
+## Avoiding Redundancy in Revisions
+When adding new content during revision, check that you are not duplicating:
+- Arguments already made in another section
+- Explanations already provided
+- Findings already reported
+
+**Before adding a paragraph, ask:** "Is this idea already stated elsewhere?"
+- If YES and adding emphasis → Use: "As emphasized earlier..." (brief)
+- If YES and expanding → Use: "Building on [prior point], we now explore..."
+- If YES and neither → Do NOT add; instead, strengthen the original location
 
 ## Examples
 

@@ -14,7 +14,7 @@ import {
 } from './types';
 import { clearAllFiles, writePaperFile, writeOversightFile, writeFeedbackFile, readPaperFile, appendSupervisorDirectives, writeSupervisorDecision } from './services/fileService';
 import { backupAndClearFiles, savePaperFile, refreshManifest, uploadDataFileToCloud, getCloudDataFile, clearChartData, clearCloudDataFile } from './services/fileApi';
-import { runBuilder, runReviewer, runReviser } from './services/geminiService';
+import { runBuilder, runReviewer, runReviser, runReviserWithSyntheticData } from './services/geminiService';
 
 // ============================================================================
 // File Detection Types
@@ -727,8 +727,16 @@ export function useIcisWorkflow(params: WorkflowHookParams) {
         return;
 
       case Stage.REVISER:
-        addLog('Reviser: Starting revision with Gemini...');
-        console.log('[Workflow] REVISER stage starting');
+        // Check if this is synthetic data generation mode
+        const isSyntheticMode = overrideParam?.startsWith('[SYNTHETIC_MODE]') ?? false;
+        const actualOverride = isSyntheticMode && overrideParam ? overrideParam.replace('[SYNTHETIC_MODE]', '') : overrideParam;
+
+        if (isSyntheticMode) {
+          addLog('Reviser: Starting SYNTHETIC DATA GENERATION mode (Step 0.5)...');
+        } else {
+          addLog('Reviser: Starting revision with Gemini...');
+        }
+        console.log(`[Workflow] REVISER stage starting (synthetic mode: ${isSyntheticMode})`);
         setStageStatus(Stage.REVISER, StageStatus.ACTIVE);
 
         try {
@@ -760,11 +768,16 @@ export function useIcisWorkflow(params: WorkflowHookParams) {
           const feedback = latestRound?.feedback || 'Improve clarity and strengthen methodology.';
           // Use override if provided (to avoid race condition with async state updates)
           // Otherwise fall back to state, then to default
-          const supervisorComment = overrideParam || latestRound?.supervisorComment || 'Please address the reviewer concerns.';
+          const supervisorComment = actualOverride || latestRound?.supervisorComment || 'Please address the reviewer concerns.';
 
           console.log(`[Workflow] Feedback: ${feedback.substring(0, 100)}...`);
-          console.log(`[Workflow] Supervisor comment (${overrideParam ? 'from override' : 'from state'}): ${supervisorComment.substring(0, 100)}...`);
-          addLog('Reviser: Analyzing feedback and generating revisions...');
+          console.log(`[Workflow] Supervisor comment (${actualOverride ? 'from override' : 'from state'}): ${supervisorComment.substring(0, 100)}...`);
+
+          if (isSyntheticMode) {
+            addLog('Reviser: Extracting research model and generating synthetic data...');
+          } else {
+            addLog('Reviser: Analyzing feedback and generating revisions...');
+          }
           addLog(`Reviser: Paper size: ${currentPaper.length} chars, calling Gemini...`);
 
           // Get data file name for potential visualization updates
@@ -775,9 +788,11 @@ export function useIcisWorkflow(params: WorkflowHookParams) {
             addLog(`Reviser: ${message}`);
           };
 
-          // Call real Gemini reviser (with visualization support)
-          console.log('[Workflow] Calling runReviser...');
-          const reviserResult = await runReviser(currentPaper, feedback, supervisorComment, dataFileName, onReviserProgress);
+          // Call appropriate Gemini function based on mode
+          console.log(`[Workflow] Calling ${isSyntheticMode ? 'runReviserWithSyntheticData' : 'runReviser'}...`);
+          const reviserResult = isSyntheticMode
+            ? await runReviserWithSyntheticData(currentPaper, feedback, supervisorComment, onReviserProgress)
+            : await runReviser(currentPaper, feedback, supervisorComment, dataFileName, onReviserProgress);
           console.log(`[Workflow] runReviser completed, result: ${reviserResult.paperContent?.length || 0} chars`);
 
           // Log data alert if any
@@ -1042,6 +1057,28 @@ export function useIcisWorkflow(params: WorkflowHookParams) {
         }
         setStageStatus(Stage.SUPERVISOR, StageStatus.COMPLETED);
         moveToStage(Stage.FINALIZE);
+        break;
+
+      case 'generateSyntheticData':
+        // Supervisor decision: generate synthetic data and add Results section
+        addLog('Supervisor: Initiating synthetic data generation...');
+        if (payload) {
+          updateLastRound({ supervisorComment: payload });
+          // Save supervisor directives for synthetic data generation
+          const syntheticVersion = simulationState.currentRound;
+          appendSupervisorDirectives(syntheticVersion, syntheticVersion, `[SYNTHETIC DATA REQUEST]\n${payload}`);
+          writeSupervisorDecision('GENERATE_SYNTHETIC_DATA', syntheticVersion);
+          addLog(`Supervisor: Saved synthetic data request to feedback file (round ${syntheticVersion})`);
+        }
+        // Route to Reviser with synthetic data mode
+        // The reviser will execute Step 0.5 (Synthetic Data Generation Mode)
+        addLog('Supervisor: Routing to Reviser for synthetic data generation (Step 0.5)');
+        setStageStatus(Stage.SUPERVISOR, StageStatus.COMPLETED);
+        moveToStage(Stage.REVISER);
+        // Pass [SYNTHETIC_MODE] prefix to indicate synthetic data generation
+        // The reviser will detect this prefix and call runReviserWithSyntheticData
+        const syntheticPayload = `[SYNTHETIC_MODE]${payload || ''}`;
+        setTimeout(() => handleStageAction(Stage.REVISER, 'start', syntheticPayload), 100);
         break;
 
       case 'NEW_CASE':

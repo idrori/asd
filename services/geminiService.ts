@@ -257,7 +257,7 @@ Your output should match the quality, depth, and academic rigor of these exempla
     contents: [{ parts }],
     systemInstruction: systemInstruction ? { parts: [{ text: systemInstruction }] } : undefined,
     generationConfig: {
-      maxOutputTokens: 8192,
+      maxOutputTokens: 16384,  // Increased from 8192 to prevent truncation
       temperature: 0.7
     }
   };
@@ -279,10 +279,12 @@ Your output should match the quality, depth, and academic rigor of these exempla
   try {
     let response: Response;
 
-    if (endpoint.type === 'vercel') {
-      // Use Vercel proxy (recommended - keeps API key secure)
-      const proxyUrl = `${endpoint.baseUrl}/api/gemini`;
-      console.log(`[Gemini] Using Vercel proxy for multimodal request: ${proxyUrl}`);
+    if (endpoint.type === 'vercel' || endpoint.type === 'local') {
+      // Use proxy (Vercel or local backend - keeps API key secure)
+      const proxyUrl = endpoint.type === 'local'
+        ? `${endpoint.baseUrl}/api/gemini`  // Local backend path
+        : `${endpoint.baseUrl}/api/gemini`;       // Vercel function path
+      console.log(`[Gemini] Using ${endpoint.type} proxy for multimodal request: ${proxyUrl}`);
 
       response = await fetch(proxyUrl, {
         method: 'POST',
@@ -292,7 +294,7 @@ Your output should match the quality, depth, and academic rigor of these exempla
       });
     } else {
       // Direct API call (requires API key)
-      if (!API_KEY) {
+      if (!GEMINI_API_KEY) {
         throw new GeminiError(
           GeminiErrorType.API_KEY_INVALID,
           'Gemini API key is not configured and no proxy available',
@@ -575,7 +577,7 @@ async function callGemini(prompt: string, systemInstruction?: string): Promise<s
   const body: Record<string, unknown> = {
     contents: [{ parts: [{ text: prompt }] }],
     generationConfig: {
-      maxOutputTokens: 8192,
+      maxOutputTokens: 16384,  // Increased from 8192 to prevent truncation
       temperature: 0.7
     }
   };
@@ -588,16 +590,13 @@ async function callGemini(prompt: string, systemInstruction?: string): Promise<s
   const endpoint = await getApiEndpoint();
 
   // Use proxy if available (more secure)
-  if (endpoint.type === 'vercel') {
-    console.log('[Gemini] Using Vercel proxy...');
+  if (endpoint.type === 'vercel' || endpoint.type === 'local') {
+    console.log(`[Gemini] Using ${endpoint.type} proxy...`);
     return callGeminiViaProxy(body, endpoint.baseUrl);
   }
 
-  // For local development, fall through to direct API call
-  // (local backend doesn't have Gemini proxy by default)
-
-  // Direct API call requires API key
-  if (!API_KEY) {
+  // Direct API call requires API key (fallback when no proxy available)
+  if (!GEMINI_API_KEY) {
     throw new GeminiError(
       GeminiErrorType.API_KEY_INVALID,
       'API key not configured. Set VITE_API_URL for production or VITE_GEMINI_API_KEY for development.',
@@ -829,7 +828,7 @@ async function callGeminiWithPdf(
       ]
     }],
     generationConfig: {
-      maxOutputTokens: 8192,  // Safe limit for most Gemini models
+      maxOutputTokens: 16384,  // Increased from 8192 to prevent truncation
       temperature: 0.7
     }
   };
@@ -837,11 +836,39 @@ async function callGeminiWithPdf(
   console.log('[Gemini] Calling API with PDF content...');
   console.log(`[Gemini] Using model: ${getGeminiModel()}`);
 
-  const response = await fetch(getGeminiDirectUrl(), {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
+  // Check for proxy availability first
+  const endpoint = await getApiEndpoint();
+  let response: Response;
+
+  if (endpoint.type === 'vercel' || endpoint.type === 'local') {
+    // Use proxy (more secure)
+    const proxyUrl = endpoint.type === 'local'
+      ? `${endpoint.baseUrl}/api/gemini`
+      : `${endpoint.baseUrl}/api/gemini`;
+    console.log(`[Gemini PDF] Using ${endpoint.type} proxy: ${proxyUrl}`);
+
+    response = await fetch(proxyUrl, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ ...body, model: getGeminiModel() })
+    });
+  } else {
+    // Direct API call requires API key
+    if (!GEMINI_API_KEY) {
+      throw new GeminiError(
+        GeminiErrorType.API_KEY_INVALID,
+        'Gemini API key is not configured',
+        'Missing VITE_GEMINI_API_KEY',
+        false
+      );
+    }
+
+    response = await fetch(getGeminiDirectUrl(), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+  }
 
   if (!response.ok) {
     const errorText = await response.text();
@@ -3286,7 +3313,7 @@ async function callGeminiImageWithModel(
   if (!apiKey) {
     // Try via proxy
     const endpoint = await getApiEndpoint();
-    if (endpoint.type === 'vercel') {
+    if (endpoint.type === 'vercel' || endpoint.type === 'local') {
       return callGeminiImageViaProxy(prompt, model, endpoint.baseUrl);
     }
     throw new Error('No API key and no proxy available for image generation');
@@ -5118,4 +5145,396 @@ End with a summary of major concerns and minor corrections.`;
  */
 export const loadPaperTemplate = async (): Promise<string> => {
   return await loadPrompt('TEMPLATE');
+};
+
+// ============================================================================
+// STEP 3: MATHEMATICAL FORMULATION - Types and Functions
+// ============================================================================
+
+/**
+ * Research type classification matching ICISbuilder.txt
+ */
+export type ResearchTypeCode = '2A' | '2B' | '2D' | '2E';
+
+export interface ResearchTypeInfo {
+  code: ResearchTypeCode;
+  name: string;
+  needsMathFormulation: boolean;  // True if novel algorithms/proofs detected
+  mathFormulationReason?: string; // Why math formulation is needed (if applicable)
+}
+
+export interface InterviewAnalysisResult {
+  researchType: ResearchTypeInfo;
+  domain: string;
+  problemStatement: string;
+  keyConstructs: string[];        // Main theoretical constructs
+  proposedMethod: string;         // Brief description of method
+  hasNovelAlgorithm: boolean;     // Detected novel algorithm/computation
+  hasNovelProof: boolean;         // Detected novel proof/theorem
+  hasComputationalModel: boolean; // Detected computational/simulation model
+}
+
+export interface MathematicalFormulation {
+  content: string;                // LaTeX content for the formulation
+  type: 'full' | 'none';          // Type of formulation generated
+  components: string[];           // List of components included (e.g., "Signal Representation", "Algorithm")
+}
+
+/**
+ * Analyze interview transcript to determine research type and if mathematical formulation is needed
+ * Based on ICISbuilder.txt Step 1 and Step 3 skip logic
+ */
+export const analyzeInterviewForResearchType = async (
+  interviewTranscript: string
+): Promise<InterviewAnalysisResult> => {
+  console.log('[MathFormulation] Analyzing interview for research type...');
+
+  const prompt = `Analyze this research interview to determine the research type and methodology.
+
+INTERVIEW TRANSCRIPT:
+${interviewTranscript.substring(0, 8000)}
+
+Classify the research into EXACTLY ONE of these types:
+- "2A": Simulation & Computational Modeling - uses computer simulations, agent-based models, system dynamics
+- "2B": Analytical & Theoretical Modeling - mathematical proofs, game theory, optimization models, formal analysis
+- "2D": Laboratory & Field Experiments - controlled experiments, A/B tests, randomized trials
+- "2E": Survey Research - questionnaires, interviews, observational studies, correlational analysis
+
+Also detect if the research requires NOVEL MATHEMATICAL FORMULATION:
+- Novel algorithms (not standard statistical methods)
+- Mathematical proofs or theorems
+- Computational models requiring formal specification
+- Optimization problems with custom formulations
+
+Return JSON with this exact structure:
+{
+  "researchTypeCode": "2A" | "2B" | "2D" | "2E",
+  "researchTypeName": "full name of research type",
+  "domain": "research domain (e.g., 'information systems', 'healthcare IT')",
+  "problemStatement": "one sentence problem statement",
+  "keyConstructs": ["construct1", "construct2", "construct3"],
+  "proposedMethod": "brief description of proposed method",
+  "hasNovelAlgorithm": true/false,
+  "hasNovelProof": true/false,
+  "hasComputationalModel": true/false,
+  "mathFormulationReason": "why math formulation is needed (or null if not needed)"
+}`;
+
+  // Define expected response type
+  interface ResearchAnalysisResponse {
+    researchTypeCode: string;
+    researchTypeName: string;
+    domain: string;
+    problemStatement: string;
+    keyConstructs: string[];
+    proposedMethod: string;
+    hasNovelAlgorithm: boolean;
+    hasNovelProof: boolean;
+    hasComputationalModel: boolean;
+    mathFormulationReason: string | null;
+  }
+
+  try {
+    const result = await callGeminiJson(prompt) as ResearchAnalysisResponse;
+
+    // Determine if math formulation is needed based on research type and detected elements
+    const code = result.researchTypeCode as ResearchTypeCode;
+    let needsMathFormulation = false;
+
+    // 2A (Simulation) and 2B (Analytical) ALWAYS need math formulation
+    if (code === '2A' || code === '2B') {
+      needsMathFormulation = true;
+    }
+    // 2D/2E need math formulation only if novel algorithms/proofs/models detected
+    else if (result.hasNovelAlgorithm || result.hasNovelProof || result.hasComputationalModel) {
+      needsMathFormulation = true;
+    }
+
+    console.log(`[MathFormulation] Research type: ${code} (${result.researchTypeName})`);
+    console.log(`[MathFormulation] Needs math formulation: ${needsMathFormulation}`);
+    if (needsMathFormulation) {
+      console.log(`[MathFormulation] Reason: ${result.mathFormulationReason || 'Required for research type'}`);
+    }
+
+    return {
+      researchType: {
+        code,
+        name: result.researchTypeName,
+        needsMathFormulation,
+        mathFormulationReason: result.mathFormulationReason || undefined
+      },
+      domain: result.domain,
+      problemStatement: result.problemStatement,
+      keyConstructs: result.keyConstructs || [],
+      proposedMethod: result.proposedMethod,
+      hasNovelAlgorithm: result.hasNovelAlgorithm || false,
+      hasNovelProof: result.hasNovelProof || false,
+      hasComputationalModel: result.hasComputationalModel || false
+    };
+  } catch (error) {
+    console.error('[MathFormulation] Failed to analyze interview:', error);
+    // Default to Survey research with no math formulation needed
+    return {
+      researchType: {
+        code: '2E',
+        name: 'Survey Research',
+        needsMathFormulation: false
+      },
+      domain: 'information systems',
+      problemStatement: 'Research problem not extracted',
+      keyConstructs: [],
+      proposedMethod: 'Survey methodology',
+      hasNovelAlgorithm: false,
+      hasNovelProof: false,
+      hasComputationalModel: false
+    };
+  }
+};
+
+/**
+ * Generate mathematical formulation based on research type and interview content
+ * Based on ICISbuilder.txt Step 3
+ */
+export const generateMathematicalFormulation = async (
+  interviewTranscript: string,
+  analysisResult: InterviewAnalysisResult,
+  onProgress?: (message: string) => void
+): Promise<MathematicalFormulation> => {
+  const { researchType } = analysisResult;
+
+  // Skip if not needed
+  if (!researchType.needsMathFormulation) {
+    console.log('[MathFormulation] Skipping - not required for this research type');
+    return {
+      content: '',
+      type: 'none',
+      components: []
+    };
+  }
+
+  console.log(`[MathFormulation] Generating formulation for ${researchType.code} research...`);
+  onProgress?.('Generating mathematical formulation...');
+
+  // Determine which components to generate based on research type
+  let componentInstructions = '';
+  const expectedComponents: string[] = [];
+
+  if (researchType.code === '2A') {
+    componentInstructions = `Generate mathematical formulation for SIMULATION research including:
+1. **State Space Definition**: Define system states, variables, and parameters
+2. **Transition Dynamics**: State transition functions, update rules
+3. **Agent Behavior** (if applicable): Decision rules, utility functions
+4. **Simulation Algorithm**: Pseudocode for main simulation loop
+5. **Evaluation Metrics**: Formal definitions of output measures
+6. **Convergence/Stability**: Conditions for simulation termination`;
+    expectedComponents.push('State Space', 'Transition Dynamics', 'Simulation Algorithm', 'Evaluation Metrics');
+  } else if (researchType.code === '2B') {
+    componentInstructions = `Generate mathematical formulation for ANALYTICAL/THEORETICAL research including:
+1. **Model Assumptions**: Clearly stated assumptions (A1, A2, A3...)
+2. **Variable Definitions**: All variables with domains and interpretations
+3. **Core Model**: Main equations, objective functions, or game-theoretic setup
+4. **Propositions/Theorems**: Key theoretical results with proof sketches
+5. **Equilibrium Conditions** (if applicable): Nash equilibrium, optimal solutions
+6. **Comparative Statics**: How outcomes change with parameter variations`;
+    expectedComponents.push('Model Assumptions', 'Core Model', 'Propositions', 'Equilibrium Analysis');
+  } else {
+    componentInstructions = `Generate mathematical formulation for the NOVEL contribution including:
+1. **Problem Formalization**: Mathematical definition of the problem
+2. **Algorithm Specification**: Formal algorithm with inputs, outputs, steps
+3. **Complexity Analysis**: Time and space complexity (Big-O notation)
+4. **Correctness Properties**: Key invariants or properties that hold`;
+    expectedComponents.push('Problem Formalization', 'Algorithm Specification', 'Complexity Analysis');
+  }
+
+  const prompt = `You are generating the mathematical formulation section for an academic research paper.
+
+RESEARCH CONTEXT:
+- Type: ${researchType.name} (${researchType.code})
+- Domain: ${analysisResult.domain}
+- Problem: ${analysisResult.problemStatement}
+- Key Constructs: ${analysisResult.keyConstructs.join(', ')}
+- Method: ${analysisResult.proposedMethod}
+
+INTERVIEW EXCERPT:
+${interviewTranscript.substring(0, 6000)}
+
+${componentInstructions}
+
+OUTPUT FORMAT:
+Generate LaTeX content that can be directly included in the Methodology section.
+Use proper LaTeX math environments (equation, align, algorithm).
+Do NOT include \\section{} headers - this will be embedded in Methodology.
+Start with a brief introductory paragraph, then present the formulation.`;
+
+  try {
+    const content = await callGemini(
+      prompt,
+      "You are an expert in mathematical modeling for Information Systems research. Generate rigorous but accessible mathematical formulations."
+    );
+
+    let cleanedContent = content
+      .replace(/^```latex\s*/i, '')
+      .replace(/^```\s*/i, '')
+      .replace(/\s*```$/i, '')
+      .trim();
+
+    console.log(`[MathFormulation] Generated formulation (${cleanedContent.length} chars)`);
+    onProgress?.('Mathematical formulation complete');
+
+    return {
+      content: cleanedContent,
+      type: 'full',
+      components: expectedComponents
+    };
+  } catch (error) {
+    console.error('[MathFormulation] Failed to generate formulation:', error);
+    onProgress?.('Mathematical formulation failed - continuing without');
+    return {
+      content: '',
+      type: 'none',
+      components: []
+    };
+  }
+};
+
+// ============================================================================
+// SYNTHETIC DATA GENERATION MODE
+// ============================================================================
+
+/**
+ * Run reviser in synthetic data generation mode (Step 0.5)
+ * Generates synthetic data based on research model and adds Results section to PARTIAL paper
+ * Uses ICISsyntheticData.txt prompt for consistency with other prompts
+ */
+export const runReviserWithSyntheticData = async (
+  paperContent: string,
+  feedback: string,
+  supervisorComment: string,
+  onProgress?: (message: string) => void
+): Promise<ReviserResult> => {
+  console.log('[Reviser-Synthetic] Starting synthetic data generation mode...');
+  console.log(`[Reviser-Synthetic] Paper length: ${paperContent.length} characters`);
+
+  // ============================================================================
+  // PHASE 1: Generate synthetic data and add Results section (Step 0.5)
+  // ============================================================================
+
+  console.log('[Reviser-Synthetic] Phase 1: Loading SYNTHETIC_DATA prompt...');
+  const syntheticDataPrompt = await loadPrompt('SYNTHETIC_DATA');
+  console.log(`[Reviser-Synthetic] Prompt loaded (${syntheticDataPrompt.length} chars)`);
+
+  onProgress?.('Phase 1: Generating synthetic data and adding Results section...');
+
+  const syntheticPrompt = `${syntheticDataPrompt}
+
+================================================================================
+CURRENT CONTEXT
+================================================================================
+
+CURRENT PAPER (PARTIAL - needs Results section):
+${paperContent}
+
+REVIEWER FEEDBACK (calibrate data to address these concerns):
+${feedback}
+
+SUPERVISOR DIRECTIVES:
+${supervisorComment}
+
+================================================================================
+EXECUTION INSTRUCTIONS
+================================================================================
+
+Execute the steps defined in the prompt above:
+1. STEP 1: Extract context from the paper (hypotheses, variables, relationships)
+2. STEP 2: Specify data characteristics based on research type
+3. STEP 3: Ensure theoretical consistency with hypotheses
+4. STEP 4: Address reviewer/supervisor feedback in data generation
+5. STEP 5: Use realistic effect sizes from IS literature
+6. STEP 6: Generate the synthetic dataset and statistics
+7. STEP 7: Update the paper with a complete Results section
+
+OUTPUT FORMAT:
+Return the complete revised LaTeX paper with:
+- Results section inserted after Methodology
+- Discussion updated with findings interpretation
+- Transparency statement included
+- Abstract updated to mention empirical findings
+
+Output ONLY the complete LaTeX document (no explanations, no code blocks).
+Start with \\documentclass or \\begin{abstract}.
+End with \\end{document}.`;
+
+  let paperWithResults: string;
+  try {
+    paperWithResults = await callGemini(
+      syntheticPrompt,
+      "You are an expert academic writer executing synthetic data generation for an IS research paper. Follow the ICISsyntheticData prompt guidelines precisely. Output ONLY the revised LaTeX content."
+    );
+    paperWithResults = cleanLatexOutput(paperWithResults);
+    console.log(`[Reviser-Synthetic] Phase 1 complete: Paper now has ${paperWithResults.length} characters`);
+  } catch (error) {
+    console.error('[Reviser-Synthetic] Phase 1 failed - synthetic data generation error:', error);
+    return {
+      paperContent,
+      dataAlert: 'Failed to generate synthetic data - see console for details',
+      usedSyntheticData: false,
+      limitedBySource: false
+    };
+  }
+
+  // Verify Results section was added
+  const hasResults = paperWithResults.includes('\\section{Results}') || paperWithResults.includes('\\section*{Results}');
+  if (!hasResults) {
+    console.warn('[Reviser-Synthetic] Results section may not have been added properly');
+  }
+
+  // Verify transparency statement was added
+  const hasTransparency = paperWithResults.includes('synthetic data') || paperWithResults.includes('Synthetic data');
+  if (!hasTransparency) {
+    console.warn('[Reviser-Synthetic] Transparency statement may not have been added');
+  }
+
+  onProgress?.('Phase 1 complete: Results section added');
+
+  // ============================================================================
+  // PHASE 2: Run normal revision to address all feedback (Steps 1-7)
+  // ============================================================================
+
+  console.log('[Reviser-Synthetic] Phase 2: Running normal revision to address feedback...');
+  onProgress?.('Phase 2: Addressing reviewer feedback and supervisor comments...');
+
+  const enhancedSupervisorComment = `${supervisorComment}
+
+[SYSTEM NOTE: Synthetic data has already been generated and a Results section has been added.
+Now focus on addressing all reviewer feedback throughout the paper, improving writing quality,
+and ensuring all sections are coherent with the new Results section.]`;
+
+  try {
+    const revisionResult = await runReviser(
+      paperWithResults,
+      feedback,
+      enhancedSupervisorComment,
+      undefined,
+      (msg) => onProgress?.(`Phase 2: ${msg}`)
+    );
+
+    console.log(`[Reviser-Synthetic] Phase 2 complete: Final paper has ${revisionResult.paperContent.length} characters`);
+    onProgress?.('Synthetic data generation and revision complete');
+
+    return {
+      paperContent: revisionResult.paperContent,
+      dataAlert: 'Synthetic data was generated to demonstrate the research model. Reviewer feedback has been addressed throughout the paper.',
+      usedSyntheticData: true,
+      limitedBySource: revisionResult.limitedBySource
+    };
+  } catch (error) {
+    console.error('[Reviser-Synthetic] Phase 2 failed - revision error:', error);
+    console.log('[Reviser-Synthetic] Returning Phase 1 result (Results section added, but feedback not addressed)');
+    return {
+      paperContent: paperWithResults,
+      dataAlert: 'Synthetic data was generated, but revision failed. Reviewer feedback may not be fully addressed.',
+      usedSyntheticData: true,
+      limitedBySource: false
+    };
+  }
 };

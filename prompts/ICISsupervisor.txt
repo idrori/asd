@@ -210,27 +210,37 @@ STEP 3: DETERMINE STATUS AND RECOMMENDATION
 
 ```
 THRESHOLDS:
-- REVIEW_SCORE_MIN: 4      (All 5 review scores must be >= 4)
-- TRUSTWORTHINESS_MIN: 5   (All 3 trustworthiness scores must be >= 5)
-- MAJOR_ERRORS_MAX: 0      (Must have 0 major errors)
-- MAX_RECOMMENDED_CYCLES: 5 (Warn if approaching)
+- REVIEW_SCORE_AVG_MIN: 3.5  (Average of 5 review scores must be >= 3.5)
+- TRUSTWORTHINESS_MIN: 5     (All 3 trustworthiness scores must be >= 5)
+- MAJOR_ERRORS_MAX: 2        (Maximum 2 major errors per cycle)
+- MAX_CYCLES: 3              (1 build + 2 revisions maximum)
 ```
+
+**Cycle Limit Rule:** The workflow allows a maximum of 3 cycles total:
+- Cycle 1: Initial build (ICISbuilder)
+- Cycle 2: First revision (ICISreviser)
+- Cycle 3: Second/final revision (ICISreviser)
+
+After 3 cycles, the paper must be finalized regardless of scores.
 
 **Check each threshold and collect reasons:**
 
-1. **Review Scores Check:**
-   For each of (novelty, significance, methodologicalRigor, clarity, relevance):
-   - If score < 4: Add to reasons: "{criterion} score ({score}) below threshold (4)"
+1. **Review Scores Check (Average):**
+   Calculate averageScore = (novelty + significance + methodologicalRigor + clarity + relevance) / 5
+   - If averageScore < 3.5: Add to reasons: "Average review score ({averageScore}) below threshold (3.5)"
 
 2. **Trustworthiness Check:**
    For each of (reliability, benevolence, goalAlignment):
    - If score < 5: Add to reasons: "{dimension} score ({score}) below threshold (5)"
 
 3. **Major Errors Check:**
-   - If majorErrors > 0: Add to reasons: "{majorErrors} major error(s) remaining"
+   - If majorErrors > 2: Add to reasons: "{majorErrors} major errors exceeds limit (2)"
 
 4. **Critical Alerts Check:**
    - If criticalAlerts.length > 0: Add to reasons: "{count} critical alert(s) present"
+
+5. **Cycle Limit Check:**
+   - If currentCycle >= 3: Add to reasons: "Maximum cycles (3) reached - must finalize"
 
 **Determine Status:**
 - If reasons.length === 0: STATUS = "ON TRACK"
@@ -243,9 +253,9 @@ If STATUS === "ON TRACK":
 RECOMMENDATION: FINALIZE PAPER
 ------------------------------------------------------------------------
 All quality thresholds have been met:
-- All review scores >= 4 (Average: {averageScore}/5)
+- Average review score >= 3.5 (Current: {averageScore}/5)
 - All trustworthiness scores >= 5
-- No major errors remaining
+- Major errors <= 2 (Current: {majorErrors})
 - No critical alerts
 
 The paper is ready for final submission preparation.
@@ -263,8 +273,9 @@ Priority Actions:
 2. {reasons[1]}
 3. {reasons[2]}
 
-Current revision cycle: {currentVersion}
-{If currentVersion >= 4: "Warning: Approaching maximum recommended cycles (5)"}
+Current cycle: {currentCycle} of 3 maximum
+{If currentCycle == 2: "Note: This is the FINAL revision opportunity"}
+{If currentCycle >= 3: "CYCLE LIMIT REACHED: Must finalize regardless of issues"}
 ------------------------------------------------------------------------
 ```
 
@@ -293,8 +304,15 @@ OPTION B: FINALIZE PAPER
 - No further revisions will be made
 - Choose this only if paper meets quality standards
 
+OPTION C: GENERATE SYNTHETIC DATA
+---------------------------------
+- Available for Experiment/Survey papers with planned data collection
+- Generates synthetic data based on paper's research model
+- Converts PARTIAL paper to FULL paper with Results section
+- Use when paper needs empirical demonstration before data collection completes
+
 ------------------------------------------------------------------------
-YOUR DIRECTIVES (for Option A - be specific):
+YOUR DIRECTIVES (for Option A or C - be specific):
 ------------------------------------------------------------------------
 Examples:
 - "Strengthen theoretical contribution by adding discussion of X theory"
@@ -302,11 +320,12 @@ Examples:
 - "Clarify methodology in Section 4.2 - explain sampling procedure"
 - "Address reviewer concern about generalizability in Discussion"
 - "Fix the 2 remaining major errors identified in Table 2"
+- "Generate synthetic data with sample size 250, medium effect sizes"
 
 [Enter your directives here or type NONE if finalizing]
 
 ------------------------------------------------------------------------
-YOUR DECISION: Type "REVISE" or "FINALIZE"
+YOUR DECISION: Type "REVISE", "FINALIZE", or "SYNTHETIC"
 ------------------------------------------------------------------------
 ```
 
@@ -406,6 +425,63 @@ STEP 5: EXECUTE DECISION
    3. Send notifications
    ```
 
+**If decision = "SYNTHETIC" (GENERATE_SYNTHETIC_DATA):**
+
+1. Verify paper is eligible for synthetic data generation:
+   - Research type must be "Laboratory & field experiments" OR "Survey research"
+   - Paper type must be PARTIAL (no Results section yet)
+   - If not eligible, display error and return to decision options
+
+2. Get supervisor directives from input (optional guidance for data generation)
+
+3. Create synthetic data request file:
+   ```
+   Write: {ICIS_PATH}\Data\synthetic_request_{participantId}.txt
+
+   Content:
+   ================================================================================
+   SYNTHETIC DATA GENERATION REQUEST
+   ================================================================================
+   Decision: GENERATE_SYNTHETIC_DATA
+   Participant: {participantId}
+   Current Cycle: {currentVersion}
+   Timestamp: {current ISO timestamp}
+
+   SUPERVISOR DIRECTIVES:
+   {supervisor's directives - e.g., sample size, effect sizes, specific requirements}
+
+   PAPER CONTEXT:
+   - Research Type: {researchType}
+   - Current Paper Type: PARTIAL
+   - Target Paper Type: FULL (after synthetic data generation)
+
+   INSTRUCTIONS:
+   Execute ICISbuilder Step 1.6 (Supervisor-Initiated Synthetic Data Generation)
+   Follow ICISsyntheticData.txt prompt for generation guidelines
+   ================================================================================
+   ```
+
+4. Display confirmation:
+   ```
+   DECISION RECORDED: Generate Synthetic Data
+
+   Actions completed:
+   - Request recorded in synthetic_request_{participantId}.txt
+   - Supervisor directives captured for data generation
+
+   NEXT STEP: Execute ICISreviser (synthetic data mode)
+   The reviser will:
+   1. Read ICISsyntheticData.txt for generation guidelines
+   2. Extract research model from current paper
+   3. Generate synthetic dataset calibrated to literature and reviewer feedback
+   4. Run statistical analysis on synthetic data
+   5. Add Results section to the paper
+   6. Update Discussion with findings interpretation
+   7. Add transparency statement about synthetic data
+
+   Paper will be converted from PARTIAL to FULL.
+   ```
+
 ================================================================================
 STEP 6: VERIFICATION
 ================================================================================
@@ -429,23 +505,29 @@ Before completing, verify all actions:
    Use Glob to confirm file exists
 
 5. **Next step is clear:**
-   Report: "Next prompt to execute: {ICISreviser/ICISfinalize}"
+   Report: "Next prompt to execute: {ICISreviser/ICISfinalize/ICISreviser (synthetic data mode)}"
 
 ================================================================================
 QUICK REFERENCE: THRESHOLDS
 ================================================================================
 
-| Metric                | Threshold | Scale | Constant                    |
-|-----------------------|-----------|-------|-----------------------------|
-| Review Scores (all 5) | >= 4      | 1-5   | REVIEW_SCORE_MIN: 4         |
-| Trustworthiness (all 3)| >= 5     | 1-7   | TRUSTWORTHINESS_MIN: 5      |
-| Major Errors          | = 0       | count | MAJOR_ERRORS_MAX: 0         |
-| Critical Alerts       | none      | count | (empty array)               |
-| Max Cycles            | 5         | count | MAX_RECOMMENDED_CYCLES: 5   |
+| Metric                  | Threshold | Scale | Constant                    |
+|-------------------------|-----------|-------|-----------------------------|
+| Review Score (average)  | >= 3.5    | 1-5   | REVIEW_SCORE_AVG_MIN: 3.5   |
+| Trustworthiness (all 3) | >= 5      | 1-7   | TRUSTWORTHINESS_MIN: 5      |
+| Major Errors (per cycle)| <= 2      | count | MAJOR_ERRORS_MAX: 2         |
+| Critical Alerts         | none      | count | (empty array)               |
+| Max Cycles              | 3         | count | MAX_CYCLES: 3               |
+
+**Cycle Structure:**
+- Cycle 1: Initial build (ICISbuilder)
+- Cycle 2: First revision (ICISreviser)
+- Cycle 3: Final revision (ICISreviser) - MUST finalize after this
 
 **Status Logic:**
 - ON TRACK: ALL thresholds met
-- ATTENTION NEEDED: ANY threshold not met
+- ATTENTION NEEDED: ANY threshold not met (but can still revise if cycles < 3)
+- FORCED FINALIZE: Cycle 3 complete (finalize regardless of thresholds)
 
 ================================================================================
 DELIVERABLES
@@ -455,10 +537,11 @@ This prompt produces:
 
 1. **Dashboard Display** - Shows version progression with all metrics
 2. **Status Determination** - ON TRACK or ATTENTION NEEDED with reasons
-3. **Recommendation** - FINALIZE or CONTINUE_REVISION
+3. **Recommendation** - FINALIZE, CONTINUE_REVISION, or GENERATE_SYNTHETIC_DATA
 4. **Decision Recording**:
    - If REVISE: Appends directives to feedback_{participantId}_v{N}.txt
    - If FINALIZE: Creates supervisor_decision_{participantId}.txt
-5. **Next Step Indication** - ICISreviser or ICISfinalize
+   - If SYNTHETIC: Creates synthetic_request_{participantId}.txt
+5. **Next Step Indication** - ICISreviser, ICISfinalize, or ICISreviser (synthetic data mode)
 
 ================================================================================

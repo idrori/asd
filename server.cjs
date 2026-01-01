@@ -24,7 +24,7 @@ try {
 }
 
 // Semantic Scholar API for reference lookup
-const SEMANTIC_SCHOLAR_API_KEY = process.env.VITE_SEMANTIC_SCHOLAR_API_KEY || '';
+const SEMANTIC_SCHOLAR_API_KEY = process.env.SEMANTIC_SCHOLAR_API_KEY || '';
 const SEMANTIC_SCHOLAR_BASE_URL = 'https://api.semanticscholar.org/graph/v1';
 
 // OpenAI API for paper review (proxied through backend for security)

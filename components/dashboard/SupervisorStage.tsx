@@ -225,7 +225,7 @@ const SupervisorStage: React.FC<SupervisorStageProps> = ({
                 {allOversight.map((o, i) => (
                   <th key={i} className="text-center p-2 bg-slate-50">v{o.version}</th>
                 ))}
-                <th className="text-left p-2 bg-slate-50">Remaining Issues</th>
+                <th className="text-left p-2 bg-slate-50">Count</th>
               </tr>
             </thead>
             <tbody>
@@ -236,8 +236,8 @@ const SupervisorStage: React.FC<SupervisorStageProps> = ({
                     {o.errorCounts.majorErrors}
                   </td>
                 ))}
-                <td className="p-2 text-xs text-slate-600">
-                  {oversightData?.errorDetails.majorErrors[0]?.substring(0, 30) || 'None'}
+                <td className="p-2 text-center font-bold text-red-600">
+                  {oversightData?.errorCounts.majorErrors || 0}
                 </td>
               </tr>
               <tr className="border-b border-slate-200">
@@ -245,8 +245,8 @@ const SupervisorStage: React.FC<SupervisorStageProps> = ({
                 {allOversight.map((o, i) => (
                   <td key={i} className="text-center p-2">{o.errorCounts.minorErrors}</td>
                 ))}
-                <td className="p-2 text-xs text-slate-600">
-                  {oversightData?.errorDetails.minorErrors[0]?.substring(0, 30) || 'None'}
+                <td className="p-2 text-center">
+                  {oversightData?.errorCounts.minorErrors || 0}
                 </td>
               </tr>
               <tr className="border-t-2 border-slate-400 bg-slate-50 font-bold">
@@ -254,15 +254,44 @@ const SupervisorStage: React.FC<SupervisorStageProps> = ({
                 {allOversight.map((o, i) => (
                   <td key={i} className="text-center p-2">{o.errorCounts.majorErrors + o.errorCounts.minorErrors}</td>
                 ))}
-                <td className="p-2 text-xs">
-                  {allOversight.length > 1
-                    ? `${Math.round((1 - (allOversight[allOversight.length - 1].errorCounts.majorErrors + allOversight[allOversight.length - 1].errorCounts.minorErrors) / Math.max(1, allOversight[0].errorCounts.majorErrors + allOversight[0].errorCounts.minorErrors)) * 100)}% reduction`
-                    : '-'}
+                <td className="p-2 text-center">
+                  {(oversightData?.errorCounts.majorErrors || 0) + (oversightData?.errorCounts.minorErrors || 0)}
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
+
+        {/* Detailed Error List */}
+        {oversightData && (oversightData.errorDetails.majorErrors.length > 0 || oversightData.errorDetails.minorErrors.length > 0) && (
+          <div className="mt-4 border-t border-slate-200 pt-4">
+            <h4 className="font-bold text-slate-700 mb-2 font-mono text-sm">DETAILED ERROR LIST:</h4>
+
+            {/* Major Errors */}
+            {oversightData.errorDetails.majorErrors.length > 0 && (
+              <div className="mb-3">
+                <h5 className="font-semibold text-red-700 text-sm mb-1">Major Errors ({oversightData.errorDetails.majorErrors.length}):</h5>
+                <ul className="list-disc list-inside space-y-1">
+                  {oversightData.errorDetails.majorErrors.map((error, i) => (
+                    <li key={i} className="text-sm text-red-600 ml-2">{error}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Minor Errors */}
+            {oversightData.errorDetails.minorErrors.length > 0 && (
+              <div>
+                <h5 className="font-semibold text-amber-700 text-sm mb-1">Minor Errors ({oversightData.errorDetails.minorErrors.length}):</h5>
+                <ul className="list-disc list-inside space-y-1">
+                  {oversightData.errorDetails.minorErrors.map((error, i) => (
+                    <li key={i} className="text-sm text-amber-600 ml-2">{error}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* TABLE 3: Trustworthiness Assessment */}
@@ -344,25 +373,41 @@ const SupervisorStage: React.FC<SupervisorStageProps> = ({
             {feedbackData ? (
               <>
                 <div>
-                  <p className="font-medium">Summary:</p>
-                  <p>{feedbackData.summary || 'No summary available.'}</p>
+                  <p className="font-medium">Overall Assessment:</p>
+                  <p>{feedbackData.overallAssessment || 'No assessment available.'}</p>
                 </div>
-                {feedbackData.majorIssues && feedbackData.majorIssues.length > 0 && (
+                <div>
+                  <p className="font-medium">Research Question & Contribution:</p>
+                  <p>{feedbackData.researchQuestion || 'No feedback available.'}</p>
+                </div>
+                <div>
+                  <p className="font-medium">Method:</p>
+                  <p>{feedbackData.method || 'No feedback available.'}</p>
+                </div>
+                <div>
+                  <p className="font-medium">Potential Impact:</p>
+                  <p>{feedbackData.potentialImpact || 'No feedback available.'}</p>
+                </div>
+                <div>
+                  <p className="font-medium">Writing Quality:</p>
+                  <p>{feedbackData.writing || 'No feedback available.'}</p>
+                </div>
+                {feedbackData.majorConcerns && feedbackData.majorConcerns.length > 0 && (
                   <div>
-                    <p className="font-medium text-red-600">Major Issues:</p>
+                    <p className="font-medium text-red-600">Major Concerns:</p>
                     <ul className="list-disc list-inside">
-                      {feedbackData.majorIssues.map((issue: string, i: number) => (
-                        <li key={i}>{issue}</li>
+                      {feedbackData.majorConcerns.map((concern: string, i: number) => (
+                        <li key={i}>{concern}</li>
                       ))}
                     </ul>
                   </div>
                 )}
-                {feedbackData.suggestions && feedbackData.suggestions.length > 0 && (
+                {feedbackData.minorCorrections && feedbackData.minorCorrections.length > 0 && (
                   <div>
-                    <p className="font-medium">Suggestions:</p>
+                    <p className="font-medium">Minor Corrections:</p>
                     <ul className="list-disc list-inside">
-                      {feedbackData.suggestions.map((suggestion: string, i: number) => (
-                        <li key={i}>{suggestion}</li>
+                      {feedbackData.minorCorrections.map((correction: string, i: number) => (
+                        <li key={i}>{correction}</li>
                       ))}
                     </ul>
                   </div>
@@ -374,7 +419,7 @@ const SupervisorStage: React.FC<SupervisorStageProps> = ({
           </div>
         ) : (
           <p className="text-sm text-slate-700 line-clamp-3">
-            {feedbackData?.summary || lastFeedback || "No feedback generated."}
+            {feedbackData?.overallAssessment || lastFeedback || "No feedback generated."}
           </p>
         )}
       </div>
@@ -440,6 +485,16 @@ const SupervisorStage: React.FC<SupervisorStageProps> = ({
             </ul>
           </div>
         </div>
+
+        {/* Option C: Generate Synthetic Data - shown for experiment/survey without data */}
+        <div className="bg-slate-800 p-3 rounded mb-4">
+          <p className="font-bold text-orange-400">OPTION C: GENERATE SYNTHETIC DATA</p>
+          <ul className="text-xs text-slate-300 mt-2 space-y-1">
+            <li>• Generates synthetic data based on paper's research model</li>
+            <li>• Updates Results section with statistical analysis</li>
+            <li>• Use when data collection is planned but paper needs empirical demonstration</li>
+          </ul>
+        </div>
       </div>
 
       {/* Your Directives Input */}
@@ -475,6 +530,16 @@ const SupervisorStage: React.FC<SupervisorStageProps> = ({
             className="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-bold flex items-center justify-center gap-2 transition-all disabled:opacity-50 font-mono"
           >
             [ ] FINALIZE PAPER
+          </button>
+        </div>
+        {/* Generate Synthetic Data Button - half size */}
+        <div className="flex justify-center mt-3">
+          <button
+            onClick={() => onAction('generateSyntheticData', supervisorComment)}
+            disabled={isProcessing}
+            className="w-1/2 bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-lg font-bold text-sm flex items-center justify-center gap-2 transition-all disabled:opacity-50 font-mono"
+          >
+            [ ] GENERATE SYNTHETIC DATA
           </button>
         </div>
       </div>

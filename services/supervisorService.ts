@@ -255,10 +255,12 @@ export function generateDashboard(
 
 /**
  * Get comment for a review score
+ * Note: Average score threshold is 3.5, but individual scores are evaluated here
  */
 function getScoreComment(score: number): string {
   if (score >= 4.5) return 'Excellent';
-  if (score >= 4) return 'Good - meets threshold';
+  if (score >= 4) return 'Good';
+  if (score >= 3.5) return 'Acceptable';
   if (score >= 3) return 'Needs improvement';
   if (score >= 2) return 'Significant concerns';
   return 'Critical - requires major revision';

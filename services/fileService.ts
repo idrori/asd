@@ -519,7 +519,7 @@ export function appendSupervisorDirectives(
  * Write supervisor decision file as specified in ICISsupervisor.txt
  */
 export function writeSupervisorDecision(
-  decision: 'CONTINUE' | 'FINALIZE',
+  decision: 'CONTINUE' | 'FINALIZE' | 'GENERATE_SYNTHETIC_DATA',
   cycle: number,
   finalScores?: {
     averageReviewScore: number;

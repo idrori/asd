@@ -41,17 +41,29 @@ export interface InterviewAnalysis {
   initialReferences: string[];       // From prompt: 1-3 references supplied in interview
 }
 
+/**
+ * Paper types based on data availability
+ * From ICISbuilder.txt Step 1.5
+ */
+export enum PaperType {
+  FULL = 'FULL',                           // 14-16 pages, all sections including Results
+  PARTIAL_NO_EXAMPLES = 'PARTIAL_NO_EXAMPLES',   // 8-10 pages, no Results section
+  PARTIAL_WITH_EXAMPLES = 'PARTIAL_WITH_EXAMPLES' // 10-12 pages, no Results but has demo
+}
+
 export interface DataAssessment {
   hasDataFile: boolean;
   dataFilePath?: string;
   dataFormat?: string;
+  hasExampleData: boolean;                 // NEW: Example_data_{participantId}.* exists
+  exampleDataPath?: string;                // NEW: Path to example data if exists
   observationCount?: number;
   variables?: string[];
   variableTypes?: Record<string, string>;  // From prompt: Data types per variable
   missingValueCount?: number;              // From prompt: Missing values assessment
   dataIssues?: string[];                   // From prompt: Any obvious issues
-  // All strategies produce 14-16 page full papers
-  // 'data_collection_pending' = interview indicates data will be collected but isn't available yet
+  dataCollectionPlanned: boolean;          // NEW: From interview analysis
+  paperType: PaperType;                    // NEW: Determined paper type
   dataStrategy: 'full_paper' | 'synthetic_data' | 'theoretical_only' | 'data_collection_pending';
 }
 
@@ -264,9 +276,9 @@ export function formatStepLog(step: BuilderStep, status: 'starting' | 'completed
  */
 export function getArtifactPaths(artifactType: string): { codePath: string; dataPath: string; resultsPath: string } {
   return {
-    codePath: `${FILE_PATHS.CODE}\\${artifactType}`,
-    dataPath: `${FILE_PATHS.DATA}\\${artifactType}`,
-    resultsPath: `${FILE_PATHS.RESULTS}\\${artifactType}`
+    codePath: `${FILE_PATHS.CODE_DIR}\\${artifactType}`,
+    dataPath: `${FILE_PATHS.DATA_DIR}\\${artifactType}`,
+    resultsPath: `${FILE_PATHS.RESULTS_DIR}\\${artifactType}`
   };
 }
 
@@ -289,19 +301,122 @@ export function createArtifact(
 }
 
 /**
- * Get paper requirements - all papers are now full 14-16 page papers
+ * Determine paper type based on research type and data availability
+ * From ICISbuilder.txt Step 1.5
  */
-export function getPaperType(): {
+export function determinePaperType(
+  researchType: ResearchType,
+  hasDataFile: boolean,
+  hasExampleData: boolean,
+  dataCollectionPlanned: boolean
+): PaperType {
+  // If real data exists, always produce full paper
+  if (hasDataFile) {
+    return PaperType.FULL;
+  }
+
+  // For experiments and surveys with planned data collection
+  if (researchType === ResearchType.EXPERIMENTAL || researchType === ResearchType.SURVEY) {
+    if (dataCollectionPlanned) {
+      // Data collection planned but not done - partial paper
+      if (hasExampleData) {
+        return PaperType.PARTIAL_WITH_EXAMPLES;
+      }
+      return PaperType.PARTIAL_NO_EXAMPLES;
+    }
+    // No planned data collection - can generate synthetic data for full paper
+    return PaperType.FULL;
+  }
+
+  // Simulations and analytical papers always produce full papers
+  // (they generate their own synthetic/numerical data)
+  return PaperType.FULL;
+}
+
+/**
+ * Get section requirements based on paper type
+ * From ICISbuilder.txt Step 8
+ */
+export function getSectionRequirementsForPaperType(paperType: PaperType): {
+  minPages: number;
+  maxPages: number;
+  maxSections: number;
+  sections: string[];
+  description: string;
+  includesResults: boolean;
+} {
+  switch (paperType) {
+    case PaperType.PARTIAL_NO_EXAMPLES:
+      return {
+        minPages: 8,
+        maxPages: 10,
+        maxSections: 6,
+        sections: [
+          'Introduction',
+          'Literature Review',
+          'Theoretical Framework',
+          'Proposed Methodology',
+          'Discussion',
+          'Conclusion'
+        ],
+        description: 'Partial paper - data collection pending, no Results section',
+        includesResults: false
+      };
+
+    case PaperType.PARTIAL_WITH_EXAMPLES:
+      return {
+        minPages: 10,
+        maxPages: 12,
+        maxSections: 6,
+        sections: [
+          'Introduction',
+          'Literature Review',
+          'Theoretical Framework',
+          'Methodology with Analysis Demonstration',
+          'Discussion',
+          'Conclusion'
+        ],
+        description: 'Partial paper with methodology demo using example data',
+        includesResults: false
+      };
+
+    case PaperType.FULL:
+    default:
+      return {
+        minPages: 14,
+        maxPages: 16,
+        maxSections: 8,
+        sections: [
+          'Introduction',
+          'Literature Review',
+          'Theoretical Framework',
+          'Methodology',
+          'Results',
+          'Discussion',
+          'Conclusion'
+        ],
+        description: 'Full paper with empirical results',
+        includesResults: true
+      };
+  }
+}
+
+/**
+ * Get paper requirements based on paper type
+ * @deprecated Use getSectionRequirementsForPaperType() instead for full paper type support
+ */
+export function getPaperType(paperType: PaperType = PaperType.FULL): {
   minPages: number;
   maxPages: number;
   sections: string[];
   description: string;
 } {
+  const requirements = getSectionRequirementsForPaperType(paperType);
   return {
-    minPages: 14,
-    maxPages: 16,
-    sections: ['Introduction', 'Literature Review', 'Theory', 'Method', 'Results', 'Discussion', 'Conclusion'],
-    description: 'Full paper with empirical results'
+    minPages: requirements.minPages,
+    maxPages: requirements.maxPages,
+    sections: requirements.sections,
+    description: requirements.description
   };
 }
 

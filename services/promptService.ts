@@ -21,10 +21,11 @@ import templatePrompt from '../prompts/icisTemplate.txt?raw';
 import misqCriteriaPrompt from '../prompts/misqReviewCriteria.txt?raw';
 import infographicPrompt from '../prompts/ICISinfoprompt.txt?raw';
 import tablePrompt from '../prompts/ICIStableprompt.txt?raw';
+import syntheticDataPrompt from '../prompts/ICISsyntheticData.txt?raw';
 import { ICIS_BASE_PATH } from '../constants';
 
 // Prompt keys
-export type PromptKey = 'SETUP' | 'BUILDER' | 'REVIEWER' | 'SUPERVISOR' | 'REVISER' | 'FINALIZE' | 'TEMPLATE' | 'MISQ_CRITERIA' | 'INFOGRAPHIC' | 'TABLE';
+export type PromptKey = 'SETUP' | 'BUILDER' | 'REVIEWER' | 'SUPERVISOR' | 'REVISER' | 'FINALIZE' | 'TEMPLATE' | 'MISQ_CRITERIA' | 'INFOGRAPHIC' | 'TABLE' | 'SYNTHETIC_DATA';
 
 // Map prompt keys to config file names
 const PROMPT_KEY_TO_FILE: Record<PromptKey, string> = {
@@ -37,7 +38,8 @@ const PROMPT_KEY_TO_FILE: Record<PromptKey, string> = {
   TEMPLATE: 'template.txt',
   MISQ_CRITERIA: 'review_criteria.txt',
   INFOGRAPHIC: 'infographic.txt',
-  TABLE: 'datatable.txt'
+  TABLE: 'datatable.txt',
+  SYNTHETIC_DATA: 'synthetic_data.txt'
 };
 
 // Legacy prompts (ICIS) for backward compatibility
@@ -51,7 +53,8 @@ const LEGACY_PROMPTS: Record<PromptKey, string> = {
   TEMPLATE: templatePrompt,
   MISQ_CRITERIA: misqCriteriaPrompt,
   INFOGRAPHIC: infographicPrompt,
-  TABLE: tablePrompt
+  TABLE: tablePrompt,
+  SYNTHETIC_DATA: syntheticDataPrompt
 };
 
 // Cache for loaded prompts

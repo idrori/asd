@@ -396,12 +396,16 @@ After creating both files, verify:
 THRESHOLDS (For Reference - Used by ICISsupervisor)
 ================================================================================
 
-| Metric                | Threshold for "On Track" | Scale |
-|-----------------------|--------------------------|-------|
-| Review Scores (all 5) | >= 4                     | 1-5   |
-| Trustworthiness (all 3)| >= 5                    | 1-7   |
-| Major Errors          | = 0                      | count |
-| Critical Alerts       | none                     | count |
+| Metric                   | Threshold for "On Track" | Scale |
+|--------------------------|--------------------------|-------|
+| Review Score (average)   | >= 3.5                   | 1-5   |
+| Trustworthiness (all 3)  | >= 5                     | 1-7   |
+| Major Errors (per cycle) | <= 2                     | count |
+| Critical Alerts          | none                     | count |
+| Max Cycles               | 3                        | count |
+
+**Note:** The workflow allows maximum 3 cycles (1 build + 2 revisions).
+After cycle 3, paper must be finalized regardless of scores.
 
 ================================================================================
 DELIVERABLES

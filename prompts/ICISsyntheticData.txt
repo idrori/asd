@@ -1,0 +1,232 @@
+================================================================================
+ICISsyntheticData - Synthetic Data Generation Prompt
+================================================================================
+
+PURPOSE:
+This prompt guides the generation of synthetic data when:
+1. The supervisor clicks "Generate Synthetic Data" in the dashboard
+2. The paper is for Experiment/Survey research WITH data collection planned
+3. The supervisor decides synthetic data will strengthen the paper
+
+TRIGGER: Supervisor decision via "Generate Synthetic Data" button
+OUTPUT: Synthetic dataset in Data/synthetic_data_{participantId}.csv + updated Results section
+
+================================================================================
+STEP 1: EXTRACT CONTEXT FROM EXISTING PAPER
+================================================================================
+
+Read the current paper version to extract:
+
+1. **Research Questions and Hypotheses**
+   - The synthetic data must be designed to test these specifically
+   - Extract H1, H2, H3... with their predicted relationships
+
+2. **Proposed Variables**
+   - Independent variables (IVs)
+   - Dependent variables (DVs)
+   - Mediating variables (if any)
+   - Moderating variables (if any)
+   - Control variables
+
+3. **Expected Relationships**
+   - Direction and strength of each relationship
+   - Example: "X positively affects Y (β ≈ 0.3-0.5)"
+   - Take from research questions or hypotheses
+
+4. **Unit of Analysis**
+   - What entities the data represents (individuals, organizations, etc.)
+   - Target population characteristics
+
+================================================================================
+STEP 2: SPECIFY DATA CHARACTERISTICS
+================================================================================
+
+**Sample Size:**
+- Survey research: 150-300 respondents (typical for IS research)
+- Experimental research: 80-200 participants (40-100 per condition)
+- Calculate based on: power analysis (0.80 power, α=0.05, expected effect size)
+
+**Variable Distributions:**
+- Likert scales (1-7): Slight negative skew typical (mean ~4.5-5.5)
+- Continuous variables: Normal or slightly skewed based on construct
+- Categorical: Realistic proportions matching target population
+
+**Effect Sizes (realistic for IS research):**
+- Small: r ≈ 0.10-0.15, β ≈ 0.10-0.20
+- Medium: r ≈ 0.25-0.35, β ≈ 0.25-0.40
+- Large: r ≈ 0.45-0.55, β ≈ 0.45-0.60
+
+**Noise and Variance:**
+- Add realistic measurement error (reliability α = 0.70-0.90)
+- Include individual variation (not all relationships perfectly clean)
+- R² values typically 0.20-0.50 for IS models
+
+================================================================================
+STEP 3: ENSURE THEORETICAL CONSISTENCY
+================================================================================
+
+**Hypothesized Relationships:**
+- Generate data where H1, H2, H3... hold at p < 0.05
+- Effect sizes should match predictions from literature review
+- Partial mediation: direct effects remain significant but reduced
+
+**Non-Hypothesized Paths:**
+- Include realistic non-significant relationships (p > 0.10)
+- Control variables should show typical patterns from literature
+- Some noise in the data (not all relationships perfectly clean)
+
+**Variance Explained:**
+- R² = 0.25-0.45 for main DVs (typical for IS behavioral models)
+- Adjusted R² slightly lower (realistic model fit)
+- F-statistics significant for overall model
+
+**Demographic Variables:**
+- Age: Match target population (e.g., working adults 25-55)
+- Gender: Approximately balanced unless population-specific
+- Experience: Realistic range for context
+
+================================================================================
+STEP 4: ADDRESS REVIEWER/SUPERVISOR FEEDBACK
+================================================================================
+
+Read the latest feedback file for specific guidance:
+- Reviewer concerns about empirical validation
+- Supervisor directives about data characteristics
+- Specific hypotheses to demonstrate
+- Control variables to include
+
+Example adaptations:
+- "Reviewer noted lack of empirical validation" → Generate data demonstrating model testability
+- "Strengthen mediation analysis" → Ensure mediator shows significant indirect effects
+- "Add control for experience" → Include experience variable with realistic correlations
+
+================================================================================
+STEP 5: RESEARCH LITERATURE FOR CALIBRATION
+================================================================================
+
+**Before generating data, search for:**
+1. Meta-analyses of similar constructs (for effect size benchmarks)
+2. Published studies with similar models (for realistic R² values)
+3. Validated scales (for proper measurement properties)
+
+**Use Semantic Scholar API to find:**
+- Effect sizes from prior empirical studies
+- Correlation matrices from related research
+- Sample characteristics from target populations
+
+**Calibration sources:**
+- "Technology acceptance meta-analysis effect sizes"
+- "Trust in IS empirical studies correlations"
+- "[Your construct] survey research statistics"
+
+================================================================================
+STEP 6: GENERATE OUTPUT
+================================================================================
+
+**Create Data Files:**
+
+1. **synthetic_data_{participantId}.csv**
+   - Clear column headers matching paper variable names
+   - One row per observation
+   - Proper data types (numeric for scales, string for categorical)
+
+2. **synthetic_data_codebook_{participantId}.txt**
+   ```
+   VARIABLE       TYPE      SCALE       DESCRIPTION
+   ----------------------------------------------------------------
+   respondent_id  integer   1-N         Unique identifier
+   iv_name        numeric   1-7         Independent variable (7-point Likert)
+   dv_name        numeric   1-7         Dependent variable (7-point Likert)
+   age            integer   18-65       Participant age in years
+   gender         string    M/F/O       Participant gender
+   ```
+
+3. **synthetic_data_summary_{participantId}.txt**
+   - Descriptive statistics (M, SD for all variables)
+   - Correlation matrix
+   - Reliability estimates (Cronbach's α)
+   - Key regression/hypothesis test results
+
+================================================================================
+STEP 7: UPDATE PAPER WITH RESULTS
+================================================================================
+
+After generating synthetic data:
+
+1. **Update Results Section:**
+   - Add statistical analysis results
+   - Include hypothesis test outcomes (H1 supported, H2 supported, etc.)
+   - Present tables with regression coefficients, p-values
+   - Reference figures showing key relationships
+
+2. **Add Required Tables:**
+   - Table: Descriptive Statistics and Correlations
+   - Table: Hypothesis Test Results (regression analysis)
+   - Table: Measurement Model Results (if SEM)
+
+3. **Add Required Figures:**
+   - Figure: Results overlaid on research model (paths with β values)
+   - Figure: Key effect visualizations (if applicable)
+
+4. **Update Discussion:**
+   - Interpret findings in light of hypotheses
+   - Connect to theoretical implications
+   - Note that data is synthetic (transparency statement)
+
+================================================================================
+EXAMPLE TEMPLATE
+================================================================================
+
+"Based on this paper's theoretical model, generate synthetic survey data:
+
+**Sample:** 250 respondents representing IT professionals
+
+**Variables:**
+- IV: Technology self-efficacy (7-point Likert, 5 items)
+- DV: System adoption intention (7-point Likert, 4 items)
+- Mediator: Perceived usefulness (7-point Likert, 6 items)
+- Controls: Age (continuous), Experience (years), Gender (binary)
+
+**Expected Relationships:**
+- Self-efficacy → Perceived usefulness: β ≈ 0.45
+- Perceived usefulness → Adoption intention: β ≈ 0.52
+- Direct effect (self-efficacy → adoption): β ≈ 0.15 (partial mediation)
+
+**Constraints:**
+- All Cronbach's alphas > 0.70
+- Realistic multicollinearity (VIF < 3)
+- Support for hypotheses at p < 0.05
+
+**Reviewer Feedback to Address:**
+The reviewer criticized the lack of empirical evidence for the mediation
+hypothesis—ensure the synthetic data supports testing this relationship
+with appropriate statistical power."
+
+================================================================================
+QUALITY CHECKLIST
+================================================================================
+
+Before generating, verify you have specified:
+□ Which hypotheses the data should support (H1, H2, H3...)
+□ Realistic effect sizes for your domain (from literature)
+□ Appropriate sample size for statistical analyses
+□ Variable types and measurement scales
+□ Any constraints from reviewer/supervisor feedback
+
+After generating, verify:
+□ CSV file created in Data/ directory
+□ Codebook created with variable descriptions
+□ Summary statistics computed
+□ Results section updated in paper
+□ Transparency statement included about synthetic data
+
+================================================================================
+DELIVERABLES
+================================================================================
+
+1. Data/synthetic_data_{participantId}.csv
+2. Data/synthetic_data_codebook_{participantId}.txt
+3. Data/synthetic_data_summary_{participantId}.txt
+4. Updated Paper/icis_paper_{participantId}_v{N+1}.tex with Results section
+
+================================================================================

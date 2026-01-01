@@ -57,27 +57,30 @@ DELIVERABLE: Comprehensive research outline including:
 - Evaluation strategy (metrics and protocols for assessing results)
 - **RESEARCH TYPE** (exactly one of): "Simulation & Computational Modeling" OR "Analytical & Theoretical Modeling (with or without data)" OR "Laboratory & field experiments" OR "Survey research"
 - Initial references (1-3 from interview)
-- **Needs mathematical formulation:** Yes/No (indicate if novel algorithms, proofs, or computational models are needed - this determines whether Step 3 executes for experimental/survey research) 
+- **Needs mathematical formulation:** Yes/No (indicate if novel algorithms, proofs, or computational models are needed - this determines whether Step 3 executes for experimental/survey research)
+- **Data collection planned:** Yes/No (indicate if interview mentions upcoming data collection, IRB approval, or recruitment plans - this affects paper type for 2D/2E research)
 
 ---
 
 ## STEP 1.5: DATA FILE ASSESSMENT
 
-**Execute this step to determine data availability and strategy.**
+**Execute this step to determine data availability, paper type, and strategy.**
 
-### A) Check for Data_file
+### A) Check for Data Files
 
-Use Glob to check if data file exists (using participantId from STEP 0):
+Use Glob to check for data files (using participantId from STEP 0):
 ```
-Glob: Data_file_{participantId}*
+Glob: Data_file_{participantId}*       # Real/complete data
+Glob: Example_data_{participantId}*    # Example/pilot data (NEW)
 Glob: Data/*
 ```
 
-Document result:
-- ✅ **Data_file found:** [location and format]
-- ❌ **No Data_file:** Proceed based on research type
+Document results:
+- ✅ **Data_file found:** [location and format] → Proceed with FULL paper
+- ✅ **Example_data found:** [location and format] → May produce PARTIAL paper with demo
+- ❌ **No data files:** Proceed based on research type and data collection plans
 
-### B) If Data_file exists, assess format and contents:
+### B) If Data_file (real data) exists, assess format and contents:
 
 1. **Determine format:**
    - CSV/TSV (.csv, .tsv)
@@ -95,27 +98,45 @@ Document result:
 
 3. **Save assessment:** Create Code/data_assessment_{participantId}.txt with above fields
 
-### C) Set Data Strategy Based on Research Type
+### B2) If Example_data (pilot/sample data) exists:
 
-**ALL research types produce FULL PAPER (14-16 pages).**
+Example data is used to demonstrate methodology without claiming actual results:
+- Typically 5-20 observations showing planned variable structure
+- Used to illustrate analysis approach, NOT for actual findings
+- All outputs must be labeled "(Illustrative - Example Data, N=X)"
+
+### C) Set Data Strategy and Paper Type
+
+**PAPER TYPES:**
+| Paper Type | Pages | When Used |
+|------------|-------|-----------|
+| FULL | 14-16 | Real data exists, OR synthetic data generated |
+| PARTIAL_NO_EXAMPLES | 8-10 | Data planned but no examples available |
+| PARTIAL_WITH_EXAMPLES | 10-12 | Data planned + example data for demo |
 
 **For RESEARCH TYPE 2D (Laboratory & Field Experiments):**
-- ✅ Data_file exists → Full paper with empirical results
-- ❌ No Data_file + Interview indicates data collection PLANNED → Write full paper with methodology, note "Data collection in progress" in Results/Discussion
-- ❌ No Data_file + No planned data collection → Generate synthetic experimental data for demonstration
+- ✅ Data_file exists → **FULL paper** with empirical results
+- ❌ No Data_file + Example_data exists + Data planned → **PARTIAL_WITH_EXAMPLES** (methodology demo)
+- ❌ No Data_file + No Example_data + Data planned → **PARTIAL_NO_EXAMPLES** (no Results section)
+- ❌ No Data_file + No planned data collection → **FULL paper** with synthetic data
 
 **For RESEARCH TYPE 2E (Survey Research):**
-- ✅ Data_file exists → Full paper with empirical results
-- ❌ No Data_file + Interview indicates data collection PLANNED → Write full paper with methodology, note "Data collection in progress" in Results/Discussion
-- ❌ No Data_file + No planned data collection → Generate synthetic survey data for demonstration
+- ✅ Data_file exists → **FULL paper** with empirical results
+- ❌ No Data_file + Example_data exists + Data planned → **PARTIAL_WITH_EXAMPLES** (methodology demo)
+- ❌ No Data_file + No Example_data + Data planned → **PARTIAL_NO_EXAMPLES** (no Results section)
+- ❌ No Data_file + No planned data collection → **FULL paper** with synthetic data
 
 **For RESEARCH TYPE 2A (Simulation & Computational Modeling):**
-- ✅ Data_file exists → Use for calibration/validation + generate synthetic data for simulation runs
-- ❌ No Data_file → Generate synthetic data based on literature (simulations always need data)
+- ✅ Data_file exists → **FULL paper** - use for calibration/validation + synthetic for runs
+- ❌ No Data_file → **FULL paper** - generate synthetic data (simulations always produce results)
 
 **For RESEARCH TYPE 2B (Analytical & Theoretical Modeling):**
-- ✅ Data_file exists → Use for empirical validation of theoretical predictions
-- ❌ No Data_file → Theoretical paper with propositions and numerical examples for illustration
+- ✅ Data_file exists → **FULL paper** - use for empirical validation of predictions
+- ❌ No Data_file → **FULL paper** - theoretical with propositions and numerical examples
+
+**PARTIAL PAPER CHARACTERISTICS:**
+- **PARTIAL_NO_EXAMPLES (8-10 pages):** No Results section; Methodology describes planned approach
+- **PARTIAL_WITH_EXAMPLES (10-12 pages):** No Results section; Methodology includes analysis demonstration on example data
 
 ### D) File Organization
 
@@ -133,7 +154,9 @@ Document result:
 ```
 
 **DELIVERABLE:**
-- Data strategy documented
+- **Paper type determined:** FULL, PARTIAL_NO_EXAMPLES, or PARTIAL_WITH_EXAMPLES
+- Data strategy documented (real data, synthetic data, or pending)
+- Example data assessment if applicable
 - Data generation approach if no Data_file provided
 
 ---
@@ -418,9 +441,9 @@ Save as: Code/research_metadata_{participantId}.json
       "required": true,
       "minWords": 500,
       "minParagraphs": 3,
-      "minFigures": 2,
-      "minTables": 1,
-      "description": "Findings with figures/tables, statistical results, hypothesis outcomes"
+      "typicalFigures": 2,
+      "typicalTables": 1,
+      "description": "Findings with figures/tables as needed to clarify results and support claims"
     },
     "discussion": {
       "required": true,
@@ -948,13 +971,37 @@ Every paper MUST include the following at the START of the LaTeX document:
 
 **NEVER omit \title{}, \begin{document}, or \maketitle - these are REQUIRED.**
 
-**DETERMINE PAPER TYPE:**
+**DETERMINE PAPER TYPE (from Step 1.5):**
 
-**FULL PAPER (ALL Research Types):**
-- All sections: Introduction, Literature Review, Theory, Method, Results, Discussion, Conclusion
-- Target: 14-16 pages
-- Include all figures and tables from analysis
+### FULL PAPER (14-16 pages)
+**When:** Real data exists, synthetic data generated, or analytical/simulation research
+**Sections:** Introduction, Literature Review, Theory, Method, Results, Discussion, Conclusion
+**Requirements:**
+- All 7 sections present
+- Results section: Include figures and tables that clarify findings and strengthen claims (typically 2 figures, 1 table - but only if they add value)
 - Follow steps 8.1-8.3 below for figure handling
+
+**Figure/Table Principle:** Include visual elements when they make the paper easier to understand or more persuasive. Do NOT add figures/tables merely to meet a quota if they are redundant or do not add clarity.
+
+### PARTIAL PAPER WITHOUT EXAMPLES (8-10 pages)
+**When:** Data collection planned but no example data available (2D/2E only)
+**Sections:** Introduction, Literature Review, Theory, Proposed Methodology, Discussion, Conclusion
+**Requirements:**
+- **NO Results section** - data collection is pending
+- Methodology section titled "Proposed Methodology" or "Research Design"
+- Include statement: "Data collection is currently in progress"
+- Discussion focuses on expected implications based on hypotheses
+- Conceptual figures only (research model, theoretical framework)
+
+### PARTIAL PAPER WITH EXAMPLES (10-12 pages)
+**When:** Data collection planned AND example data available for demonstration (2D/2E only)
+**Sections:** Introduction, Literature Review, Theory, Methodology with Demo, Discussion, Conclusion
+**Requirements:**
+- **NO Results section** - actual results pending
+- Methodology includes "Analysis Demonstration" subsection
+- Demo uses example data (clearly labeled as illustrative)
+- All demo outputs labeled: "(Illustrative - Example Data, N=X)"
+- Conceptual figures + demo figures (labeled as demonstration)
 
 ---
 
@@ -1011,7 +1058,6 @@ Before writing full paper, test ONE figure path:
 
 **STEP 8.3 - WRITE LATEX:**
 
-**FOR FULL PAPER:**
 Write the paper using the SAME path pattern that worked in test (from STEP 8.2).
 
 Example figure inclusion:
@@ -1024,50 +1070,109 @@ Example figure inclusion:
 
 Use the path structure that passed the test in STEP 8.2
 
-**FORBIDDEN:**
+**FORBIDDEN (ALL PAPER TYPES):**
 - Bullet points in body (except: data characteristics, criteria, conditions)
 - Paragraphs <100 words
 - \\subsubsection{} commands
 - Numbered lists in narrative
 
-**REQUIRED:**
+**REQUIRED (ALL PAPER TYPES):**
 - Paragraphs 150-250 words minimum
 - Flowing narrative with transitions
 - Integrate ideas within paragraphs
 - ONLY \\section{} and \\subsection{} headings
-- 14-16 pages total
-- **RESULTS SECTION MUST INCLUDE:**
-  - At least 2-3 data analysis figures from STEP 6
-  - Figures showing main findings (hypothesis tests, model results, comparisons)
-  - Each figure must be referenced and discussed in the text
-  - Tables summarizing key statistical results
 
 **Academic Style:** See Appendix D for detailed guidelines
 
-Write complete paper in LaTeX following ICISTemplate.txt
+---
+
+### FOR FULL PAPER (14-16 pages):
+
+Write complete paper in LaTeX following ICISTemplate.txt with ALL 7 sections.
+
+**RESULTS SECTION GUIDELINES:**
+- Include figures that visualize key findings (hypothesis tests, model results, comparisons)
+- Include tables that summarize statistical results clearly
+- Each figure/table must be referenced and discussed in the text
+- **Typical benchmark:** 2 figures + 1 table, but include more or fewer based on what genuinely clarifies and strengthens the presentation
+- Do NOT pad with redundant visuals; every figure/table should earn its place
 
 **After writing, verify:**
 □ 14-16 pages total
-□ Bullet points ≤ 3 locations
-□ Average paragraph ≥ 150 words
-□ All sections included (Intro, Lit Review, Theory, Method, Results, Discussion, Conclusion)
-□ No \\subsubsection{}
-□ Smooth narrative flow
-□ Results section includes at least 2-3 data analysis figures
-□ Each figure is referenced in text (e.g., "As shown in Figure 1...")
+□ All 7 sections included (Intro, Lit Review, Theory, Method, Results, Discussion, Conclusion)
+□ Results section includes figures/tables that clarify findings (typically 2 figs + 1 table)
+□ Each figure/table is referenced in text (e.g., "As shown in Figure 1...")
+□ No redundant figures/tables (each adds unique value)
 □ Figures compile (see compilation check below)
 
-**FIGURE COMPILATION CHECK:**
+---
+
+### FOR PARTIAL PAPER WITHOUT EXAMPLES (8-10 pages):
+
+Write paper with 6 sections (NO Results section).
+
+**SPECIAL REQUIREMENTS:**
+- Section 4 title: "Proposed Methodology" or "Research Design"
+- Include clear statement: "Data collection is currently in progress. Results will be available upon completion of the study."
+- Discussion section: Focus on expected implications based on hypotheses
+- Include 1-2 conceptual figures (research model, theoretical framework)
+
+**After writing, verify:**
+□ 8-10 pages total
+□ 6 sections included (NO Results section)
+□ "Data collection in progress" statement present
+□ At least 1 conceptual figure (research model)
+
+---
+
+### FOR PARTIAL PAPER WITH EXAMPLES (10-12 pages):
+
+Write paper with 6 sections + Analysis Demonstration subsection.
+
+**METHODOLOGY WITH DEMO SECTION:**
+```latex
+\section{Methodology}
+[Standard methodology content...]
+
+\subsection{Analysis Demonstration}
+To illustrate the planned analysis approach, we demonstrate using example data
+(N=X observations). This demonstration shows the analysis procedure that will
+be applied to the full dataset upon completion of data collection.
+
+[Include demo analysis with clearly labeled illustrative outputs]
+
+These results are illustrative and based on example data. The full analysis
+will be conducted once data collection is complete.
+```
+
+**DEMO LABELING REQUIREMENTS:**
+- All demo tables: "(Illustrative - Example Data, N=X)"
+- All demo figures: "(Demonstration Only)"
+- Clear text stating: "These results are illustrative"
+
+**After writing, verify:**
+□ 10-12 pages total
+□ 6 sections included (NO Results section)
+□ Analysis Demonstration subsection present
+□ All demo outputs clearly labeled as illustrative
+□ Example data N value stated
+
+---
+
+**FIGURE COMPILATION CHECK (ALL PAPER TYPES):**
 After first pdflatex run, verify:
 - Look for: [page <../Results/fig1.png>] in output
 - If "File not found" appears: Use Glob to find correct paths, update LaTeX, recompile
-- Check PDF size: Should be >450KB with images
+- Check PDF size thresholds:
+  - FULL: >450KB with images
+  - PARTIAL_NO_EXAMPLES: >250KB
+  - PARTIAL_WITH_EXAMPLES: >350KB
 
 ---
 
 ## STEP 8.4: SECTION CONTENT VALIDATION (MANDATORY)
 
-⚠️ **CRITICAL:** Before proceeding to Step 8.5, validate that ALL sections exist and contain substantive content.
+⚠️ **CRITICAL:** Before proceeding to Step 8.5, validate that ALL required sections exist and contain substantive content based on paper type.
 
 **STEP 8.4-A: Verify All Required Sections Exist**
 
@@ -1076,68 +1181,313 @@ Search the LaTeX file for each required section header:
 grep "\\section{" Paper/icis_paper_{participantId}_v1.tex
 ```
 
-**Required sections (ALL must be present):**
-1. Introduction (or \section{Introduction})
-2. Literature Review (or \section{Literature Review} or \section{Related Work})
-3. Theoretical Framework (or \section{Theoretical Framework} or \section{Theory})
-4. Methodology (or \section{Method} or \section{Methodology} or \section{Research Design})
-5. Results (or \section{Results} or \section{Findings})
-6. Discussion (or \section{Discussion})
-7. Conclusion (or \section{Conclusion})
+**Required sections by paper type:**
 
-**If ANY section is missing:** STOP and add the missing section before proceeding.
+### FULL PAPER (7 sections required):
+1. Introduction
+2. Literature Review (or Related Work)
+3. Theoretical Framework (or Theory)
+4. Methodology (or Method)
+5. **Results** (or Findings) - REQUIRED
+6. Discussion
+7. Conclusion
+
+### PARTIAL PAPER (6 sections required - NO Results):
+1. Introduction
+2. Literature Review (or Related Work)
+3. Theoretical Framework (or Theory)
+4. Proposed Methodology (or Research Design)
+5. Discussion
+6. Conclusion
+
+**If ANY required section is missing:** STOP and add the missing section before proceeding.
 
 **STEP 8.4-B: Validate Section Content**
 
-For EACH section, verify it contains substantive content (not just a header):
-
+### FOR FULL PAPER:
 | Section | Min Words | Min Paragraphs | Required Elements |
 |---------|-----------|----------------|-------------------|
 | Introduction | 500 | 3 | Problem statement, research gap, contributions |
 | Literature Review | 800 | 5 | 15+ citations, organized themes |
 | Theoretical Framework | 600 | 4 | Theory basis, hypotheses (H1, H2, etc.) |
 | Methodology | 600 | 4 | Design, data, measures, analysis plan |
-| **Results** | **500** | **3** | **2+ figures, 1+ table, statistical findings** |
+| **Results** | **500** | **3** | **Statistical findings; figures/tables as needed for clarity** |
 | Discussion | 400 | 3 | Implications, limitations |
 | Conclusion | 200 | 2 | Summary, future research |
 
-**STEP 8.4-C: Results Section Special Validation**
+**Note on figures/tables:** Typically 2 figures + 1 table in Results, but prioritize value over count. Include only what genuinely improves understanding or persuasiveness.
 
+### FOR PARTIAL PAPER (NO_EXAMPLES):
+| Section | Min Words | Min Paragraphs | Required Elements |
+|---------|-----------|----------------|-------------------|
+| Introduction | 500 | 3 | Problem statement, research gap, contributions |
+| Literature Review | 600 | 4 | 12+ citations, organized themes |
+| Theoretical Framework | 600 | 4 | Theory basis, hypotheses (H1, H2, etc.) |
+| Proposed Methodology | 600 | 4 | Design, planned measures, planned analysis |
+| Discussion | 400 | 3 | Expected implications, limitations |
+| Conclusion | 200 | 2 | Summary, future research |
+
+### FOR PARTIAL PAPER (WITH_EXAMPLES):
+| Section | Min Words | Min Paragraphs | Required Elements |
+|---------|-----------|----------------|-------------------|
+| Introduction | 500 | 3 | Problem statement, research gap, contributions |
+| Literature Review | 600 | 4 | 12+ citations, organized themes |
+| Theoretical Framework | 600 | 4 | Theory basis, hypotheses (H1, H2, etc.) |
+| Methodology with Demo | 800 | 5 | Design + Analysis Demonstration subsection |
+| Discussion | 400 | 3 | Expected implications, limitations |
+| Conclusion | 200 | 2 | Summary, future research |
+
+**STEP 8.4-C: Paper-Type-Specific Validation**
+
+### FOR FULL PAPER - Results Section Validation:
 The Results section MUST contain:
-1. ✅ At least 2 figures (\includegraphics commands)
-2. ✅ At least 1 table (\begin{table} environment)
-3. ✅ Statistical results (effect sizes, p-values, confidence intervals)
-4. ✅ Explicit reference to each figure ("As shown in Figure 1...")
-5. ✅ Interpretation of findings connected to hypotheses
+1. ✅ Statistical results (effect sizes, p-values, confidence intervals)
+2. ✅ Interpretation of findings connected to hypotheses
+3. ✅ Figures/tables that clarify key findings (typically 2 figs + 1 table, but adjust based on value)
+4. ✅ Each figure/table is referenced in text ("As shown in Figure 1...")
+5. ✅ No redundant visuals - each figure/table should add unique value
 
-**Count figures in Results section:**
-```
-# Find Results section and count figures within it
-sed -n '/\\section{Results}/,/\\section{/p' Paper/icis_paper_{participantId}_v1.tex | grep -c "includegraphics"
-```
+**Flexibility:** If a finding is clear from text alone, a figure may not be needed. If a table would merely repeat what's stated in prose, omit it. Conversely, complex results may need more than 2 figures.
 
-**If Results section has <2 figures or <1 table:** STOP and add required visual elements.
+### FOR PARTIAL PAPER (NO_EXAMPLES) - Methodology Validation:
+The Proposed Methodology section MUST contain:
+1. ✅ Statement: "Data collection is currently in progress"
+2. ✅ At least 1 conceptual figure (research model)
+3. ✅ Complete analysis plan (what tests will be run)
+
+### FOR PARTIAL PAPER (WITH_EXAMPLES) - Demo Validation:
+The Methodology section MUST contain:
+1. ✅ Analysis Demonstration subsection
+2. ✅ Clear labeling: "(Illustrative - Example Data, N=X)"
+3. ✅ At least 1 demo figure or table (labeled as illustrative)
+4. ✅ Statement explaining demo is illustrative, not actual results
 
 **STEP 8.4-D: Section Validation Checklist**
 
-Before proceeding to STEP 8.5, confirm ALL checks pass:
-
+### FULL PAPER Checklist:
 □ Introduction section exists with ≥500 words
 □ Literature Review section exists with ≥800 words and ≥15 citations
 □ Theoretical Framework section exists with ≥600 words and explicit hypotheses
 □ Methodology section exists with ≥600 words
-□ **Results section exists with ≥500 words, ≥2 figures, ≥1 table**
+□ **Results section exists with ≥500 words and appropriate figures/tables for clarity**
 □ Discussion section exists with ≥400 words
 □ Conclusion section exists with ≥200 words
+□ Each figure/table adds unique value (no redundant visuals)
+
+### PARTIAL PAPER Checklist:
+□ Introduction section exists with ≥500 words
+□ Literature Review section exists with ≥600 words and ≥12 citations
+□ Theoretical Framework section exists with ≥600 words and explicit hypotheses
+□ Proposed Methodology section exists with ≥600 words
+□ **NO Results section** (data collection pending)
+□ Discussion section exists with ≥400 words (expected implications)
+□ Conclusion section exists with ≥200 words
+□ If WITH_EXAMPLES: Analysis Demonstration subsection with demo labeling
 
 **If ANY check fails:** Edit the paper to add missing content before proceeding.
 
 **DELIVERABLE:**
-- Complete LaTeX paper with all sections containing substantive content
+- Complete LaTeX paper with all required sections containing substantive content
 
 ---
 
-## STEP 8.5: REFERENCE VALIDATION AND GENERATION (MANDATORY)
+## STEP 8.5: FULL PAPER EDIT VERIFICATION (MANDATORY)
+
+⚠️ **IMPORTANT:** This step MUST execute AFTER all sections have been built and validated in Step 8.4. Due to capacity constraints, paper sections may be generated incrementally. This step provides a holistic review and edit pass once all content is present.
+
+**PURPOSE:** Perform a comprehensive edit of the complete paper to ensure good flow, coherent structure, and remove redundancies.
+
+**PRE-CONDITION:** All sections must be complete (verified in Step 8.4)
+
+### STEP 8.5-A: Section Organization Check
+
+**Maximum section counts:**
+- FULL papers: Maximum 8 sections (7 main + Abstract)
+- PARTIAL papers: Maximum 6 sections (5 main + Abstract)
+
+**Heading rules:**
+- Allowed: `\section{}` and `\subsection{}` ONLY
+- **FORBIDDEN:** `\subsubsection{}` - must be removed or promoted
+
+### STEP 8.5-B: Subsection Rules
+
+Subsections are allowed ONLY if:
+1. The subsection is **necessary** for logical organization, AND
+2. The subsection content is **>200 words**
+
+**For each subsection <200 words:**
+- Merge it with adjacent content, OR
+- Remove the subsection heading and flow content into parent section
+- Remove subsection headings that serve only as labels without substantial content
+
+### STEP 8.5-C: Redundancy Elimination (Operationalized)
+
+**STEP 8.5-C1: Cross-Section Redundancy Check**
+
+For each pair of sections, check for content that appears in both:
+
+| Check | Pattern to Find | Action |
+|-------|-----------------|--------|
+| Definition duplication | Same construct defined in Lit Review AND Theory | Keep only in Theory; Lit Review should cite, not redefine |
+| Hypothesis repetition | H1-Hn stated fully in Theory AND Results | Theory: full statement; Results: brief reference only ("As predicted in H1...") |
+| Method duplication | Procedure described in Method AND Results | Keep details in Method; Results references only |
+| Literature overlap | Same citation discussed in Intro AND Lit Review | Intro: 1 sentence max; full discussion in Lit Review |
+
+**STEP 8.5-C2: Within-Section Redundancy Check**
+
+Search for these patterns within each section:
+
+```
+# Find repeated phrases (3+ words appearing 2+ times)
+Pattern: Any phrase of 3+ words appearing more than once in same section
+
+# Find synonym clusters saying same thing
+Example: "users adopt the system" ... "individuals embrace the technology" ... "people accept the tool"
+→ Consolidate to ONE phrasing, use pronouns/shorter references after
+```
+
+**STEP 8.5-C3: Filler Phrase Removal**
+
+Remove or replace these low-value phrases:
+- "It is important to note that" → Delete, start with the actual point
+- "As mentioned earlier/above" → Delete or use specific reference
+- "In order to" → "To"
+- "The fact that" → Delete
+- "It should be noted that" → Delete
+- "Due to the fact that" → "Because"
+
+**Consolidate** overlapping content into single, comprehensive statements.
+
+### STEP 8.5-D: Figure and Table Reference Check
+
+**CRITICAL:** Every figure and table MUST be referenced in the main text.
+
+**Figure references:**
+- Pattern: "Figure X shows..." or "As shown in Figure X..."
+- Reference should appear BEFORE or AT the figure location
+
+**Table references:**
+- Pattern: "Table X presents..." or "As summarized in Table X..."
+
+**Check for unreferenced elements:**
+```
+# Find all figures
+grep -o 'label{fig:[^}]*}' Paper/icis_paper_{participantId}_v1.tex
+
+# Find all figure references
+grep -o 'Figure [0-9]*' Paper/icis_paper_{participantId}_v1.tex
+grep -o 'Figure~\\ref{fig:[^}]*}' Paper/icis_paper_{participantId}_v1.tex
+```
+
+**Add missing references** where needed.
+
+### STEP 8.5-E: Flow and Coherence Improvements (Operationalized)
+
+**STEP 8.5-E1: Section-Level Flow**
+
+Each section should end by setting up the next. Check for transition sentences:
+
+| From Section | Expected Bridge to Next |
+|--------------|------------------------|
+| Introduction | "The remainder of this paper is organized as follows..." OR ends with research questions |
+| Literature Review | "These gaps motivate our theoretical framework..." OR "Building on this foundation..." |
+| Theory | "To test these hypotheses, we designed..." OR "The following methodology..." |
+| Methodology | "Applying this approach yielded..." OR "We now present the results..." |
+| Results | "These findings have several implications..." |
+| Discussion | "In conclusion..." |
+
+**STEP 8.5-E2: Paragraph-Level Coherence Check**
+
+For EACH pair of consecutive paragraphs, verify the connection:
+
+**The "Last-First" Test:**
+1. Read the LAST sentence of paragraph N
+2. Read the FIRST sentence of paragraph N+1
+3. Check: Is there a clear logical link?
+
+**Types of valid links:**
+- **Continuation:** "Furthermore," "Moreover," "Additionally," "Building on this,"
+- **Contrast:** "However," "In contrast," "Conversely," "Despite this,"
+- **Cause-Effect:** "Consequently," "Therefore," "As a result," "Thus,"
+- **Specification:** "Specifically," "In particular," "For example,"
+- **Temporal:** "Subsequently," "Following this," "After establishing,"
+- **Pronoun/Reference:** "This finding..." "These results..." "Such approaches..."
+
+**If NO link exists:** Add a transition sentence or revise the first sentence of paragraph N+1.
+
+**STEP 8.5-E3: Topic Sentence Verification**
+
+Each paragraph should begin with a clear topic sentence stating the paragraph's main point:
+
+```
+✅ Good: "Trust plays a central role in technology adoption."
+   (Clear claim that the paragraph will develop)
+
+❌ Bad: "There are several factors to consider."
+   (Vague, doesn't state the specific point)
+
+❌ Bad: "Smith (2020) found that..."
+   (Starts with citation, not your argument)
+```
+
+**Fix:** Rewrite opening sentences to state YOUR point, then use citations as support.
+
+**STEP 8.5-E4: Paragraph Unity Check**
+
+Each paragraph should develop ONE main idea:
+
+1. Identify the topic sentence (usually first sentence)
+2. Check: Does every sentence in the paragraph support/develop that topic?
+3. If a sentence introduces a NEW idea → Move it to start a new paragraph
+
+**STEP 8.5-E5: Sentence-Level Flow**
+
+Within paragraphs, check for:
+
+- **Old-to-New pattern:** Each sentence should begin with known information (from previous sentence) and end with new information
+  ```
+  ✅ "Users develop trust through repeated interactions. These interactions build familiarity, which..."
+  ❌ "A key factor is familiarity. Users develop trust through repeated interactions."
+  ```
+
+- **Consistent subjects:** Avoid unnecessary subject shifts within a paragraph
+  ```
+  ✅ "Users adopt... They then... Their experience..."
+  ❌ "Users adopt... The system provides... Researchers found... Adoption increases..."
+  ```
+
+### STEP 8.5-F: Edit Verification Checklist
+
+**Structure:**
+□ No `\subsubsection{}` commands remain
+□ All subsections are >200 words
+□ Section count ≤8 (FULL) or ≤6 (PARTIAL)
+□ Every `\includegraphics` has corresponding text reference
+□ Every `\begin{table}` has corresponding text reference
+
+**Redundancy (from 8.5-C):**
+□ No construct defined in multiple sections
+□ Hypotheses stated fully only in Theory section
+□ No repeated 3+ word phrases within sections
+□ Filler phrases removed ("It is important to note that", etc.)
+
+**Flow (from 8.5-E):**
+□ Each section ends with transition to next
+□ Consecutive paragraphs pass "Last-First" test (clear link)
+□ Each paragraph begins with topic sentence (not citation)
+□ Each paragraph develops ONE main idea
+□ Sentences follow old-to-new information pattern
+
+**Overall:**
+□ Narrative arc is coherent from Introduction to Conclusion
+□ Reader can follow logic without re-reading
+
+**DELIVERABLE:**
+- Edited LaTeX paper with improved flow, no redundancy, and clear coherence
+
+---
+
+## STEP 8.6: REFERENCE VALIDATION AND GENERATION (MANDATORY)
 
 ⚠️ CRITICAL: ALL references MUST be validated via Semantic Scholar API before inclusion.
 
@@ -1146,7 +1496,7 @@ Before proceeding to STEP 8.5, confirm ALL checks pass:
 2. **APA 7th Edition format** - Consistent formatting throughout
 3. **If not found, find alternative** - Never include a reference that cannot be verified
 
-**STEP 8.5-A: Extract All Citations**
+**STEP 8.6-A: Extract All Citations**
 
 1. Extract all \cite{} keys from the paper:
    ```
@@ -1155,7 +1505,7 @@ Before proceeding to STEP 8.5, confirm ALL checks pass:
 
 2. Create list of citation keys to validate
 
-**STEP 8.5-B: Validate Each Reference via Semantic Scholar**
+**STEP 8.6-B: Validate Each Reference via Semantic Scholar**
 
 For EACH citation key (e.g., Davis1989, VenkEtAl2003):
 
@@ -1192,7 +1542,7 @@ For EACH citation key (e.g., Davis1989, VenkEtAl2003):
    - If still not found: **DO NOT INCLUDE** - remove the \cite{} from the paper
    - Find a replacement paper on the same topic that IS in Semantic Scholar
 
-**STEP 8.5-C: Generate References Section**
+**STEP 8.6-C: Generate References Section**
 
 Create the \\begin{thebibliography} section with ONLY verified references:
 
@@ -1565,7 +1915,7 @@ This appendix provides calibration guidance extracted from analysis of 11 exempl
 | Literature/Background | 2-3 | 800-1200 | Thematic organization, gap identification |
 | Theoretical Framework | 1-2 | 500-800 | Theory basis, constructs, hypotheses |
 | Methodology | 2-3 | 800-1200 | Design, data, measures, analysis plan |
-| Results | 2-3 | 700-1000 | Tables, figures, statistical findings |
+| Results | 2-3 | 700-1000 | Statistical findings; figures/tables as needed for clarity |
 | Discussion | 1.5-2 | 600-900 | Implications (theoretical + practical), limitations |
 | Conclusion | 0.5-1 | 200-400 | Summary, contributions, future research |
 | References | 1-2 | 40-60 citations | APA format, recent + foundational |
