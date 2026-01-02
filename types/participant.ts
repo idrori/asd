@@ -29,6 +29,7 @@ export type GroupId = 1 | 2 | null; // 1 = With Oversight, 2 = Control, null = U
 export interface Participant {
   id: string;
   email: string;  // Only PII stored - for contact purposes
+  name?: string;  // Optional display name
   group_id: GroupId;
   status: ParticipantStatus;
   registered_at: string; // ISO timestamp

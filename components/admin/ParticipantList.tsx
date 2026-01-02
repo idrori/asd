@@ -105,7 +105,7 @@ const ParticipantList: React.FC<ParticipantListProps> = ({ onBack }) => {
     const matchesSearch =
       !searchTerm ||
       p.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.name.toLowerCase().includes(searchTerm.toLowerCase());
+      p.name?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = !statusFilter || p.status === statusFilter;
     const matchesGroup = groupFilter === 'all' || p.group_id === groupFilter;
     return matchesSearch && matchesStatus && matchesGroup;

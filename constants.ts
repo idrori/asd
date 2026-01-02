@@ -20,36 +20,42 @@ export function getConferenceBasePath(conferenceId: ConferenceId): string {
 }
 
 // Stage display information
-export const STAGE_INFO: Record<Stage, { label: string; description: string; icon: string }> = {
+export const STAGE_INFO: Record<Stage, { label: string; description: string; icon: string; promptFile?: string }> = {
   [Stage.SETUP]: {
     label: 'Setup',
     description: 'Verify files and initialize project',
-    icon: 'FileText'
+    icon: 'FileText',
+    promptFile: 'ICISsetup.txt'
   },
   [Stage.BUILDER]: {
     label: 'Builder',
     description: 'Build paper from research interview',
-    icon: 'Hammer'
+    icon: 'Hammer',
+    promptFile: 'ICISbuilder.txt'
   },
   [Stage.REVIEWER]: {
     label: 'Reviewer',
     description: 'AI review and scoring',
-    icon: 'Search'
+    icon: 'Search',
+    promptFile: 'ICISreview.txt'
   },
   [Stage.SUPERVISOR]: {
     label: 'Supervisor',
     description: 'Human oversight and decision',
-    icon: 'UserCheck'
+    icon: 'UserCheck',
+    promptFile: 'ICISsupervisor.txt'
   },
   [Stage.REVISER]: {
     label: 'Reviser',
     description: 'Revise based on feedback',
-    icon: 'Edit3'
+    icon: 'Edit3',
+    promptFile: 'ICISreviser.txt'
   },
   [Stage.FINALIZE]: {
     label: 'Finalize',
     description: 'Final submission preparation',
-    icon: 'Send'
+    icon: 'Send',
+    promptFile: 'ICISfinalize.txt'
   }
 };
 
@@ -113,38 +119,45 @@ export const BUILDER_STEP_INFO: Record<BuilderStep, { label: string; description
 };
 
 // Research type information
-export const RESEARCH_TYPE_INFO: Record<ResearchType, { label: string; description: string; requiresData: boolean }> = {
+export const RESEARCH_TYPE_INFO: Record<ResearchType, { label: string; description: string; requiresData: boolean; template?: string }> = {
   [ResearchType.SIMULATION]: {
     label: 'Simulation & Computational Modeling',
     description: 'Agent-based models, Monte Carlo simulations, system dynamics',
-    requiresData: false
+    requiresData: false,
+    template: 'metaprompt_template_COMPUTATIONAL.py'
   },
   [ResearchType.ANALYTICAL]: {
     label: 'Analytical & Theoretical Modeling',
     description: 'Game theory, optimization, formal proofs',
-    requiresData: false
+    requiresData: false,
+    template: 'metaprompt_template_COMPUTATIONAL.py'
   },
   [ResearchType.SECONDARY_DATA]: {
     label: 'Secondary Data Analysis',
     description: 'Analysis of existing datasets',
-    requiresData: true
+    requiresData: true,
+    template: 'metaprompt_template_SECONDARY.py'
   },
   [ResearchType.EXPERIMENTAL]: {
     label: 'Laboratory & Field Experiments',
     description: 'Controlled experiments with human subjects',
-    requiresData: true
+    requiresData: true,
+    template: 'metaprompt_template_EXPERIMENTAL.py'
   },
   [ResearchType.SURVEY]: {
     label: 'Survey Research',
     description: 'Questionnaire-based data collection',
-    requiresData: true
+    requiresData: true,
+    template: 'metaprompt_template_SURVEY.py'
   }
 };
 
 // File paths configuration
 export const FILE_PATHS = {
+  ROOT: 'icis',
   DATA_DIR: 'Data',
   PAPER_DIR: 'Paper',
+  PAPER: 'icis/Paper',
   RESULTS_DIR: 'Results',
   CODE_DIR: 'Code',
   INTERVIEW_PREFIX: 'INTERVIEW',
@@ -153,12 +166,23 @@ export const FILE_PATHS = {
   MANIFEST_FILE: 'manifest.json'
 };
 
-// Review score thresholds
+// Review score thresholds (1-5 scale)
 export const REVIEW_THRESHOLDS = {
-  APPROVAL_MIN: 3.5,      // Minimum average score for approval (1-5 scale)
-  TRUSTWORTHINESS_MIN: 5, // Minimum trustworthiness score (1-7 scale)
+  APPROVAL_MIN: 3.5,      // Minimum average score for approval
+  AUTO_APPROVE_MIN: 4,    // Minimum score for auto-approval (all criteria must meet)
+  NOVELTY_MIN: 2.5,       // Minimum novelty score
+  SIGNIFICANCE_MIN: 2.5,  // Minimum significance score
+  RIGOR_MIN: 3,           // Minimum methodological rigor score
+  CLARITY_MIN: 3,         // Minimum clarity score
+  RELEVANCE_MIN: 3,       // Minimum relevance score
   MAX_MAJOR_ERRORS: 2,    // Maximum major errors per cycle
   MAX_CYCLES: 3           // Maximum cycles (1 build + 2 revisions)
+};
+
+// Trustworthiness thresholds (1-7 scale)
+export const TRUSTWORTHINESS_THRESHOLDS = {
+  MIN: 5,                 // Minimum trustworthiness score
+  ALERT_THRESHOLD: 4      // Score below which to trigger alerts
 };
 
 // API configuration

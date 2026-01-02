@@ -341,32 +341,6 @@ export function getRevisionSummary(
   return lines.join('\n');
 }
 
-/**
- * Validate figure paths exist (placeholder for actual file system check)
- */
-export function validateFigurePaths(paths: string[]): {
-  valid: string[];
-  invalid: string[];
-} {
-  // Placeholder - in real implementation would use file system
-  // For now, assume paths starting with '../Results/' are valid
-  const valid: string[] = [];
-  const invalid: string[] = [];
-
-  for (const path of paths) {
-    if (path.startsWith('../Results/') || path.startsWith('..\\Results\\')) {
-      valid.push(path);
-    } else if (path.startsWith('Results/') || path.includes('experiment_')) {
-      // Likely incorrect path format
-      invalid.push(path);
-    } else {
-      valid.push(path); // Give benefit of doubt
-    }
-  }
-
-  return { valid, invalid };
-}
-
 // ============================================================================
 // STEP 0 & 8: Verification Functions
 // From ICISreviser.txt - reusing patterns from builderService

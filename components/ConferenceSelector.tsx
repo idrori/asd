@@ -168,7 +168,7 @@ const ConferenceSelector: React.FC<ConferenceSelectorProps> = ({
                       <span className="block text-xs text-gray-500 truncate">{conf.name}</span>
                     </div>
                     {!conf.verified && (
-                      <AlertCircle className="w-3.5 h-3.5 text-yellow-500 flex-shrink-0" title="Not fully verified" />
+                      <span title="Not fully verified"><AlertCircle className="w-3.5 h-3.5 text-yellow-500 flex-shrink-0" /></span>
                     )}
                   </button>
                 ))}

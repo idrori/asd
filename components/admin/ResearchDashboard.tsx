@@ -207,8 +207,8 @@ const ResearchDashboard: React.FC<ResearchDashboardProps> = ({ onViewParticipant
               <div>
                 <p className="font-medium text-sm text-slate-800">{alert.message}</p>
                 <p className="text-xs text-slate-500 mt-1">
-                  {alert.participants.slice(0, 3).join(', ')}
-                  {alert.participants.length > 3 && ` +${alert.participants.length - 3} more`}
+                  {alert.participantIds.slice(0, 3).join(', ')}
+                  {alert.participantIds.length > 3 && ` +${alert.participantIds.length - 3} more`}
                 </p>
               </div>
             </div>

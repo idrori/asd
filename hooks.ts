@@ -222,7 +222,8 @@ export function useFileUpload() {
         interview: null,
         template: null,
         dataFile: null,
-        participantId: null
+        participantId: null,
+        participantEmail: null
       };
 
       // Process manifest files
@@ -428,7 +429,7 @@ interface WorkflowHookParams {
   addRound: (round: RoundScore) => void;
   updateLastRound: (updates: Partial<RoundScore>) => void;
   resetStageData: (stage: Stage) => void;
-  resetAllState?: () => void;  // Optional reset function for new case
+  resetAllState?: () => Promise<void>;  // Optional reset function for new case
   uploadedFiles: UploadedFiles;
   getInterviewContent: () => string;
   refreshDetection?: () => Promise<void>;  // Re-detect files from manifest (async)

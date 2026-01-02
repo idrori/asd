@@ -201,14 +201,14 @@ const SetupStage: React.FC<SetupStageProps> = ({
                 label="Transcript"
                 accept=".txt"
                 required={true}
-                file={uploadedFiles.interview}
+                file={uploadedFiles.interview ?? null}
                 onFileSelect={(file) => onFileChange('interview', file)}
               />
               <FileUpload
                 label="Data (Optional)"
                 accept=".txt,.csv,.xlsx,.json"
                 required={false}
-                file={uploadedFiles.dataFile}
+                file={uploadedFiles.dataFile ?? null}
                 onFileSelect={(file) => onFileChange('dataFile', file)}
               />
             </div>

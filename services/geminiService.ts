@@ -1366,7 +1366,7 @@ CITATION FORMAT (CRITICAL - Inline APA 7th Edition Style):
       content = await callGeminiWithExamples(prompt, systemInstruction, context.examplePapers);
     } catch (error) {
       // If RECITATION error (copyright filter), retry without example papers
-      if (error instanceof GeminiError && error.details?.includes('RECITATION')) {
+      if (error instanceof GeminiError && error.technicalDetails?.includes('RECITATION')) {
         console.warn(`[generateSection] RECITATION error for ${section.name} - retrying without example papers`);
         content = await callGemini(prompt, systemInstruction);
       } else {

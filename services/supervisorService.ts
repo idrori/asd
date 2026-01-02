@@ -489,14 +489,6 @@ export function recordSupervision(record: SupervisionRecord): void {
 }
 
 /**
- * Get supervision history for project
- */
-export async function getSupervisionHistory(_projectId: string): Promise<SupervisionRecord[]> {
-  // Placeholder - projectId will be used to retrieve from storage
-  return [];
-}
-
-/**
  * Generate supervisor guidance based on review (legacy support + enhancement)
  * Status comes from oversight file, not calculated
  */

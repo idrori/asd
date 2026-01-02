@@ -725,7 +725,7 @@ export interface CloudAnalysisResult {
     description: string;
   }[];
   chart_data?: {
-    type: 'histogram' | 'heatmap' | 'bar' | 'scatter';
+    type: 'histogram' | 'heatmap' | 'bar' | 'scatter' | 'line' | 'pie' | 'doughnut';
     column?: string;
     columns?: string[];
     x_column?: string;
@@ -733,6 +733,11 @@ export interface CloudAnalysisResult {
     data: any;
     stats?: Record<string, any>;
     correlation?: number;
+    // Chart.js format properties
+    title?: string;
+    labels?: string[];
+    datasets?: { data: any[]; label?: string; backgroundColor?: string | string[] }[];
+    options?: { title?: { text?: string }; scales?: { x?: { title?: { text?: string } }; y?: { title?: { text?: string } } } };
   }[];
   text_summary?: string;
   error?: string;
@@ -1684,6 +1689,9 @@ let currentChartData: ChartDataResource | null = null;
  * This allows users to reproduce the figures locally
  */
 function generatePythonFromChartData(chartData: CloudAnalysisResult['chart_data'], isSynthetic: boolean): string {
+  if (!chartData || chartData.length === 0) {
+    return '# No chart data available';
+  }
   const lines: string[] = [
     '"""',
     'ICIScopilot - Visualization Code',
@@ -1809,7 +1817,7 @@ export function storeChartData(chartData: CloudAnalysisResult['chart_data'], isS
     generatedAt: new Date().toISOString()
   };
 
-  console.log(`[Chart Data] Stored ${chartData.length} chart configs and Python code (${pythonCode.length} chars)`);
+  console.log(`[Chart Data] Stored ${chartData?.length ?? 0} chart configs and Python code (${pythonCode.length} chars)`);
 }
 
 /**
