@@ -1,8 +1,4 @@
-# ASD - Automated Scientific Discovery with Human Oversight
-
-A React + TypeScript web application for AI-assisted academic paper generation with human oversight. Uses Gemini AI to transform research interviews into formatted conference papers while maintaining researcher control through a structured multi-stage workflow.
-
-## References
+# Code for
 
 **Designing human oversight in automated scientific discovery**
 Dov Te'eni, Maayan Nakash, Iddo Drori
