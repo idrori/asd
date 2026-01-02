@@ -20,7 +20,6 @@ Information Technologies and Systems: workshop on exploring generative AI to tra
 - **Data analysis**: Automatic statistical analysis and visualization generation
 - **Reference validation**: Cross-references against Semantic Scholar
 - **PDF generation**: Compiles LaTeX to PDF via cloud service
-- **Multi-venue support**: 181 academic venues (34 conferences + 147 journals)
 
 ## Tech Stack
 
