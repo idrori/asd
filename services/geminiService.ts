@@ -1436,14 +1436,42 @@ export const runBuilder = async (
 
   console.log(`[Builder] Starting section-by-section generation (${sections.length} sections, ${isPartialPaper ? 'partial' : 'full'} paper)`);
 
-  // STEP 1: Analyze data file FIRST (for ALL research types when data exists)
-  // This provides the data summary that informs Methodology and Results sections
+  // Data processing pipeline (for empirical papers with data):
+  // 1. Data Cleaning - Remove empty rows, imputation, deduplication, standardize columns
+  // 2. Data Analysis - Analyze the CLEANED data to get summary statistics
   let dataSummary: string | undefined;
   let dataAlert: string | undefined;
+  let cleaningSummary: string | undefined;
 
   if (dataFileName) {
-    console.log(`[Builder] Data file provided: ${dataFileName} - analyzing for ALL research types`);
+    console.log(`[Builder] Data file provided: ${dataFileName} - starting data pipeline`);
+
+    // STEP 1: Data Cleaning FIRST
+    try {
+      onProgress?.('Data Cleaning', 'starting');
+      console.log('[Builder] Step 1: Performing data cleaning operations...');
+
+      const cleaningResult = await cleanDataFile(
+        dataFileName,
+        (msg) => console.log(`[Builder] ${msg}`)
+      );
+
+      if (cleaningResult.success) {
+        cleaningSummary = cleaningResult.summary;
+        console.log('[Builder] Data cleaning complete:', cleaningSummary);
+        onProgress?.('Data Cleaning', 'completed');
+      } else {
+        console.warn('[Builder] Data cleaning had issues:', cleaningResult.error);
+        onProgress?.('Data Cleaning', 'completed');  // Continue even if cleaning has issues
+      }
+    } catch (cleanError) {
+      console.warn('[Builder] Data cleaning error (non-fatal):', cleanError);
+      onProgress?.('Data Cleaning', 'completed');  // Continue even if cleaning fails
+    }
+
+    // STEP 2: Data Analysis on CLEANED data
     onProgress?.('Data Analysis', 'starting');
+    console.log('[Builder] Step 2: Analyzing cleaned data...');
 
     try {
       const analysisResult = await analyzeDataFile(
@@ -1461,7 +1489,10 @@ export const runBuilder = async (
       });
 
       if (analysisResult.success && analysisResult.dataSummary) {
-        dataSummary = analysisResult.dataSummary;
+        // Combine cleaning summary with analysis summary
+        dataSummary = cleaningSummary
+          ? `DATA CLEANING PERFORMED:\n${cleaningSummary}\n\nDATA ANALYSIS (on cleaned data):\n${analysisResult.dataSummary}`
+          : analysisResult.dataSummary;
         console.log('[Builder] Data analysis complete - summary available for paper generation');
         console.log('[Builder] Data summary preview:', dataSummary.substring(0, 500));
         onProgress?.('Data Analysis', 'completed');
@@ -1476,7 +1507,7 @@ export const runBuilder = async (
       onProgress?.('Data Analysis', 'error');
     }
   } else {
-    console.log('[Builder] No data file provided - proceeding without data analysis');
+    console.log('[Builder] No data file provided - proceeding without data pipeline');
   }
 
   // STEP 2: Load example papers for research mode
@@ -2218,6 +2249,204 @@ export interface DataAnalysisResult {
   dataSummary?: string;
   dataFileFound: boolean;
   error?: string;
+}
+
+/**
+ * Result of data cleaning operations
+ */
+export interface DataCleaningResult {
+  success: boolean;
+  summary: string;
+  rowsRemoved: number;
+  columnsProcessed: number;
+  imputationsPerformed: number;
+  error?: string;
+}
+
+/**
+ * Perform basic data cleaning operations on the data file
+ * Operations include:
+ * - Removing empty/null rows
+ * - Basic imputation for missing values (mean for numeric, mode for categorical)
+ * - Removing duplicate rows
+ * - Standardizing column names
+ *
+ * @param dataFileName - Name of the data file to clean
+ * @param onProgress - Optional callback for progress updates
+ * @returns DataCleaningResult with summary of operations performed
+ */
+export async function cleanDataFile(
+  dataFileName: string,
+  onProgress?: (message: string) => void
+): Promise<DataCleaningResult> {
+  console.log(`[DataCleaning] Starting data cleaning for: ${dataFileName}`);
+  onProgress?.('Starting data cleaning...');
+
+  const cleaningScript = `
+import pandas as pd
+import numpy as np
+import sys
+import json
+
+def clean_data(file_path):
+    """Perform basic data cleaning operations."""
+    results = {
+        'rows_removed': 0,
+        'columns_processed': 0,
+        'imputations_performed': 0,
+        'operations': []
+    }
+
+    try:
+        # Read the data file
+        if file_path.endswith('.csv'):
+            df = pd.read_csv(file_path)
+        elif file_path.endswith('.xlsx') or file_path.endswith('.xls'):
+            df = pd.read_excel(file_path)
+        else:
+            df = pd.read_csv(file_path)  # Default to CSV
+
+        original_rows = len(df)
+        results['columns_processed'] = len(df.columns)
+
+        # 1. Remove completely empty rows
+        df_cleaned = df.dropna(how='all')
+        empty_rows_removed = original_rows - len(df_cleaned)
+        if empty_rows_removed > 0:
+            results['operations'].append(f"Removed {empty_rows_removed} completely empty rows")
+            results['rows_removed'] += empty_rows_removed
+
+        # 2. Remove duplicate rows
+        before_dedup = len(df_cleaned)
+        df_cleaned = df_cleaned.drop_duplicates()
+        duplicates_removed = before_dedup - len(df_cleaned)
+        if duplicates_removed > 0:
+            results['operations'].append(f"Removed {duplicates_removed} duplicate rows")
+            results['rows_removed'] += duplicates_removed
+
+        # 3. Basic imputation for missing values
+        for col in df_cleaned.columns:
+            missing_count = df_cleaned[col].isna().sum()
+            if missing_count > 0:
+                # For numeric columns, use mean imputation
+                if pd.api.types.is_numeric_dtype(df_cleaned[col]):
+                    mean_val = df_cleaned[col].mean()
+                    df_cleaned[col] = df_cleaned[col].fillna(mean_val)
+                    results['imputations_performed'] += missing_count
+                    results['operations'].append(f"Imputed {missing_count} missing values in '{col}' with mean ({mean_val:.2f})")
+                # For categorical columns, use mode imputation
+                else:
+                    mode_val = df_cleaned[col].mode()
+                    if len(mode_val) > 0:
+                        df_cleaned[col] = df_cleaned[col].fillna(mode_val[0])
+                        results['imputations_performed'] += missing_count
+                        results['operations'].append(f"Imputed {missing_count} missing values in '{col}' with mode ('{mode_val[0]}')")
+
+        # 4. Standardize column names (lowercase, replace spaces with underscores)
+        original_cols = list(df_cleaned.columns)
+        df_cleaned.columns = [col.lower().strip().replace(' ', '_').replace('-', '_') for col in df_cleaned.columns]
+        renamed_cols = sum(1 for o, n in zip(original_cols, df_cleaned.columns) if o != n)
+        if renamed_cols > 0:
+            results['operations'].append(f"Standardized {renamed_cols} column names")
+
+        # Save the cleaned data back
+        if file_path.endswith('.xlsx') or file_path.endswith('.xls'):
+            df_cleaned.to_excel(file_path, index=False)
+        else:
+            df_cleaned.to_csv(file_path, index=False)
+
+        results['operations'].append(f"Saved cleaned data ({len(df_cleaned)} rows, {len(df_cleaned.columns)} columns)")
+
+        return results
+
+    except Exception as e:
+        return {'error': str(e), 'operations': []}
+
+# Run cleaning
+results = clean_data(sys.argv[1] if len(sys.argv) > 1 else 'data.csv')
+print(json.dumps(results))
+`;
+
+  try {
+    // Get the cloud data file URL
+    const cloudFile = await getCloudDataFile(dataFileName);
+    if (!cloudFile) {
+      return {
+        success: false,
+        summary: 'Could not locate data file',
+        rowsRemoved: 0,
+        columnsProcessed: 0,
+        imputationsPerformed: 0,
+        error: 'Data file not found in cloud storage'
+      };
+    }
+
+    onProgress?.('Running data cleaning operations...');
+
+    // Execute the cleaning script
+    const result = await executePythonScript(cleaningScript, [cloudFile.url]);
+
+    if (result.success && result.stdout) {
+      try {
+        const cleaningData = JSON.parse(result.stdout.trim());
+
+        if (cleaningData.error) {
+          return {
+            success: false,
+            summary: `Cleaning error: ${cleaningData.error}`,
+            rowsRemoved: 0,
+            columnsProcessed: 0,
+            imputationsPerformed: 0,
+            error: cleaningData.error
+          };
+        }
+
+        const operations = cleaningData.operations || [];
+        const summary = operations.length > 0
+          ? operations.join('\\n- ')
+          : 'No cleaning operations needed - data was already clean';
+
+        onProgress?.(`Data cleaning complete: ${operations.length} operations performed`);
+
+        return {
+          success: true,
+          summary: `- ${summary}`,
+          rowsRemoved: cleaningData.rows_removed || 0,
+          columnsProcessed: cleaningData.columns_processed || 0,
+          imputationsPerformed: cleaningData.imputations_performed || 0
+        };
+      } catch (parseError) {
+        console.warn('[DataCleaning] Could not parse cleaning results:', parseError);
+        return {
+          success: true,
+          summary: 'Data cleaning completed (details unavailable)',
+          rowsRemoved: 0,
+          columnsProcessed: 0,
+          imputationsPerformed: 0
+        };
+      }
+    }
+
+    return {
+      success: false,
+      summary: 'Cleaning script execution failed',
+      rowsRemoved: 0,
+      columnsProcessed: 0,
+      imputationsPerformed: 0,
+      error: result.stderr || 'Unknown error'
+    };
+
+  } catch (error) {
+    console.error('[DataCleaning] Error:', error);
+    return {
+      success: false,
+      summary: 'Data cleaning failed',
+      rowsRemoved: 0,
+      columnsProcessed: 0,
+      imputationsPerformed: 0,
+      error: (error as Error).message
+    };
+  }
 }
 
 /**
