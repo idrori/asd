@@ -1491,62 +1491,59 @@ export const runBuilder = async (
     console.log('[Builder] Draft mode - skipping example papers for faster generation');
   }
 
-  // Generate visualizations BEFORE Results section (for full papers)
-  // This allows the Results section to reference the actual figures
-  // Figures are generated regardless of whether data is available:
-  // - With data: data-driven charts via QuickChart.io (PNG images)
-  // - Without data: AI-generated conceptual charts via QuickChart.io (PNG images)
+  // Generate visualizations for ALL papers (both full and partial/theoretical)
+  // - Full papers (with data): data figures + conceptual figures
+  // - Partial/theoretical papers (no data): conceptual figures only (infographics, research models)
   let generatedFigures: GeneratedFigure[] = [];
   let usedSyntheticData = false;
   let figuresInfoForResults = '';
 
-  if (!isPartialPaper) {
-    try {
-      onProgress?.('Visualizations', 'starting');
-      console.log('[Builder] Generating visualizations BEFORE Results section...');
-      console.log(`[Builder] Data summary available: ${!!dataSummary}, Data file: ${dataFileName || 'none'}`);
+  // Always generate visualizations - conceptual figures for all papers, data figures only with real data
+  try {
+    onProgress?.('Visualizations', 'starting');
+    console.log(`[Builder] Generating visualizations (${isPartialPaper ? 'conceptual only - theoretical paper' : 'full paper with data'})...`);
+    console.log(`[Builder] Data summary available: ${!!dataSummary}, Data file: ${dataFileName || 'none'}`);
 
-      // Create research context from interview (we don't have sections yet)
-      const researchContext = `Research Interview: ${interviewTranscript.substring(0, 2000)}`;
+    // Create research context from interview (we don't have sections yet)
+    const researchContext = `Research Interview: ${interviewTranscript.substring(0, 2000)}`;
 
-      const vizResult = await generateVisualizations(
-        interviewTranscript,
-        researchContext,
-        dataFileName,
-        (msg) => console.log(`[Builder] ${msg}`),
-        dataSummary,
-        false  // First round: no synthetic data - only real data or conceptual figures
-      );
+    const vizResult = await generateVisualizations(
+      interviewTranscript,
+      researchContext,
+      dataFileName,
+      (msg) => console.log(`[Builder] ${msg}`),
+      dataSummary,
+      false  // First round: no synthetic data - only real data or conceptual figures
+    );
 
-      generatedFigures = vizResult.figures;
-      usedSyntheticData = vizResult.usedSyntheticData;
+    generatedFigures = vizResult.figures;
+    usedSyntheticData = vizResult.usedSyntheticData;
 
-      // Build figure info string for Results section prompt
-      if (generatedFigures.length > 0) {
-        figuresInfoForResults = '\n\nGENERATED FIGURES (reference these in your Results section):\n';
-        generatedFigures.forEach((fig, i) => {
-          figuresInfoForResults += `- Figure ${i + 1} (\\ref{fig:fig${i + 1}}): ${fig.description}\n`;
-        });
-        figuresInfoForResults += '\nIMPORTANT: Reference each figure in the text using Figure~\\ref{fig:fig1}, Figure~\\ref{fig:fig2}, etc.\n';
-        figuresInfoForResults += 'Example: "As shown in Figure~\\ref{fig:fig1}, the distribution of..."\n';
-      }
-
-      // Merge visualization alerts with data analysis alerts
-      if (vizResult.dataAlert) {
-        dataAlert = dataAlert
-          ? `${dataAlert}\n${vizResult.dataAlert}`
-          : vizResult.dataAlert;
-      }
-
-      onProgress?.('Visualizations', 'completed');
-      console.log(`[Builder] Generated ${generatedFigures.length} figures before Results section`);
-    } catch (error) {
-      console.error('[Builder] Visualization generation failed:', error);
-      onProgress?.('Visualizations', 'error');
-      const vizError = `*** VISUALIZATION ERROR: ${(error as Error).message}`;
-      dataAlert = dataAlert ? `${dataAlert}\n${vizError}` : vizError;
-      usedSyntheticData = true;
+    // Build figure info string for Results section prompt (only for full papers with Results)
+    if (generatedFigures.length > 0 && !isPartialPaper) {
+      figuresInfoForResults = '\n\nGENERATED FIGURES (reference these in your Results section):\n';
+      generatedFigures.forEach((fig, i) => {
+        figuresInfoForResults += `- Figure ${i + 1} (\\ref{fig:fig${i + 1}}): ${fig.description}\n`;
+      });
+      figuresInfoForResults += '\nIMPORTANT: Reference each figure in the text using Figure~\\ref{fig:fig1}, Figure~\\ref{fig:fig2}, etc.\n';
+      figuresInfoForResults += 'Example: "As shown in Figure~\\ref{fig:fig1}, the distribution of..."\n';
     }
+
+    // Merge visualization alerts with data analysis alerts
+    if (vizResult.dataAlert) {
+      dataAlert = dataAlert
+        ? `${dataAlert}\n${vizResult.dataAlert}`
+        : vizResult.dataAlert;
+    }
+
+    onProgress?.('Visualizations', 'completed');
+    console.log(`[Builder] Generated ${generatedFigures.length} figures (${isPartialPaper ? 'conceptual' : 'data + conceptual'})`);
+  } catch (error) {
+    console.error('[Builder] Visualization generation failed:', error);
+    onProgress?.('Visualizations', 'error');
+    const vizError = `*** VISUALIZATION ERROR: ${(error as Error).message}`;
+    dataAlert = dataAlert ? `${dataAlert}\n${vizError}` : vizError;
+    usedSyntheticData = true;
   }
 
   for (const section of sections) {
@@ -1619,11 +1616,12 @@ export const runBuilder = async (
     }
   }
 
-  // If we didn't generate figures earlier (no dataSummary), try now
-  if (!isPartialPaper && generatedFigures.length === 0) {
+  // If we didn't generate figures earlier, try now with richer context from generated sections
+  // This applies to ALL papers (full and partial/theoretical) - conceptual figures should always be generated
+  if (generatedFigures.length === 0) {
     try {
       onProgress?.('Visualizations', 'starting');
-      console.log('[Builder] Generating visualizations (post-sections fallback)...');
+      console.log(`[Builder] Generating visualizations (post-sections fallback, ${isPartialPaper ? 'conceptual only' : 'full'})...`);
 
       const researchContext = `
 Abstract: ${generatedSections.abstract?.substring(0, 500) || ''}
@@ -1654,7 +1652,7 @@ Methodology: ${generatedSections.methodology?.substring(0, 500) || ''}
       }
 
       onProgress?.('Visualizations', 'completed');
-      console.log(`[Builder] Generated ${generatedFigures.length} figures (fallback)`);
+      console.log(`[Builder] Generated ${generatedFigures.length} figures (fallback, ${isPartialPaper ? 'conceptual' : 'full'})`);
     } catch (error) {
       console.error('[Builder] Visualization generation failed:', error);
       onProgress?.('Visualizations', 'error');
