@@ -1499,62 +1499,142 @@ export const runBuilder = async (
     console.log('[Builder] Draft mode - skipping example papers for faster generation');
   }
 
-  // Generate visualizations for ALL papers (both full and partial/theoretical)
-  // - Full papers (with data): data figures + conceptual figures
-  // - Partial/theoretical papers (no data): conceptual figures only (infographics, research models)
+  // Initialize visualization state
   let generatedFigures: GeneratedFigure[] = [];
   let usedSyntheticData = false;
   let figuresInfoForResults = '';
 
-  // Always generate visualizations - conceptual figures for all papers, data figures only with real data
-  try {
-    onProgress?.('Visualizations', 'starting');
-    console.log(`[Builder] Generating visualizations (${isPartialPaper ? 'conceptual only - theoretical paper' : 'full paper with data'})...`);
-    console.log(`[Builder] Data summary available: ${!!dataSummary}, Data file: ${dataFileName || 'none'}`);
+  // PHASE 1: Generate sections UP TO AND INCLUDING 'theory'
+  // Then generate conceptual figures with paper context, then continue with remaining sections
+  const sectionsBeforeViz = ['title', 'abstract', 'introduction', 'literature_review', 'theory'];
+  const sectionsAfterViz = isPartialPaper
+    ? ['methodology', 'conclusion', 'references']
+    : ['methodology', 'results', 'discussion', 'conclusion', 'references'];
 
-    // Create research context from interview (we don't have sections yet)
-    const researchContext = `Research Interview: ${interviewTranscript.substring(0, 2000)}`;
+  console.log(`[Builder] Phase 1: Generating sections before conceptual figures...`);
+  for (const section of sections.filter(s => sectionsBeforeViz.includes(s.key))) {
+    try {
+      onProgress?.(section.name, 'starting');
+      console.log(`[Builder] Generating: ${section.name}...`);
 
-    const vizResult = await generateVisualizations(
-      interviewTranscript,
-      researchContext,
-      dataFileName,
-      (msg) => console.log(`[Builder] ${msg}`),
-      dataSummary,
-      false  // First round: no synthetic data - only real data or conceptual figures
-    );
-
-    generatedFigures = vizResult.figures;
-    usedSyntheticData = vizResult.usedSyntheticData;
-
-    // Build figure info string for Results section prompt (only for full papers with Results)
-    if (generatedFigures.length > 0 && !isPartialPaper) {
-      figuresInfoForResults = '\n\nGENERATED FIGURES (reference these in your Results section):\n';
-      generatedFigures.forEach((fig, i) => {
-        figuresInfoForResults += `- Figure ${i + 1} (\\ref{fig:fig${i + 1}}): ${fig.description}\n`;
+      const content = await generateSection(section, {
+        interviewTranscript,
+        previousSections: generatedSections,
+        dataSummary,
+        examplePapers
       });
-      figuresInfoForResults += '\nIMPORTANT: Reference each figure in the text using Figure~\\ref{fig:fig1}, Figure~\\ref{fig:fig2}, etc.\n';
-      figuresInfoForResults += 'Example: "As shown in Figure~\\ref{fig:fig1}, the distribution of..."\n';
-    }
 
-    // Merge visualization alerts with data analysis alerts
-    if (vizResult.dataAlert) {
-      dataAlert = dataAlert
-        ? `${dataAlert}\n${vizResult.dataAlert}`
-        : vizResult.dataAlert;
-    }
+      generatedSections[section.key] = content;
+      onProgress?.(section.name, 'completed');
+      console.log(`[Builder] Completed: ${section.name} (${content.split(/\s+/).length} words)`);
 
-    onProgress?.('Visualizations', 'completed');
-    console.log(`[Builder] Generated ${generatedFigures.length} figures (${isPartialPaper ? 'conceptual' : 'data + conceptual'})`);
-  } catch (error) {
-    console.error('[Builder] Visualization generation failed:', error);
-    onProgress?.('Visualizations', 'error');
-    const vizError = `*** VISUALIZATION ERROR: ${(error as Error).message}`;
-    dataAlert = dataAlert ? `${dataAlert}\n${vizError}` : vizError;
-    usedSyntheticData = true;
+      await delay(500);
+    } catch (error) {
+      onProgress?.(section.name, 'error');
+      console.error(`[Builder] Error generating ${section.name}:`, error);
+      throw new Error(`Failed to generate ${section.name}: ${(error as Error).message}`);
+    }
   }
 
-  for (const section of sections) {
+  // PHASE 2: Generate conceptual figures WITH PAPER CONTEXT
+  // Now we have title, abstract, intro, lit review, and theory - use this for context
+  console.log(`[Builder] Phase 2: Generating conceptual figures with paper context...`);
+  try {
+    onProgress?.('Conceptual Figures', 'starting');
+
+    // Build paper context from generated sections
+    const paperContext = Object.entries(generatedSections)
+      .map(([key, content]) => `[${key.toUpperCase()}]\n${content}`)
+      .join('\n\n');
+
+    const researchContext = `${paperContext.substring(0, 4000)}\n\nResearch Interview: ${interviewTranscript.substring(0, 1500)}`;
+
+    // Generate conceptual figures (research model and theoretical framework)
+    const conceptualResult = await generateConceptualFigures(
+      interviewTranscript,
+      researchContext,
+      (msg) => console.log(`[Builder] ${msg}`)
+    );
+
+    if (conceptualResult.success && conceptualResult.figures.length > 0) {
+      // Generate descriptions for each conceptual figure using Gemini with image + paper context
+      console.log(`[Builder] Generating figure descriptions with Gemini...`);
+      for (const fig of conceptualResult.figures) {
+        if (fig.base64) {
+          const figureType = fig.filename === 'research_model.png' ? 'research_model' : 'theoretical_framework';
+          const description = await generateFigureDescription(
+            fig.base64,
+            figureType,
+            fig.description,
+            paperContext
+          );
+          fig.paragraphDescription = description;
+          console.log(`[Builder] Generated description for ${fig.filename}`);
+        }
+      }
+      generatedFigures = conceptualResult.figures;
+    }
+
+    onProgress?.('Conceptual Figures', 'completed');
+    console.log(`[Builder] Generated ${generatedFigures.length} conceptual figures with descriptions`);
+  } catch (error) {
+    console.error('[Builder] Conceptual figure generation failed:', error);
+    onProgress?.('Conceptual Figures', 'error');
+  }
+
+  // PHASE 3: Generate remaining sections (methodology onwards)
+  // For full papers with data, also generate data visualizations before results
+  console.log(`[Builder] Phase 3: Generating remaining sections...`);
+
+  // For full papers with data, generate data visualizations before results section
+  if (!isPartialPaper && dataSummary) {
+    try {
+      onProgress?.('Data Visualizations', 'starting');
+      console.log(`[Builder] Generating data visualizations...`);
+
+      const researchContext = `Research Interview: ${interviewTranscript.substring(0, 2000)}`;
+
+      const vizResult = await generateVisualizations(
+        interviewTranscript,
+        researchContext,
+        dataFileName,
+        (msg) => console.log(`[Builder] ${msg}`),
+        dataSummary,
+        false  // No synthetic data
+      );
+
+      // Add data figures (not conceptual ones which we already have)
+      const dataFigures = vizResult.figures.filter(f =>
+        f.filename !== 'research_model.png' && f.filename !== 'theoretical_framework.png'
+      );
+      generatedFigures = [...generatedFigures, ...dataFigures];
+      usedSyntheticData = vizResult.usedSyntheticData;
+
+      // Build figure info string for Results section prompt
+      if (dataFigures.length > 0) {
+        figuresInfoForResults = '\n\nGENERATED FIGURES (reference these in your Results section):\n';
+        dataFigures.forEach((fig, i) => {
+          figuresInfoForResults += `- Figure ${i + 1} (\\ref{fig:fig${i + 1}}): ${fig.description}\n`;
+        });
+        figuresInfoForResults += '\nIMPORTANT: Reference each figure in the text using Figure~\\ref{fig:fig1}, Figure~\\ref{fig:fig2}, etc.\n';
+      }
+
+      if (vizResult.dataAlert) {
+        dataAlert = dataAlert ? `${dataAlert}\n${vizResult.dataAlert}` : vizResult.dataAlert;
+      }
+
+      onProgress?.('Data Visualizations', 'completed');
+      console.log(`[Builder] Generated ${dataFigures.length} data figures`);
+    } catch (error) {
+      console.error('[Builder] Data visualization generation failed:', error);
+      onProgress?.('Data Visualizations', 'error');
+      const vizError = `*** VISUALIZATION ERROR: ${(error as Error).message}`;
+      dataAlert = dataAlert ? `${dataAlert}\n${vizError}` : vizError;
+    }
+  }
+
+  // Generate remaining sections
+  for (const section of sections.filter(s => sectionsAfterViz.includes(s.key))) {
     try {
       onProgress?.(section.name, 'starting');
       console.log(`[Builder] Generating: ${section.name}...`);
@@ -1567,15 +1647,14 @@ export const runBuilder = async (
       const content = await generateSection(section, {
         interviewTranscript,
         previousSections: generatedSections,
-        dataSummary: sectionDataSummary,  // Pass data summary + figure info for Results
-        examplePapers  // ICIS exemplar papers for research mode quality calibration
+        dataSummary: sectionDataSummary,
+        examplePapers
       });
 
       generatedSections[section.key] = content;
       onProgress?.(section.name, 'completed');
       console.log(`[Builder] Completed: ${section.name} (${content.split(/\s+/).length} words)`);
 
-      // Small delay between sections to avoid rate limiting
       await delay(500);
     } catch (error) {
       onProgress?.(section.name, 'error');
@@ -1927,6 +2006,18 @@ const ICIS_POSTAMBLE = `
 `;
 
 /**
+ * Get default figure description text for use in assemblePaper
+ * This is a fallback when Gemini-generated description is not available
+ */
+function getDefaultFigureDescriptionText(filename: string, figLabel: string): string {
+  if (filename === 'research_model.png') {
+    return `Figure~\\ref{${figLabel}} illustrates the research model, depicting the key constructs and their hypothesized relationships. The model shows how the independent variables influence the dependent variables through the proposed mechanisms. Each arrow represents a hypothesized relationship that will be tested in the analysis.`;
+  } else {
+    return `Figure~\\ref{${figLabel}} presents the theoretical framework that underpins this study. This framework synthesizes the core theoretical perspectives and shows how they inform the research design and analysis. The framework provides a structured lens through which the research questions are examined.`;
+  }
+}
+
+/**
  * Assemble generated sections into a complete paper
  */
 function assemblePaper(
@@ -1992,33 +2083,30 @@ This paper was generated by an AI-assisted scientific discovery system. All cont
         storeBibliography('references.bib', bibContent);
         // Add bibliography commands - \cite{} commands in body will pull the cited entries
         paper += `\\bibliographystyle{apalike}\n\\bibliography{references}\n`;
-      } else if (key === 'methodology' && isPartialPaper && figures.length > 0) {
-        // For theoretical papers, insert conceptual figures (research model, framework) in the Methodology section
+      } else if (key === 'theory') {
+        // Theory section with Framework Visualization subsection containing conceptual figures
         const conceptualFigures = figures.filter(f =>
           f.filename === 'research_model.png' || f.filename === 'theoretical_framework.png'
         );
 
         paper += `\\section{${sectionTitles[key]}}\n\n${fixedContent}\n\n`;
 
+        // Add Framework Visualization subsection at the end of theory section
         if (conceptualFigures.length > 0) {
           paper += `\\subsection{Framework Visualization}\n\n`;
           paper += `This subsection presents visual representations of the theoretical foundations guiding this research.\n\n`;
 
-          // Generate figure LaTeX with specific labels
-          conceptualFigures.forEach((fig, i) => {
-            const figNum = i + 1;
+          // Generate figure LaTeX with specific labels and Gemini-generated descriptions
+          conceptualFigures.forEach((fig) => {
             const safeFilename = fig.filename.replace(/[^a-zA-Z0-9_.-]/g, '_');
             const escapedDescription = fig.description.replace(/_/g, '\\_').replace(/&/g, '\\&').replace(/%/g, '\\%');
             const figLabel = fig.filename === 'research_model.png' ? 'fig:research_model' : 'fig:theoretical_framework';
 
-            // Add descriptive text with figure reference
-            if (fig.filename === 'research_model.png') {
-              paper += `Figure~\\ref{${figLabel}} illustrates the research model, depicting the key constructs and their hypothesized relationships. The model shows how the independent variables influence the dependent variables through the proposed mechanisms.\n\n`;
-            } else {
-              paper += `Figure~\\ref{${figLabel}} presents the theoretical framework that underpins this study. This framework synthesizes the core theoretical perspectives and shows how they inform the research design and analysis.\n\n`;
-            }
+            // Use Gemini-generated paragraph description if available, otherwise use default
+            const paragraphText = fig.paragraphDescription || getDefaultFigureDescriptionText(fig.filename, figLabel);
+            paper += `${paragraphText}\n\n`;
 
-            // Add the figure
+            // Add the figure with proper label
             paper += `\\begin{figure}[htbp]
 \\centering
 \\includegraphics[width=0.9\\textwidth]{${safeFilename}}
@@ -2028,28 +2116,33 @@ This paper was generated by an AI-assisted scientific discovery system. All cont
           });
         }
       } else if (key === 'results') {
-        // Separate data figures from infographic
-        const dataFigures = figures.filter(f => f.filename !== 'research_infographic.png');
+        // Get data/empirical figures (exclude conceptual figures and infographic)
+        const dataFigures = figures.filter(f =>
+          f.filename !== 'research_infographic.png' &&
+          f.filename !== 'research_model.png' &&
+          f.filename !== 'theoretical_framework.png'
+        );
 
-        // Insert data figures at the beginning of Results section
+        // Start with section header and content
         paper += `\\section{${sectionTitles[key]}}\n\n`;
-        // Add data source notice within Results section
-        if (usedSyntheticData && dataFigures.length > 0) {
-          paper += `\\textbf{Note: The following visualizations were generated using AI-synthesized data for illustration purposes only.}\\\\[1em]\n\n`;
-        }
-        if (dataFigures.length > 0) {
-          paper += generateFigureLatex(dataFigures);
-        }
+        paper += `${fixedContent}\n\n`;
 
         // Add the generated data table if available
         if (dataTable) {
-          paper += `\n\\subsection{Summary Data Table}\n\n`;
+          paper += `\\subsection{Summary Data Table}\n\n`;
           paper += `The following table presents key structured data extracted from this research. The complete dataset is available in the accompanying CSV file (datatable.csv). See Table~\\ref{tab:datatable} for details.\n\n`;
           paper += dataTable;
           paper += `\n\n`;
         }
 
-        paper += `\n${fixedContent}\n\n`;
+        // Insert data/empirical figures AFTER the results content
+        if (dataFigures.length > 0) {
+          paper += `\\subsection{Data Visualizations}\n\n`;
+          if (usedSyntheticData) {
+            paper += `\\textbf{Note: The following visualizations were generated using AI-synthesized data for illustration purposes only.}\\\\[1em]\n\n`;
+          }
+          paper += generateFigureLatex(dataFigures);
+        }
       } else if (key === 'discussion') {
         // Insert infographic at the end of Discussion section
         const infographic = figures.find(f => f.filename === 'research_infographic.png');
@@ -2081,9 +2174,10 @@ This paper was generated by an AI-assisted scientific discovery system. All cont
  */
 export interface GeneratedFigure {
   filename: string;
-  description: string;
+  description: string;  // Short caption for the figure
   latexRef: string;
   base64?: string;  // Raw PNG data for upload to blob storage
+  paragraphDescription?: string;  // Gemini-generated paragraph describing the figure in context
 }
 
 /**
@@ -2105,6 +2199,123 @@ export interface DataAnalysisResult {
   dataSummary?: string;
   dataFileFound: boolean;
   error?: string;
+}
+
+/**
+ * Generate a descriptive paragraph for a conceptual figure using Gemini
+ * This analyzes the figure image along with the paper context to create
+ * a contextual description that references the figure properly.
+ *
+ * @param base64Image - Base64 encoded PNG image data
+ * @param figureType - Type of figure ('research_model' or 'theoretical_framework')
+ * @param caption - Short caption for the figure
+ * @param paperContext - Generated paper content so far for context
+ * @returns Generated paragraph description
+ */
+async function generateFigureDescription(
+  base64Image: string,
+  figureType: 'research_model' | 'theoretical_framework',
+  caption: string,
+  paperContext: string
+): Promise<string> {
+  const figLabel = figureType === 'research_model' ? 'fig:research_model' : 'fig:theoretical_framework';
+
+  const prompt = figureType === 'research_model'
+    ? `You are analyzing a research model diagram for an academic paper.
+
+TASK: Write a single paragraph (3-5 sentences) describing this research model figure for the "Framework Visualization" subsection of a Theoretical Framework section.
+
+REQUIREMENTS:
+1. Start with: "Figure~\\ref{${figLabel}} illustrates..."
+2. Describe the key constructs/variables shown in the diagram
+3. Explain the hypothesized relationships depicted (arrows, connections)
+4. Mention how independent variables relate to dependent variables
+5. Use formal academic language appropriate for a top-tier IS journal
+6. Do NOT include any LaTeX figure environment commands - just the descriptive paragraph text
+
+FIGURE CAPTION: ${caption}
+
+PAPER CONTEXT (for understanding the research):
+${paperContext.substring(0, 3000)}
+
+Write ONLY the descriptive paragraph, nothing else.`
+    : `You are analyzing a theoretical framework diagram for an academic paper.
+
+TASK: Write a single paragraph (3-5 sentences) describing this theoretical framework figure for the "Framework Visualization" subsection of a Theoretical Framework section.
+
+REQUIREMENTS:
+1. Start with: "Figure~\\ref{${figLabel}} presents..."
+2. Describe the key theoretical concepts and their organization
+3. Explain how the framework synthesizes different theoretical perspectives
+4. Mention how this framework guides the research design
+5. Use formal academic language appropriate for a top-tier IS journal
+6. Do NOT include any LaTeX figure environment commands - just the descriptive paragraph text
+
+FIGURE CAPTION: ${caption}
+
+PAPER CONTEXT (for understanding the research):
+${paperContext.substring(0, 3000)}
+
+Write ONLY the descriptive paragraph, nothing else.`;
+
+  try {
+    // Build Gemini request with image as inline_data
+    const geminiRequest = {
+      contents: [{
+        parts: [
+          {
+            inline_data: {
+              mime_type: 'image/png',
+              data: base64Image
+            }
+          },
+          { text: prompt }
+        ]
+      }],
+      systemInstruction: {
+        parts: [{ text: 'You are an expert academic writer specializing in Information Systems research. Write formal, precise descriptions for academic figures.' }]
+      },
+      generationConfig: {
+        temperature: 0.7,
+        maxOutputTokens: 500
+      }
+    };
+
+    const response = await fetch(`${API_BASE_URL}/api/gemini`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(geminiRequest)
+    });
+
+    if (!response.ok) {
+      console.warn(`[generateFigureDescription] API error: ${response.status}`);
+      return getDefaultFigureDescription(figureType, figLabel);
+    }
+
+    const data = await response.json();
+    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+    if (text && text.trim().length > 50) {
+      console.log(`[generateFigureDescription] Generated description for ${figureType}: ${text.substring(0, 100)}...`);
+      return text.trim();
+    }
+
+    return getDefaultFigureDescription(figureType, figLabel);
+  } catch (error) {
+    console.error('[generateFigureDescription] Error:', error);
+    return getDefaultFigureDescription(figureType, figLabel);
+  }
+}
+
+/**
+ * Get default figure description as fallback
+ */
+function getDefaultFigureDescription(figureType: string, figLabel: string): string {
+  if (figureType === 'research_model') {
+    return `Figure~\\ref{${figLabel}} illustrates the research model, depicting the key constructs and their hypothesized relationships. The model shows how the independent variables influence the dependent variables through the proposed mechanisms. Each arrow represents a hypothesized relationship that will be tested in the analysis.`;
+  } else {
+    return `Figure~\\ref{${figLabel}} presents the theoretical framework that underpins this study. This framework synthesizes the core theoretical perspectives and shows how they inform the research design and analysis. The framework provides a structured lens through which the research questions are examined.`;
+  }
 }
 
 /**
