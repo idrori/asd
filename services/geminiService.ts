@@ -1274,11 +1274,19 @@ async function generateSection(
       const citationsList = [...citations].sort().join('\n- ');
       console.log(`[generateSection] Found ${citations.size} inline citations in paper`);
       citationKeysContext = `
-CITATIONS USED IN PAPER:
-The following citations were used in the paper body. Ensure you include matching references:
+⚠️ CRITICAL - CITATIONS USED IN PAPER (${citations.size} total):
+You MUST generate a BibTeX entry for EACH of these citations. The paper body already contains these inline citations, so the bibliography MUST include matching references:
+
 - ${citationsList}
 
-Generate complete APA references for each of these citations.
+INSTRUCTIONS:
+1. Generate ONE @article or @inproceedings BibTeX entry for EACH citation listed above
+2. The author and year in each BibTeX entry MUST match the citation format used in the paper
+3. For "et al." citations, the first author in BibTeX must match (e.g., "Liu et al., 2023" → author = {Liu, ...})
+4. You may add 3-5 additional foundational references, but the ${citations.size} citations above are MANDATORY
+5. Total references should be ${citations.size} + 3-5 additional = ${citations.size + 4} to ${citations.size + 5} entries
+
+DO NOT skip any of the ${citations.size} citations listed above.
 `;
     }
   }
