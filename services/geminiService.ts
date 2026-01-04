@@ -1436,20 +1436,49 @@ export const runBuilder = async (
 
   console.log(`[Builder] Starting section-by-section generation (${sections.length} sections, ${isPartialPaper ? 'partial' : 'full'} paper)`);
 
-  // Data processing pipeline (for empirical papers with data):
-  // 1. Data Cleaning - Remove empty rows, imputation, deduplication, standardize columns
-  // 2. Data Analysis - Analyze the CLEANED data to get summary statistics
+  // Data processing pipeline:
+  // For USER-PROVIDED EMPIRICAL DATA (3 steps):
+  //   1. Preliminary Data Analysis - Analyze raw data, identify types, summary stats (no paper summary yet)
+  //   2. Data Cleaning - Based on preliminary analysis, clean the data
+  //   3. Full Data Analysis - Analyze cleaned data, create data summary for paper
+  // For SYNTHETIC DATA (generated later): Just data analysis (already clean)
   let dataSummary: string | undefined;
   let dataAlert: string | undefined;
   let cleaningSummary: string | undefined;
+  let preliminaryAnalysis: string | undefined;
 
   if (dataFileName) {
-    console.log(`[Builder] Data file provided: ${dataFileName} - starting data pipeline`);
+    console.log(`[Builder] User-provided data file: ${dataFileName} - starting 3-step data pipeline`);
 
-    // STEP 1: Data Cleaning FIRST
+    // STEP 1: Preliminary Data Analysis (on raw data)
+    // Identifies data types, generates summary statistics, but NO paper summary yet
+    try {
+      onProgress?.('Preliminary Analysis', 'starting');
+      console.log('[Builder] Step 1: Preliminary analysis of raw data...');
+
+      const prelimResult = await performPreliminaryAnalysis(
+        dataFileName,
+        (msg) => console.log(`[Builder] ${msg}`)
+      );
+
+      if (prelimResult.success) {
+        preliminaryAnalysis = prelimResult.analysis;
+        console.log('[Builder] Preliminary analysis complete');
+        console.log('[Builder] Raw data profile:', prelimResult.analysis?.substring(0, 300));
+        onProgress?.('Preliminary Analysis', 'completed');
+      } else {
+        console.warn('[Builder] Preliminary analysis had issues:', prelimResult.error);
+        onProgress?.('Preliminary Analysis', 'completed');
+      }
+    } catch (prelimError) {
+      console.warn('[Builder] Preliminary analysis error (non-fatal):', prelimError);
+      onProgress?.('Preliminary Analysis', 'completed');
+    }
+
+    // STEP 2: Data Cleaning (based on preliminary analysis)
     try {
       onProgress?.('Data Cleaning', 'starting');
-      console.log('[Builder] Step 1: Performing data cleaning operations...');
+      console.log('[Builder] Step 2: Cleaning data based on preliminary analysis...');
 
       const cleaningResult = await cleanDataFile(
         dataFileName,
@@ -1462,16 +1491,16 @@ export const runBuilder = async (
         onProgress?.('Data Cleaning', 'completed');
       } else {
         console.warn('[Builder] Data cleaning had issues:', cleaningResult.error);
-        onProgress?.('Data Cleaning', 'completed');  // Continue even if cleaning has issues
+        onProgress?.('Data Cleaning', 'completed');
       }
     } catch (cleanError) {
       console.warn('[Builder] Data cleaning error (non-fatal):', cleanError);
-      onProgress?.('Data Cleaning', 'completed');  // Continue even if cleaning fails
+      onProgress?.('Data Cleaning', 'completed');
     }
 
-    // STEP 2: Data Analysis on CLEANED data
+    // STEP 3: Full Data Analysis (on cleaned data) - creates data summary for paper
     onProgress?.('Data Analysis', 'starting');
-    console.log('[Builder] Step 2: Analyzing cleaned data...');
+    console.log('[Builder] Step 3: Full analysis of cleaned data for paper generation...');
 
     try {
       const analysisResult = await analyzeDataFile(
@@ -1489,11 +1518,18 @@ export const runBuilder = async (
       });
 
       if (analysisResult.success && analysisResult.dataSummary) {
-        // Combine cleaning summary with analysis summary
-        dataSummary = cleaningSummary
-          ? `DATA CLEANING PERFORMED:\n${cleaningSummary}\n\nDATA ANALYSIS (on cleaned data):\n${analysisResult.dataSummary}`
-          : analysisResult.dataSummary;
-        console.log('[Builder] Data analysis complete - summary available for paper generation');
+        // Build comprehensive data summary for paper generation
+        let fullSummary = '';
+        if (preliminaryAnalysis) {
+          fullSummary += `RAW DATA PROFILE:\n${preliminaryAnalysis}\n\n`;
+        }
+        if (cleaningSummary) {
+          fullSummary += `DATA CLEANING PERFORMED:\n${cleaningSummary}\n\n`;
+        }
+        fullSummary += `CLEANED DATA ANALYSIS:\n${analysisResult.dataSummary}`;
+
+        dataSummary = fullSummary;
+        console.log('[Builder] Full data analysis complete - summary available for paper generation');
         console.log('[Builder] Data summary preview:', dataSummary.substring(0, 500));
         onProgress?.('Data Analysis', 'completed');
       } else {
@@ -2444,6 +2480,203 @@ print(json.dumps(results))
       rowsRemoved: 0,
       columnsProcessed: 0,
       imputationsPerformed: 0,
+      error: (error as Error).message
+    };
+  }
+}
+
+/**
+ * Result of preliminary data analysis
+ */
+export interface PreliminaryAnalysisResult {
+  success: boolean;
+  analysis?: string;
+  error?: string;
+}
+
+/**
+ * Perform preliminary analysis on raw data before cleaning
+ * This identifies data types, generates summary statistics, and profiles the raw data
+ * but does NOT create a data summary for the paper yet.
+ *
+ * @param dataFileName - Name of the data file to analyze
+ * @param onProgress - Optional callback for progress updates
+ * @returns PreliminaryAnalysisResult with raw data profile
+ */
+export async function performPreliminaryAnalysis(
+  dataFileName: string,
+  onProgress?: (message: string) => void
+): Promise<PreliminaryAnalysisResult> {
+  console.log(`[PreliminaryAnalysis] Starting preliminary analysis for: ${dataFileName}`);
+  onProgress?.('Analyzing raw data structure...');
+
+  const analysisScript = `
+import pandas as pd
+import numpy as np
+import sys
+import json
+
+def analyze_raw_data(file_path):
+    """Perform preliminary analysis on raw data."""
+    results = {
+        'rows': 0,
+        'columns': 0,
+        'column_types': {},
+        'missing_values': {},
+        'duplicates': 0,
+        'numeric_stats': {},
+        'categorical_stats': {},
+        'data_quality_issues': []
+    }
+
+    try:
+        # Read the data file
+        if file_path.endswith('.csv'):
+            df = pd.read_csv(file_path)
+        elif file_path.endswith('.xlsx') or file_path.endswith('.xls'):
+            df = pd.read_excel(file_path)
+        else:
+            df = pd.read_csv(file_path)
+
+        results['rows'] = len(df)
+        results['columns'] = len(df.columns)
+
+        # Analyze each column
+        for col in df.columns:
+            dtype = str(df[col].dtype)
+            results['column_types'][col] = dtype
+
+            # Count missing values
+            missing = df[col].isna().sum()
+            if missing > 0:
+                results['missing_values'][col] = int(missing)
+                pct = (missing / len(df)) * 100
+                results['data_quality_issues'].append(f"Column '{col}': {missing} missing values ({pct:.1f}%)")
+
+            # Stats for numeric columns
+            if pd.api.types.is_numeric_dtype(df[col]):
+                results['numeric_stats'][col] = {
+                    'mean': float(df[col].mean()) if not pd.isna(df[col].mean()) else None,
+                    'std': float(df[col].std()) if not pd.isna(df[col].std()) else None,
+                    'min': float(df[col].min()) if not pd.isna(df[col].min()) else None,
+                    'max': float(df[col].max()) if not pd.isna(df[col].max()) else None
+                }
+            # Stats for categorical columns
+            else:
+                unique_count = df[col].nunique()
+                results['categorical_stats'][col] = {
+                    'unique_values': int(unique_count),
+                    'top_value': str(df[col].mode()[0]) if len(df[col].mode()) > 0 else None
+                }
+
+        # Count duplicates
+        duplicates = df.duplicated().sum()
+        results['duplicates'] = int(duplicates)
+        if duplicates > 0:
+            results['data_quality_issues'].append(f"Found {duplicates} duplicate rows")
+
+        # Check for empty rows
+        empty_rows = df.isna().all(axis=1).sum()
+        if empty_rows > 0:
+            results['data_quality_issues'].append(f"Found {empty_rows} completely empty rows")
+
+        return results
+
+    except Exception as e:
+        return {'error': str(e)}
+
+# Run analysis
+results = analyze_raw_data(sys.argv[1] if len(sys.argv) > 1 else 'data.csv')
+print(json.dumps(results))
+`;
+
+  try {
+    // Get the cloud data file URL
+    const cloudFile = await getCloudDataFile(dataFileName);
+    if (!cloudFile) {
+      return {
+        success: false,
+        error: 'Data file not found in cloud storage'
+      };
+    }
+
+    onProgress?.('Profiling raw data...');
+
+    // Execute the analysis script
+    const result = await executePythonScript(analysisScript, [cloudFile.url]);
+
+    if (result.success && result.stdout) {
+      try {
+        const analysisData = JSON.parse(result.stdout.trim());
+
+        if (analysisData.error) {
+          return {
+            success: false,
+            error: analysisData.error
+          };
+        }
+
+        // Build human-readable analysis summary
+        let summary = `Dataset: ${analysisData.rows} rows × ${analysisData.columns} columns\n\n`;
+
+        // Column types
+        summary += `COLUMN TYPES:\n`;
+        for (const [col, dtype] of Object.entries(analysisData.column_types)) {
+          summary += `  - ${col}: ${dtype}\n`;
+        }
+
+        // Numeric column statistics
+        if (Object.keys(analysisData.numeric_stats).length > 0) {
+          summary += `\nNUMERIC COLUMNS:\n`;
+          for (const [col, stats] of Object.entries(analysisData.numeric_stats)) {
+            const s = stats as any;
+            summary += `  - ${col}: mean=${s.mean?.toFixed(2)}, std=${s.std?.toFixed(2)}, range=[${s.min?.toFixed(2)}, ${s.max?.toFixed(2)}]\n`;
+          }
+        }
+
+        // Categorical column statistics
+        if (Object.keys(analysisData.categorical_stats).length > 0) {
+          summary += `\nCATEGORICAL COLUMNS:\n`;
+          for (const [col, stats] of Object.entries(analysisData.categorical_stats)) {
+            const s = stats as any;
+            summary += `  - ${col}: ${s.unique_values} unique values, most common: "${s.top_value}"\n`;
+          }
+        }
+
+        // Data quality issues
+        if (analysisData.data_quality_issues.length > 0) {
+          summary += `\nDATA QUALITY ISSUES IDENTIFIED:\n`;
+          for (const issue of analysisData.data_quality_issues) {
+            summary += `  ⚠ ${issue}\n`;
+          }
+        } else {
+          summary += `\nDATA QUALITY: No major issues identified\n`;
+        }
+
+        onProgress?.('Preliminary analysis complete');
+
+        return {
+          success: true,
+          analysis: summary
+        };
+      } catch (parseError) {
+        console.warn('[PreliminaryAnalysis] Could not parse results:', parseError);
+        return {
+          success: false,
+          error: 'Could not parse analysis results'
+        };
+      }
+    }
+
+    return {
+      success: false,
+      error: result.stderr || 'Analysis script failed'
+    };
+
+  } catch (error) {
+    console.error('[PreliminaryAnalysis] Error:', error);
+    return {
+      success: false,
       error: (error as Error).message
     };
   }
