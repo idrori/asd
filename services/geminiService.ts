@@ -1557,19 +1557,20 @@ export const runBuilder = async (
     );
 
     if (conceptualResult.success && conceptualResult.figures.length > 0) {
-      // Generate descriptions for each conceptual figure using Gemini with image + paper context
-      console.log(`[Builder] Generating figure descriptions with Gemini...`);
+      // Analyze each conceptual figure using Gemini to generate caption AND description
+      console.log(`[Builder] Analyzing figures with Gemini to generate captions and descriptions...`);
       for (const fig of conceptualResult.figures) {
         if (fig.base64) {
           const figureType = fig.filename === 'research_model.png' ? 'research_model' : 'theoretical_framework';
-          const description = await generateFigureDescription(
+          const analysis = await analyzeFigureWithGemini(
             fig.base64,
             figureType,
-            fig.description,
             paperContext
           );
-          fig.paragraphDescription = description;
-          console.log(`[Builder] Generated description for ${fig.filename}`);
+          // Update figure with Gemini-generated caption and description
+          fig.description = analysis.caption;
+          fig.paragraphDescription = analysis.paragraphDescription;
+          console.log(`[Builder] Generated caption and description for ${fig.filename}`);
         }
       }
       generatedFigures = conceptualResult.figures;
@@ -2202,61 +2203,71 @@ export interface DataAnalysisResult {
 }
 
 /**
- * Generate a descriptive paragraph for a conceptual figure using Gemini
+ * Result of figure analysis - includes both caption and description
+ */
+interface FigureAnalysisResult {
+  caption: string;
+  paragraphDescription: string;
+}
+
+/**
+ * Analyze a conceptual figure using Gemini to generate both caption and description
  * This analyzes the figure image along with the paper context to create
- * a contextual description that references the figure properly.
+ * a contextual caption and description that references the figure properly.
  *
  * @param base64Image - Base64 encoded PNG image data
  * @param figureType - Type of figure ('research_model' or 'theoretical_framework')
- * @param caption - Short caption for the figure
  * @param paperContext - Generated paper content so far for context
- * @returns Generated paragraph description
+ * @returns Generated caption and paragraph description
  */
-async function generateFigureDescription(
+async function analyzeFigureWithGemini(
   base64Image: string,
   figureType: 'research_model' | 'theoretical_framework',
-  caption: string,
   paperContext: string
-): Promise<string> {
+): Promise<FigureAnalysisResult> {
   const figLabel = figureType === 'research_model' ? 'fig:research_model' : 'fig:theoretical_framework';
 
   const prompt = figureType === 'research_model'
     ? `You are analyzing a research model diagram for an academic paper.
 
-TASK: Write a single paragraph (3-5 sentences) describing this research model figure for the "Framework Visualization" subsection of a Theoretical Framework section.
+TASK: Analyze this research model figure and provide TWO outputs:
+
+1. CAPTION: A concise caption (1-2 sentences) suitable for a LaTeX \\caption{} command. Describe what the figure shows (e.g., "Research model depicting the relationships between perceived usefulness, perceived ease of use, and technology adoption intention").
+
+2. DESCRIPTION: A paragraph (3-5 sentences) describing this research model for the "Framework Visualization" subsection. Start with: "Figure~\\ref{${figLabel}} illustrates..."
 
 REQUIREMENTS:
-1. Start with: "Figure~\\ref{${figLabel}} illustrates..."
-2. Describe the key constructs/variables shown in the diagram
-3. Explain the hypothesized relationships depicted (arrows, connections)
-4. Mention how independent variables relate to dependent variables
-5. Use formal academic language appropriate for a top-tier IS journal
-6. Do NOT include any LaTeX figure environment commands - just the descriptive paragraph text
-
-FIGURE CAPTION: ${caption}
+- Analyze the actual content of the figure (constructs, variables, arrows, relationships)
+- Use formal academic language appropriate for a top-tier IS journal
+- For the caption: Be concise and descriptive
+- For the description: Explain the key constructs and hypothesized relationships
 
 PAPER CONTEXT (for understanding the research):
 ${paperContext.substring(0, 3000)}
 
-Write ONLY the descriptive paragraph, nothing else.`
+OUTPUT FORMAT (use exactly this format):
+CAPTION: [Your caption here]
+DESCRIPTION: [Your paragraph description here]`
     : `You are analyzing a theoretical framework diagram for an academic paper.
 
-TASK: Write a single paragraph (3-5 sentences) describing this theoretical framework figure for the "Framework Visualization" subsection of a Theoretical Framework section.
+TASK: Analyze this theoretical framework figure and provide TWO outputs:
+
+1. CAPTION: A concise caption (1-2 sentences) suitable for a LaTeX \\caption{} command. Describe what the framework shows (e.g., "Theoretical framework integrating institutional theory and technology acceptance constructs").
+
+2. DESCRIPTION: A paragraph (3-5 sentences) describing this framework for the "Framework Visualization" subsection. Start with: "Figure~\\ref{${figLabel}} presents..."
 
 REQUIREMENTS:
-1. Start with: "Figure~\\ref{${figLabel}} presents..."
-2. Describe the key theoretical concepts and their organization
-3. Explain how the framework synthesizes different theoretical perspectives
-4. Mention how this framework guides the research design
-5. Use formal academic language appropriate for a top-tier IS journal
-6. Do NOT include any LaTeX figure environment commands - just the descriptive paragraph text
-
-FIGURE CAPTION: ${caption}
+- Analyze the actual content of the figure (concepts, components, structure)
+- Use formal academic language appropriate for a top-tier IS journal
+- For the caption: Be concise and descriptive
+- For the description: Explain how the framework synthesizes theoretical perspectives
 
 PAPER CONTEXT (for understanding the research):
 ${paperContext.substring(0, 3000)}
 
-Write ONLY the descriptive paragraph, nothing else.`;
+OUTPUT FORMAT (use exactly this format):
+CAPTION: [Your caption here]
+DESCRIPTION: [Your paragraph description here]`;
 
   try {
     // Build Gemini request with image as inline_data
@@ -2273,11 +2284,11 @@ Write ONLY the descriptive paragraph, nothing else.`;
         ]
       }],
       systemInstruction: {
-        parts: [{ text: 'You are an expert academic writer specializing in Information Systems research. Write formal, precise descriptions for academic figures.' }]
+        parts: [{ text: 'You are an expert academic writer specializing in Information Systems research. Analyze figures and write formal, precise captions and descriptions.' }]
       },
       generationConfig: {
         temperature: 0.7,
-        maxOutputTokens: 500
+        maxOutputTokens: 800
       }
     };
 
@@ -2288,29 +2299,54 @@ Write ONLY the descriptive paragraph, nothing else.`;
     });
 
     if (!response.ok) {
-      console.warn(`[generateFigureDescription] API error: ${response.status}`);
-      return getDefaultFigureDescription(figureType, figLabel);
+      console.warn(`[analyzeFigureWithGemini] API error: ${response.status}`);
+      return getDefaultFigureAnalysis(figureType, figLabel);
     }
 
     const data = await response.json();
     const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
     if (text && text.trim().length > 50) {
-      console.log(`[generateFigureDescription] Generated description for ${figureType}: ${text.substring(0, 100)}...`);
-      return text.trim();
+      // Parse the response to extract caption and description
+      const captionMatch = text.match(/CAPTION:\s*(.+?)(?=DESCRIPTION:|$)/s);
+      const descriptionMatch = text.match(/DESCRIPTION:\s*(.+)/s);
+
+      const caption = captionMatch ? captionMatch[1].trim() : getDefaultCaption(figureType);
+      const description = descriptionMatch ? descriptionMatch[1].trim() : getDefaultDescription(figureType, figLabel);
+
+      console.log(`[analyzeFigureWithGemini] Generated for ${figureType}:`);
+      console.log(`  Caption: ${caption.substring(0, 80)}...`);
+      console.log(`  Description: ${description.substring(0, 80)}...`);
+
+      return { caption, paragraphDescription: description };
     }
 
-    return getDefaultFigureDescription(figureType, figLabel);
+    return getDefaultFigureAnalysis(figureType, figLabel);
   } catch (error) {
-    console.error('[generateFigureDescription] Error:', error);
-    return getDefaultFigureDescription(figureType, figLabel);
+    console.error('[analyzeFigureWithGemini] Error:', error);
+    return getDefaultFigureAnalysis(figureType, figLabel);
   }
 }
 
 /**
- * Get default figure description as fallback
+ * Get default figure analysis as fallback
  */
-function getDefaultFigureDescription(figureType: string, figLabel: string): string {
+function getDefaultFigureAnalysis(figureType: string, figLabel: string): FigureAnalysisResult {
+  return {
+    caption: getDefaultCaption(figureType),
+    paragraphDescription: getDefaultDescription(figureType, figLabel)
+  };
+}
+
+function getDefaultCaption(figureType: string): string {
+  if (figureType === 'research_model') {
+    return 'Research model showing the theoretical framework, key constructs, and hypothesized relationships';
+  } else {
+    return 'Theoretical framework overview illustrating the key concepts and their interrelationships';
+  }
+}
+
+function getDefaultDescription(figureType: string, figLabel: string): string {
   if (figureType === 'research_model') {
     return `Figure~\\ref{${figLabel}} illustrates the research model, depicting the key constructs and their hypothesized relationships. The model shows how the independent variables influence the dependent variables through the proposed mechanisms. Each arrow represents a hypothesized relationship that will be tested in the analysis.`;
   } else {
