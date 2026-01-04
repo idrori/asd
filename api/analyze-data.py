@@ -57,20 +57,59 @@ class handler(BaseHTTPRequestHandler):
             result['summary']['shape'] = {'rows': len(rows), 'columns': len(columns)}
             result['summary']['columns'] = columns
 
-            # Identify column types by sampling data
+            # Identify column types by sampling data with quality filtering
             numeric_cols = []
             categorical_cols = []
+            # Columns to skip for visualization (but still report in summary)
+            skipped_numeric_cols = []
+            skipped_categorical_cols = []
 
             for col in columns:
                 values = [row.get(col, '') for row in rows[:100]]  # Sample first 100
-                numeric_count = sum(1 for v in values if self.is_numeric(v))
-                if numeric_count > len(values) * 0.7:  # 70% numeric threshold
-                    numeric_cols.append(col)
-                else:
-                    categorical_cols.append(col)
+                non_empty_values = [v for v in values if v and str(v).strip()]
+                numeric_count = sum(1 for v in non_empty_values if self.is_numeric(v))
 
-            result['summary']['numeric_columns'] = numeric_cols
-            result['summary']['categorical_columns'] = categorical_cols
+                if numeric_count > len(non_empty_values) * 0.7:  # 70% numeric threshold
+                    # Check if this is a good numeric column for visualization
+                    numeric_values = []
+                    for v in non_empty_values:
+                        try:
+                            numeric_values.append(float(v))
+                        except:
+                            pass
+
+                    if len(numeric_values) >= 5:
+                        # Check for meaningful variance (skip index/ID columns)
+                        variance = self.calculate_simple_variance(numeric_values)
+                        unique_ratio = len(set(numeric_values)) / len(numeric_values)
+
+                        # Skip columns that look like IDs (sequential, very high cardinality)
+                        # or columns with zero/very low variance
+                        if variance < 0.01 or (unique_ratio > 0.95 and len(numeric_values) > 20):
+                            skipped_numeric_cols.append(col)
+                        else:
+                            numeric_cols.append(col)
+                    else:
+                        skipped_numeric_cols.append(col)
+                else:
+                    # Check if this is a good categorical column for visualization
+                    # Skip columns with very long text (likely descriptions, not categories)
+                    avg_length = sum(len(str(v)) for v in non_empty_values) / max(len(non_empty_values), 1)
+                    unique_count = len(set(non_empty_values))
+
+                    # Skip if: avg value length > 50 chars (text content)
+                    # or too many unique values relative to sample size (not categorical)
+                    # or very few unique values (not interesting)
+                    if avg_length > 50 or unique_count > len(non_empty_values) * 0.8 or unique_count < 2:
+                        skipped_categorical_cols.append(col)
+                    else:
+                        categorical_cols.append(col)
+
+            result['summary']['numeric_columns'] = numeric_cols + skipped_numeric_cols
+            result['summary']['categorical_columns'] = categorical_cols + skipped_categorical_cols
+            # Store the filtered columns for visualization
+            result['summary']['visualizable_numeric_cols'] = numeric_cols
+            result['summary']['visualizable_categorical_cols'] = categorical_cols
 
             # Descriptive statistics for numeric columns
             if numeric_cols:
@@ -117,21 +156,24 @@ class handler(BaseHTTPRequestHandler):
                         'data': corr_matrix
                     })
 
-            # Categorical summaries
+            # Categorical summaries (use filtered visualizable columns)
             if categorical_cols:
                 cat_summary = {}
-                for col in categorical_cols[:5]:  # Limit to first 5
+                for col in categorical_cols[:5]:  # Limit to first 5 visualizable columns
                     values = [row.get(col, '') for row in rows if row.get(col, '')]
                     counter = Counter(values)
                     top_10 = dict(counter.most_common(10))
                     cat_summary[col] = top_10
 
-                    # Add bar chart data for frontend
-                    result['chart_data'].append({
-                        'type': 'bar',
-                        'column': col,
-                        'data': top_10
-                    })
+                    # Only add bar chart if there's meaningful distribution
+                    # Skip if all values have count=1 (not interesting) or only 1 unique value
+                    counts = list(top_10.values())
+                    if len(counts) >= 2 and max(counts) > 1:
+                        result['chart_data'].append({
+                            'type': 'bar',
+                            'column': col,
+                            'data': top_10
+                        })
 
                 result['summary']['categorical_summary'] = cat_summary
 
@@ -193,6 +235,17 @@ class handler(BaseHTTPRequestHandler):
             return True
         except (ValueError, TypeError):
             return False
+
+    def calculate_simple_variance(self, values):
+        """Calculate normalized variance (coefficient of variation squared) for filtering"""
+        if len(values) < 2:
+            return 0
+        mean = sum(values) / len(values)
+        if mean == 0:
+            return 0
+        variance = sum((x - mean) ** 2 for x in values) / len(values)
+        # Return coefficient of variation squared (normalized variance)
+        return variance / (mean ** 2) if mean != 0 else 0
 
     def calculate_stats(self, values):
         """Calculate descriptive statistics for a list of numeric values"""

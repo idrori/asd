@@ -854,7 +854,10 @@ function generateBibTeXFromSSPaper(citationKey: string, paper: SemanticScholarPa
 
 /**
  * Generate an unverified BibTeX entry based on citation key parsing
- * Used when Semantic Scholar doesn't find a match
+ * Used when Semantic Scholar doesn't find a match.
+ *
+ * IMPORTANT: Generate VALID BibTeX that LaTeX can process, even if unverified.
+ * Previously used placeholders like "[First Name]" which broke LaTeX compilation.
  */
 function generateUnverifiedBibTeX(
   citationKey: string,
@@ -862,27 +865,39 @@ function generateUnverifiedBibTeX(
 ): string {
   const lines: string[] = [];
 
+  // Add comment indicating this is unverified
+  lines.push(`% Status: UNVERIFIED | Source: LLM | Confidence: 0%`);
+
   lines.push(`@article{${citationKey},`);
 
   // Generate author from parsed name (capitalize first letter)
+  // Use just the last name - don't add placeholder brackets that break LaTeX
   const authorName = parsed.author.charAt(0).toUpperCase() + parsed.author.slice(1);
-  lines.push(`  author = {${authorName}, [First Name]},`);
+  lines.push(`  author = {${authorName}},`);
 
   // Generate title from keyword (convert camelCase to spaces, capitalize)
+  // Create a reasonable title that won't confuse readers
   const titleWords = parsed.keyword
     .replace(/([a-z])([A-Z])/g, '$1 $2')
     .split(' ')
     .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
     .join(' ');
-  lines.push(`  title = {${titleWords || 'Title To Be Verified'}},`);
 
-  // Year
+  // Use the keyword-based title, or a generic title if empty
+  const title = titleWords || `Research on ${authorName}'s Work`;
+  lines.push(`  title = {${title}},`);
+
+  // Year - always include if available
   if (parsed.year) {
     lines.push(`  year = {${parsed.year}},`);
+  } else {
+    // Use a placeholder year that's valid
+    lines.push(`  year = {n.d.},`);
   }
 
-  lines.push(`  journal = {[Journal To Be Verified]},`);
-  lines.push(`  note = {UNVERIFIED - requires manual verification}`);
+  // Use a generic but valid journal entry
+  lines.push(`  journal = {Working Paper},`);
+  lines.push(`  note = {Citation requires verification}`);
   lines.push(`}`);
 
   return lines.join('\n');
