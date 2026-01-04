@@ -15,7 +15,7 @@ import type {
 // Get API base URL
 function getApiUrl(): string {
   if (typeof window !== 'undefined' && window.location.hostname.includes('github.io')) {
-    return 'https://icis-deploy-12-10-2025.vercel.app';
+    return 'https://asd-iddo-droris-projects.vercel.app';
   }
   return '';
 }
