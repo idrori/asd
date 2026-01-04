@@ -1654,8 +1654,10 @@ export const runBuilder = async (
       for (const result of results) {
         if (result.status === 'ALREADY_EXISTS') continue;
 
-        // Add to accumulated BibTeX
-        if (result.bibtexEntry) {
+        // Add to accumulated BibTeX ONLY if verified or partial
+        // IMPORTANT: Do NOT add UNVERIFIED entries - they have placeholder data
+        // that causes "?" citations in the final paper
+        if (result.bibtexEntry && (result.status === 'VERIFIED' || result.status === 'PARTIAL')) {
           accumulatedBibTeX.push(result.bibtexEntry);
         }
 

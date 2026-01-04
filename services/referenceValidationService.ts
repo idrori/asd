@@ -407,7 +407,13 @@ function generateFinalBibTeX(
   lines.push('');
 
   // Generate BibTeX for each reference
+  // IMPORTANT: Skip UNVERIFIED entries - they have placeholder data that causes "?" citations
   for (const ref of mergedRefs) {
+    // Skip unverified entries entirely - they shouldn't appear in the final bib file
+    if (ref.status === ReferenceValidationStatus.UNVERIFIED) {
+      continue;
+    }
+
     // Add status comment
     lines.push(`% Status: ${ref.status} | Source: ${ref.source}${ref.confidence < 1 ? ` | Confidence: ${(ref.confidence * 100).toFixed(0)}%` : ''}`);
 
