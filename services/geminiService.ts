@@ -1254,39 +1254,38 @@ async function generateSection(
     .map(([key, content]) => `[${key}]\n${content.substring(0, 500)}...`)
     .join('\n\n');
 
-  // For References section: Extract ALL citation keys from previous sections
-  // This ensures bibitem keys match the cite{} commands used in the paper
+  // For References section: Extract ALL \cite{key} commands from previous sections
+  // This ensures BibTeX entries match the \cite{} commands used in the paper
   let citationKeysContext = '';
   if (section.key === 'references') {
     const allPreviousText = Object.values(context.previousSections).join('\n');
-    // Extract inline APA citations like "(Author, Year)" or "(Author & Author, Year)" or "(Author et al., Year)"
-    // Match patterns like: (Davis, 1989), (Jensen & Meckling, 1976), (Venkatesh et al., 2003)
-    const citationPattern = /\(([A-Z][a-zA-Z]+(?:\s+(?:&|and)\s+[A-Z][a-zA-Z]+)?(?:\s+et\s+al\.)?),?\s*(\d{4})\)/g;
+    // Extract \cite{key} commands - match patterns like: \cite{davis1989}, \cite{venkatesh2003utaut}
+    const citationPattern = /\\cite\{([^}]+)\}/g;
     const citations = new Set<string>();
     let match;
     while ((match = citationPattern.exec(allPreviousText)) !== null) {
-      const author = match[1].replace(/\s+&\s+/g, ' & ').replace(/\s+and\s+/g, ' & ');
-      const year = match[2];
-      citations.add(`${author} (${year})`);
+      // Handle multiple citations in one \cite{} command like \cite{davis1989,venkatesh2003}
+      const keys = match[1].split(',').map(k => k.trim());
+      keys.forEach(key => citations.add(key));
     }
 
     if (citations.size > 0) {
       const citationsList = [...citations].sort().join('\n- ');
-      console.log(`[generateSection] Found ${citations.size} inline citations in paper`);
+      console.log(`[generateSection] Found ${citations.size} \\cite{} keys in paper`);
       citationKeysContext = `
-⚠️ CRITICAL - CITATIONS USED IN PAPER (${citations.size} total):
-You MUST generate a BibTeX entry for EACH of these citations. The paper body already contains these inline citations, so the bibliography MUST include matching references:
+⚠️ CRITICAL - CITATION KEYS USED IN PAPER (${citations.size} total):
+The paper body uses these \\cite{key} commands. You MUST generate a BibTeX entry for EACH key:
 
 - ${citationsList}
 
 INSTRUCTIONS:
-1. Generate ONE @article or @inproceedings BibTeX entry for EACH citation listed above
-2. The author and year in each BibTeX entry MUST match the citation format used in the paper
-3. For "et al." citations, the first author in BibTeX must match (e.g., "Liu et al., 2023" → author = {Liu, ...})
-4. You may add 3-5 additional foundational references, but the ${citations.size} citations above are MANDATORY
-5. Total references should be ${citations.size} + 3-5 additional = ${citations.size + 4} to ${citations.size + 5} entries
+1. Generate ONE @article or @inproceedings BibTeX entry for EACH citation key listed above
+2. The BibTeX entry key MUST EXACTLY match the \\cite{} key used in the paper
+3. Example: \\cite{davis1989perceived} requires @article{davis1989perceived, ...}
+4. You may add 3-5 additional foundational references beyond the ${citations.size} required keys
+5. Total references should be ${citations.size} + 3-5 additional = ${citations.size + 3} to ${citations.size + 5} entries
 
-DO NOT skip any of the ${citations.size} citations listed above.
+DO NOT skip any of the ${citations.size} citation keys listed above. Each one MUST have a matching BibTeX entry.
 `;
     }
   }
@@ -1357,19 +1356,18 @@ IMPORTANT:
 - ALL references in the bibliography MUST be complete with real author names, paper titles, journal/venue names, and publication years
 - Generate complete, realistic content based on the research context provided${context.dataSummary ? '\n- This is an EMPIRICAL study with real data - make this clear in your writing\n- For Methodology/Results: USE the actual data characteristics from the DATA FILE ANALYSIS above\n- Reference the data-driven nature of the research where appropriate' : ''}
 
-CITATION FORMAT (CRITICAL - Inline APA 7th Edition Style):
-- Write citations INLINE using plain text author-year format, NOT LaTeX \\cite{} commands
-- Parenthetical citation: "prior research has shown this effect (Jensen \\& Meckling, 1976)"
-- Narrative citation: "Jensen and Meckling (1976) demonstrated that..."
-- Two authors: Always include both names: "(Davis \\& Bagozzi, 1989)"
-- Three or more authors: Use "et al." after first author: "(Venkatesh et al., 2003)"
-- Multiple citations: Separate with semicolons, alphabetical order: "(Davis, 1989; Venkatesh et al., 2003)"
-- Use \\& for ampersand in parenthetical citations, "and" in narrative citations
-- Do NOT use \\cite{} or \\citep{} commands - write the author names and year directly
-- NEVER include a "References:" section, bibliography, or reference list at the end of your content
-- NEVER list out the references you cited - just use inline citations
-- Your output should contain ONLY the section content, ending with the last paragraph of prose
-- References are generated separately and will appear at the end of the full paper`}`;
+CITATION FORMAT (CRITICAL - LaTeX \\cite{} Commands):
+- Use LaTeX \\cite{key} commands for ALL citations
+- Citation key format: authorYYYYword (e.g., davis1989perceived, venkatesh2003user)
+- Single citation: "prior research has shown this effect \\cite{jensen1976theory}"
+- Multiple citations: "as demonstrated in prior work \\cite{davis1989perceived,venkatesh2003user}"
+- Narrative citation: "Davis \\cite{davis1989perceived} demonstrated that..."
+- Use lowercase for citation keys, no spaces, author's last name + year + first word of title
+- Each \\cite{key} you use MUST have a matching BibTeX entry in the references
+- Aim for 15-25 unique citations across the paper
+- NEVER include a "References:" section or bibliography in your content
+- Your output should contain ONLY the section content with \\cite{} commands
+- References are generated separately as BibTeX entries`}`;
 
   const systemInstruction = "You are an expert academic writer specializing in Information Systems research. Write in formal academic style following top-tier IS journal standards.";
 
@@ -1992,9 +1990,8 @@ This paper was generated by an AI-assisted scientific discovery system. All cont
         // Store the bibliography as a separate .bib file and use \bibliography command
         const bibContent = cleanBibTeXContent(sections[key]);
         storeBibliography('references.bib', bibContent);
-        // Add bibliography commands (apalike style auto-generates "References" header)
-        // \nocite{*} prints all entries since we use inline (Author, Year) citations, not \cite{} commands
-        paper += `\\nocite{*}\n\\bibliographystyle{apalike}\n\\bibliography{references}\n`;
+        // Add bibliography commands - \cite{} commands in body will pull the cited entries
+        paper += `\\bibliographystyle{apalike}\n\\bibliography{references}\n`;
       } else if (key === 'methodology' && isPartialPaper && figures.length > 0) {
         // For theoretical papers, insert conceptual figures (research model, framework) in the Methodology section
         const conceptualFigures = figures.filter(f =>
@@ -2005,8 +2002,30 @@ This paper was generated by an AI-assisted scientific discovery system. All cont
 
         if (conceptualFigures.length > 0) {
           paper += `\\subsection{Framework Visualization}\n\n`;
-          paper += `The following figures provide visual representations of the research model and theoretical framework.\n\n`;
-          paper += generateFigureLatex(conceptualFigures);
+          paper += `This subsection presents visual representations of the theoretical foundations guiding this research.\n\n`;
+
+          // Generate figure LaTeX with specific labels
+          conceptualFigures.forEach((fig, i) => {
+            const figNum = i + 1;
+            const safeFilename = fig.filename.replace(/[^a-zA-Z0-9_.-]/g, '_');
+            const escapedDescription = fig.description.replace(/_/g, '\\_').replace(/&/g, '\\&').replace(/%/g, '\\%');
+            const figLabel = fig.filename === 'research_model.png' ? 'fig:research_model' : 'fig:theoretical_framework';
+
+            // Add descriptive text with figure reference
+            if (fig.filename === 'research_model.png') {
+              paper += `Figure~\\ref{${figLabel}} illustrates the research model, depicting the key constructs and their hypothesized relationships. The model shows how the independent variables influence the dependent variables through the proposed mechanisms.\n\n`;
+            } else {
+              paper += `Figure~\\ref{${figLabel}} presents the theoretical framework that underpins this study. This framework synthesizes the core theoretical perspectives and shows how they inform the research design and analysis.\n\n`;
+            }
+
+            // Add the figure
+            paper += `\\begin{figure}[htbp]
+\\centering
+\\includegraphics[width=0.9\\textwidth]{${safeFilename}}
+\\caption{${escapedDescription}}
+\\label{${figLabel}}
+\\end{figure}\n\n`;
+          });
         }
       } else if (key === 'results') {
         // Separate data figures from infographic
