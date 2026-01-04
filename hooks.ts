@@ -639,12 +639,14 @@ export function useIcisWorkflow(params: WorkflowHookParams) {
           // Otherwise fall back to uploadedFiles.dataFile?.name
           console.log(`[processStage BUILDER] overrideParam="${overrideParam}", uploadedFiles.dataFile?.name="${uploadedFiles.dataFile?.name}"`);
           const dataFileName = overrideParam || uploadedFiles.dataFile?.name;
+          // Partial paper (theoretical) if no data file - only conceptual figures in first round
+          // Full paper if data file is provided - both data and conceptual figures
           const isPartial = !dataFileName;
-          addLog(`Builder: Mode - ${isPartial ? 'Partial paper (no data)' : 'Full paper with data'}`);
+          addLog(`Builder: Mode - ${isPartial ? 'Theoretical paper (conceptual figures only)' : 'Full paper with data'}`);
           if (dataFileName) {
             addLog(`Builder: Data file - ${dataFileName}`);
           } else {
-            addLog('Builder: WARNING - No data file name available');
+            addLog('Builder: No data file - generating theoretical paper with conceptual figures');
           }
 
           // Progress callback to update UI
