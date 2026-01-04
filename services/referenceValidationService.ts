@@ -576,3 +576,375 @@ export async function quickValidateReferences(
 ): Promise<{ bibtex: string; report: ReferenceValidationReport }> {
   return validateAndEnrichReferences(bibtexContent, '', { skipDiscovery: true });
 }
+
+// ============================================================
+// Incremental Citation Validation (Real-time during section generation)
+// ============================================================
+
+/**
+ * Result of validating a single citation key
+ */
+export interface IncrementalCitationResult {
+  citationKey: string;
+  status: 'VERIFIED' | 'PARTIAL' | 'UNVERIFIED' | 'ALREADY_EXISTS';
+  confidence: number;
+  bibtexEntry: string;
+  paper?: SemanticScholarPaper;
+  searchQuery?: string;
+}
+
+/**
+ * Parse a citation key to extract searchable components
+ * Format: authorYYYYword (e.g., davis1989perceived, venkatesh2003user)
+ */
+function parseCitationKey(key: string): { author: string; year: number | null; keyword: string } {
+  // Match pattern: author name + 4-digit year + optional keyword
+  const match = key.match(/^([a-z]+)(\d{4})(.*)$/i);
+
+  if (match) {
+    return {
+      author: match[1],
+      year: parseInt(match[2], 10),
+      keyword: match[3] || ''
+    };
+  }
+
+  // Fallback: try to find year anywhere in the key
+  const yearMatch = key.match(/(\d{4})/);
+  const year = yearMatch ? parseInt(yearMatch[1], 10) : null;
+  const author = key.replace(/\d+/g, '').replace(/[^a-zA-Z]/g, '');
+
+  return { author, year, keyword: '' };
+}
+
+/**
+ * Build search query from citation key components
+ */
+function buildSearchQuery(parsed: { author: string; year: number | null; keyword: string }): string {
+  const parts: string[] = [];
+
+  if (parsed.author) {
+    parts.push(parsed.author);
+  }
+
+  if (parsed.keyword) {
+    // Convert camelCase or concatenated words to spaces
+    const keywordWithSpaces = parsed.keyword
+      .replace(/([a-z])([A-Z])/g, '$1 $2')
+      .toLowerCase();
+    parts.push(keywordWithSpaces);
+  }
+
+  return parts.join(' ');
+}
+
+/**
+ * Validate a single citation key against Semantic Scholar and generate BibTeX
+ * Used for real-time validation during section generation
+ *
+ * @param citationKey - The citation key (e.g., "davis1989perceived")
+ * @param existingKeys - Set of already validated citation keys to avoid duplicates
+ * @returns Validation result with BibTeX entry
+ */
+export async function validateSingleCitation(
+  citationKey: string,
+  existingKeys: Set<string>
+): Promise<IncrementalCitationResult> {
+  // Check if already validated
+  if (existingKeys.has(citationKey)) {
+    return {
+      citationKey,
+      status: 'ALREADY_EXISTS',
+      confidence: 1.0,
+      bibtexEntry: '' // Empty - already in accumulated BibTeX
+    };
+  }
+
+  console.log(`[IncrementalValidation] Validating citation: ${citationKey}`);
+
+  // Parse the citation key to extract searchable components
+  const parsed = parseCitationKey(citationKey);
+  const searchQuery = buildSearchQuery(parsed);
+
+  console.log(`[IncrementalValidation] Parsed: author="${parsed.author}", year=${parsed.year}, keyword="${parsed.keyword}"`);
+  console.log(`[IncrementalValidation] Search query: "${searchQuery}"`);
+
+  // Search Semantic Scholar
+  const searchResult = await callSSSearch(
+    [searchQuery],
+    {
+      yearMin: parsed.year ? parsed.year - 1 : 1980,
+      yearMax: parsed.year ? parsed.year + 1 : 2025,
+      limit: 5
+    }
+  );
+
+  if (!searchResult.success || searchResult.papers.length === 0) {
+    console.log(`[IncrementalValidation] No results for "${citationKey}" - generating unverified entry`);
+
+    // Generate an unverified BibTeX entry based on the citation key
+    const unverifiedEntry = generateUnverifiedBibTeX(citationKey, parsed);
+
+    return {
+      citationKey,
+      status: 'UNVERIFIED',
+      confidence: 0,
+      bibtexEntry: unverifiedEntry,
+      searchQuery
+    };
+  }
+
+  // Find best matching paper
+  const bestMatch = findBestMatch(searchResult.papers, parsed);
+
+  if (!bestMatch) {
+    console.log(`[IncrementalValidation] No good match for "${citationKey}"`);
+    const unverifiedEntry = generateUnverifiedBibTeX(citationKey, parsed);
+
+    return {
+      citationKey,
+      status: 'UNVERIFIED',
+      confidence: 0.3,
+      bibtexEntry: unverifiedEntry,
+      searchQuery
+    };
+  }
+
+  // Generate verified BibTeX from Semantic Scholar paper
+  const { paper, confidence } = bestMatch;
+  const bibtexEntry = generateBibTeXFromSSPaper(citationKey, paper);
+
+  const status = confidence >= CONFIDENCE_VERIFIED ? 'VERIFIED' :
+                 confidence >= CONFIDENCE_PARTIAL ? 'PARTIAL' : 'UNVERIFIED';
+
+  console.log(`[IncrementalValidation] Found match: "${paper.title}" (confidence: ${(confidence * 100).toFixed(0)}%, status: ${status})`);
+
+  return {
+    citationKey,
+    status,
+    confidence,
+    bibtexEntry,
+    paper,
+    searchQuery
+  };
+}
+
+/**
+ * Find the best matching paper from search results
+ */
+function findBestMatch(
+  papers: SemanticScholarPaper[],
+  parsed: { author: string; year: number | null; keyword: string }
+): { paper: SemanticScholarPaper; confidence: number } | null {
+  let bestPaper: SemanticScholarPaper | null = null;
+  let bestScore = 0;
+
+  for (const paper of papers) {
+    let score = 0;
+
+    // Year match (exact = 0.3, off by 1 = 0.2)
+    if (parsed.year && paper.year) {
+      if (paper.year === parsed.year) {
+        score += 0.3;
+      } else if (Math.abs(paper.year - parsed.year) === 1) {
+        score += 0.2;
+      }
+    }
+
+    // Author match (check if author name appears in paper authors)
+    if (parsed.author && paper.authors && paper.authors.length > 0) {
+      const authorLower = parsed.author.toLowerCase();
+      const hasAuthorMatch = paper.authors.some(a =>
+        a.name.toLowerCase().includes(authorLower) ||
+        authorLower.includes(a.name.split(' ').pop()?.toLowerCase() || '')
+      );
+      if (hasAuthorMatch) {
+        score += 0.4;
+      }
+    }
+
+    // Keyword match in title
+    if (parsed.keyword && paper.title) {
+      const keywordLower = parsed.keyword.toLowerCase();
+      const titleLower = paper.title.toLowerCase();
+
+      // Check if keyword or parts of it appear in title
+      const keywordParts = keywordLower.replace(/([a-z])([A-Z])/g, '$1 $2').split(' ');
+      const matchingParts = keywordParts.filter(part =>
+        part.length > 3 && titleLower.includes(part)
+      );
+
+      if (matchingParts.length > 0) {
+        score += 0.3 * (matchingParts.length / keywordParts.length);
+      }
+    }
+
+    if (score > bestScore) {
+      bestScore = score;
+      bestPaper = paper;
+    }
+  }
+
+  if (bestPaper && bestScore >= 0.4) {
+    return { paper: bestPaper, confidence: Math.min(bestScore, 1.0) };
+  }
+
+  return null;
+}
+
+/**
+ * Generate BibTeX entry from Semantic Scholar paper data
+ */
+function generateBibTeXFromSSPaper(citationKey: string, paper: SemanticScholarPaper): string {
+  const isConference = paper.venue?.includes('Conference') ||
+                       paper.venue?.includes('Proceedings') ||
+                       paper.venue?.includes('Workshop');
+
+  const type = isConference ? 'inproceedings' : 'article';
+  const lines: string[] = [];
+
+  lines.push(`@${type}{${citationKey},`);
+
+  // Authors
+  if (paper.authors && paper.authors.length > 0) {
+    const authorStr = paper.authors.map(a => a.name).join(' and ');
+    lines.push(`  author = {${authorStr}},`);
+  }
+
+  // Title
+  lines.push(`  title = {${paper.title}},`);
+
+  // Year
+  if (paper.year) {
+    lines.push(`  year = {${paper.year}},`);
+  }
+
+  // Venue/Journal
+  if (isConference && paper.venue) {
+    lines.push(`  booktitle = {${paper.venue}},`);
+  } else if (paper.journal?.name) {
+    lines.push(`  journal = {${paper.journal.name}},`);
+    if (paper.journal.volume) {
+      lines.push(`  volume = {${paper.journal.volume}},`);
+    }
+    if (paper.journal.pages) {
+      lines.push(`  pages = {${paper.journal.pages}},`);
+    }
+  } else if (paper.venue) {
+    lines.push(`  journal = {${paper.venue}},`);
+  }
+
+  // DOI
+  if (paper.doi) {
+    lines.push(`  doi = {${paper.doi}},`);
+  }
+
+  // URL
+  if (paper.url) {
+    lines.push(`  url = {${paper.url}},`);
+  }
+
+  // Add validation note
+  lines.push(`  note = {Validated via Semantic Scholar}`);
+
+  lines.push(`}`);
+
+  return lines.join('\n');
+}
+
+/**
+ * Generate an unverified BibTeX entry based on citation key parsing
+ * Used when Semantic Scholar doesn't find a match
+ */
+function generateUnverifiedBibTeX(
+  citationKey: string,
+  parsed: { author: string; year: number | null; keyword: string }
+): string {
+  const lines: string[] = [];
+
+  lines.push(`@article{${citationKey},`);
+
+  // Generate author from parsed name (capitalize first letter)
+  const authorName = parsed.author.charAt(0).toUpperCase() + parsed.author.slice(1);
+  lines.push(`  author = {${authorName}, [First Name]},`);
+
+  // Generate title from keyword (convert camelCase to spaces, capitalize)
+  const titleWords = parsed.keyword
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .split(' ')
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+    .join(' ');
+  lines.push(`  title = {${titleWords || 'Title To Be Verified'}},`);
+
+  // Year
+  if (parsed.year) {
+    lines.push(`  year = {${parsed.year}},`);
+  }
+
+  lines.push(`  journal = {[Journal To Be Verified]},`);
+  lines.push(`  note = {UNVERIFIED - requires manual verification}`);
+  lines.push(`}`);
+
+  return lines.join('\n');
+}
+
+/**
+ * Validate multiple citations in batch (more efficient for multiple citations)
+ */
+export async function validateCitationBatch(
+  citationKeys: string[],
+  existingKeys: Set<string>
+): Promise<IncrementalCitationResult[]> {
+  const results: IncrementalCitationResult[] = [];
+
+  // Filter out already validated keys
+  const newKeys = citationKeys.filter(key => !existingKeys.has(key));
+
+  console.log(`[IncrementalValidation] Batch validating ${newKeys.length} new citations (${citationKeys.length - newKeys.length} already exist)`);
+
+  // Process in parallel with rate limiting (max 3 concurrent)
+  const batchSize = 3;
+  for (let i = 0; i < newKeys.length; i += batchSize) {
+    const batch = newKeys.slice(i, i + batchSize);
+    const batchResults = await Promise.all(
+      batch.map(key => validateSingleCitation(key, existingKeys))
+    );
+    results.push(...batchResults);
+
+    // Small delay between batches to avoid rate limiting
+    if (i + batchSize < newKeys.length) {
+      await new Promise(resolve => setTimeout(resolve, 200));
+    }
+  }
+
+  // Add ALREADY_EXISTS results for skipped keys
+  for (const key of citationKeys) {
+    if (existingKeys.has(key)) {
+      results.push({
+        citationKey: key,
+        status: 'ALREADY_EXISTS',
+        confidence: 1.0,
+        bibtexEntry: ''
+      });
+    }
+  }
+
+  return results;
+}
+
+/**
+ * Extract citation keys from text content
+ */
+export function extractCitationKeys(text: string): string[] {
+  const citationPattern = /\\cite\{([^}]+)\}/g;
+  const keys = new Set<string>();
+  let match;
+
+  while ((match = citationPattern.exec(text)) !== null) {
+    // Handle multiple citations in one \cite{} command
+    const keyList = match[1].split(',').map(k => k.trim());
+    keyList.forEach(key => keys.add(key));
+  }
+
+  return [...keys];
+}

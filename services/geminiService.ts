@@ -1248,15 +1248,18 @@ async function generateSection(
     researchType?: string;
     dataSummary?: string;  // Data analysis summary to inform Methodology and Results
     examplePapers?: ExamplePaper[];  // ICIS exemplar papers for research mode
+    accumulatedBibTeX?: string;  // Incrementally validated BibTeX from previous sections
   }
 ): Promise<string> {
   const previousContent = Object.entries(context.previousSections)
     .map(([key, content]) => `[${key}]\n${content.substring(0, 500)}...`)
     .join('\n\n');
 
-  // For References section: Extract ALL \cite{key} commands from previous sections
-  // This ensures BibTeX entries match the \cite{} commands used in the paper
+  // For References section: Use accumulated BibTeX from incremental validation
+  // and extract any remaining \cite{key} commands not yet validated
   let citationKeysContext = '';
+  let accumulatedBibTeXContext = '';
+
   if (section.key === 'references') {
     const allPreviousText = Object.values(context.previousSections).join('\n');
     // Extract \cite{key} commands - match patterns like: \cite{davis1989}, \cite{venkatesh2003utaut}
@@ -1272,7 +1275,34 @@ async function generateSection(
     if (citations.size > 0) {
       const citationsList = [...citations].sort().join('\n- ');
       console.log(`[generateSection] Found ${citations.size} \\cite{} keys in paper`);
-      citationKeysContext = `
+
+      // Check if we have accumulated BibTeX from incremental validation
+      if (context.accumulatedBibTeX && context.accumulatedBibTeX.trim().length > 0) {
+        // Count how many entries are in accumulated BibTeX
+        const accumulatedCount = (context.accumulatedBibTeX.match(/@(article|inproceedings|book|incollection|misc)\{/gi) || []).length;
+        console.log(`[generateSection] Using ${accumulatedCount} pre-validated BibTeX entries`);
+
+        citationKeysContext = `
+⚠️ IMPORTANT - INCREMENTAL CITATION VALIDATION ACTIVE:
+Most citations in this paper have ALREADY been validated against Semantic Scholar during section generation.
+
+ALREADY VALIDATED (${accumulatedCount} entries):
+The following BibTeX entries have been validated and will be included automatically:
+
+${context.accumulatedBibTeX.substring(0, 3000)}${context.accumulatedBibTeX.length > 3000 ? '\n... (truncated)' : ''}
+
+YOUR TASK:
+1. Review the citation keys used in the paper: ${citationsList.substring(0, 500)}
+2. Add 3-5 ADDITIONAL foundational/seminal references that are NOT already in the validated entries above
+3. These should be highly-cited, well-known papers in the field (e.g., Davis 1989 TAM, Venkatesh 2003 UTAUT, DeLone & McLean IS Success)
+4. Output ONLY the NEW BibTeX entries you are adding (the validated ones are already included)
+5. Do NOT duplicate any entries that already exist in the validated references above
+
+OUTPUT: Only new BibTeX entries for foundational references not already validated.
+`;
+      } else {
+        // No accumulated BibTeX - generate all from scratch
+        citationKeysContext = `
 ⚠️ CRITICAL - CITATION KEYS USED IN PAPER (${citations.size} total):
 The paper body uses these \\cite{key} commands. You MUST generate a BibTeX entry for EACH key:
 
@@ -1287,6 +1317,7 @@ INSTRUCTIONS:
 
 DO NOT skip any of the ${citations.size} citation keys listed above. Each one MUST have a matching BibTeX entry.
 `;
+      }
     }
   }
 
@@ -1571,6 +1602,88 @@ export const runBuilder = async (
   let usedSyntheticData = false;
   let figuresInfoForResults = '';
 
+  // ============================================================
+  // INCREMENTAL CITATION VALIDATION STATE
+  // Citations are validated against Semantic Scholar as each section is generated
+  // BibTeX grows incrementally throughout paper generation
+  // ============================================================
+  let accumulatedBibTeX: string[] = [];  // Array of BibTeX entries
+  const validatedCitationKeys = new Set<string>();  // Track validated keys to avoid duplicates
+  let citationValidationStats = {
+    total: 0,
+    verified: 0,
+    partial: 0,
+    unverified: 0
+  };
+
+  // Import incremental validation functions
+  const { validateCitationBatch, extractCitationKeys } = await import('./referenceValidationService');
+
+  /**
+   * Helper: Validate citations in newly generated section content
+   * Extracts \cite{} keys, validates against Semantic Scholar, adds to accumulated BibTeX
+   */
+  async function validateSectionCitations(
+    sectionContent: string,
+    sectionName: string
+  ): Promise<void> {
+    // Extract citation keys from the section
+    const citationKeys = extractCitationKeys(sectionContent);
+
+    if (citationKeys.length === 0) {
+      console.log(`[Builder] No citations found in ${sectionName}`);
+      return;
+    }
+
+    // Filter to only new citations (not already validated)
+    const newKeys = citationKeys.filter(key => !validatedCitationKeys.has(key));
+
+    if (newKeys.length === 0) {
+      console.log(`[Builder] All ${citationKeys.length} citations in ${sectionName} already validated`);
+      return;
+    }
+
+    console.log(`[Builder] Validating ${newKeys.length} new citations from ${sectionName}...`);
+    onProgress?.('Citation Validation', 'starting');
+
+    try {
+      // Validate new citations against Semantic Scholar
+      const results = await validateCitationBatch(newKeys, validatedCitationKeys);
+
+      // Process results
+      for (const result of results) {
+        if (result.status === 'ALREADY_EXISTS') continue;
+
+        // Add to accumulated BibTeX
+        if (result.bibtexEntry) {
+          accumulatedBibTeX.push(result.bibtexEntry);
+        }
+
+        // Mark as validated
+        validatedCitationKeys.add(result.citationKey);
+
+        // Update stats
+        citationValidationStats.total++;
+        if (result.status === 'VERIFIED') {
+          citationValidationStats.verified++;
+        } else if (result.status === 'PARTIAL') {
+          citationValidationStats.partial++;
+        } else {
+          citationValidationStats.unverified++;
+        }
+      }
+
+      console.log(`[Builder] Citation validation for ${sectionName}: ${newKeys.length} new, ${validatedCitationKeys.size} total accumulated`);
+      console.log(`[Builder] Validation stats: ${citationValidationStats.verified} verified, ${citationValidationStats.partial} partial, ${citationValidationStats.unverified} unverified`);
+
+      onProgress?.('Citation Validation', 'completed');
+    } catch (error) {
+      console.error(`[Builder] Citation validation error in ${sectionName}:`, error);
+      onProgress?.('Citation Validation', 'error');
+      // Non-fatal - continue with paper generation
+    }
+  }
+
   // Figure generation flow:
   // 1. Conceptual figures (research_model.png, theoretical_framework.png) → after Theory section
   // 2. Empirical figures (data visualizations) → after Results section (only if data available)
@@ -1593,12 +1706,19 @@ export const runBuilder = async (
         interviewTranscript,
         previousSections: generatedSections,
         dataSummary,
-        examplePapers
+        examplePapers,
+        accumulatedBibTeX: accumulatedBibTeX.join('\n\n')  // Pass accumulated BibTeX for context
       });
 
       generatedSections[section.key] = content;
       onProgress?.(section.name, 'completed');
       console.log(`[Builder] Completed: ${section.name} (${content.split(/\s+/).length} words)`);
+
+      // INCREMENTAL CITATION VALIDATION: Validate citations after each section
+      // Skip for title (no citations) and references (handled separately)
+      if (section.key !== 'title' && section.key !== 'references') {
+        await validateSectionCitations(content, section.name);
+      }
 
       await delay(500);
     } catch (error) {
@@ -1668,12 +1788,18 @@ export const runBuilder = async (
           interviewTranscript,
           previousSections: generatedSections,
           dataSummary,
-          examplePapers
+          examplePapers,
+          accumulatedBibTeX: accumulatedBibTeX.join('\n\n')  // Pass accumulated BibTeX for context
         });
 
         generatedSections[section.key] = content;
         onProgress?.(section.name, 'completed');
         console.log(`[Builder] Completed: ${section.name} (${content.split(/\s+/).length} words)`);
+
+        // INCREMENTAL CITATION VALIDATION: Validate citations after each section
+        if (section.key !== 'references') {
+          await validateSectionCitations(content, section.name);
+        }
 
         await delay(500);
       } catch (error) {
@@ -1724,22 +1850,45 @@ export const runBuilder = async (
 
   // PHASE 5: Generate remaining sections (Discussion, Conclusion, References for full papers)
   // Or (Methodology, Conclusion, References for partial/theoretical papers)
+  // NOTE: References section now uses ACCUMULATED BibTeX from incremental validation
   console.log(`[Builder] Phase 5: Generating remaining sections...`);
   for (const section of sections.filter(s => sectionsPhase3.includes(s.key))) {
     try {
       onProgress?.(section.name, 'starting');
       console.log(`[Builder] Generating: ${section.name}...`);
 
-      const content = await generateSection(section, {
-        interviewTranscript,
-        previousSections: generatedSections,
-        dataSummary,
-        examplePapers
-      });
+      // For References section: Use accumulated BibTeX from incremental validation
+      if (section.key === 'references') {
+        console.log(`[Builder] Using ${accumulatedBibTeX.length} incrementally validated BibTeX entries`);
+        console.log(`[Builder] Citation stats: ${citationValidationStats.verified} verified, ${citationValidationStats.partial} partial, ${citationValidationStats.unverified} unverified`);
 
-      generatedSections[section.key] = content;
+        // Use accumulated BibTeX as the base, but still allow LLM to add foundational references
+        const content = await generateSection(section, {
+          interviewTranscript,
+          previousSections: generatedSections,
+          dataSummary,
+          examplePapers,
+          accumulatedBibTeX: accumulatedBibTeX.join('\n\n')  // Pass all accumulated BibTeX
+        });
+
+        generatedSections[section.key] = content;
+      } else {
+        const content = await generateSection(section, {
+          interviewTranscript,
+          previousSections: generatedSections,
+          dataSummary,
+          examplePapers,
+          accumulatedBibTeX: accumulatedBibTeX.join('\n\n')
+        });
+
+        generatedSections[section.key] = content;
+
+        // INCREMENTAL CITATION VALIDATION: Validate citations after each section
+        await validateSectionCitations(content, section.name);
+      }
+
       onProgress?.(section.name, 'completed');
-      console.log(`[Builder] Completed: ${section.name} (${content.split(/\s+/).length} words)`);
+      console.log(`[Builder] Completed: ${section.name}`);
 
       await delay(500);
     } catch (error) {
@@ -1749,24 +1898,37 @@ export const runBuilder = async (
     }
   }
 
-  // STEP: Validate and enrich references with Semantic Scholar
-  // This validates LLM-generated references and discovers additional relevant papers
+  // STEP: Finalize references - merge accumulated BibTeX with any LLM additions
+  // Then do final validation/enrichment pass with Semantic Scholar
   if (generatedSections.references) {
     try {
-      onProgress?.('Reference Validation', 'starting');
-      console.log('[Builder] Validating references with Semantic Scholar...');
+      onProgress?.('Reference Finalization', 'starting');
+      console.log('[Builder] Finalizing references - merging accumulated BibTeX with LLM additions...');
 
+      // Combine accumulated BibTeX with LLM-generated references
+      // The LLM may have added foundational references not cited in the paper
+      const combinedBibTeX = accumulatedBibTeX.length > 0
+        ? `% === INCREMENTALLY VALIDATED REFERENCES (${accumulatedBibTeX.length} entries) ===\n` +
+          `% Validated during paper generation against Semantic Scholar\n` +
+          `% Stats: ${citationValidationStats.verified} verified, ${citationValidationStats.partial} partial, ${citationValidationStats.unverified} unverified\n\n` +
+          accumulatedBibTeX.join('\n\n') +
+          '\n\n% === ADDITIONAL REFERENCES FROM LLM ===\n' +
+          generatedSections.references
+        : generatedSections.references;
+
+      // Final validation pass to discover additional papers and enrich metadata
       const { validateAndEnrichReferences } = await import('./referenceValidationService');
       const validationResult = await validateAndEnrichReferences(
-        generatedSections.references,
+        combinedBibTeX,
         interviewTranscript,
         {
           targetMin: isPartialPaper ? 15 : 25,
-          targetMax: isPartialPaper ? 25 : 40
+          targetMax: isPartialPaper ? 25 : 40,
+          skipDiscovery: accumulatedBibTeX.length >= 15  // Skip discovery if we have enough validated refs
         }
       );
 
-      // Update references with validated BibTeX
+      // Update references with final validated BibTeX
       generatedSections.references = validationResult.bibtex;
 
       // Log validation metrics
