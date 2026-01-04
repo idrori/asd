@@ -1504,15 +1504,20 @@ export const runBuilder = async (
   let usedSyntheticData = false;
   let figuresInfoForResults = '';
 
-  // PHASE 1: Generate sections UP TO AND INCLUDING 'theory'
-  // Then generate conceptual figures with paper context, then continue with remaining sections
-  const sectionsBeforeViz = ['title', 'abstract', 'introduction', 'literature_review', 'theory'];
-  const sectionsAfterViz = isPartialPaper
-    ? ['methodology', 'conclusion', 'references']
-    : ['methodology', 'results', 'discussion', 'conclusion', 'references'];
+  // Figure generation flow:
+  // 1. Conceptual figures (research_model.png, theoretical_framework.png) → after Theory section
+  // 2. Empirical figures (data visualizations) → after Results section (only if data available)
 
-  console.log(`[Builder] Phase 1: Generating sections before conceptual figures...`);
-  for (const section of sections.filter(s => sectionsBeforeViz.includes(s.key))) {
+  // Section phases:
+  const sectionsPhase1 = ['title', 'abstract', 'introduction', 'literature_review', 'theory'];  // Before conceptual figures
+  const sectionsPhase2 = ['methodology', 'results'];  // Before empirical figures (for full papers)
+  const sectionsPhase3 = isPartialPaper
+    ? ['methodology', 'conclusion', 'references']  // Partial papers: no results, no empirical figures
+    : ['discussion', 'conclusion', 'references'];   // Full papers: after empirical figures
+
+  // PHASE 1: Generate sections up to and including Theory
+  console.log(`[Builder] Phase 1: Generating sections up to Theory...`);
+  for (const section of sections.filter(s => sectionsPhase1.includes(s.key))) {
     try {
       onProgress?.(section.name, 'starting');
       console.log(`[Builder] Generating: ${section.name}...`);
@@ -1583,72 +1588,85 @@ export const runBuilder = async (
     onProgress?.('Conceptual Figures', 'error');
   }
 
-  // PHASE 3: Generate remaining sections (methodology onwards)
-  // For full papers with data, also generate data visualizations before results
-  console.log(`[Builder] Phase 3: Generating remaining sections...`);
+  // PHASE 3: Generate Methodology and Results sections (for full papers only)
+  // For partial/theoretical papers, this phase is skipped (methodology is in Phase 4)
+  if (!isPartialPaper) {
+    console.log(`[Builder] Phase 3: Generating Methodology and Results...`);
+    for (const section of sections.filter(s => sectionsPhase2.includes(s.key))) {
+      try {
+        onProgress?.(section.name, 'starting');
+        console.log(`[Builder] Generating: ${section.name}...`);
 
-  // For full papers with data, generate data visualizations before results section
-  if (!isPartialPaper && dataSummary) {
-    try {
-      onProgress?.('Data Visualizations', 'starting');
-      console.log(`[Builder] Generating data visualizations...`);
-
-      const researchContext = `Research Interview: ${interviewTranscript.substring(0, 2000)}`;
-
-      const vizResult = await generateVisualizations(
-        interviewTranscript,
-        researchContext,
-        dataFileName,
-        (msg) => console.log(`[Builder] ${msg}`),
-        dataSummary,
-        false  // No synthetic data
-      );
-
-      // Add data figures (not conceptual ones which we already have)
-      const dataFigures = vizResult.figures.filter(f =>
-        f.filename !== 'research_model.png' && f.filename !== 'theoretical_framework.png'
-      );
-      generatedFigures = [...generatedFigures, ...dataFigures];
-      usedSyntheticData = vizResult.usedSyntheticData;
-
-      // Build figure info string for Results section prompt
-      if (dataFigures.length > 0) {
-        figuresInfoForResults = '\n\nGENERATED FIGURES (reference these in your Results section):\n';
-        dataFigures.forEach((fig, i) => {
-          figuresInfoForResults += `- Figure ${i + 1} (\\ref{fig:fig${i + 1}}): ${fig.description}\n`;
+        const content = await generateSection(section, {
+          interviewTranscript,
+          previousSections: generatedSections,
+          dataSummary,
+          examplePapers
         });
-        figuresInfoForResults += '\nIMPORTANT: Reference each figure in the text using Figure~\\ref{fig:fig1}, Figure~\\ref{fig:fig2}, etc.\n';
-      }
 
-      if (vizResult.dataAlert) {
-        dataAlert = dataAlert ? `${dataAlert}\n${vizResult.dataAlert}` : vizResult.dataAlert;
-      }
+        generatedSections[section.key] = content;
+        onProgress?.(section.name, 'completed');
+        console.log(`[Builder] Completed: ${section.name} (${content.split(/\s+/).length} words)`);
 
-      onProgress?.('Data Visualizations', 'completed');
-      console.log(`[Builder] Generated ${dataFigures.length} data figures`);
-    } catch (error) {
-      console.error('[Builder] Data visualization generation failed:', error);
-      onProgress?.('Data Visualizations', 'error');
-      const vizError = `*** VISUALIZATION ERROR: ${(error as Error).message}`;
-      dataAlert = dataAlert ? `${dataAlert}\n${vizError}` : vizError;
+        await delay(500);
+      } catch (error) {
+        onProgress?.(section.name, 'error');
+        console.error(`[Builder] Error generating ${section.name}:`, error);
+        throw new Error(`Failed to generate ${section.name}: ${(error as Error).message}`);
+      }
+    }
+
+    // PHASE 4: Generate EMPIRICAL figures (after Results section, only if data available)
+    if (dataSummary) {
+      try {
+        onProgress?.('Empirical Figures', 'starting');
+        console.log(`[Builder] Phase 4: Generating empirical figures after Results...`);
+
+        const researchContext = `Research Interview: ${interviewTranscript.substring(0, 2000)}`;
+
+        const vizResult = await generateVisualizations(
+          interviewTranscript,
+          researchContext,
+          dataFileName,
+          (msg) => console.log(`[Builder] ${msg}`),
+          dataSummary,
+          false  // No synthetic data
+        );
+
+        // Add empirical/data figures (exclude conceptual ones which we already have)
+        const empiricalFigures = vizResult.figures.filter(f =>
+          f.filename !== 'research_model.png' && f.filename !== 'theoretical_framework.png'
+        );
+        generatedFigures = [...generatedFigures, ...empiricalFigures];
+        usedSyntheticData = vizResult.usedSyntheticData;
+
+        if (vizResult.dataAlert) {
+          dataAlert = dataAlert ? `${dataAlert}\n${vizResult.dataAlert}` : vizResult.dataAlert;
+        }
+
+        onProgress?.('Empirical Figures', 'completed');
+        console.log(`[Builder] Generated ${empiricalFigures.length} empirical figures`);
+      } catch (error) {
+        console.error('[Builder] Empirical figure generation failed:', error);
+        onProgress?.('Empirical Figures', 'error');
+        const vizError = `*** VISUALIZATION ERROR: ${(error as Error).message}`;
+        dataAlert = dataAlert ? `${dataAlert}\n${vizError}` : vizError;
+      }
     }
   }
 
-  // Generate remaining sections
-  for (const section of sections.filter(s => sectionsAfterViz.includes(s.key))) {
+  // PHASE 5: Generate remaining sections (Discussion, Conclusion, References for full papers)
+  // Or (Methodology, Conclusion, References for partial/theoretical papers)
+  console.log(`[Builder] Phase 5: Generating remaining sections...`);
+  for (const section of sections.filter(s => sectionsPhase3.includes(s.key))) {
     try {
       onProgress?.(section.name, 'starting');
       console.log(`[Builder] Generating: ${section.name}...`);
 
-      // For Results section, include figure information
-      const sectionDataSummary = section.key === 'results' && figuresInfoForResults
-        ? (dataSummary || '') + figuresInfoForResults
-        : dataSummary;
-
       const content = await generateSection(section, {
         interviewTranscript,
         previousSections: generatedSections,
-        dataSummary: sectionDataSummary,
+        dataSummary,
         examplePapers
       });
 
