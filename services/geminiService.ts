@@ -1654,10 +1654,11 @@ export const runBuilder = async (
       for (const result of results) {
         if (result.status === 'ALREADY_EXISTS') continue;
 
-        // Add to accumulated BibTeX ONLY if verified or partial
-        // IMPORTANT: Do NOT add UNVERIFIED entries - they have placeholder data
-        // that causes "?" citations in the final paper
-        if (result.bibtexEntry && (result.status === 'VERIFIED' || result.status === 'PARTIAL')) {
+        // Add ALL entries to accumulated BibTeX (including unverified)
+        // The final generateFinalBibTeX() will filter them appropriately:
+        // - If there are verified entries, it excludes unverified ones
+        // - If ALL entries are unverified, it includes them as fallback
+        if (result.bibtexEntry) {
           accumulatedBibTeX.push(result.bibtexEntry);
         }
 
@@ -2254,13 +2255,14 @@ function stripEmbeddedReferences(content: string): string {
   // Pattern 7: "Bibliography" (title case) followed by content
   cleaned = cleaned.replace(/\n\nBibliography\n\n([\s\S]*?)(?=\\section|$)/gi, '');
 
-  // Pattern 8: \subsection{Bibliography} or \subsection{References} with itemize blocks
-  // The LLM sometimes generates formatted reference lists as subsections
-  cleaned = cleaned.replace(/\\subsection\*?\{(?:Bibliography|References)\}[\s\S]*?(?=\\section|\\subsection(?!\*?\{(?:Bibliography|References)\})|$)/gi, '');
+  // Pattern 8: \subsection{Bibliography} or \subsection{References} followed by any content until next \section
+  // The LLM sometimes generates formatted reference lists as subsections within Literature Review
+  cleaned = cleaned.replace(/\\subsection\*?\{(?:Bibliography|References)\}\s*[\s\S]*?(?=\\section\{)/gi, '');
 
-  // Pattern 9: \begin{itemize} blocks that contain citation-style entries (Author, Year format)
-  // This catches embedded bibliographies formatted as bullet lists
-  cleaned = cleaned.replace(/\\begin\{itemize\}\s*(?:\\item\s+[A-Z][^\\]*?\(\d{4}\)[^\n]*\n*)+\\end\{itemize\}/gi, '');
+  // Pattern 9: \begin{itemize} blocks that contain citation-style entries
+  // Matches itemize blocks where items contain author names with years in parentheses
+  // Handles LaTeX commands like \& and \textit{} within entries
+  cleaned = cleaned.replace(/\\begin\{itemize\}\s*(?:\\item\s+[A-Z][\s\S]*?\(\d{4}\)[\s\S]*?\n)+\s*\\end\{itemize\}/gi, '');
 
   // Trim trailing whitespace
   cleaned = cleaned.trim();

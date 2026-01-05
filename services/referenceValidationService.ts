@@ -406,11 +406,27 @@ function generateFinalBibTeX(
   lines.push('% =====================================');
   lines.push('');
 
+  // Check if we have ANY verified or partial entries
+  const hasVerifiedEntries = mergedRefs.some(
+    r => r.status === ReferenceValidationStatus.VERIFIED ||
+         r.status === ReferenceValidationStatus.PARTIAL ||
+         r.status === ReferenceValidationStatus.DISCOVERED
+  );
+
+  // If no verified entries exist, we must include unverified as fallback
+  // Otherwise the bib file would be empty and all citations show as "?"
+  const includeUnverified = !hasVerifiedEntries;
+
+  if (includeUnverified) {
+    lines.push('% WARNING: No verified references found. Including unverified entries as fallback.');
+    lines.push('% These references should be manually verified before submission.');
+    lines.push('');
+  }
+
   // Generate BibTeX for each reference
-  // IMPORTANT: Skip UNVERIFIED entries - they have placeholder data that causes "?" citations
   for (const ref of mergedRefs) {
-    // Skip unverified entries entirely - they shouldn't appear in the final bib file
-    if (ref.status === ReferenceValidationStatus.UNVERIFIED) {
+    // Skip unverified entries UNLESS we have no verified entries at all
+    if (ref.status === ReferenceValidationStatus.UNVERIFIED && !includeUnverified) {
       continue;
     }
 
