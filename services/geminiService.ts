@@ -2254,6 +2254,14 @@ function stripEmbeddedReferences(content: string): string {
   // Pattern 7: "Bibliography" (title case) followed by content
   cleaned = cleaned.replace(/\n\nBibliography\n\n([\s\S]*?)(?=\\section|$)/gi, '');
 
+  // Pattern 8: \subsection{Bibliography} or \subsection{References} with itemize blocks
+  // The LLM sometimes generates formatted reference lists as subsections
+  cleaned = cleaned.replace(/\\subsection\*?\{(?:Bibliography|References)\}[\s\S]*?(?=\\section|\\subsection(?!\*?\{(?:Bibliography|References)\})|$)/gi, '');
+
+  // Pattern 9: \begin{itemize} blocks that contain citation-style entries (Author, Year format)
+  // This catches embedded bibliographies formatted as bullet lists
+  cleaned = cleaned.replace(/\\begin\{itemize\}\s*(?:\\item\s+[A-Z][^\\]*?\(\d{4}\)[^\n]*\n*)+\\end\{itemize\}/gi, '');
+
   // Trim trailing whitespace
   cleaned = cleaned.trim();
 
